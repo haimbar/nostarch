@@ -274,3 +274,8 @@ TSWLatexianTemp*
 
 # Makeindex log files
 *.lpz
+
+.DS_Store
+*.config
+*debug.txt
+serverPID*.txt

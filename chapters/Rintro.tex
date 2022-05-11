@@ -1,0 +1,347 @@
+\chapter{Getting to know R}
+\chapterartfile{images/Rlogo.png}
+\hypertarget{Rintro}{%
+Just like a chef needs a set of tools, a kitchen with a large surface to work on, and a detailed cookbook with different recipes, a data scientist needs a powerful programming language, a convenient development environment, and good documentation.
+We chose the \R language and the RStudio integrated development environment (IDE) for this book, and we hope that this book will be your basic guide into data science. In order to get started, you must first get the necessary software and get acquainted with it, and this is what this chapter is about.}
+
+\hypertarget{installing-r-and-rstudio}{%
+\section{Installing \R and Rstudio}\label{installing-r-and-rstudio}}
+To install \R go to the website of the Comprehensive R Archive Network (\url{https://cran.r-project.org/}) and download the latest version of \R for your operating system (Windows, MacOS, or Linux). %As of \today, the latest version is 4.0.4. 
+Follow the installation instructions.
+
+Next, go the Rstudio download website
+(\url{https://rstudio.com/products/rstudio/download/}) and get the Desktop version
+(open source license). %As of \today, the version is 1.4.1106. 
+Follow the installation instruction.  An icon that looks like this
+\includegraphics[height=0.025\textheight]{images/RstudioLogo.png}
+will be on your computer's desktop. Double-click on this icon to start the \R session. The Rstudio IDE will open, and look like this:
+
+\begin{center}\includegraphics[width=0.8\linewidth]{images/RstudioMain} \end{center}
+
+The left-hand side of the screen contains the Console tab. Notice the \(>\) sign (called the `prompt'). When you see this character, it means that \R is ready for the next command. Put the cursor there, and then type
+
+\begin{verbatim}
+2 + 2
+\end{verbatim}
+and hit Enter on the keyboard. You should get the following on the Console:
+
+\begin{verbatim}
+[1] 4
+\end{verbatim}
+
+Notice the top-right part of the Rstudio window. You should see an `Environment' and a `History' tab. Click on History. All your previous input appears there. Try entering another calculation or command and see that they appear in the session's history. For example, try entering the following
+
+\begin{verbatim}
+date()
+\end{verbatim}
+
+
+Click on the Environment tab. It should be empty when you start \R for the first time. In the Console, type
+
+\begin{verbatim}
+myFirstVariable <- factorial(5)
+\end{verbatim}
+
+Notice that nothing was printed in the Console, but the Environment tab now contains a table with one row, with `myFirstVariable' appearing in the cell on the left, and its value (120) on the right. Any object appearing in the Environment tab is available to you throughout your \R session, and you don't have to redefine or recalculate it. For example, you can try the following:
+
+\begin{verbatim}
+myFirstVariable/6
+\end{verbatim}
+The Console should now display 20.
+
+The lower-right side of the IDE contains a file browser (the Files tab), information about installed packages (more about it later), and any plot generated during the \R session. It also contains a Help tab, to obtain information about built-in functions.
+
+Finally, before we move on to the next section, in the Rstudio top menu, click on File, then on New File, and then on \R Script. Alternatively, you can click on little green `+' icon in the top-left part of the IDE. This will split the left side of the Rstudio IDE into two parts -- the lower part will contain the Console, and the top part will contain a tab labeled `Untitled1'. This is where you can enter \R code which you will save to a permanent file, and re-use later.
+For example, enter the following in the blank space in the Untitled1 tab:
+
+\begin{verbatim}
+# This is my first R program
+cat("Hello, World!\n")
+\end{verbatim}
+
+
+Then, from the main menu in Rstudio, click on File, then on Save, and in the `Save As' box enter FirstProgram.R and click the Save button. Notice that the tab name is now FirstProgram.R.
+
+In that part of the window, there should now be a small button called Source. Click on it. The program will be executed and the output will be shown in the Console. You can also execute individual lines in the source code. Just put the cursor anywhere in that line, and click on the Run button (which is near the Source button) or click Ctrl+Enter (or Command+Enter on a Mac). 
+
+That's it. In the rest of these notes we will see more features of Rstudio, but you are now ready to start learning programming in R.
+
+
+\section{Basic Operations in R}
+\subsection{Some Useful Functions}
+%\input{Rnw/intro-funcs}
+\R has many built-in functions, and many more in external packages. We will introduce them as we go, but let's get started with some basic ones.
+The documentation on each function can be obtained by using \code{?func} or \code{help(func)} where \texttt{func} is some function. For example, to get the documentation about using the \code{help()} function, try the following:
+\showCode{R}{Code/ch1oneliners.R}[1][2]
+
+When we start an \R session, it's important to determine the `working directory'. This is the folder on our computer which \R will use to search for data or code files and save results. To find out which folder is currently used, we use the following:
+\showCode{R}{Code/ch1oneliners.R}[4][4]
+Try it!
+
+If we want (and we often will), we may change the working directory by using \code{setwd()}.  
+\showCode{R}{Code/ch1oneliners.R}[5][5]
+The \verb|~/| notation is a shortcut to your home directory. Using this shortcut is convenient because if you are using different computers or you share code with others, the home directory may be different on each computer.
+
+Data is stored in variables. We can get the data from a file (Excel, comma-separated values, etc.), the Internet, or we can generate it ourselves. Let's start by generating some data.
+The simplest function to create data is called \code{c()}, which stands for `combine'.
+\showCode{R}{Code/ch1ex1.R}
+
+\runR{Code/ch1ex1.R}{ch1ex1}{}
+
+\includeOutput{ch1ex1}
+
+%\begin{verbatim}
+%[1] "Data Science" "Statistics"   "Probability" 
+%\end{verbatim}
+%\end{kframe}
+%\end{knitrout}
+%We created a variable called courseNames, and it contains three values. Note that we assigned the values into the variable by using the \verb|<-| operator. The parentheses around the whole statement cause the content of the variable to printed immediately to the console.
+%We can now do things with this variable. For example, we can check the variable type, using the \code{class()} function.
+%We can also get a bit more detailed information by checking its structure, using the \code{str()} function.
+%\begin{knitrout}
+%\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+%\begin{alltt}
+%\hlkwd{class}\hlstd{(courseNames)}
+%\end{alltt}
+%\begin{verbatim}
+%[1] "character"
+%\end{verbatim}
+%\begin{alltt}
+%\hlkwd{str}\hlstd{(courseNames)}
+%\end{alltt}
+%\begin{verbatim}
+% chr [1:3] "Data Science" "Statistics" "Probability"
+%\end{verbatim}
+%\end{kframe}
+%\end{knitrout}
+%The variable is of class `character', and it is a vector with three values. 
+%We can check the number of elements in a vector by using the \code{length()} function:
+%\begin{knitrout}
+%\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+%\begin{alltt}
+%\hlkwd{length}\hlstd{(courseNames)}
+%\end{alltt}
+%\begin{verbatim}
+%[1] 3
+%\end{verbatim}
+%\end{kframe}
+%\end{knitrout}
+%
+%Pick good variable names. They should describe the meaning of the value, yet be short enough to type. Variable names can only contain letters, numbers, the dot character, or the underline character. Variable names can only begin with either a letter, or a dot as long as it is not followed by a number. They should not be the same as an existing function name or other reserved words in the language (like `while', `if', `quit'.)
+%
+%We can also generate variables which contain sequences of numbers. To do that, we use the \code{seq()} function. For example, we can create a variable which contains all the odd numbers between 1 and 20:
+%\begin{knitrout}
+%\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+%\begin{alltt}
+%\hlstd{(oddLT20} \hlkwb{<-} \hlkwd{seq}\hlstd{(}\hlnum{1}\hlstd{,}\hlnum{20}\hlstd{,}\hlkwc{by}\hlstd{=}\hlnum{2}\hlstd{))}
+%\end{alltt}
+%\begin{verbatim}
+% [1]  1  3  5  7  9 11 13 15 17 19
+%\end{verbatim}
+%\begin{alltt}
+%\hlkwd{length}\hlstd{(oddLT20)}
+%\end{alltt}
+%\begin{verbatim}
+%[1] 10
+%\end{verbatim}
+%\end{kframe}
+%\end{knitrout}
+%
+%To generate consecutive values, we can also use the colon operator:
+%\begin{knitrout}
+%\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+%\begin{alltt}
+%\hlstd{(firstThirteen} \hlkwb{<-} \hlnum{1}\hlopt{:}\hlnum{13}\hlstd{)}
+%\end{alltt}
+%\begin{verbatim}
+% [1]  1  2  3  4  5  6  7  8  9 10 11 12 13
+%\end{verbatim}
+%\end{kframe}
+%\end{knitrout}
+%
+%Another useful function to generate data is \code{rep()}, which replicates values.
+%We often have to generate a vector of ones or zeros, and we can do it like in the following example. We use this opportunitiy to also introduce the functions \code{sum()} and \code{cumsum()} (cumulative sum).
+%\begin{knitrout}
+%\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+%\begin{alltt}
+%\hlstd{(ones} \hlkwb{<-} \hlkwd{rep}\hlstd{(}\hlnum{1}\hlstd{,} \hlnum{10}\hlstd{))}
+%\end{alltt}
+%\begin{verbatim}
+% [1] 1 1 1 1 1 1 1 1 1 1
+%\end{verbatim}
+%\begin{alltt}
+%\hlkwd{length}\hlstd{(ones)}
+%\end{alltt}
+%\begin{verbatim}
+%[1] 10
+%\end{verbatim}
+%\begin{alltt}
+%\hlkwd{sum}\hlstd{(ones)}
+%\end{alltt}
+%\begin{verbatim}
+%[1] 10
+%\end{verbatim}
+%\begin{alltt}
+%\hlkwd{cumsum}\hlstd{(ones)}
+%\end{alltt}
+%\begin{verbatim}
+% [1]  1  2  3  4  5  6  7  8  9 10
+%\end{verbatim}
+%\end{kframe}
+%\end{knitrout}
+%
+%There are also many functions to handle text. The \code{paste()} function attaches two strings of characters together. Note the usage of the collapse option (also called an `argument' of the function) in the second example:
+%\begin{knitrout}
+%\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+%\begin{alltt}
+%\hlkwd{paste}\hlstd{(courseNames)}
+%\end{alltt}
+%\begin{verbatim}
+%[1] "Data Science" "Statistics"   "Probability" 
+%\end{verbatim}
+%\begin{alltt}
+%\hlkwd{paste}\hlstd{(courseNames,} \hlkwc{collapse}\hlstd{=}\hlstr{", "}\hlstd{)}
+%\end{alltt}
+%\begin{verbatim}
+%[1] "Data Science, Statistics, Probability"
+%\end{verbatim}
+%\end{kframe}
+%\end{knitrout}
+%
+%Let's combine what we've learned so far to create the 52 cards  in a standard deck, which includes four suits: Club, Diamond, Heart, and Spade:
+%\begin{knitrout}
+%\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+%\begin{alltt}
+%\hlstd{suits} \hlkwb{<-} \hlkwd{c}\hlstd{(}\hlkwd{rep}\hlstd{(}\hlstr{"C"}\hlstd{,}\hlnum{13}\hlstd{),} \hlkwd{rep}\hlstd{(}\hlstr{"D"}\hlstd{,}\hlnum{13}\hlstd{),} \hlkwd{rep}\hlstd{(}\hlstr{"H"}\hlstd{,}\hlnum{13}\hlstd{),} \hlkwd{rep}\hlstd{(}\hlstr{"S"}\hlstd{,}\hlnum{13}\hlstd{))}
+%\hlstd{(cards} \hlkwb{<-} \hlkwd{paste0}\hlstd{(suits,} \hlkwd{rep}\hlstd{(}\hlnum{1}\hlopt{:}\hlnum{13}\hlstd{,}\hlnum{4}\hlstd{)))}
+%\end{alltt}
+%\begin{verbatim}
+% [1] "C1"  "C2"  "C3"  "C4"  "C5"  "C6"  "C7"  "C8"  "C9"  "C10" "C11" "C12"
+%[13] "C13" "D1"  "D2"  "D3"  "D4"  "D5"  "D6"  "D7"  "D8"  "D9"  "D10" "D11"
+%[25] "D12" "D13" "H1"  "H2"  "H3"  "H4"  "H5"  "H6"  "H7"  "H8"  "H9"  "H10"
+%[37] "H11" "H12" "H13" "S1"  "S2"  "S3"  "S4"  "S5"  "S6"  "S7"  "S8"  "S9" 
+%[49] "S10" "S11" "S12" "S13"
+%\end{verbatim}
+%\end{kframe}
+%\end{knitrout}
+%Note that \code{paste0()} is the same as \code{paste(..., collapse="")}.
+%
+%Let's `deal' five cards to each player for a game of poker. We will use the \code{sample()} function.
+%\begin{knitrout}
+%\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+%\begin{alltt}
+%\hlkwd{set.seed}\hlstd{(}\hlnum{5252}\hlstd{)}
+%\hlstd{(pokerHand} \hlkwb{<-} \hlkwd{matrix}\hlstd{(}\hlkwd{sample}\hlstd{(cards,}\hlnum{20}\hlstd{,}\hlkwc{replace}\hlstd{=}\hlnum{FALSE}\hlstd{),} \hlkwc{nrow}\hlstd{=}\hlnum{5}\hlstd{,} \hlkwc{ncol}\hlstd{=}\hlnum{4}\hlstd{))}
+%\end{alltt}
+%\begin{verbatim}
+%     [,1]  [,2]  [,3]  [,4] 
+%[1,] "S8"  "S13" "S7"  "C4" 
+%[2,] "D8"  "C1"  "H6"  "H11"
+%[3,] "D4"  "C11" "S6"  "S11"
+%[4,] "D12" "C13" "S4"  "S1" 
+%[5,] "C6"  "S9"  "H12" "H9" 
+%\end{verbatim}
+%\end{kframe}
+%\end{knitrout}
+%The \code{sample()} function in this example is used to draw 20 cards at random from the deck, without replacement. Then, to divide it into four hands, we use the \code{matrix()} function, and specify the number of rows and the number of columns.
+%
+%Check the class and the structure of the variable pokerHand, using the functions we've mentioned earlier.
+%
+%We can save variables to a file in order to use them in a later session.
+%\begin{knitrout}
+%\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+%\begin{alltt}
+%\hlkwd{save}\hlstd{(pokerHand,} \hlkwc{file}\hlstd{=}\hlstr{"pokerHand.RData"}\hlstd{)}
+%\end{alltt}
+%\end{kframe}
+%\end{knitrout}
+%If we don't specify the complete path, the file will be stored in the current working directory. Recall that you can find out which directory is used with the \code{getwd()} function, and set it to another directory with \code{setwd()}.
+%Then, we may get the saved variables by using the following:
+%\begin{knitrout}
+%\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+%\begin{alltt}
+%\hlkwd{load}\hlstd{(}\hlstr{"pokerHand.RData"}\hlstd{)}
+%\end{alltt}
+%\end{kframe}
+%\end{knitrout}
+%After you use the \code{load()} function, the variable pokerHand will be available to use.
+%
+%Variables which we do not save, will not be available once we terminate the current \R session. When we quit an \R session, we have an option to save the entire session's information. However, if there are variables, datasets, or functions which we have created and want to save, it's better to save them explicitly.
+%
+%There are a few constants in \R, including the letters of the alphabet (upper- and lower-case), the month names, and the number $\pi$.
+%\begin{knitrout}
+%\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+%\begin{alltt}
+%\hlstd{LETTERS}
+%\end{alltt}
+%\begin{verbatim}
+% [1] "A" "B" "C" "D" "E" "F" "G" "H" "I" "J" "K" "L" "M" "N" "O" "P" "Q" "R" "S"
+%[20] "T" "U" "V" "W" "X" "Y" "Z"
+%\end{verbatim}
+%\begin{alltt}
+%\hlstd{letters}
+%\end{alltt}
+%\begin{verbatim}
+% [1] "a" "b" "c" "d" "e" "f" "g" "h" "i" "j" "k" "l" "m" "n" "o" "p" "q" "r" "s"
+%[20] "t" "u" "v" "w" "x" "y" "z"
+%\end{verbatim}
+%\begin{alltt}
+%\hlstd{month.abb}
+%\end{alltt}
+%\begin{verbatim}
+% [1] "Jan" "Feb" "Mar" "Apr" "May" "Jun" "Jul" "Aug" "Sep" "Oct" "Nov" "Dec"
+%\end{verbatim}
+%\begin{alltt}
+%\hlstd{month.name}
+%\end{alltt}
+%\begin{verbatim}
+% [1] "January"   "February"  "March"     "April"     "May"       "June"     
+% [7] "July"      "August"    "September" "October"   "November"  "December" 
+%\end{verbatim}
+%\begin{alltt}
+%\hlstd{pi}
+%\end{alltt}
+%\begin{verbatim}
+%[1] 3.141593
+%\end{verbatim}
+%\end{kframe}
+%\end{knitrout}
+%
+%The base distribution of \R is very comprehensive, but there are thousands of contributed packages which are written by \R users. We will use several such packages in the book, so let us see how to do it.
+%The package \pkg{lattice} provides `elegant high-level data visualization system with an emphasis on multivariate data'. To install the package, we use the \code{install.packages()} function.
+%\begin{knitrout}
+%\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+%\begin{alltt}
+%\hlkwd{install.packages}\hlstd{(}\hlstr{"lattice"}\hlstd{)}
+%\end{alltt}
+%\end{kframe}
+%\end{knitrout}
+%This has to be done just once. Occasionally, you may be prompted to install updates, which can also be done by using the \code{update.packages()} function.
+%To use the package, we need to load it, using the \code{library()} function. In the following example we use a built-in dataset of opera singers, and we plot their heights by their vocal parts.
+%\begin{knitrout}
+%\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+%\begin{alltt}
+%\hlkwd{library}\hlstd{(}\hlstr{"lattice"}\hlstd{)}
+%\hlkwd{bwplot}\hlstd{(voice.part} \hlopt{~} \hlstd{height,} \hlkwc{data}\hlstd{=singer,} \hlkwc{xlab}\hlstd{=}\hlstr{"Height (inches)"}\hlstd{)}
+%\end{alltt}
+%\end{kframe}\begin{figure}
+%
+%{\centering \includegraphics[width=\maxwidth]{figure/intro-pkg-1} 
+%
+%}
+%
+%\caption[Using the lattice package to create boxplots]{Using the lattice package to create boxplots}\label{fig:intro-pkg}
+%\end{figure}
+%
+%\end{knitrout}
+%
+
+When you want to finish your session, just type \code{quit()}.
+
+
+\subsection{Generating random numbers}
+%\input{Rnw/intro}
+
+
+\subsection{Summary statistics}
+%\input{Rnw/intro-stat}

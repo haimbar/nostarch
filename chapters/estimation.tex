@@ -1,0 +1,54 @@
+\hypertarget{ch:estimation}{%
+\chapter{Estimation: A Hide-and-Seek Game with the Nature}\label{ch:estimation}}
+
+First paragraph needs to be something highlighting ...
+(test edits on overleaf).
+
+\section{Introduction}
+Consider this game setup. We have a random sample of size \(n\) from a normal
+distribution \(N(\mu, 1)\), where \(\mu\) is unknown, and we want to estimate \(\mu\)
+with this sample. An estimator is a quantity constructed from the observed
+sample, that is, it is a statistic. What estimators can we construct? How do we
+assess which is better?
+
+\input{Rnw/est-hide}
+
+The location parameter of a distribution controls the location of the
+distribution.
+
+
+\section{Seeking strategies}
+
+To play the hide-and-seek game better, we need to select a good strategy. From
+the examples in the last section, it seems that which strategy is better depends
+on the underlying truth, which is unknown.
+
+
+Let's start with an example.
+\begin{illustration}[Likelihood in guessing jars]
+  % \indexExSix{Computing ranks in the presence of ties}
+\label{example:has-jars}
+There are 9 jars. The first jar has 9 red and 1 green balls; the second jar has
+8 red and 2 green balls; $\cdots\cdots$; the 9th jar has 1 red and 9 green
+balls. Now, one jar is randomly selected, from which one ball is randomly
+selected, and the ball is red. Which jar was the one that was selected?
+
+There are nine possibilities. If the selected jar were the first one, the
+probability that a randomly selected ball is red is 9/10. If the selected jar
+were the second one, the probability that a randomly selected ball is red is
+8/10. Continue until the 9th jar. With this calculation, which jar should we
+guess?
+
+The first one!
+\end{illustration}
+
+The principle we use here is the so-called maximum likelihood estimation. The
+unknown true has 9 possibilities. We choose the one that gives the highest
+likelihood of observing a randomly selected ball being red.
+
+\section{Uncertainty}
+
+\input{Rnw/est-ci-clt}
+
+\input{Rnw/est-ci-boot}
+

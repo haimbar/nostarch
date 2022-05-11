@@ -1,0 +1,50 @@
+\hypertarget{ch:llnclt}{%
+%  \chapter{The Law of Large Numbers and the Central Limit Theorem}\label{ch:llnclt}}
+\chapter{Towards the End of the Horizon}\label{ch:llnclt}}
+\chapterartfile{images/dnormplot.pdf}
+Benjamin Franklin once said `In this world nothing can be said to be certain, except death and taxes'. Still, for all the uncertain things in life, and especially in science where most theories cannot be proven correct, we would like to be able to say something about how confident we are about a conclusion we draw. To do that, scientists conduct an experiment in which they collect data and check if it provides evidence in favor or against a proposed theory.
+This chapter describes two of the most important results in probability and statistics -- the law of large numbers and the central limit theorem. These theorems explain why statistics works and is useful in so many situations! They tell us that, if we collect enough data (and conduct a sensible experiment) we will be able to say to what extent we can trust our results, and also tell us how much data we need in order to draw conclusions with a certain degree of confidence. Without these results, conducting experiments would be meaningless, no matter how many samples are collected.
+
+\section{Introduction}
+Let's start with a few simple examples which will be used in this chapter:
+\begin{enumerate}
+\item We get a random sample of 200 people and give them an IQ test. What is the distribution of the scores in this sample? How close is it to the true distribution of the whole population?\\
+How likely is it that we find a person with IQ greater than 150?\\
+In order to be accepted to the Mensa club a person has to be in the top 2\% of the IQ distribution. What is the minimum score required in order to be a Mensa member?
+\item The pockets of the roulette wheel are numbered from 0 to 36. In number ranges from 1 to 10 and 19 to 28, odd numbers are red and even are black. In ranges from 11 to 18 and 29 to 36, odd numbers are black and even are red. There is a green pocket numbered 0 (zero). Suppose you want to bet on a color, say, red, and if the ball lands in a red pocket your payoff is twice your bet, and otherwise you lose your bet. What is the probability you win? What is your expected payoff? Suppose you have \$10,000, and you bet one dollar each time. How much money will you win or lose?.
+\item Suppose that you get a text message every 6 minutes (a rate of 10 per hour), and suppose that they arrive independently of one another, according to a Poisson distribution. How many messages do you expect to get on an average day, between 8am and 8pm? 
+%\item \hb{homework question?}As of June 16, 2021 Tony Snell from the Atlanta Hawks leads the NBA in 3pt accuracy with 53.8\%.
+%If he takes 3pt 10 shots per game over the next 10 games, how many three-point shots do you expect him to make?
+\end{enumerate}
+
+The main paradigm in statistical inference and prediction in order to answer such question is to take a sample from the population we're interested in, and choose a mathematical model which we believe represents the whole population. Then we check if our model appears to reasonable, in the sense that it fits the data well. If it does, we can use the mathematical properties of the model to draw conclusions about the population. By representing the sample using a mathematical (probabilistic) formula, we essentially augment a finite sample to an infinite one. Working with a formula/model for the data allows us to use the `heavy artillery' of math, like finding maximum/minimum, computing areas under the curve of the function, and so on. 
+
+This chapter deals with inference which can be derived from the mean of a population, and we show the (arguably) two most important results in statistics -- the law of large numbers (LLN), and the central limit theorem (CLT). Together, these two very general theorems make it possible to draw conclusions about the whole population, from a single sample! (as long as the sample size is large enough).
+
+
+\section{The Law of Large Numbers}
+
+\input{Rnw/LLNCLT1}
+
+\input{Rnw/LLNCLT2}
+
+\input{Rnw/LLNCLT3}
+
+\subsection{The LLN -- an intuitive statement of the theorem}
+Informally, the law of large number states that the results of an experiment tend to settle down to a fixed average when the experiment is repeated many times. In other words, as the sample size increases, the sample mean will get closer to the true population mean.
+
+The LLN is very general -- it doesn't matter if the question is about how many boy-births we expect to see (`binomial distribution') or if we measure IQ (`normal distribution'). The only requirements are that the samples are independent, and identically distributed, and that the true distribution actually has a mean. (We will see an example where this is not the case.)
+
+It is important to emphasize that the LLN does not imply that the results of future experiments will balance out what already happened! If we bet 100 times at the roulette wheel and lost each time, this does not mean that we have a better chance of winning the next bet. All the LLN is saying is that if we continue to play many times, the overall probability that we win in each round will converge to 18/37.
+
+\input{Rnw/LLNCLT4}
+
+
+\section{The Central Limit Theorem}
+The LLN says that as we increase the sample size, the sample mean converges to a fixed value (the true population mean).  It does not say anything, however, about how close the sample estimate is to the true value. In other words, it says nothing about our level of (un)certainty. 
+
+The central limit theorem (CLT) says that, in many (most) situations, when independent random variables are averaged, their normalized mean tends toward a normal distribution. This is true even if the original variables themselves are not normally distributed!
+
+The CLT requires very little about the actual distribution of the data. The sample has to be i.i.d., and the distribution must have a finite variance. 
+
+\input{Rnw/LLNCLT5}
