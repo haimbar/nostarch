@@ -1,0 +1,121 @@
+\documentclass[cfonts]{nostarch}
+
+\usepackage{lipsum}
+\hyphenation{ve-sti-bu-lum sene-c-tus rut-rum con-sec-te-tu-er
+  elei-fend no-num-my li-be-ro}
+
+\usepackage{natbib}
+\usepackage{nshyper}
+\lstset{fancyvrb=true}
+
+
+% our additions to the preamble (make external)
+%\usepackage[python]{runcode}
+%\usepackage[python,stopserver]{runcode}
+\usepackage[R]{runcodeBook}
+%\usepackage[cache]{runcodeBook}
+
+\usepackage{multirow}
+
+%\usepackage{mdframed}
+%\BeforeBeginEnvironment{minted}{\begin{mdframed}}
+%\AfterEndEnvironment{minted}{\end{mdframed}}
+
+\let\code\texttt
+\let\proglang\textsf
+\newcommand{\pkg}[1]{{\fontshape{it}\selectfont #1}}
+\def\R{\textsf{R} }
+
+% self defined environment and commands
+\newcounter{example}% [section]
+\newenvironment{example}[1][]{\refstepcounter{example}\par\medskip
+   \noindent \textbf{Example~\theexample. (#1)} \rmfamily}{\medskip}
+   % \noindent \textbf{Example~\thesection.\theexample. (#1)} \rmfamily}{\medskip}
+
+
+
+\makeindex
+\begin{document}
+
+
+\frontmatter
+\input{chapters/front_matter}
+
+%\author{A.~U.~Thor, C.~O.~R.~Respondent and W.~R.~Iter}
+%
+%\title{Pellentesque habitant morbi}
+%
+%\subtitle{Cum sociis natoque penatibus}
+%
+%\nostarchlogo{vitruvian.jpg}
+%
+%\makehalftitle
+%
+%\maketitle
+%
+%
+
+%\index{Keats, John@\emph{Keats, John}}
+%\index{gods!Greek!Apollo}
+%\index{Apollo|see{gods, Greek}}
+%\index{Greek gods|see{gods, Greek}}
+
+%\brieftableofcontents
+%
+%\tableofcontents
+
+% --file-line-error --synctex=1
+
+
+\chapter*[Foreword by R.~E.~Viewer]{Foreword}
+
+\bigskip
+
+\lipsum[48-60]
+
+\bigskip
+
+\begin{raggedright}
+\bfseries
+R.~E.~Viewer\index{Viewer, R. E.@\emph{Viewer, R.~E.}}\\
+New York\index{USA!states!New York}\index{New York|see{USA, states}}\\
+December 2007
+\end{raggedright}
+
+\mainmatter
+\part{Mi aliquam dictum}
+
+\lipsum[77-78]
+
+
+\input{chapters/Rintro}
+\include{chapters/EDA}
+\include{chapters/probability}
+%\include{chapters/llnclt}
+%\include{chapters/estimation}
+%\include{chapters/datacollect}
+%\include{chapters/hypothesis}
+
+
+
+\index{vita|)}
+
+\backmatter
+
+\nocite{*}
+\bibliographystyle{plainnat}
+\bibliography{nostarch}
+
+\printindex
+
+\updatespage
+
+Visit \url{http://borisv.lk.net/latex.html} for updates, errata, and
+other information.
+
+
+\colophon
+
+The book was produced as an example of the package \texttt{nostarch}. 
+
+\end{document}
