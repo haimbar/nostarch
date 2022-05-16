@@ -8,12 +8,22 @@
 \usepackage{nshyper}
 \lstset{fancyvrb=true}
 
+\def\replace#1#2#3{%
+ \def\tmp##1#2{##1#3\tmp}%
+   \tmp#1\stopreplace#2\stopreplace}
+\def\stopreplace#1\stopreplace{}
+
 
 % our additions to the preamble (make external)
 %\usepackage[python]{runcode}
 %\usepackage[python,stopserver]{runcode}
-\usepackage[R]{runcodeBook}
+\usepackage[R]{runcode}%Book}
 %\usepackage[cache]{runcodeBook}
+
+\setminted[julia]{linenos, frame=single, bgcolor=bg, breaklines=true}
+\setminted[R]{linenos, frame=single, bgcolor=white, breaklines=true}
+\setminted[python]{linenos, frame=single, bgcolor=white, breaklines=true}
+\tcbset{breakable,colback=red!5!white,colframe=red!75!black}
 
 \usepackage{multirow}
 
@@ -89,8 +99,8 @@ December 2007
 
 
 \input{chapters/Rintro}
-\include{chapters/EDA}
-\include{chapters/probability}
+%\include{chapters/EDA}
+%\include{chapters/probability}
 %\include{chapters/llnclt}
 %\include{chapters/estimation}
 %\include{chapters/datacollect}

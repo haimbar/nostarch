@@ -1,5 +1,0 @@
-courseNames <- c("Data Science", "Statistics", "Probability")
-print(courseNames)
-print(class(courseNames))
-print(str(courseNames))
-print(length(courseNames))
