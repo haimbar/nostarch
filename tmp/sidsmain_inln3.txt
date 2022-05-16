@@ -1,0 +1,1 @@
+\XeTeXglyph \numexpr \XeTeXcharglyph "0060\relax \XeTeXglyph \numexpr \XeTeXcharglyph "0060\relax \XeTeXglyph \numexpr \XeTeXcharglyph "0060\relax cat(paste(oddLT20))\XeTeXglyph \numexpr \XeTeXcharglyph "0060\relax \XeTeXglyph \numexpr \XeTeXcharglyph "0060\relax \XeTeXglyph \numexpr \XeTeXcharglyph "0060\relax
