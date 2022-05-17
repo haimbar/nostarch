@@ -1,8 +1,8 @@
 \chapter{Getting to know R}
 \chapterartfile{images/Rlogo.png}
 \hypertarget{Rintro}{%
-Just like a chef needs a set of tools, a kitchen with a large surface to work on, and a detailed cookbook with different recipes, a data scientist needs a powerful programming language, a convenient development environment, and good documentation.
-In this chapter we provide a brief introduction to the \R language and the RStudio integrated development environment (IDE).}
+Just like a chef needs a set of tools, a kitchen with a convenient surface to work on, and a detailed cookbook with different recipes, a data scientist needs a powerful programming language, a convenient development environment, and good documentation.
+In this chapter we provide a brief introduction to the \R language and the RStudio integrated development environment (IDE). Here, and in the remainder of the book we provide some essential `recipes' for data scientists.}
 
 % for this book, and we hope that this book will be your basic guide into data science. In order to get started, you must first get the necessary software and get acquainted with it, and this is what this chapter is about.
  
@@ -71,15 +71,17 @@ That's it. You are now ready to start learning programming in R.
 
 \section{Basic Operations in R}
 \subsection{Some Useful Functions}
-\runR{Code/ch1sec1.R}{ch1init}%[cache]
-%\input{Rnw/intro-funcs}
+\runR{Code/ch1sec1.R}{ch1init}[cache]
+\runR{Code/ch1sec2.R}{ch1init2}[cache]
+\runR{Code/ch1sec3.R}{ch1init3}[cache]
+\runR{Code/ch1sec3b.R}{ch1init3b}[cache]
 \R has many built-in functions, and many more in external packages. We will introduce them as we go, but let's get started with some basic ones.
 The documentation on each function can be obtained by using \code{?func} or \code{help(func)} where \texttt{func} is some function. For example, to get the documentation about using the \code{date()} function, try the following:
 \showCode{R}{Code/ch1sec1.R}[1][2]
 
 When we start an \R session, it's important to determine the `working directory'. This is the folder on our computer which \R will use to search for data or code files and where it will save results (unless we explicitly specify another directory). To find out which folder is currently used, we use the following:
 \showCode{R}{Code/ch1sec1.R}[5][5]
-Try it! We sometimes refer to the complete directory information as `path', since it tells us how to get to a specific file, starting from the root directory (which is denoted by `\slash' or `\textbackslash' on Windows). The path corresponds to the hierarchical organization of folders (directories) on your computer.
+Try it! We sometimes refer to the complete directory information as `path', since it tells us how to get to a specific file, starting from the root directory (which is denoted by `\slash' on Mac and Linux, or `\textbackslash' on Windows). The path corresponds to the hierarchical organization of folders (directories) on your computer.
 
 If we want (and we often will), we may change the working directory by using \code{setwd()}.  For example, try:
 \showCode{R}{Code/ch1sec1.R}[6][6]
@@ -133,7 +135,7 @@ There are also many functions to handle text. The \code{paste()} function attach
 
 Let's combine what we've learned so far to create the 52 cards  in a standard deck, which includes four suits: Club, Diamond, Heart, and Spade:
 \showCode{R}{Code/ch1sec1.R}[28][29]
-Run each line separately, and check the content of `suits' and what \code{rep(1:13,4)} generates. Note that the function \code{paste0()} is the same as \code{paste(..., collapse="")}.
+Run each line separately, and check the content of `suits' and what \code{rep(1:13,4)} generates. Note that the function \code{paste0()} is the same as \code{paste(..., collapse="")}. The content of the cards variable is:
 \inlnR{```cat(paste(cards))```}[vbox]
 
 
@@ -155,216 +157,164 @@ Variables which we do not save will not be available once we terminate the curre
 
 There are a few constants in \R, including the letters of the alphabet (upper- and lower-case), the month names, and the number $\pi$. Try running the following:
 \showCode{R}{Code/ch1sec1.R}[38][42]
-The output for the third line is this:
+The output for the third line is:
 \inlnR{```cat(month.abb)```}[vbox]
 
 
-The base distribution of \R is very comprehensive, but there are thousands of contributed packages which are written by \R users. We will use several such packages in the book, so let us demonstrate how to do it.
+The base distribution of \R is very comprehensive, but there are thousands of contributed packages which are written by \R users. We will use several such packages in the book, so let us demonstrate the basic usage.
 The package \pkg{lattice} provides `elegant high-level data visualization system with an emphasis on multivariate data'. To install the package, we use the \code{install.packages()} function. In order to use the package, you have to load it using the \code{library()} function:
 \showCode{R}{Code/ch1sec1.R}[45][46]
 
 Installing the package has to be done just once. Occasionally, you may be prompted to install updates, which can also be done by using the \code{update.packages()} function. Loading a package has to be done each time you begin a new \R session.
 
-In the following example we use a built-in dataset of opera singers, and we plot their heights by their vocal parts.
+In the following example we use a built-in dataset of opera singers, and we plot their heights by their vocal parts (Figure \ref{fig:ch1:operaheight}).
 
 \showCode{R}{Code/ch1sec1.R}[48][49]
 \begin{figure}
 \centering
 \includegraphics[width=0.6\textwidth]{images/operaheight.pdf}
-\caption{Using the lattice package to create boxplots}\label{fig:ch1:operaheight}
+\caption{Using the lattice package to create boxplots.}\label{fig:ch1:operaheight}
 \end{figure}
 \noindent We will learn a lot more about data visualization in subsequent chapters.
 When you want to finish your session, just type \code{quit()}.
 
 
 \subsection{Generating random numbers}
-%\input{Rnw/intro}
-In this book, much of the learning will be done by using simulated data, so let's start by learning how to generate data. The basic function to generate random data is \code{runif()} which is used to draw random numbers, uniformly between 0 and 1. In the following example we create 10,000 random draws from a uniform distribution, keep these numbers in a variable called simData, and plot a histogram to show the distribution of the data we have generated. The \code{set.seed()} function is used to ensure that every time we run this code, we will get the same set of random numbers. This is called \textit{reproducible code}. 
-%<<intro-runif, eval=TRUE, fig.align='center', fig.width=4, fig.height=3.5, fig.cap="A histogram of 10,000 randomly drawn numbers from a standard uniform distribution." >>=
-%# Generate 10,000 points from a uniform distribution
-%set.seed(210313)
-%n <- 10000
-%simData <- runif(n)
-%hist(simData)
-%@ 
+In this book much of the learning will be done by using simulated data, so let's start by learning how to generate data. The basic function to generate random data is \code{runif()} which is used to draw random numbers uniformly between 0 and 1. In the following example we create 10,000 random draws from a uniform distribution, we keep these numbers in a variable called simData, and then plot a histogram to show the distribution of the data we have generated. The \code{set.seed()} function is used to ensure that every time we run this code, we will get the same set of random numbers. This is called \textit{reproducible code}. 
+\showCode{R}{Code/ch1sec2.R}[2][6]
+\begin{figure}
+\centering
+\includegraphics[width=0.6\textwidth]{images/simunif1.pdf}
+\caption{A histogram of a random sample from a standard uniform distribution.}\label{fig:ch1:simunif1}
+\end{figure}
 
 
-From the range and the flatness of the histogram we can see that the generated data is indeed uniform on [0,1]. The \code{runif()} function can be used to draw random numbers uniformly on any finite interval. For example, if we want our random numbers to be in the interval [1,5] we will run the following code:
 
-%<<intro-runif-with-range, eval=FALSE, >>=
-%n <- 10000
-%simData <- runif(n, min=1, max=5)
-%@ 
-
-Try it, and draw the histogram as in the previous example. Try it with a fixed seed and verify that you get the same output each time. Then, run the code without a fixed seed and observe that you get a different distribution each time. Since the number of random draws is fairly large, the shape of the histogram will not change much.
+From the range and the flatness of the histogram in Figure \ref{fig:ch1:simunif1} we can see that the generated data is indeed uniform on [0,1]. The \code{runif()} function can be used to draw random numbers uniformly on any finite interval. For example, if we want our random numbers to be in the interval [1,5] we will run the following code:
+\showCode{R}{Code/ch1sec2.R}[9][10]
+\noindent Try it, and draw the histogram as in the previous example. Try it with a fixed seed and verify that you get the same output each time. Then, run the code without a fixed seed and observe that you get a different distribution each time. Since the number of random draws is fairly large, the shape of the histogram will not change much.
 
 From a random draw of a uniform distribution we can generate random numbers from other distributions. For example, we want to simulate (fair) coin flips, and count the number of Heads that we get. Let's say we want to simulate 200 coin tosses. We will draw 200 random numbers from a uniform distribution, and decide that we got Heads in the $i$-th toss if the $i$-the random number is less than 0.5, and Tails otherwise.
 Try the following code multiple times (do not use \code{set.seed()}). What do you observe? We will discuss it further in a different chapter.
-%<<intro-heads, eval=TRUE, comment="Outout:" >>=
-%# Simulate 200 coin-flips, using the runif function:
-%n.trials <- 200
-%cat("Number of Heads is: ", sum(runif(n.trials) < 0.5), "\n")
-%@ 
-
-
+\showCode{R}{Code/ch1sec2.R}[13][15]
 A few comments:
 \begin{itemize}
 \item A comment in \R starts with \#. Any text following the \# sign is considered user-documentation and is not executed by \R.
 \item We have used the \code{cat()} function to print (concatenate) text to the console. Fixed text appears in double (or single) quotes, but the content of variables or output from \R functions should not be quoted. The \verb|\n| symbol tells \R to print a newline character at the end. Try to see what happens if you remove it.
-\item The expression within the \code{sum()} function produces TRUE/FALSE (Boolean) values. First, we draw n.trials random numbers from a uniform distribution. Then, each one is compared with 0.5. If the value is less than 0.5, the returned value is TRUE. Otherwise, it's FALSE. This demonstrates one of \R's greatest features - allowing to run `vectorized' code. In one line, we generated 200 random numbers and compared each one to 0.5, and as a result, we got 200 Boolean values which we have added together (TRUE counts as 1, and FALSE counts as 0.) So, the result in the sum is the number of Heads in 200 tosses.
+\item The expression within the \code{sum()} function produces TRUE/FALSE (Boolean) values. First, we draw n.trials random numbers from a uniform distribution. Then, each one is compared with 0.5. If the value is less than 0.5, the returned value is TRUE. Otherwise, it's FALSE. This demonstrates one of \R's greatest features - allowing to run `vectorized' code. In one line, we generated 200 random numbers and for each one we checked if it is less than 0.5, and as a result, we got 200 Boolean values which we have added together (TRUE counts as 1, and FALSE counts as 0.) So, the result in the sum is the number of Heads in 200 tosses.
 \end{itemize}
 
-Statistical inference is based on a mental exercise in which we ask, if we could repeat the same experiment infinitely many times, what would we see? With simulations, we can get a good approximation. For example, the 200 coin-tosses experiment can be repeated, say, 100 times. One way is to use loops, like in the following example:
-%<<intro-heads2, eval=TRUE, fig.align='center', fig.width=4, fig.height=4, fig.cap="A histogram of 100 experiments, from each we get the total number of Heads in 200 fair coin tosses." >>=
-%set.seed(442886)
-%n.trials <- 200  # the number of coin-tosses in each experiment
-%reps <- 100  # the number of experiments
-%Heads <- rep(0, reps)  # A vector to store the results (initialize with 0s)
-%for (i in 1:reps) {
-%  Heads[i] <- sum((runif(n.trials) < 0.5))
-%}
-%hist(Heads, breaks=20)
-%@ 
+The number of Heads we get (with this seed) is \inlnR{```cat(sum(runif(n.trials) < 0.5))```}. Statistical inference is based on a mental exercise in which we ask, if we could repeat the same experiment infinitely many times, what would we see? With simulations, we can get a good approximation. For example, the 200 coin-tosses experiment can be repeated, say, 100 times. One way is to use loops, like in the following example:
+\showCode{R}{Code/ch1sec2.R}[18][25]
+We've used a \code{for()} loop, with an index variable called \texttt{i} which runs from 1 to 100. In each iteration we simulated n.trials=200 coin tosses, as before. The result from each iteration is stored in the $i$-th position in the vector we called Heads. Figure \ref{fig:ch1:simunif2} shows the distribution of 100 simulations, each of which consists of 200 coin tosses and from each of the 100 simulations we obtain the proportion of times we got Heads.
+
+\begin{figure}
+\centering
+\includegraphics[width=0.6\textwidth]{images/simunif2.pdf}
+\caption{A histogram of 100 experiments in which we flip a coin 200 time and calculate the proportion of times we get Heads out of 200.}\label{fig:ch1:simunif2}
+\end{figure}
+
+Using the uniform distribution, we have created a random draw from a different distribution, called the `binomial'. The mathematical notation is $Bin(N, p)$ where $N$ is the number of trials such that in each trial there can be exactly two outcomes (e.g., Heads or Tails in coin tosses), and $p$ is the probability of the first possible outcome (e.g., Head), and $1-p$ is the probability of the second possible outcome (e.g., Tail).
+\R has a built-in function to generate random numbers from many different distributions, including the binomial so the code above can be replaced by the following, which uses the \code{rbinom()} function:
+\showCode{R}{Code/ch1sec2.R}[29][33]
 
 
-We've used a \code{for()} loop, with an index variable called \texttt{i} which runs from 1 to 100. In each iteration we simulated n.trials=200 coin tosses, as before. The result from each iteration is stored in the $i$-th position in the vector we called Heads.
-
-Using the uniform distribution, we have created a random draw from a different distribution, called the `binomial'. The mathematical notation is $Bin(N, p)$ where $N$ is the number of trials such that in each trial there can be exactly two outcomes (e.g., coin tosses), and $p$ is the probability of the first possible outcome (e.g., Head), and $1-p$ is the probability of the second possible outcome (e.g., Tail).
-\R has a built-in function to generate random numbers from many different distributions, so the code above can be replaced by the following, which uses the \code{rbinom()} function:
-%<<intro-binomial, eval=TRUE, fig.align='center', fig.width=4, fig.height=3.5, fig.cap="A histogram of 100 binomial experiments, using rbinom() to simulate 200 fair coin tosses in each experiment." >>=
-%set.seed(442886)
-%reps <- 100
-%n.trials <- 200
-%Heads <- rbinom(reps, n.trials, 0.5)
-%hist(Heads, breaks=20)
-%@ 
-
-
-Exercises:
+\textcolor{red}{Exercises:}
 \begin{enumerate}
-\item Change the number of simulated coin-toss datasets (\texttt{reps}) to 1,000 and rerun the code. Then change it to 10,000 and run it again. What do you notice?
+\item Change the number of simulated coin-toss simulations (\texttt{reps}) to 1,000 and rerun the code. Then change it to 10,000 and run it again. What do you notice?
 \item Change the probability of Heads to 0.2 and run the code again. Then, change it to 0.8. What do you observe?
 \item Try other values of the number of trials and the probability of Heads.
 \end{enumerate}
 
 
-
 \subsection{Summary statistics}
-%\input{Rnw/intro-stat}
 
 We will introduce some statistical functions to summarize data. To demonstrate some of these functions, let's first generate some data:
 
-%<<intro-rexp1, eval=TRUE, >>=
-%n <- 10000
-%lambda <- 10
-%x <- -log(runif(n))/lambda
-%@ 
+\showCode{R}{Code/ch1sec3.R}[1][4]
+Note that in \R the \code{log} function uses the natural logarithm by default. To use base 10 or base 2, use \code{log10} and \code{log2}, respectively. To specify another base, use the \code{base} argument. For example, try  \code{log(16, base=4)}.
 
-Note that in \R, the \code{log} function uses the natural logarithm by default. To use base 10 or base 2, use \code{log10} and \code{log2}, respectively. To specify the base, use the \code{base} argument. For example, try  \code{log(16, base=4)}.
-
-The most commonly used one is the mean (a.k.a. the average), $\overline{x}$:\\
+The most commonly used statistical summary is the mean (a.k.a. the average), $\overline{x}$:\\
 $$\overline{x}=\frac{x_1+\ldots+x_n}{n}\,.$$
 Other ways to estimate some sort of `central tendency' of a distribution are:
  \begin{itemize}
  \item The trimmed mean, which is similar to the mean, except that the smallest and largest $p\cdot 100\%$  of the values are excluded from the computation. In our example, if we take $p=0.1$ with the simulated data, only 8,000 data points will be used in the calculation of the trimmed mean; 
  \item The median, which is a number (denoted here by $x_{0.5}$) such that half the data points are greater than $x_{0.5}$ and half are less than or equal to $x_{0.5}$. 
  \end{itemize}
-
 Let's compute the sample's mean, trimmed mean, and median. Notice that  in this example the mean is greater than trimmed mean, which is greater than the median. In general, the mean is not a great estimate of the `center' of a non-symmetric distribution. We say that the mean is more `sensitive to extreme values' than the median.
-%<<intro-rexp2, eval=TRUE, comment="Output:">>=
-%mean(x)
-%mean(x, trim=0.1)
-%median(x)
-%@ 
+\showCode{R}{Code/ch1sec3.R}[7][9]
+In this example with n=\inlnR{```cat(n)```} random numbers we get that the mean is \inlnR{```cat(mean(x))```}, the trimmed mean is  \inlnR{```cat(mean(x, trim=0.1))```}, and the median is \inlnR{```cat(median(x))```}.
 
-The formula we used to generate the data is the probability function of the exponential distribution, with rate parameter $\lambda=10$. We denote it by $X\sim exp(\lambda)$. The exponential distribution is often used to model random waiting times, like the time between incoming text messages. We would usually generate it by using the \code{rexp()} function in \R.
+The formula we used, \code{x <- -log(runif(n))/lambda}, generates random number from the so-called exponential distribution with rate parameter $\lambda=10$. We denote it by $X\sim exp(\lambda)$. The exponential distribution is often used to model random waiting times, like the time between incoming text messages. We would usually generate it by using the \code{rexp()} function in \R, like this: \code{x <- rexp(n, lambda)} .
 Mathematical analysis of the distribution leads to the fact that the expected value of an exponential random variable with rate $\lambda$, is $1/\lambda$. We see that the theoretical expected value of our example is 0.1, and the sample mean is very close to 0.1. This is no coincidence - we will discuss it in  later chapter.
 
 
-The distribution of \texttt{x} is shown below as a \textit{box-and-whisker plot} (or simply, boxplot). This is a very simple representation of numeric data, which is constructed by summarizing the data using a few numeric characteristics. The boxplot below is drawn horizontally, and the vertical grey line inside the box is the median. Similar to the median, we find the first quartile -- a point, $x_{0.25}$, such that 25\% of the values are less than $x_{0.25}$ and 75\% are greater than $x_{25}$; and the third quartile -- a point, $x_{0.75}$, such that 75\% of the values are less than $x_{0.75}$ and 25\% are greater than $x_{0.75}$. The first and third quartiles are the vertical edges of the box, also called the lower and upper hinges. So, the box represents 50\% of the data. The range between the first and third quartiles is called the \textit{Inter-Quartile Range}, or IQR, which is sometimes used to estimate the dispersion or spread of the data.
+The distribution of \texttt{x} is shown in Figure \ref{fig:ch1:simexp} as a \textit{box-and-whisker plot} (or simply, boxplot). This is a very simple representation of numeric data, which is constructed by summarizing the data using a few numeric characteristics. In Figure \ref{fig:ch1:simexp} the boxplot  is drawn horizontally, and the vertical grey line inside the box is the median. Similar to the median, we find the first quartile -- a point, $x_{0.25}$, such that 25\% of the values are less than $x_{0.25}$ and 75\% are greater than $x_{25}$; and the third quartile -- a point, $x_{0.75}$, such that 75\% of the values are less than $x_{0.75}$ and 25\% are greater than $x_{0.75}$. The first and third quartiles are the vertical edges of the box, also called the lower and upper hinges. So, the box represents the middle 50\% of the data. The range between the first and third quartiles is called the \textit{Inter-Quartile Range}, or IQR, which is sometimes used to estimate the dispersion or spread of the data.
 The `whiskers', which are the dashed grey lines, are constructed by adding 1.5$\cdot$IQR to each side of the box. If the result is smaller than the minimum value (or greater than the maximum), then the whisker only extends to the minimum (maximum). Points within the range between the two whiskers are not plotted individually, since their distribution is summarized succinctly by the box-and-whiskers plot. Points outside the range between the two whiskers are considered `outliers', or extreme values, and are shown explicitly. 
 
 The plot was generated with the following code. Try it, and try changing some of the parameters to understand their role. We will cover the topic of visualization in a different chapter.
 
-%<<intro-boxplot-rexp, eval=TRUE, fig.align='center', fig.width=6, fig.height=3, fig.cap="A boxplot." >>=
-%boxplot(x, cex=0.5, col=4,border = "grey66", horizontal = T, axes=F, at=0.25)
-%axis(1, pos = 0)
-%points(mean(x),0.25,col=2, pch=19, cex=0.7)
-%points(mean(x, trim=0.1),0.25, col="brown", pch=18)
-%@ 
+\showCode{R}{Code/ch1sec3.R}[12][15]
+
+\begin{figure}
+\centering
+\includegraphics[width=0.95\textwidth]{images/expdistbp.pdf}
+\caption{A boxplot of data generated from an exponential distribution with $\lambda=10$.}\label{fig:ch1:simexp}
+\end{figure}
 
 
-A boxplot does not include the mean, or the trimmed mean, but we have added them here as a red circle and brown diamond, respectively, in order to show that they are different than the mean. The median is smaller than the mean in this case, so we say that the distribution is skewed to the left. The median does not depend on the scale of the data. It simply represents where half the data lies. 
+A boxplot does not include the mean, or the trimmed mean, but we have added them here as a red circle and brown diamond, respectively, in order to show that they are different than the median. The median is smaller than the mean in this case, so we say that the distribution is skewed to the left. The median does not depend on the scale of the data. It simply represents where half the data lies. 
 
 A more detailed summary of a sample can be obtained by calculating its quantiles. In the boxplot, only three quantiles (also called percentiles) are shown. We can show the quintiles (20, 40, 60, 80 percentiles), or deciles (10, 20,\ldots, 90 percentiles) by using the \code{quantile()} function.
 
-%<<intro-quantile-rexp, eval=TRUE, fig.align='center', fig.width=7, fig.height=4, fig.cap="A histogram of a sample from an exponential distribution, with the 10, 20, 30,... percentiles" >>=
-%hist(x, breaks=50, border="white", col="lightblue", freq=FALSE, xlim=c(0,0.6))
-%deciles <- quantile(x, probs=seq(0.1,0.9,by=0.1))
-%abline(v=deciles, lty=2, col="purple", lwd=2)
-%text(deciles, dexp(deciles, 10), paste0(seq(10,90,by=10),"%"), cex=0.7, col="orange")
-%@ 
+\showCode{R}{Code/ch1sec3.R}[19][22]
+
+\begin{figure}
+\centering
+\includegraphics[width=0.7\textwidth]{images/expdisthist.pdf}
+\caption{A histogram of a sample from an exponential distribution, with the 10, 20, 30,... percentiles.}\label{fig:ch1:simexp2}
+\end{figure}
+
 
 
 In addition to sample statistics which summarize some notion of the center of the distribution, we are often interested in estimating the dispersion of the data. The most commonly used measures of dispersion are the variance, and its square root - the standard deviation. The variance is defined as follows
 
 $$Var(X)=\frac{(x_1-\mu)^2+\ldots+(x_n-\mu)^2}{n}$$
- where $\mu$ is the mean of the distribution of $X$. In words, the variance is the average squared deviation from the mean.
+ where $\mu$ is the mean of the distribution of $X$. In words, the variance is the average of the squared deviations from the mean.
 Notice that in \R the variance is computed with n-1 in the denominator (with n-1 we get an `unbiased estimator' for the true variance).
 
 The corresponding functions in \R are \code{var()} and \code{sd()}. In the following code we also demonstrate the \code{IQR()} function.
-%<<intro-rexp3, eval=TRUE, comment="Output:">>=
-%var(x)
-%sd(x) # note that sd(x) is sqrt(sd(x))
-%IQR(x)
-%@ 
+
+\showCode{R}{Code/ch1sec3.R}[25][27]
 
 We will see in subsequent chapters that the normal distribution plays a major role in statistics. It is defined by a probability density function, with two parameters -- $\mu$ and $\sigma^2$:
 $$\phi(x; \mu,\sigma^2)=\frac{1}{\sqrt{2\pi\sigma^2}}\exp\left[-\frac{(x-\mu)^2}{2\sigma^2}\right]\,.$$
-It is symmetric, `bell-shaped', and centered around the mean, $\mu$, as shown in the following plot. The blue histogram is generated by the \code{rnorm()} function, using $\mu=2.5$ and $\sigma^2=0.25$. The orange curve shows the function $\phi$, by using the \code{dnorm()} function (to obtain the density of $x$).
-%<<intro-rnorm1, eval=TRUE, comment="Output:", fig.align='center', fig.width=4, fig.height=4, fig.cap="A histogram of a sample from an normal distribution, with mean=2.5 and variance=0.25" >>=
-%x <- rnorm(10000, mean=2.5, sd=0.5)
-%hist(x, breaks=30, border="white", col="navyblue", freq=FALSE)
-%xs <- seq (0,5, length=500)
-%lines(xs, dnorm(xs,2.5, 0.5), col="orange", lwd=3)
-%@ 
+It is symmetric, `bell-shaped', and centered around the mean, $\mu$, as shown in Figure \ref{fig:ch1:simnorm}. The blue histogram is generated by drawing random numbers from a normal distribution, using the \code{rnorm()} function. Here, we use $\mu=2.5$ and $\sigma^2=0.25$. The orange curve shows the function $\phi$, by using the \code{dnorm()} function (to obtain the density function of $x$).
+\showCode{R}{Code/ch1sec3.R}[30][33]
+\begin{figure}
+\centering
+\includegraphics[width=0.7\textwidth]{images/normdisthist.pdf}
+\caption{A histogram of a sample from a normal distribution, with mean=2.5 and variance=0.25.}\label{fig:ch1:simnorm}
+\end{figure}
 
-We can obtained more detailed summaries about the sample, by using the functions \code{summary()} and \code{describe()} (the latter is from the psych package, and provides more details.)
+We can obtained more detailed summaries about the sample, by using the  \code{summary()} function. \code{summary()}  gives the minimum, maximum, the 25th, 50th, and 75th percentiles, as well as the mean of the sample. Using the random numbers from the normal distribution in the previous code:
+\showCode{R}{Code/ch1sec3.R}[36][36]
+\inlnR{```print(summary(x))```}[vbox]
+Another possibility (among many) to summarize data in \R is the \code{describe()} function from the psych package, 
+\showCode{R}{Code/ch1sec3.R}[37][37]
+It gives the sample size, the standard deviation, the trimmed mean, the mean absolute deviation (mad), the range (maximum minus minimum), the skewness, and the kurtosis \textcolor{red}{will we use the kurtosis later? If so, we should add a ref.}.
+\inlnR{```print(psych::describe(x))```}[vbox]
 
-%<<intro-rnorm2, eval=TRUE, comment="Output:">>=
-%print(summary(x))
-%print(psych::describe(x))
-%@ 
+We conclude this chapter with some functions which can be used to summarize discrete (categorical) data, where the mean, variance, quantiles, etc. are not applicable. We will revisit the topic of summarizing data in the chapter on \textcolor{red}{visualization}.
 
-\code{summary()}  gives the minimum, maximum, the 25th, 50th, and 75th percentiles, as well as the mean of the sample. \code{psych::describe()} also gives the sample size, the standard deviation, the trimmed mean, the mean absolute deviation (mad), the range (maximum minus minimum), the skewness, and the kurtosis \hb{will we use the kurtosis later? If so, we should add a ref.}.
-
-We conclude this chapter with some functions which can be used to summarize discrete (categorical) data, where the mean, variance, quantiles, etc. are not applicable. We will revisit the topic of summarizing data in the chapter on \hb{visualization}.
-
-To simulate categorical data we can use the \code{rmultinom()} function, which simulates putting $N$ objects in $K$ bins with given probabilities. Another possibility is to use \code{cut()} function which divides a range of number into discrete ranges and creates discrete categories in a factor variable.
+To simulate categorical data we can use the \code{rmultinom()} function, which simulates putting $N$ objects in $K$ bins with given probabilities for each bin. Another possibility is to use \code{cut()} function which divides a range of numbers into discrete ranges and creates discrete categories in a factor variable.
 For example, suppose there is a town with three hotels (Motel 6, Best Western,  and Hilton) with 400, 300, and 300 rooms, and one auto rental company with only two makes of cars (700 Honda, and 300 Teslas). In the following code we simulate the allocation of 100 visitors to hotels and cars. We use the \code{table()} function to show the counts by hotel, by car, and by both. 
+\showCode{R}{Code/ch1sec3.R}[39][45]
+\inlnR{```print(table(hotelrooms))```}[vbox]
+\inlnR{```print(autotbl <- table(autorental))```}[vbox]
+\inlnR{```print(table(hotelrooms, autorental))```}[vbox]
 
-%<<intro-cut1, eval=TRUE, comment="Output:">>=
-%hotelrooms <- cut(runif(100),breaks = c(0,0.4,0.7,1), include.lowest = TRUE)
-%levels(hotelrooms) <- c("Motel 6", "Best Western", "Hilton")
-%autorental <- cut(runif(100),breaks = c(0,0.7,1), include.lowest = TRUE)
-%levels(autorental) <- c("Honda", "Tesla")
-%(hoteltbl <- table(hotelrooms))
-%(autotbl <- table(autorental))
-%table(hotelrooms, autorental)
-%@ 
 
 We can use the \code{max()} and \code{which.max()} functions to find the mode of the data (the most frequent value).
-
-%<<intro-cut2, eval=TRUE, comment="Output:">>=
-%cat(levels(hotelrooms)[which.max(hoteltbl)],":", max(hoteltbl),"\n")
-%cat(levels(autorental)[which.max(autotbl)],":", max(autotbl),"\n")
-%@ 
-
-%matrices
-% in a chapter on visualization:
-%.  more distributions - Poisson, beta, gamma, lognormal
-%.  density plot
-%.  ecdf
-%.  Q-Q plot
-%.  scatterplot
-
+\showCode{R}{Code/ch1sec3b.R}[1][2]
+The hotel with the largest number of guests is \inlnR{```cat(levels(hotelrooms)[which.max(hoteltbl)])```} with \inlnR{```cat(max(hoteltbl))```} guests, and \inlnR{```cat(levels(autorental)[which.max(autotbl)])```} is rented to \inlnR{```cat(max(autotbl))```} people.
