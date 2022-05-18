@@ -279,3 +279,5 @@ TSWLatexianTemp*
 *.config
 *debug.txt
 serverPID*.txt
+
+tmp/
