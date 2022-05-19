@@ -17,7 +17,7 @@
 % our additions to the preamble (make external)
 %\usepackage[python]{runcode}
 %\usepackage[python,stopserver]{runcode}
-\usepackage[R]{runcode}%Book}
+\usepackage[nohup,R]{runcode}%Book}
 %\usepackage[cache]{runcodeBook}
 
 \setminted[julia]{linenos, frame=single, bgcolor=bg, breaklines=true}
@@ -129,3 +129,8 @@ other information.
 The book was produced as an example of the package \texttt{nostarch}. 
 
 \end{document}
+
+%%% Local Variables:
+%%% TeX-command-extra-options: "--shell-escape"
+%%% TeX-engine: xetex
+%%% End:
