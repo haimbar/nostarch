@@ -1,1 +1,0 @@
-\XeTeXglyph \numexpr \XeTeXcharglyph "0060\relax \XeTeXglyph \numexpr \XeTeXcharglyph "0060\relax \XeTeXglyph \numexpr \XeTeXcharglyph "0060\relax print(class(courseNames))\XeTeXglyph \numexpr \XeTeXcharglyph "0060\relax \XeTeXglyph \numexpr \XeTeXcharglyph "0060\relax \XeTeXglyph \numexpr \XeTeXcharglyph "0060\relax
