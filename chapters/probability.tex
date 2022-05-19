@@ -51,8 +51,12 @@ down if it is above the 13th floor. There are 12 floors below the 13th floor and
 is $12/14\approx0.86>0.5$. Thus no matter when Mr. Smith wants to go home, it is
 more likely that the elevator is going up.
 
-We can simulate this situation:  
+We can simulate this situation:
 
+\showCode{R}{Code/probability-elevator.R}
+\runR{Code/probability-elevator.R}{elevator}{}
+Running the above code gives:
+\includeOutput{elevator}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %\input{Rnw/probability-elevator}
 
@@ -125,10 +129,13 @@ We should choose die C over die A!
 
 Here is an experiment to simulate the intransitive dice.
 
-\showCode{python}{Code/probability-IntransitiveDice.py}
-
+% \showCode{python}{Code/probability-IntransitiveDice.py}
+% Running this code gives the following:
+% \runPython{Code/probability-IntransitiveDice.py}{IntransitiveDice}{}
+% \includeOutput{IntransitiveDice}
+\showCode{R}{Code/probability-IntransitiveDice.R}
 Running this code gives the following:
-\runPython{Code/probability-IntransitiveDice.py}{IntransitiveDice}{}
+\runR{Code/probability-IntransitiveDice.R}{IntransitiveDice}{}
 \includeOutput{IntransitiveDice}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -169,6 +176,10 @@ probability is $\frac{1}{3}$.
 
 If we simulate many families, we can find the numerical answer quite accurately.
 
+\showCode{R}{Code/probability-TwoChildren.R}
+\runR{Code/probability-TwoChildren.R}{TwoChildren}{}
+Running the above code gives:
+\includeOutput{TwoChildren}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %\input{Rnw/probability-TwoChildren}
 
@@ -472,10 +483,8 @@ to your advantage to switch your choice?
 %\input{Rnw/probability-MontyHall}
 
 %%% Local Variables:
-%%% coding: utf-8
 %%% mode: latex
-%%% TeX-engine: xetex
-%%% TeX-master: "../00why.tex"
-%%% End:
-
 %%% TeX-command-extra-options: "-shell-escape"
+%%% TeX-engine: xetex
+%%% TeX-master: "../sidsmain.tex"
+%%% End:
