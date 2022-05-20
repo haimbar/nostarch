@@ -205,6 +205,10 @@ division should be $45:15$.
 
 Let's use simulation to solve this problem.
 
+\showCode{R}{Code/probability-FairDivision.R}
+\runR{Code/probability-FairDivision.R}{FairDivision}{}
+Running the above code gives:
+\includeOutput{FairDivision}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %\input{Rnw/probability-FairDivision}
 
@@ -225,6 +229,15 @@ be in that room.
 
 Let's use simulation to verify the aforementioned numbers.
 
+\showCode{R}{Code/probability-birthday.R}
+\runR{Code/probability-birthday.R}{birthday}{}
+Running the above code gives:
+% \includeOutput{birthday}
+If there are 23 people in the room, the probability that some people
+share the same birthday is \inlnR{```cat(prob.p23[1])```} and the probability
+that some people's birthday is the same as yours is
+\inlnR{```cat(prob.p23[2])```}. If there are 253 people in the room, the two
+probabilities are \inlnR{```cat(prob.p253[1])```} and \inlnR{```cat(prob.p253[2])```}, respectively. 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %\input{Rnw/probability-birthday}
 
@@ -270,6 +283,10 @@ If Gretchen spins the chamber again, the probability that she shoots Henry would
 be 2/6, or 1/3, since there are two possible bullets that would be in firing
 position out of the six possible chambers that would be in position.
 
+\showCode{R}{Code/probability-HenryChoice.R}
+\runR{Code/probability-HenryChoice.R}{HenryChoice}{}
+Running the above code gives:
+\includeOutput{HenryChoice}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %\input{Rnw/probability-HenryChoice}
 
@@ -285,6 +302,10 @@ A box is selected at random and a coin is taken from that box at random. If the
 coin is a gold coin, what is the probability that the other coin in that box is
 also a gold coin.
 
+\showCode{R}{Code/probability-BertrandBox.R}
+\runR{Code/probability-BertrandBox.R}{BertrandBox}{}
+Running the above code gives:
+\includeOutput{BertrandBox}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %\input{Rnw/probability-BertrandBox}
 
@@ -404,6 +425,25 @@ qualified applicants.
 To use simulation to further illustrate this, we simulate a data set
 with four groups in the following.
 
+\showCode{R}{Code/probability-Simpson.R}[1][6]
+\runR{Code/probability-Simpson.R}{Simpson}{}
+% Running the above code gives:
+% \includeOutput{Simpson}
+
+We use the following code to first plot the whole data and then mark different
+groups in different colors. 
+\showCode{R}{Code/probability-Simpson.R}[8][9]
+
+The results is displayed below.
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.45\textwidth]{images/probability-Simpson-plots.pdf}
+\includegraphics[width=0.45\textwidth,page=2]{images/probability-Simpson-plots.pdf}
+\caption{Scatter plot of the whole data without (left) and with (right) group labeled.}
+\label{fig:probability-simpson}
+\end{figure}
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %\input{Rnw/probability-Simpson}
 
@@ -452,6 +492,10 @@ gives the prisoners more than 0.30 probability to survive
 In the following, we define two functions to simulate the method of randomly
 open 50 drawers and the better strategy, respectively.
 
+\showCode{R}{Code/probability-100prisoners.R}
+\runR{Code/probability-100prisoners.R}{100prisoners}[cache]
+Running the above code gives:
+\includeOutput{100prisoners}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %\input{Rnw/probability-100prisoners}
 
@@ -479,6 +523,10 @@ and the host, who knows what's behind the doors, opens another door, say No. 3,
 which has a goat. He then says to you, "Do you want to pick door No. 2?" Is it
 to your advantage to switch your choice?
 
+\showCode{R}{Code/probability-MontyHall.R}
+\runR{Code/probability-MontyHall.R}{MontyHall}[run]
+Running the above code gives:
+\includeOutput{MontyHall}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %\input{Rnw/probability-MontyHall}
 
