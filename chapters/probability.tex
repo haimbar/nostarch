@@ -1,23 +1,19 @@
 \hypertarget{ch:probability}{%
-  \chapter{Intuition, Paradoxes, and Probability}
+  \chapter{Probability -- Intuition and Paradoxes}
   \label{ch:probability}}
 
 \chapterartfile{images/Black_Dice_PNG_Clip_Art-2653.png}
-\hypertarget{Rintro}{The world is random and probability is a tool to quantify
-  the randomness. With random events, our intuition may give us high confidence
-  on a wrong conclusion. For example, knowing that A is larger than B and B is
-  larger than C, can we say A is always larger than C? Not really for random
-  events.}
+\hypertarget{Rintro}{The world is random and probability is a tool to quantify the randomness. It is the mathematical basis for all statistical reasoning. It helps us to determine how likely it is that we'll win a lottery, or the chances that our town will be hit by an earthquake in the next month.
+However, probability theory can be confusing and even counter-intuitive in some cases. In this chapter we review basic concepts in probability, we show some examples in which our intuition may fail us (and even the best mathematician), and provide guidance how to avoid common errors in probabilistic thinking.}
 
 \hypertarget{probability}{%
 \section{Probability}\label{probability}}
-
-We will go through examples to see how probability helps
-interpret phenomena in real life and how probability may counter
-intuition. We begin by introducing some concepts:
+\subsection{Basic Definitions}
+%We will go through examples to see how probability helps interpret phenomena in real life and how probability may counter intuition. We begin by introducing some concepts:
+We begin with some essential terminology and notations: 
 \begin{itemize}
-\item Experiment: a situations in which the outcome occur randomly, e.g.,
-  flipping a coin, rolling a dice, and picking a card.
+\item Experiment: a situation in which the outcome occurs randomly, e.g.,
+  flipping a coin, rolling a dice, and picking a card from a deck.
 \item Sample Space: the set of all possible outcomes in an experiment, e.g.,
   \{head, tail\}, \{1, 2, ..., 6\}, and \{all card faces\}.
 \item Event: a subset of the sample space is called an event; an event
@@ -27,50 +23,43 @@ intuition. We begin by introducing some concepts:
 \end{itemize}
 
 The relationship between a sample space and an event can be illustrated using a
-Venn diagram such as Figure~\Ref{fig:probability-event} for rolling a dice. The
-sample space labeled as $S$ is represented as the rectangle that contains all the
-six possible outcomes. The event $E$ of having an even number is represented
-as the circle that contains the even numbers.
+Venn diagram such as Figure~\ref{fig:probability-event} for rolling a die. The
+sample space labeled as $S$ is represented by the outer rectangle that contains all the
+six possible outcomes. The event $E$ of rolling an even number is represented
+by the inner, rounded rectangle  that contains the numbers 2, 4, and 6.
 
 \begin{figure}[htbp]
 \centering
 \begin{tikzpicture}
-  \draw (-2, 1.5) rectangle (2, -1.5);
-  \fill[color=gray] (0, 0) circle (1);
-  \draw (-1.5, 0) node{$S$};
-  \draw (-1, 1) node{1} (0, 1.2) node{3} (1, 1) node{5};
-  \draw (0.1, 0.4) node{$E$};
-  \draw (-0.4, -0.2) node{2} (0, -0.4) node{4} (0.4, -0.2) node{6};
+  \draw (-2, 2) rectangle (2, 0);
+  \draw[rounded corners=10pt, fill = cyan!20, draw=blue] (-0.7,0.1) rectangle ++(2.5,0.8);
+  \draw (-1.5, 1.7) node{$S$};
+  \draw (-1, 1.2) node{1} (0, 1.2) node{3} (1, 1.2) node{5};
+  \draw (-0.5, 0.5) node{2} (0.5, 0.5) node{4} (1.5, 0.5) node{6};
+  \draw[text = blue] (0, 0.3) node{$E$};
 \end{tikzpicture}
-\caption{Sample space and event illustrated with Venn diagram}
+\caption{Sample space (the outcomes of a fair six-sided die) and event (rolling an even number) illustrated with Venn diagram. }
 \label{fig:probability-event}
 \end{figure}
 
-\emph{Probability} is a measure on how likely an event occurs. If we assume that the
-possible outcomes in an experiment % is countable and they
-have equal chance to occur, then the probability of event $E$ is
+\emph{Probability} is a number between zero and one which tells us how likely an event to occur. If we assume (for now) that the sample space is finite and each possible outcome in an experiment  has an equal chance to occur, then the probability of event $E$ is
   \begin{equation}
     P(E) =\frac{\text{size of } E}{\text{size of } S}.
   \end{equation}
-  % where $n$ is the number of elements in $E$ and $N$ is the
-  % number of elements in the sample space.  Note that this formula
-  % holds only if all the outcomes are equally likely.
-
-% \hypertarget{example-elevator-waiting-time}{%
-%   \section{Elevator waiting
-%     time}\label{example-elevator-waiting-time}}
-\begin{example}[Elevator waiting time]
-  Mr. Smith works on the 13th floor of a 15 floor building. The only elevator
-  moves continuously through floors 1, 2, . . . 14, 15, 14, . . . 2, 1, 2,
-  . . . , except that it stops on a floor on which the button has been
+  In the example depicted in Figure~\ref{fig:probability-event} the probability that we roll an even number when we use a fair die, is $P(even)=3/6=0.5$.
+  
+In the following chapters we will deal with infinite (even uncountable) sample spaces, and we will generalize the definition of $P(E)$ then.
+  
+ \begin{example}[Elevator waiting time]
+  Mr. Smith works on the 13th floor of a 15 floor building. The only elevator in his building  moves continuously through floors 1, 2, . . . 14, 15, 14, . . . 2, 1, 2,  . . . , except that it stops on a floor on which the button has been
   pressed. Assume that time spent loading and unloading passengers is very small
-  compared to the travelling time.  Mr.~Smith complains that at 5pm, when he
+  compared to the traveling time.  Mr.~Smith complains that at 5pm, when he
   wants to go home, the elevator almost always goes up when it stops on his
   floor. What is the explanation?
 \end{example}
 
 When Mr.~Smith gets to the elevator, it may be below the 13th floor or above
-it. The elevator will goes up if it is below the 13th floor and it will goes
+it. The elevator will go up if it is below the 13th floor and it will go
 down if it is above the 13th floor. There are 12 floors below the 13th floor and
 2 floors above it, so the probability that the elevator is below the 13th floor
 is $12/14\approx0.86>0.5$. Thus no matter when Mr. Smith wants to go home, it is
@@ -82,20 +71,106 @@ We can simulate this situation:
 \runR{Code/probability-elevator.R}{elevator}{}
 Running the above code gives:
 \includeOutput{elevator}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%\input{Rnw/probability-elevator}
 
-Probabilities for random may counter intuition and they may not have usual
-ordering. We discus two examples in the following subsections.
+  
+\hypertarget{conditional}{%
+\subsection{Conditional Probability}\label{conditional}}
+
+When there are two events $A$ and $B$ under consideration, knowing that $A$ has occurred may change the probability for $B$ to occur. For example, suppose that someone rolls a die behind a curtain and tells us only that the number is less than or equal to 3. What is the probability that it is an even number? Given that we got 1, 2, or 3, the only possibility that it is even is if the number is 2. The \emph{unconditional} probability of getting an even number in a roll of a die is 1/2, but because of the information that provided to us, we conclude that the \emph{conditional} probability is 1/3. 
+Using mathematical notation, we write  $P(B\mid A)=1/3$ which stands for ``conditional on $A$=the number is less than or equal to 3, the probability of $B$=the number is even, is 1/3''. 
+
+Once again, it is helpful to visualize such things using a Venn diagram. In Figure~\ref{fig:probability-conditional}, the sample space $S$ consists of the six possible outcomes and the two events are depicted as a circle (event $A$) and as a rounded rectangle ($B$). To say that we condition on $A$ means that we restrict our view and look only at outcomes that could occur if we are told that $A$ has occurred. In other words, our sample space becomes $A$, instead of the whole set, $S$.
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[thick,fill opacity=0.5]
+  \draw (-2, 2) rectangle (2.5, -0.5);
+\draw[fill=MidnightBlue!80, draw=MidnightBlue] (-0.5, 1.05) circle (0.8);
+  \draw[rounded corners=10pt, fill = Dandelion!80, draw=Dandelion] (-0.7,0.1) rectangle ++(2.5,0.8);
+  \draw (-1.7, 1.7) node{$S$};
+  \draw (-1, 1.2) node{1} (0, 1.2) node{3} (1, 1.2) node{5};
+  \draw (-0.5, 0.5) node{2} (0.5, 0.5) node{4} (1.5, 0.5) node{6};
+  \draw[text = orange] (1.2, -0.1) node{$B$};
+  \draw[text = MidnightBlue] (-1.2, 0.5) node{$A$};
+\end{tikzpicture}
+\caption{Conditional probability -- given that we are told that a die gave a number less than or equal to 3 (event $A$), what is the probability that we got an even number ($B$)?}
+\label{fig:probability-conditional}
+\end{figure}
+
+\bigskip
+Can it be that we are told that some event $A$ has occurred, but this information tells us nothing about the probability of another event, $B$? Yes -- in this case we say that the two events are \emph{independent}, and we have
+$$P(B\mid A) = P(B)\,.$$
+In general, $P(B\mid A) \ge P(B)$.
+
+\begin{example}[Two Children]
+Consider the following two problems:
+\begin{enumerate}
+\item Mr. Jones has two children. The older child is a girl. What is the
+  probability that both children are girls?
+\item Mr. Smith has two children. At least one of them is a girl. What is the
+  probability that both children are girls?
+\end{enumerate}
+\end{example}
+In a family with two children there are four possible combinations of boy/girl in when we take into consideration their ages: \{Boy, Boy\},
+\{Boy, Girl\}, \{Girl, Boy\}, \{Girl,Girl\}. Suppose that they all have the same probability to occur.
+
+For the first question: the sample space for the given situation consists of only two events -- \{Girl, Boy\}, \{Girl,Girl\}; and only one of them corresponds to the event of having two girls. Thus the
+probability of two girls is $\frac{1}{2}$. This question can also be solved this
+way: Since the older child is a girl, the probability of two girls is the
+probability that the younger child is a girl which is $\frac{1}{2}$.
+
+For the second question, the sample space includes three possibilities: \{Boy, Girl\}, \{Girl, Boy\}, \{Girl,Girl\}. Thus the
+probability of having two girls, given that at least one of them is a girl  is $\frac{1}{3}$.
+
+If we simulate many families, we can find the numerical answer quite accurately.
+
+\showCode{R}{Code/probability-TwoChildren.R}
+\runR{Code/probability-TwoChildren.R}{TwoChildren}{}
+Running the above code gives:
+\includeOutput{TwoChildren}
+
+
+
+
+
+\subsection{Bayes' Rule}\label{Bayes}
+One of the most important results in probability and statistics looks deceivingly simple, but has deep consequences, as we will see in some of the subsequent examples. It is called Bayes' Rule, named after the reverend Thomas Bayes who discovered it in the 18th century. Consider two events, $A$ and $B$, such that $P(A)$ is greater than zero. Then
+\begin{align}
+  P(B\mid A) = \frac{P(A\mid B)P(B)}{P(A)},
+\end{align}
+
+ \begin{example}[Football or ballet?]
+Jane has season tickets to the home games of her town's football team, which she attends  80\% of the time, and she also has season tickets to the town's ballet which she attends 20\% of the time. In 10\% of the weeks she attends both the weekly football game and the ballet. This is depicted in Figure~\ref{fig:bayes-rule}. 
+
+If we see Jane in a game, what is the probability that we'll see her in the ballet in the same week?
+Using Bayes' rule, $P(B\mid A) =0.5\times0.2/0.8=0.125$.
+
+If we see her in the ballet, what is the probability that we will see her in the football game, as well?
+With Bayes' rule we get $P(A\mid B) =0.125\times0.8/0.2=0.5$.
+
+So, although Jane goes to  80\% of the football games, if she ends up going to the ballet then she is less likely to go to the game in the same week (50\%). 
+\end{example}
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[fill opacity=0.7]
+  \draw (0,3) rectangle (4, 0);
+  \draw[fill = red!80, draw=red] (1, 0.5) rectangle ++(2,2) node[midway,white]{F};
+  \draw[fill = blue!80, draw=blue] (0.5,0.5) rectangle ++(1,1)  node[midway,white]{B};
+\end{tikzpicture}
+\caption{Bayes' rule. $F$ is the event that Jane attends the weekly football game, and $B$ is the events that she attends the weekly ballet.}
+\label{fig:bayes-rule}
+\end{figure}
+
+
+\section{When Intuition May Fail}
+Probability-based logic may be confusing and even counter-intuitive in some cases. In this section, we show such cases, some of which have confused some of the brightest people. The purpose of introducing these examples is to show how they may occur in everyday situations, and how to deal with them correctly.
 
 \hypertarget{Intransitive-Dice}{%
-  \subsection{Intransitive Dice}\label{Intransitive-Dice}}
-
-We know that in general if $A>B$ and $B>C$ then $A>C$. However, this may not be
-the case in the word of probability.
-
+  \subsection{Intransitivity -- when $A>B$ and $B>C$ does not imply $A>C$}\label{Intransitive-Dice}}
+Real numbers are transitive, meaning that if we know that $x>y$ and $y>z$ then $x>z$. However, probability of events are not always transitive. 
 \begin{example}[Intransitive Dice]
-% Consider three dice with different sides numbers:
+We have three unusual dice:
 \begin{itemize}
 \item Die A has sides 2, 2, 4, 4, 9, 9.
 \item Die B has sides 1, 1, 6, 6, 8, 8.
@@ -103,11 +178,9 @@ the case in the word of probability.
 \end{itemize}
 \end{example}
 
-To play a game using dice A and B, you can chose which die to roll and your
-opponent rolls the other. The one who tolls a larger number wins. Which die do
-you want to choose?
+To play a game you and your opponent choose two of the dice, say, A and B, and you get to choose which die you roll (and your opponent will roll the other.) The one who tolls a larger number wins. Which die do you want to choose?
 
-Let's table the possible results to see the better die.
+Let's tabulate the possible results if dice A and B were chosen, and see which  die is preferred.
 \begin{center}
   \begin{tabular}{cc|ccc}\hline
     &   & \multicolumn{3}{c}{B} \\
@@ -124,7 +197,7 @@ Since die A wins five out of the nine possible results and all possible results
 occur with equal probability, we know that die A has a higher winning
 probability ($\frac{5}{9}$) than die B. We should choose die A over die B.
 
-Now consider dice B and C.
+Now suppose we choose dice B and C.
 \begin{center}
   \begin{tabular}{cc|ccc}\hline
     &   & \multicolumn{3}{c}{B} \\
@@ -142,7 +215,7 @@ so we should choose die B over die C.
 
 Since we should choose die A over die B, and choose die B over die C, does this
 mean that we should choose die A over die C if these two dice are to be
-selected. Surprisingly, the answer is NO. Here is the table of the possible
+selected? Surprisingly, the answer is NO. Here is the table of the possible
 results.
 \begin{center}
   \begin{tabular}{cc|ccc}\hline
@@ -159,144 +232,49 @@ We should choose die C over die A!
 
 Here is an experiment to simulate the intransitive dice.
 
-% \showCode{python}{Code/probability-IntransitiveDice.py}
-% Running this code gives the following:
-% \runPython{Code/probability-IntransitiveDice.py}{IntransitiveDice}{}
-% \includeOutput{IntransitiveDice}
 \showCode{R}{Code/probability-IntransitiveDice.R}
 Running this code gives the following:
 \runR{Code/probability-IntransitiveDice.R}{IntransitiveDice}{}
 \includeOutput{IntransitiveDice}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%\input{Rnw/probability-IntransitiveDice}
+
+You are probably never going to encounter such dice, or play this game, but you may encounter a similar situation in real life when you have to choose among different people for a single position, or choose among similar products, based on preferences or ratings.
+For example, suppose you want to purchase a new phone which is offered by three manufacturers, and there are six reviews for each phone. Note that the average ratings of all three options in our made-up example is the same. You may prefer phone A because it got the highest rating (twice). However, it also got two very low ratings, so choosing based on the maximum is risky. Option C has less variability in its ratings, but it didn't get a very high score from any reviewer. Furthermore, it may be that you have 60,000 reviews for each phone, and not just six. So, going systematically over the reviews is impractical, and you may decide that the best way to choose your phone is to use a randomized algorithm like the one in the dice example. That is, choose two of the options, and  then choose one random rating for each one, and select the one that give the highest score. This is a reasonable algorithm, but you have to be aware of the fact that when choices are made based on a probabilistic approach, ordering of options may not have the transitive property.
+
+
 
 \hypertarget{birthday-problem}{%
-  \subsection{Birthday Problem}\label{birthday-problem}}
+  \subsection{Rare Events Still Happen}\label{birthday-problem}}
 
 \begin{example}[Birthday Problem]
-Suppose that a room contains 23 people. What is the probability that
-at least two of them have a common birthday? Assuming that each year has 365
-days, this probability seems very small, but it is actually about
-0.5. What is the probability that some one in that room has the same
-birthday as yours? This probability is quite small
-($\approx0.061$). In order to have the probability that someone's
-birthday is the same as yours to be 0.5, we need 253 random selected people to
-be in that room.
+You go on a long trip on your birthday and take a bus. There are 23 people on the bus, and to make the ride more fun you ask all the other passengers for their birth date (month and day, not year) and see if you can celebrate together. How likely it is that someone on the bus shares your birthday?
+
+The chance that a random person has the same birthday as yours is $1/365\approx0.0027$, so it may seem pretty unlikely, but with 23 people on the bus it turns out the the probability that at least one of them shares your birthday is much higher ($\approx0.061$.) In you took a plane with 253 passengers the probability that at least one of them shares your birthday is 0.5.
+
+We will also answer the following question: what is the probability that on the bus/plane there are at least two people who share a birthday (even if it's not the same as yours)?
 \end{example}
 
-Let's use simulation to verify the aforementioned numbers.
+Let's use simulation to answer these questions.
 
 \showCode{R}{Code/probability-birthday.R}
 \runR{Code/probability-birthday.R}{birthday}{}
 Running the above code gives:
 % \includeOutput{birthday}
-If there are 23 people in the room, the probability that some people
+If there are 23 people on the bus, the probability that some people
 share the same birthday is \inlnR{```cat(prob.p23[1])```} and the probability
-that some people's birthday is the same as yours is
-\inlnR{```cat(prob.p23[2])```}. If there are 253 people in the room, the two
+that at least one person's birthday is the same as yours is
+\inlnR{```cat(prob.p23[2])```}. If there are 253 people on the plane, the two
 probabilities are \inlnR{```cat(prob.p253[1])```} and \inlnR{```cat(prob.p253[2])```}, respectively. 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%\input{Rnw/probability-birthday}
 
-% \begin{equation*}
-%   P(A)=1-P(A^c)=1-\frac{P_{365,n}}{365^n}=1-\frac{365\times364\times\cdots
-%                  \times(365 - n + 1)}{365^n}
-% \end{equation*}
-% Some numbers:\\
-% \begin{tabular}{lrrrrrr}\hline
-%   $n$ & 4 & 16 & 23 & 32 & 40 & 56 \\
-%   \hline
-%   $P(A)$ & .016 & .284 & .507 & .753 & .891 & .988 \\\hline
-% \end{tabular}
-% \begin{equation*}
-%   P(A)=1-P(A^c)=1-\frac{364^n}{365^n}
-% \end{equation*}
+This is an example that shows that rare events can occur quite often, if we have a large enough sample.
+This is particularly important in trials, where DNA match is often used as evidence that a defendant has committed a crime. The chance that a DNA sample from a crime scene matches a random person is extremely low, but not zero. With nine billion people in the world, the probability that at least one other person's DNA (other than the true offender) will match the DNA sample from the scene is not negligible.
 
-\hypertarget{conditional}{%
-\section{Conditional Probability}\label{conditional}}
+\textcolor{red}{Exercise}
+Adapt the previous code by changing $N$ and $n$, to check the probability that a 1 in a billion event will be observed if you run the experiment with 1 million people.
 
-Additional knowledge may affect the outcome of an experiment and change
-the probability of an event. This is the \emph{conditional probability}. For example, when there are two events $A$ and $B$
-in consideration, knowing that $A$ has occurred may change the probability for
-$B$ to occur, and it is called the probability of event $B$ given event $A$. In
-Figure~\Ref{fig:probability-conditional}, the probability of event $B$ without
-known the occurrence of event $A$ is
-\begin{equation}
-  P(B)=\frac{\text{size of } B}{\text{size of } S}
-  =\frac{\text{size of (2) + (3)}}{\text{size of } S}.
-\end{equation}
-This is an \emph{unconditional probability}. If we know that $A$ has occurred,
-then the area of $A$ becomes the sample space and the outcome much be in the
-area of (2) for $B$ to occur. Thus the \emph{conditional probability} of $B$
-given $A$ is
-\begin{equation}
-  P(B\mid A)=\frac{\text{size of (2)}}{\text{size of } A}
-  =\frac{\text{size of (2)}}{\text{size of (1) + (2)}}.
-\end{equation}
+\hypertarget{further}{%
+\section{Further Examples}\label{further}}
 
-\begin{figure}[H]
-\centering
-\begin{tikzpicture}
-\draw (-2, 1.5) rectangle (2, -1.5);
-\fill[color=MidnightBlue!50] (-0.5, 0) circle (1);
-\fill[color=Dandelion] ( 0.5, 0) circle (1);
-\begin{scope}
-  \clip (-0.5,0) circle(1);
-  \clip (0.5,0) circle(1);
-  \fill[gray](0,0) circle(1);
-\end{scope}
-\draw (-0.5, 0) circle (1);
-\draw ( 0.5, 0) circle (1);
-\draw ( 0, -1.2) node{ $S$};
-\draw (-0.5, 1.2) node{ $A$};
-\draw ( 0.5, 1.2) node{ $B$};
-\draw (-0.8, 0) node{ $(1)$};
-\draw (   0, 0) node{ $(2)$};
-\draw ( 0.8, 0) node{ $(3)$};
-\end{tikzpicture}
-\caption{Probabilities with two events}
-\label{fig:probability-conditional}
-\end{figure}
-
-% \hypertarget{Two-Child}{%
-%   \section{Two Children}\label{Two-Child}}
-
-\begin{example}[Two Children]
-Consider the following two problems:
-\begin{enumerate}
-\item Mr. Jones has two children. The older child is a girl. What is the
-  probability that both children are girls?
-\item Mr. Smith has two children. At least one of them is a girl. What is the
-  probability that both children are girls?
-\end{enumerate}
-\end{example}
-Here are the possibilities of \{older child, younger child\}: \{Boy, Boy\},
-\{Boy, Girl\}, \{Girl, Boy\}, \{Girl,Girl\}, with equal probabilities to occur.
-
-For the first question: two elements satisfy the situation (the sample space for
-the given situation) -- \{Girl, Boy\}, \{Girl,Girl\}; one element corresponds to
-the event of two girls. Thus the
-probability of two girls is $\frac{1}{2}$. This question can also be solved this
-way: Since the older child is a girl, the probability of two girls is the
-probability that the younger child is a girl which is $\frac{1}{2}$.
-
-For the second question, three elements satisfy the situation (the sample space
-for the given situation): \{Boy, Girl\}, \{Girl, Boy\}, \{Girl,Girl\}. Thus the
-probability is $\frac{1}{3}$.
-
-If we simulate many families, we can find the numerical answer quite accurately.
-
-\showCode{R}{Code/probability-TwoChildren.R}
-\runR{Code/probability-TwoChildren.R}{TwoChildren}{}
-Running the above code gives:
-\includeOutput{TwoChildren}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%\input{Rnw/probability-TwoChildren}
-
-
-% \hypertarget{Fair-Division}{%
-%   \section{Fair Division}\label{Fair-Division}}
 
 \begin{example}[Fair Division]
 Tom and Jerry, each put 30 dollar in a jackpot to start a game. Suppose that
@@ -362,8 +340,6 @@ Running the above code gives:
 %\input{Rnw/probability-HenryChoice}
 
 
-\hypertarget{further}{%
-\section{Further Examples}\label{further}}
 
 \hypertarget{Bertrand-Box}{%
 \subsection{Bertrand's Box}\label{Bertrand-Box}}
@@ -675,6 +651,11 @@ Running the above code gives:
 
 We see that opening drawers randomly has a survival probability of almost zero
 while the smarting strategy gives a survival probability close to 0.3.
+
+% Axioms?
+% inequalities
+% football code
+
 
 %%% Local Variables:
 %%% mode: latex
