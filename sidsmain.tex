@@ -18,7 +18,7 @@
 % our additions to the preamble (make external)
 %\usepackage[python]{runcode}
 %\usepackage[python,stopserver]{runcode}
-\usepackage[nohup,R]{runcode}%Book}
+\usepackage[cache,nohup,R]{runcode}%Book}
 %\usepackage[cache]{runcodeBook}
 
 \setminted[julia]{linenos, frame=single, bgcolor=bg, breaklines=true}
@@ -30,10 +30,9 @@
 \usetikzlibrary{shapes,shadows}
 \usepackage{showlabels}
 
-
-%\usepackage{mdframed}
-%\BeforeBeginEnvironment{minted}{\begin{mdframed}}
-%\AfterEndEnvironment{minted}{\end{mdframed}}
+\usepackage{xpatch}
+% \xpretocmd{\inputminted}{\par\vspace{-0.5em}}{}{}
+\xapptocmd{\inputminted}{\par\vspace{-0.5em}}{}{}
 
 \let\code\texttt
 \let\proglang\textsf
