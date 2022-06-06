@@ -28,6 +28,7 @@
 
 \usepackage{multirow}
 \usetikzlibrary{shapes,shadows}
+\usepackage{showlabels}
 
 
 %\usepackage{mdframed}
@@ -38,6 +39,7 @@
 \let\proglang\textsf
 \newcommand{\pkg}[1]{{\fontshape{it}\selectfont #1}}
 \def\R{\textsf{R} }
+\newcommand{\why}[1]{\textcolor{red}{(WHY: #1)}}
 
 % self defined environment and commands
 \newcounter{example}% [section]
@@ -135,6 +137,7 @@ The book was produced as an example of the package \texttt{nostarch}.
 \end{document}
 
 %%% Local Variables:
+%%% mode: latex
 %%% TeX-command-extra-options: "--shell-escape"
 %%% TeX-engine: xetex
 %%% End:
