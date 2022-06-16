@@ -18,7 +18,7 @@
 % our additions to the preamble (make external)
 %\usepackage[python]{runcode}
 %\usepackage[python,stopserver]{runcode}
-\usepackage[cache,nohup,R]{runcode}%Book}
+\usepackage[nohup,R]{runcode}%Book}
 %\usepackage[cache]{runcodeBook}
 
 \setminted[julia]{linenos, frame=single, bgcolor=bg, breaklines=true}
@@ -26,7 +26,7 @@
 \setminted[python]{linenos, frame=single, bgcolor=white, breaklines=true}
 \tcbset{breakable,colback=red!5!white,colframe=red!75!black}
 
-\usepackage{multirow}
+\usepackage{multirow,amsthm,xspace}
 \usetikzlibrary{shapes,shadows}
 \usepackage{showlabels}
 
@@ -34,19 +34,15 @@
 % % \xpretocmd{\inputminted}{\par\vspace{-0.5em}}{}{}
 % \xapptocmd{\inputminted}{\par\vspace{-0.5em}}{}{}
 
+% self defined environment and commands
+\theoremstyle{definition}
+\newtheorem{example}{Example}[chapter]
+
 \let\code\texttt
 \let\proglang\textsf
 \newcommand{\pkg}[1]{{\fontshape{it}\selectfont #1}}
-\def\R{\textsf{R}}
+\newcommand{\R}{\textsf{R}\xspace}
 \newcommand{\why}[1]{\textcolor{red}{(WHY: #1)}}
-
-% self defined environment and commands
-\newcounter{example}% [section]
-\newenvironment{example}[1][]{\refstepcounter{example}\par\medskip
-   \noindent \textbf{Example~\theexample. (#1)} \rmfamily}{\medskip}
-   % \noindent \textbf{Example~\thesection.\theexample. (#1)} \rmfamily}{\medskip}
-
-
 
 \makeindex
 \begin{document}
