@@ -1,17 +1,17 @@
 help(date)
 ?date
 
-savecwd <- getwd()
+## savecwd <- getwd()
 getwd()
-setwd("~/Desktop")
-setwd(savecwd)
+## setwd("~/work")
+## setwd(savecwd)
 
 courseNames <- c("Data Science", "Statistics", "Probability")
 class(courseNames)
 str(courseNames)
 length(courseNames)
 
-oddLT20 <- seq(1,20, by=2)
+oddLT20 <- seq(1, 20, by=2)
 print(oddLT20)
 print(length(oddLT20))
 
@@ -25,12 +25,12 @@ paste(courseNames)
 paste(courseNames, collapse=", ")
 concatvar <- paste(courseNames, collapse=", ")
 
-suits <- c(rep("C",13), rep("D",13), rep("H",13), rep("S",13))
-cards <- paste0(suits, rep(1:13,4))
+suits <- c(rep("C",13), rep("D",13), rep("H", 13), rep("S", 13))
+cards <- paste0(suits, rep(1:13, 4))
 cat(cards)
 
 set.seed(5252)
-(pokerHand <- matrix(sample(cards,20,replace=FALSE), nrow=5, ncol=4))
+(pokerHand <- matrix(sample(cards, 20, replace=FALSE), nrow=5, ncol=4))
 
 save(pokerHand, file="tmp/pokerHand.RData")
 load("tmp/pokerHand.RData")
