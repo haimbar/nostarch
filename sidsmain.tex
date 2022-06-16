@@ -30,14 +30,14 @@
 \usetikzlibrary{shapes,shadows}
 \usepackage{showlabels}
 
-\usepackage{xpatch}
-% \xpretocmd{\inputminted}{\par\vspace{-0.5em}}{}{}
-\xapptocmd{\inputminted}{\par\vspace{-0.5em}}{}{}
+% \usepackage{xpatch}
+% % \xpretocmd{\inputminted}{\par\vspace{-0.5em}}{}{}
+% \xapptocmd{\inputminted}{\par\vspace{-0.5em}}{}{}
 
 \let\code\texttt
 \let\proglang\textsf
 \newcommand{\pkg}[1]{{\fontshape{it}\selectfont #1}}
-\def\R{\textsf{R} }
+\def\R{\textsf{R}}
 \newcommand{\why}[1]{\textcolor{red}{(WHY: #1)}}
 
 % self defined environment and commands
