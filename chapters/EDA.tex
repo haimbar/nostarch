@@ -1,5 +1,5 @@
 \chapter{Summarizing and Visualizing Data}
-\chapterartfile{images/mirrorhist.png}
+\chapterartfile{images/static/mirrorhist.png}
 \hypertarget{EDA}{%
 People are born with a fantastic ability to detect patterns. However, sometimes the
 information is hidden and the only way to observe a pattern is to change
@@ -12,37 +12,105 @@ and efficiency.}'
 
 %https://python-graph-gallery.com/barplot/
 
-\runR{Code/ch2sec1.R}{ch2sec1}%[cache]
+% \runR{Code/ch2sec1.R}{ch2sec1}%[cache]
 
 \hypertarget{TypesOfData}{%
 \section{Types of Data}}
-In this book we cover several methods to analyze the data with statistical tools. However, it is very important to always look at the data, and this means creating plots and tables in order to understand it better. We call this process ``exploratory data analysis'', or EDA, and it is a critical step which should never be skipped. The type of plot which we generate in each case depends on the data, and usually there is more than one option to choose from. In this chapter we cover several visualization methods, and in subsequent chapters we will see additional ones.
+In this book we cover several methods to analyze the data with statistical
+tools. However, it is very important to always look at the data, and this means
+creating plots and tables in order to understand it better. We call this process
+``exploratory data analysis'', or EDA, and it is a critical step which should
+never be skipped. The type of plot which we generate in each case depends on the
+data, and usually there is more than one option to choose from. In this chapter
+we cover several visualization methods, and in subsequent chapters we will see
+additional ones.
 
-It is useful to think of data as a table in which each row represents one individual, and each column corresponds to some characteristic of individuals. These characteristics are often called `variables', because they vary across individuals. There are three broad types of variables:
+It is useful to think of data as a table in which each row represents one
+individual, and each column corresponds to some characteristic of
+individuals. These characteristics are often called `variables', because they
+vary across individuals. There are three broad types of variables:
 \begin{itemize}
-\item \textit{Continuous}: a variable which can take any value within some range. For example, a person's income can take any value greater than zero. Sometimes the range of values is unbounded (from minus infinity to infinity), and sometimes it is bounded (like age, height, weight). 
+\item \textit{Quantitative}: a variable that can take numerical values. It
+  includes two sub-types.
+  \begin{itemize}
+  \item \textit{Continuous}: a variable which can take any value within
+    some range. For example, a person's income can take any value greater than
+    zero. Sometimes the range of values is unbounded (from minus infinity to
+    infinity), and sometimes it is bounded (like age, height, weight).
+  \item \textit{Discrete}: a variable which can take at most a countable number
+    of possible values. For example, the number of students in a class. 
+  \end{itemize}
 \item \textit{Categorical}: an individual's characteristic which can only take a finite number of values. For example, sex, marital status, or number of years of education are categorical. The values which a categorical value can take are called \textit{levels}.
 \item \textit{Ordinal}: Categorical variables which have a natural orders (like number of years of education).
 \end{itemize}
+
 In \R there are many other types of variables, but they are generally special cases of these three type of variables. Here are some important examples:
 
-\noindent\textit{Dates}: A date is stored in \R as an integer. Arbitrarily, January 1, 1970 was set to 0, and the value for each other date is the number of days since 1/1/1970, accounting for leap years. Dates prior to that are given negative values.
+\begin{itemize}
+\item \textit{Dates}: A date is stored in \R as an integer. Arbitrarily, January
+  1, 1970 was set to 0, and the value for each other date is the number of days
+  since 1/1/1970, accounting for leap years. Dates prior to that are given
+  negative values.
 
-\noindent\textit{Boolean}: Some variables are either TRUE or FALSE. In the coin-flipping simulation in Chapter \ref{rintro} we generated a Boolean variable which was TRUE if a randomly generated number drawn uniformly between zero and one was greater than 0.5, and FALSE otherwise. Boolean variables are categorical, with two levels.
+\item \textit{Boolean}: Some variables are either \code{TRUE} or
+  \code{FALSE}. In the coin-flipping simulation in Chapter~\ref{rintro} we
+  generated a Boolean variable which was \code{TRUE} if a randomly generated
+  number drawn uniformly between zero and one was greater than 0.5, and
+  \code{FALSE} otherwise. Boolean variables are categorical, with two levels.
 
-\noindent\textit{Character}: When a variable has a finite number of levels \R allows to make a distinction between a `factor' type and a `character' type. A factor is used when the distinct levels of the variable are meaningful for analysis and plotting. For example, Sex, marital status, and education level are usually used as factors because we are interested in comparing between different levels. On the other hand, names and student IDs are usually of no interest and are only used as labels or identifiers for individuals in the data.
+\item \textit{Character}: When a variable has a finite number of levels, \R
+  allows to make a distinction between a `factor' type and a `character' type. A
+  factor is used when the distinct levels of the variable are meaningful for
+  analysis and plotting. For example, Sex, marital status, and education level
+  are usually used as factors because we are interested in comparing between
+  different levels. On the other hand, names and student IDs are usually of no
+  interest and are only used as labels or identifiers for individuals in the
+  data.
 
-\noindent\textit{Vectors, matrices, and data frames}: Multiple values of the \textit{same type of variable} (e.g., numeric, factor, etc.) can be combined into a vector via the \code{c()} function or generated via the \code{rep()}, \code{seq()}, or random generating functions such as \code{rnorm()}. Similarly, vectors of the \textit{same type} can be combined into a matrix -- a two dimensional rectangular arrangement of values. A data frame is a more general structure -- it is a two dimensional arrangement of values in which within each column it must contain the same type of variables, but different columns can contain different types of variables.
+\item \textit{Vectors, matrices, and data frames}: Multiple values of the
+  \textit{same type of variable} (e.g., numeric, factor, etc.) can be combined
+  into a vector via the \code{c()} function or generated via the \code{rep()},
+  \code{seq()}, or random generating functions such as
+  \code{rnorm()}. Similarly, vectors of the \textit{same type} can be combined
+  into a matrix -- a two dimensional rectangular arrangement of values. A data
+  frame is a more general structure -- it is a two dimensional arrangement of
+  values in which within each column it must contain the same type of variables,
+  but different columns can contain different types of variables.
+\end{itemize}
 
 Run the following code:
-\showCode{R}{Code/ch2sec1.R}[2][9]
-Note that in the third line we create a variable called \code{g} in two steps: first, we draw a random sample of the same length as that of the vector \code{x} from a binomial distribution with probability 0.5. This gives a numeric vector in which approximately half the values are 0 and half are 1. Then, we convert it to a factor by using the function \code{factor()}. Use the \code{str()} function to see the structure and levels of this variable. In line 4 we create the variable we are interested in, \code{y}, through some formula which we will discuss later. In line 5 we create a Boolean variable, \code{yL}, which is set to TRUE if the variable \code{y} exceeds the threshold (25) and FALSE otherwise. We then combine the vectors \code{x}, \code{g}, \code{y} and \code{yL} into one data  frame called \code{df1}.
-Enter \code{str(df1)} to see the structure of \code{df1}. Note that the columns in the data frame have different types.
-The last line in the code above produces a summary of each column in the data frame:
-\inlnR{```print(summary(df1))```}[vbox]
-For numerical variables like \code{x} and \code{y}, \R shows the mean and the `five-number summary' for numerical data: the minimum, and maximum, and the 25th, 50th, and 75th percentiles. For categorical variables such as \code{g} and \code{yL} it shows the counts in each category. For \code{yL} it also shows that it is a special kind of categorical variable, namely, it is logical (Boolean).
 
-In the following we are interested in understanding the characteristics of \code{y} and its possible relationship with other variables. In real life, we never know the formula that generates a variable, so let us pretend that we don't have access to line 4 in the code above, for now.
+\showCode{R}{Code/ch2-01gendat.R}
+\runR{Code/ch2-01gendat.R}{ch2-01gendat}
+
+Note that in the third line we create a variable called \code{g} in two steps:
+first, we draw a random sample of the same length as that of the vector \code{x}
+from a binomial distribution with probability 0.5. This gives a numeric vector
+in which approximately half the values are 0 and half are 1. Then, we convert it
+to a factor by using the function \code{factor()}. Use the \code{str()} function
+to see the structure and levels of this variable. In line 4 we create the
+variable we are interested in, \code{y}, through some formula which we will
+discuss later. In line 6 we create a Boolean variable, \code{yL}, which is set
+to TRUE if the variable \code{y} exceeds the threshold (25) and FALSE
+otherwise. We then combine the vectors \code{x}, \code{g}, \code{y} and
+\code{yL} into one data frame called \code{df1}.
+Enter \code{str(df1)} to see the structure of \code{df1}. Note that the columns
+in the data frame have different types.
+The last line in the code above produces a summary of each column in the data
+frame:
+\inlnR{```print(summary(df1))```}[vbox]
+% \includeOutput{ch2_01gendat}
+
+For numerical variables like \code{x} and \code{y}, \R shows the mean and the
+`five-number summary': the minimum, the maximum, and the 25th, 50th, and 75th
+percentiles. For categorical variables such as \code{g} and \code{yL} it shows
+the counts in each category. For \code{yL} it also shows that it is a special
+kind of categorical variable, namely, it is logical (Boolean).
+
+In the following we are interested in understanding the characteristics of
+\code{y} and its possible relationship with other variables. In real life, we
+never know the formula that generates a variable, so let us pretend that we
+don't have access to lines 4-5 in the code above, for now.
 
 %% lists?
 
@@ -53,206 +121,385 @@ In the following we are interested in understanding the characteristics of \code
 \section{Plots}}
 
 \subsection{Boxplot}
-Using the data we generated in the previous section, we start by plotting \code{y}. The simplest graphical representation is the boxplot which was introduced in Chapter \ref{rintro}, and is constructed from the `five-number summary'. 
-\showCode{R}{Code/ch2sec1.R}[12][13]
-We can see the boxplot in Figure \ref{boxploty}.
-Note the usage of the options of the \code{boxplot} function, which are optional, but improve the way the plot looks. The \code{axes=F} option means that the x and y axes are not shown. In the next line we explicitly draw the vertical axis.
-Try changing the values in these options. To see which colors are available, you can run the \code{colours()} function.
+Using the data we generated in the previous section, we start by plotting
+\code{y}. The simplest graphical representation is the boxplot which was
+introduced in Chapter~\ref{rintro}, and is constructed from the `five-number
+summary'.
+\showCode{R}{Code/ch2-02boxplot.R}[2][3]
+\runR{Code/ch2-02boxplot.R}{ch2-02boxplot}
+
+We can see the boxplot in Figure~\ref{boxploty}.
+Note the usage of the options of the \code{boxplot} function, which are
+optional, but improve the way the plot looks. The \code{axes=F} option means
+that the x and y axes are not shown. In the next line we explicitly draw the
+vertical axis.
+Try changing the values in these options. To see which colors are available, you
+can run the \code{colours()} function.
 
 \begin{figure}
 \begin{center}
 \includegraphics[width=0.6\textwidth]{images/chapter_2/boxploty.pdf}
-\caption{A boxplot}
+\caption{A boxplot.}
 \label{boxploty}
 \end{center}
 \end{figure}
 
-What can we learn from this boxplot? Besides the five-number summary which is depicted graphically, we can see that the distribution of \code{y} is approximately symmetric, and there are no outliers. However, we can't say much more about how \code{y} is distributed.
+What can we learn from this boxplot? Besides the five-number summary which is
+depicted graphically, we can see that the distribution of \code{y} is
+approximately symmetric, and there are no outliers. However, we can't say much
+more about how \code{y} is distributed.
 
 \subsection{Histogram}
-Another way to look at the distribution of a single numeric variables is to draw a histogram, as we did in Chapter \ref{rintro}. A histogram is constructed (by \R) by dividing the range of a variable into `bins', and simply count the number of observations in each bin. This is done with the \code{hist()} function:
-\showCode{R}{Code/ch2sec1.R}[17][17]
-Again, notice the usage of the function's arguments. For example, \code{breaks} determines the number of bins, which \code{col} and \code{border} determine the color of the interior and edges of each bin. The \code{main=""} option is used in order to remove the title of the plot. The result is shown in Figure \ref{histy}.
-Try changing these values. What happens when you set \code{breaks} to be smaller, or larger?
+Another way to look at the distribution of a single numeric variables is to draw
+a histogram, as we did in Chapter \ref{rintro}. A histogram is constructed (by
+\R) by dividing the range of a variable into `bins', and simply count the number
+of observations in each bin. This is done with the \code{hist()} function:
+\showCode{R}{Code/ch2-03hist.R}[2][2]
+\runR{Code/ch2-03hist.R}{ch2-03hist}
+
+Again, notice the usage of the function's arguments. For example, \code{breaks}
+determines the number of bins, which \code{col} and \code{border} determine the
+color of the interior and edges of each bin. The \code{main=""} option is used
+in order to remove the title of the plot. The result is shown in
+Figure~\ref{histy}.
+Try changing these values. What happens when you set \code{breaks} to be
+smaller, or larger?
 
 \begin{figure}
 \begin{center}
 \includegraphics[width=0.6\textwidth]{images/chapter_2/histy.pdf}
-\caption{A histogram}
+\caption{A histogram.}
 \label{histy}
 \end{center}
 \end{figure}
 
-The histogram gives us more information than the boxplot. It shows a more detailed picture of the distribution and, in this particular case we see that although the distribution is indeed approximately symmetric, it is also bi-modal - it has two noticeable peaks which we cannot see with a boxplot.
+The histogram gives us more information than the boxplot. It shows a more
+detailed picture of the distribution and, in this particular case we see that
+although the distribution is indeed approximately symmetric, it is also bi-modal
+- it has two noticeable peaks which we cannot see with a boxplot.
 
-Is this enough? Can we use this plot to come up with a plausible explanation for the particular shape of the distribution? If we have more variables we can try to see if our variable \code{y} is somehow related to any of the other variables, which is what we will do next.
+Is this enough? Can we use this plot to come up with a plausible explanation for
+the particular shape of the distribution? If we have more variables we can try
+to see if our variable \code{y} is somehow related to any of the other
+variables, which is what we will do next.
 
 \subsection{Side by side boxplots}
-In addition to \code{y}, we have a categorical variable called \code{g}. To see if it is related to \code{y} we can show one boxplot for each level of the factor \code{g}, which, in this case means two side-by-side boxplots. The syntax to do this is as follows:
+In addition to \code{y}, we have a categorical variable called \code{g}. To see
+if it is related to \code{y} we can show one boxplot for each level of the
+factor \code{g}, which, in this case means two side-by-side boxplots. The syntax
+to do this is as follows:
 
-\showCode{R}{Code/ch2sec1.R}[21][23]
+\showCode{R}{Code/ch2-04sidebox.R}[2][5]
+\runR{Code/ch2-04sidebox.R}{04sidebox}
 
 The notation \code{y} $\sim$ \code{g} 
-means `show how \code{y} varies by \code{g}'. Again, we suppress the axes and show only the vertical one. We also suppress the label of the x-axis using \code{xlab=""}. For each level of the factor \code{g} we use a different combination of border and interior colors. We set the vertical range of the plot using \code{ylim=c(min(y), max(y)*1.1))}, so that it will have some extra space at the top of the figure. We use this space to put the labels for each group with the \code{text()} function.
+means `show how \code{y} varies by \code{g}'. Again, we suppress the axes and
+show only the vertical one. We also suppress the label of the x-axis using
+\code{xlab=""}. For each level of the factor \code{g} we use a different
+combination of border and interior colors. We set the vertical range of the plot
+using \code{ylim=c(min(y), max(y)*1.1))}, so that it will have some extra space
+at the top of the figure. We use this space to put the labels for each group
+with the \code{text()} function.
 
-The first argument of the \code{text()} function contains the x-coordinates of the text. In this case we have two values: 1 and 2. Why not 0 and 1, which are the actual levels of the factor \code{g}? This is because, within \R levels of factors are stored numerically from 1 to the number of levels of the factor. The ordered is determined alphabetically by default, so 0 is represented as 1, and 1 as 2. 
+The first argument of the \code{text()} function contains the x-coordinates of
+the text. In this case we have two values: 1 and 2. Why not 0 and 1, which are
+the actual levels of the factor \code{g}? This is because, within \R levels of
+factors are stored numerically from 1 to the number of levels of the factor. The
+ordered is determined alphabetically by default, so 0 is represented as 1, and 1
+as 2.
 
-The second argument contains the y-coordinates of the text. We set the maximum value on the vertical axis to be max(y)*1.1, so we put the text between the maximum value of \code{y} and the upper limit of the vertical axis, so that the text does not cover the boxplot, nor is it outside the range of the plot.
+The second argument contains the y-coordinates of the text. We set the maximum
+value on the vertical axis to be max(y)*1.1, so we put the text between the
+maximum value of \code{y} and the upper limit of the vertical axis, so that the
+text does not cover the boxplot, nor is it outside the range of the plot.
 
-The third argument is the actual text we want to display, and it is followed by \code{cex=0.6} which sets the font size to be 60\% of the default.
+The third argument is the actual text we want to display, and it is followed by
+\code{cex=0.6} which sets the font size to be 60\% of the default.
 
 \begin{figure}
 \begin{center}
 \includegraphics[width=0.6\textwidth]{images/chapter_2/sidebysidebp.pdf}
-\caption{Side by side boxplots}
+\caption{Side by side boxplots.}
 \label{sidebysidebp}
 \end{center}
 \end{figure}
 
-Is there a difference between the two groups, as determined by \code{g}? It's not entirely clear. The medians are about the same but the box of group 2 is slightly elevated.
+Is there a difference between the two groups, as determined by \code{g}? It's
+not entirely clear. The medians are about the same but the box of group 2 is
+slightly elevated.
 
-We can also plot a histogram for each group. We can do it in two plots, or in one, which makes the comparison between the groups easier. To do that we use the following code. The result is depicted in Figure \ref{histoverlay}.
-\showCode{R}{Code/ch2sec1.R}[27][28]
-When we use the brackets, as in \code{y[g==0]}, we tell \R to apply the histogram function only to the subset of the data for which \code{g} has the value 1. 
+We can also plot a histogram for each group. We can do it in two plots, or in
+one, which makes the comparison between the groups easier. To do that we use the
+following code. The result is depicted in Figure~\ref{histoverlay}.
+\showCode{R}{Code/ch2-05histoverlay.R}[2][6]
+\runR{Code/ch2-05histoverlay.R}{05histoverlay}
 
-We use the \code{xlim} argument to make sure that the range of the horizontal axis will be sufficient in order to show all the data. We need to do that here, because our first plot uses only half the data and \R uses it to infer what the range should be, and it chooses the range based on the subset, not the entire data.
+When we use the brackets, as in \code{y[g==0]}, we tell \R to apply the
+histogram function only to the subset of the data for which \code{g} has the
+value 1.
 
-The second time we call \code{hist} we use the \code{add=TRUE} option, which means that the second plot will be drawn on top of the first one. In order for the second histogram not to hide the first one, we set the color of the second histogram to be partially transparent. To do that, we have to specify the color in RGB (Red, Green, Blue) format. Every color can be constructed as a mixture of these three base colors. Computers use 256 levels (from 0 to 255) for each of the base colors, and they represent them as hexadecimal numbers (base 16, instead of the familiar decimal, or base 10 which we use in our daily lives.) It may be slightly awkward to think in hexadecimal but, in order to get the code for the table you need there are tables to convert from a color name to a number. \R also has function to help you do that. Suppose we want to use the color "navyblue". If we run \code{col2rgb("navyblue")} we get the numbers 0,0, and 128, which means that the mixture has 0 red, 0 green, and the intensity for the blue is 128/255. We then run \code{rgb(t(col2rgb("navyblue"))/255)} and get \#000080. Each pair of digits corresponds to the three base colors. Then, to add transparency we can do \code{rgb(t(col2rgb("navyblue"))/255, alpha = 0.5)} add another hexadecimal number (with alpha=0.5 we get 80.) For complete transparency we use alpha=0, and for no transparency we use alpha=1.
+We use the \code{xlim} argument to make sure that the range of the horizontal
+axis will be sufficient in order to show all the data. We need to do that here,
+because our first plot uses only half the data and \R uses it to infer what the
+range should be, and it chooses the range based on the subset, not the entire
+data.
 
-Doing this helps to see that there really is a difference between the groups, and the blue histogram is similar in shape to the one in orange, but more shifted to the right. The bi-modality is common to both groups. 
+The second time we call \code{hist} we use the \code{add=TRUE} option, which
+means that the second plot will be drawn on top of the first one. In order for
+the second histogram not to hide the first one, we set the color of the second
+histogram to be partially transparent. To do that, we have to specify the color
+in RGB (Red, Green, Blue) format. Every color can be constructed as a mixture of
+these three base colors. Computers use 256 levels (from 0 to 255) for each of
+the base colors, and they represent them as hexadecimal numbers (base 16,
+instead of the familiar decimal, or base 10 which we use in our daily lives.) It
+may be slightly awkward to think in hexadecimal but, in order to get the code
+for the table you need there are tables to convert from a color name to a
+number. \R also has function to help you do that. Suppose we want to use the
+color "navyblue". If we run \code{col2rgb("navyblue")} we get the numbers 0,0,
+and 128, which means that the mixture has 0 red, 0 green, and the intensity for
+the blue is 128/255. We then run \code{rgb(t(col2rgb("navyblue"))/255)} and get
+\#000080. Each pair of digits corresponds to the three base colors. Then, to add
+transparency we can do \code{rgb(t(col2rgb("navyblue"))/255, alpha = 0.5)} add
+another hexadecimal number (with alpha=0.5 we get 80.) For complete transparency
+we use alpha=0, and for no transparency we use alpha=1.
+
+Doing this helps to see that there really is a difference between the groups,
+and the blue histogram is similar in shape to the one in orange, but more
+shifted to the right. The bi-modality is common to both groups.
 
 \begin{figure}
 \begin{center}
 \includegraphics[width=0.6\textwidth]{images/chapter_2/histoverlay.pdf}
-\caption{Overlaid histograms}
+\caption{Overlaid histograms.}
 \label{histoverlay}
 \end{center}
 \end{figure}
 
 
 \subsection{Scatterplot}
-Next, we want to see if the variable \code{y} is related to \code{x} in some way. Since both are continuous variables, we can display the relationship between them with a scatterplot. In the following code we use the \code{plot()} function, which \R infers to mean a scatterplot of the first argument \code{x} vs. the second, \code{y}, because both are continuous. The other arguments to the function should be familiar by now.
-\showCode{R}{Code/ch2sec1.R}[32][34]
+Next, we want to see if the variable \code{y} is related to \code{x} in some
+way. Since both are continuous variables, we can display the relationship
+between them with a scatterplot. In the following code we use the \code{plot()}
+function, which \R infers to mean a scatterplot of the first argument \code{x}
+vs. the second, \code{y}, because both are continuous. The other arguments to
+the function should be familiar by now.
+\showCode{R}{Code/ch2-06scatter.R}[2][4]
+\runR{Code/ch2-06scatter.R}{ch2-06scatter}
 
-In Figure \ref{scatter} we can see an interesting pattern which we could not observe in the previous plots. First, there seems to be a cyclic pattern. Second, in the first half of the x-range, \code{y} appears to remain constant (except for the cyclic pattern). However, in the second half we see that there is a distinct `jump' which is followed by an increasing trend.
-We also see that the data is quite noisy. If we draw (in our mind's eye, for now) a line that represents the relationship between \code{x} and \code{y}, the points will be scattered around that line.
+In the left panel of Figure~\ref{scatter} we can see an interesting pattern
+which we could not observe in the previous plots. First, there seems to be a
+cyclic pattern. Second, in the first half of the x-range, \code{y} appears to
+remain constant (except for the cyclic pattern). However, in the second half we
+see that there is a distinct `jump' which is followed by an increasing trend.
+We also see that the data is quite noisy. If we draw (in our mind's eye, for
+now) a line that represents the relationship between \code{x} and \code{y}, the
+points will be scattered around that line.
 
 \begin{figure}
 \begin{center}
-\includegraphics[width=0.6\textwidth]{images/chapter_2/scatter.pdf}
-\caption{A scatterplot}
+\includegraphics[width=0.48\textwidth]{images/chapter_2/scatter.pdf}
+\includegraphics[width=0.48\textwidth]{images/chapter_2/scatter2.pdf}
+\caption{Scatterplots.}
 \label{scatter}
 \end{center}
 \end{figure}
 
 \subsection{Adding dimensions to a plot}
-So far we saw that there is a complicated relationship between \code{x} and \code{y}, and maybe some relationship between \code{g} and \code{y}. Can we put all three variables in one plot, and maybe uncover more complex patterns? Yes! We can use different colors, shapes, or sizes for each point. For example, we can use different colors for each group, as follows:
-\showCode{R}{Code/ch2sec1.R}[38][42]
-First, we use the \code{ifelse()} function to set the  color for each group. The first argument is the binary rule we use, the second is the value we assign when the first argument is TRUE, and the second is the value being assigned when the first argument results in a FALSE value. In this case, all the points for which \code{g} is equal to 1, are drawn in navy blue, and all the others in orange. 
+So far we saw that there is a complicated relationship between \code{x} and
+\code{y}, and maybe some relationship between \code{g} and \code{y}. Can we put
+all three variables in one plot, and maybe uncover more complex patterns? Yes!
+We can use different colors, shapes, or sizes for each point. For example, we
+can use different colors for each group, as follows:
+\showCode{R}{Code/ch2-07scatter2.R}[2][6]
+\runR{Code/ch2-07scatter2.R}{ch2-07scatter2}
 
-\begin{figure}
-\begin{center}
-\includegraphics[width=0.6\textwidth]{images/chapter_2/scatter2.pdf}
-\caption{A scatterplot with group colors}
-\label{scatter2}
-\end{center}
-\end{figure}
+First, we use the \code{ifelse()} function to set the color for each group. The
+first argument is the binary rule we use, the second is the value we assign when
+the first argument is TRUE, and the second is the value being assigned when the
+first argument results in a FALSE value. In this case, all the points for which
+\code{g} is equal to 1, are drawn in navy blue, and all the others in orange.
 
-Figure \ref{scatter2} shows the result. Now, we can see the entire picture. The difference between the groups seems real, and both have a cyclic pattern and a distinct change-point where the value of \code{y} increases abruptly, and then continues to increase as \code{x} becomes larger.
+% \begin{figure}
+% \begin{center}
+% \includegraphics[width=0.6\textwidth]{images/chapter_2/scatter2.pdf}
+% \caption{A scatterplot with group colors}
+% \label{scatter2}
+% \end{center}
+% \end{figure}
 
-We also added a horizontal reference line at \code{y=30} by using the \code{abline()} function. We set its type to dashed, its color to red, and its width to 3 times the default width, in order to create a clear visual effect. It is also possible to add vertical or slanted reference lines using the same function.
+The right panel of Figure~\ref{scatter} shows the result. Now, we can see the
+entire picture. The difference between the groups seems real, and both have a
+cyclic pattern and a distinct change-point where the value of \code{y} increases
+abruptly, and then continues to increase as \code{x} becomes larger.
 
-We can imagine a hypothetical situation where \code{y} is a temperature of an air-conditioned storage facility, with cyclic fluctuations which perhaps correspond to the time of day. Then, at some point the A/C system malfunctioned, and the temperature increased and then continued an upward trend as heat was building up. An alarm was set off as soon as the temperature exceeded the threshold of 30.
+We also added a horizontal reference line at \code{y=30} by using the
+\code{abline()} function. We set its type to dashed, its color to red, and its
+width to 3 times the default width, in order to create a clear visual effect. It
+is also possible to add vertical or slanted reference lines using the same
+function.
+
+We can imagine a hypothetical situation where \code{y} is a temperature of an
+air-conditioned storage facility, with cyclic fluctuations which perhaps
+correspond to the time of day. Then, at some point the A/C system malfunctioned,
+and the temperature increased and then continued an upward trend as heat was
+building up. An alarm was set off as soon as the temperature exceeded the
+threshold of 30.
 
 
 %y <- 3*(x>2*pi)*x + 4*sin(3*x) + 10*(as.numeric(g)-1) + rnorm(length(x), mean = 0, sd = 3)
 
-
-\textcolor{red}{Exercises}
-
+\begin{exercise}
 Try running the simulation code, but with the following changes:
 \begin{enumerate}
-\item Without the $x$ term: \texttt{y <- 10*(as.numeric(g)-1) + rnorm(length(x), mean = 0, sd = 3)} 
-\item Without the cyclical term: \texttt{y <- 3*(x>2*pi)*x +  10*(as.numeric(g)-1) + rnorm(length(x), mean = 0, sd = 3)} 
-\item Without the group term: \texttt{y <- 3*(x>2*pi)*x +  rnorm(length(x), mean = 0, sd = 3)} 
-\item Without the random noise: \texttt{y <- 3*(x>2*pi)*x + 4*sin(3*x) + 10*(as.numeric(g)-1)} 
-\item With less noise: \texttt{y <- 3*(x>2*pi)*x + 4*sin(3*x) + 10*(as.numeric(g)-1) + rnorm(length(x), mean = 0, sd = 1)} 
-\item With more noise: \texttt{y <- 3*(x>2*pi)*x + 4*sin(3*x) + 10*(as.numeric(g)-1) + rnorm(length(x), mean = 0, sd = 5)} 
+\item Without the $x$ term: \code{y <- 10 * (as.numeric(g) - 1) + rnorm(length(x), mean=0, sd=3)} 
+\item Without the cyclical term: \code{y <- 3 * (x > 2 * pi) * x +  10 *
+    (as.numeric(g) - 1) + rnorm(length(x), mean=0, sd=3)} 
+\item Without the group term: \code{y <- 3 * (x > 2 * pi) * x +  rnorm(length(x), mean=0, sd=3)} 
+\item Without the random noise: \code{y <- 3 * (x > 2 * pi) * x + 4 * sin(3 * x) + 10 * (as.numeric(g) - 1)} 
+\item With less noise: \code{y <- 3 * (x > 2 * pi) * x + 4 * sin(3 * x) + 10 * (as.numeric(g) - 1) + rnorm(length(x), mean=0, sd=1)} 
+\item With more noise: \code{y <- 3 * (x > 2 * pi) * x + 4 * sin(3 * x) + 10 *( as.numeric(g) - 1) + rnorm(length(x), mean=0, sd=5)} 
 \item Change the coefficients. Include negative values in your attempts.
 \item Use a different marker in the plot (using the \code{pch} option).
 \end{enumerate}
+\end{exercise}
 
 \hypertarget{tables}{%
 \section{Tabulating and cross-tabulating data}}
-In the previous section we were interested in a continuous variable, and how it may depend on other variables, both continuous and categorical. When we want to explore and investigate categorical variables we often use tables, or their graphical representation.
+In the previous section we were interested in a continuous variable, and how it
+may depend on other variables, both continuous and categorical. When we want to
+explore and investigate categorical variables we often use tables, or their
+graphical representation.
 
 Let's simulate such data:
-\showCode{R}{Code/ch2sec1.R}[46][48]
-We use the \code{rpois()} function to draw random numbers which are all non-negative integers (from the Poisson distribution). Use what you learned in the previous section to plot this data. We then create categories by using the \code{cut()} function is used to create categories from continuous data. It can then be summarized by using the \code{table()} function, which simply counts the total number of observations in each category:
+\showCode{R}{Code/ch2-08gendat2.R}
+\runR{Code/ch2-08gendat2.R}{ch2-08gendat2}
+
+We use the \code{rpois()} function to draw random numbers which are all
+non-negative integers (from the Poisson distribution). Use what you learned in
+the previous section to plot this data. We then create categories by using the
+\code{cut()} function is used to create categories from continuous data. It can
+then be summarized by using the \code{table()} function, which simply counts the
+total number of observations in each category:
 \inlnR{```print(table(xcat))```}[vbox]
-This can be shown graphically by using the \code{barplot()} function as shown in Figure \ref{barplot} (or as a pie chart by using the \code{pie()} function.)
-\showCode{R}{Code/ch2sec1.R}[52][53]
+This can be shown graphically by using the \code{barplot()} function as shown in
+Figure~\ref{barplot} (or as a pie chart by using the \code{pie()} function.)
+\showCode{R}{Code/ch2-09barplot.R}[2][3]
+\runR{Code/ch2-09barplot.R}{ch2-09barplot}
 
 \begin{figure}
 \begin{center}
 \includegraphics[width=0.8\textwidth]{images/chapter_2/barplot.pdf}
-\caption{A barplot}
+\caption{A barplot.}
 \label{barplot}
 \end{center}
 \end{figure}
 
 When there is more than one variable we can use cross-tabulation, which is also referred to as a `contingency table'. Let's create a new variable called \code{ycat}:
-\showCode{R}{Code/ch2sec1.R}[57][59]
+\showCode{R}{Code/ch2-10genycat.R}
+\runR{Code/ch2-10genycat.R}{ch2-10genycat}
+
 The function \code{ftable()} (for `flat table') is used to cross-tabulate.
 \inlnR{```print(ftable(xcat, ycat))```}[vbox]
 
 There are a few things which this table allows us to see quite easily. It is clear that the distribution in each row is different from the other ones. The same thing can be said about the columns. 
 For example, most of the observations in the (0,30] category of the y variable are in (0,9] or (9,12] categories of the x variable. However, most of the data in the (100,300] y columns are in the (12,16] or (16,25] rows.
 
-To visualize this table in a plot, we can create a `spine plot', with the \code{spinogram()} function, which shows the table of proportions, rather than counts, which means that the bars all have the same total width and height, and the dimensions of boxes within each bar correspond to the proportion of the corresponding cell in the table relative to the total in the row/column of that cell. This is depicted in Figure \ref{spineplot}. Equivalently, we can also summarize this data in the form of a table by using the function \code{prop.table()}.
-\showCode{R}{Code/ch2sec1.R}[62][63]
+To visualize this table in a plot, we can create a `spine plot', with the \code{spinogram()} function, which shows the table of proportions, rather than counts, which means that the bars all have the same total width and height, and the dimensions of boxes within each bar correspond to the proportion of the corresponding cell in the table relative to the total in the row/column of that cell. This is depicted in Figure~\ref{spineplot}. Equivalently, we can also summarize this data in the form of a table by using the function \code{prop.table()}.
+\showCode{R}{Code/ch2-11proptable.R}[2][3]
+\runR{Code/ch2-11proptable.R}{ch2-11proptable}
 
-This simulation can represent a hypothetical job market where the x categories correspond to years of education, and the y categories to levels of income (in \$10,000). The levels for \code{x} correspond to 1. dropped out before high-school, 2. attended or finished high school, 3. college student, and 4. people who studied for an advanced degree. The relationship between the continuous-data variables may not be linear (in this case, we know it is quadratic because we simulated it this way) and when there is no reason to think that there is some simple formula to represent the relationship, or when all we have is the categorical data, cross-tabulation is the appropriate way to visualize and understand the data.
+This simulation can represent a hypothetical job market where the x categories
+correspond to years of education, and the y categories to levels of income (in
+\$10,000). The levels for \code{x} correspond to 1. dropped out before
+high-school, 2. attended or finished high school, 3. college student, and
+4. people who studied for an advanced degree. The relationship between the
+continuous-data variables may not be linear (in this case, we know it is
+quadratic because we simulated it this way) and when there is no reason to think
+that there is some simple formula to represent the relationship, or when all we
+have is the categorical data, cross-tabulation is the appropriate way to
+visualize and understand the data.
 
 \begin{figure}
 \begin{center}
 \includegraphics[width=0.6\textwidth]{images/chapter_2/spineplot.pdf}
 \caption{A spine plot}
-\label{spineplot}
+\label{spineplot.}
 \end{center}
 \end{figure}
 
-
-
 \hypertarget{beyond}{
 \section{Going further}}
-There is \textit{much} more to learn about effective visualization. There are many plotting tools and packages which greatly enhance the number of possibilities for data visualization. In \R, one can use the very popular and feature-rich ggplot2 package, and other ones such as plotrix, gplots, etc. \textcolor{red}{add more, plus references}. 
+There is \textit{much} more to learn about effective visualization. There are
+many plotting tools and packages which greatly enhance the number of
+possibilities for data visualization. In \R, one can use the very popular and
+feature-rich ggplot2 package \citep{ggplot2}, and other ones such as plotrix
+\citep{plotrix}, gplots \citep{warnes2016package}, plotly \citep{plotly}, etc. 
 You should also explore graphical tools in other languages can be used. For example, Matlab and Python use the very comprehensive and aesthetic matplotlib package, and for interactive plots you may find JavaScript to be very attractive with its many excellent graphing options.
 
 Regardless of which tools you use, the important thing to keep in mind is that effective data visualization is critical and sometimes more persuasive than formal statistical analysis. Thus, we want to conclude this chapter with a few important takeaways.
 
-Good visualization is almost always multivariate: we learn a lot when we compare and contrast things. Side by side boxplots, scatterplots, and cross-tabulation are a few techniques to allow us to put things in perspective.
+\begin{itemize}
+\item Good visualization is almost always multivariate: we learn a lot when we
+  compare and contrast things. Side by side boxplots, scatterplots, and
+  cross-tabulation are a few techniques to allow us to put things in
+  perspective.
 
-% overlayed histogram, density
+  % overlayed histogram, density
+\item It is critical that the plot, table, or summary of the data is accurate
+  and honest. Show the data and insights obtained from the visualization without
+  introducing any bias. For example, if you exclude points or rescale the plot,
+  you must have a good reason to do so, and make this decision known to the
+  audience of your visualization.
 
-It is critical that the plot, table, or summary of the data is accurate and honest. Show the data and insights obtained from the visualization without introducing any bias. For example, if you exclude points or rescale the plot, you must have a good reason to do so, and make this decision known to the audience of your visualization.
+\item Always strive to produce effective data visualization, so that the
+  conclusions are conveyed clearly and with little mental effort on the part of
+  the reader. This will often require a substantial mental effort on your
+  part. Do not assume that a graph that you find clear and effective also works
+  for other people. Try to show it to many people and improve your presentation
+  by taking into account other peoples' suggestions.
 
-Always strive to produce effective data visualization, so that the conclusions are conveyed clearly and with little mental effort on the part of the reader. This will often require aa substantial mental effort on your part. Do not assume that a graph that you find clear and effective, also works for other people. Try to show it to many people and improve your presentation by taking into account other peoples' suggestions.
+\item Choose the right tool for the job, and make the data the center of
+  attention -- not the bells and whistles that some software allows you to
+  produce. Edward Tufte \textcolor{red}{CITE} advocated for the principal of
+  maximizing the `information to ink ratio', and Albert Einstein said
+  `everything should be made as simple as possible, but not simpler.'
 
-Choose the right tool for the job, and make the data the center of attention -- not the bells and whistles that some software allows you to produce. Edward Tufte \textcolor{red}{CITE} advocates for the principal of maximizing the `information to ink ratio', and Albert Einstein said `everything should be made as simple as possible, but not simpler.'
+\item Don't just rely on excellent tools, and don't be lazy -- explore ways to
+  make the visualization better. For example, choosing the type of graph, the
+  point sizes, shapes, or colors, choosing the best scale, can all make a big
+  difference.
 
-Don't just rely on excellent tools, and don't be lazy -- explore ways to make the visualization better. For example, choosing the type of graph, the point sizes, shapes, or colors, choosing the best scale, can all make a big difference.
+\item Finally, we live in an era of big data, and for that we sometimes need to
+  choose plots based on computational constraints. To demonstrate it, consider
+  the following code:
+  \showCode{R}{Code/ch2-12smoth.R}[2][5]
+  \runR{Code/ch2-12smoth.R}{ch2-12smoth}
 
-Finally, we live in an era of big data, and for that we sometimes need to choose plots based on computational constraints. To demonstrate it, consider the following code:
-\showCode{R}{Code/ch2sec1.R}[67][70]
-We generate 100,000 points (x,y) and construct a scatterplot (in line 3, which we commented out). Try running this line. The large number of points may actually hide some of the features of the data. The shape of the function is clear, but the points are so dense, that it is hard to see that most of the points actually lie close to the center of the curve.
-When we plot a smooth version of the scatterplot (line 4) we get a much nicer plot, which we show in Figure \ref{smooth}.
-Furthermore, the smooth scatterplot saves us a lot of space. In this example with 100,000 points, when we save the the plots in pdf format, the simple scatterplot takes 44MB, while the smooth version is more than 2000 time smaller and takes only 18kB. In real life you will come across much larger datasets, and then the size of the plot (in bytes) will make a big difference. It may take a long time to download a plot on the Internet, and for the viewer (like Adobe) to show it on the screen, or to print it.
-
+  We generate 100,000 points \code{(x,y)} and construct a scatterplot (in line 3, which
+  we commented out). Try running this line. The large number of points may
+  actually hide some of the features of the data. The shape of the function is
+  clear, but the points are so dense that it is hard to see that most of the
+  points actually lie close to the center of the curve. When we plot a smooth
+  version of the scatterplot (line 4) we get a much nicer plot, which we show in
+  Figure~\ref{smooth}. Furthermore, the smooth scatterplot saves us a lot of
+  space. In this example with 100,000 points, when we save the the plots in pdf
+  format, the simple scatterplot takes 44MB, while the smooth version is more
+  than 2000 time smaller and takes only 18kB. In real life you will come across
+  much larger datasets, and then the size of the plot (in bytes) will make a big
+  difference. It may take a long time to download a plot on the Internet, and
+  for the viewer (like Adobe) to show it on the screen, or to print it.
+\end{itemize}
 \begin{figure}
 \begin{center}
 \includegraphics[width=0.6\textwidth]{images/chapter_2/smooth.pdf}
-\caption{A smooth scatterplot}
+\caption{A smooth scatterplot.}
 \label{smooth}
 \end{center}
 \end{figure}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-command-extra-options: "-shell-escape"
+%%% TeX-engine: xetex
+%%% TeX-master: "../sidsmain.tex"
+%%% End:

@@ -18,7 +18,7 @@
 % our additions to the preamble (make external)
 %\usepackage[python]{runcode}
 %\usepackage[python,stopserver]{runcode}
-\usepackage[nohup,R]{runcode}%Book}
+\usepackage[cache,nohup,R]{runcode}%Book}
 %\usepackage[cache]{runcodeBook}
 
 \setminted[julia]{linenos, frame=single, bgcolor=bg, breaklines=true}
@@ -28,7 +28,7 @@
 
 \usepackage{multirow,amsthm,xspace}
 \usetikzlibrary{shapes,shadows}
-\usepackage{showlabels}
+% \usepackage{showlabels}
 
 % \usepackage{xpatch}
 % % \xpretocmd{\inputminted}{\par\vspace{-0.5em}}{}{}
@@ -37,6 +37,8 @@
 % self defined environment and commands
 \theoremstyle{definition}
 \newtheorem{example}{Example}[chapter]
+\theoremstyle{remark}
+\newtheorem{exercise}{Exercise}[chapter]
 
 \let\code\texttt
 \let\proglang\textsf

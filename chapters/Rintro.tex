@@ -1,5 +1,5 @@
 \chapter{Getting to know R}\label{rintro}
-\chapterartfile{images/Rlogo.png}
+\chapterartfile{images/static/Rlogo.png}
 \hypertarget{Rintro}{%
 Just like a chef needs a set of tools, a kitchen with a convenient surface to work on, and a detailed cookbook with different recipes, a data scientist needs a powerful programming language, a convenient development environment, and good documentation.
 In this chapter we provide a brief introduction to the \R language and the RStudio integrated development environment (IDE). Here, and in the remainder of the book we provide some essential `recipes' for data scientists.}
@@ -15,10 +15,12 @@ Next, go the Rstudio download website
 (\url{https://rstudio.com/products/rstudio/download/}) and get the Desktop version
 (open source license). %As of \today, the version is 1.4.1106. 
 Follow the installation instruction.  An icon that looks like this
-\includegraphics[height=0.02\textheight]{images/RstudioLogo.png}
+\includegraphics[height=0.02\textheight]{images/static/RstudioLogo.png}
 will be on your computer's desktop. Double-click on this icon to start the \R session. The Rstudio IDE will open, and will look like this:
 
-\begin{center}\includegraphics[width=0.8\linewidth]{images/RstudioMain} \end{center}
+\begin{center}
+  \includegraphics[width=0.8\linewidth]{images/static/RstudioMain}
+\end{center}
 
 The left-hand side of the screen contains the Console tab. Notice the \(>\) sign (called the `prompt'). When you see this character, it means that \R is ready for the next command. Put the cursor there, and then type
 
@@ -188,12 +190,12 @@ The package \pkg{lattice} provides `elegant high-level data visualization system
 
 Installing the package has to be done just once. Occasionally, you may be prompted to install updates, which can also be done by using the function \code{update.packages()}. Loading a package has to be done each time you begin a new \R session.
 
-In the following example we use a built-in dataset of opera singers, and we plot their heights by their vocal parts (Figure \ref{fig:ch1:operaheight}).
+In the following example we use a built-in dataset of opera singers, and we plot their heights by their vocal parts (Figure~\ref{fig:ch1:operaheight}).
 
 \showCode{R}{Code/ch1sec1.R}[48][49]
 \begin{figure}
 \centering
-\includegraphics[width=0.6\textwidth]{images/operaheight.pdf}
+\includegraphics[width=0.6\textwidth]{images/chapter_1/operaheight.pdf}
 \caption{Using the lattice package to create boxplots.}\label{fig:ch1:operaheight}
 \end{figure}
 \noindent We will learn a lot more about data visualization in subsequent chapters.
@@ -213,13 +215,13 @@ In this book much of the learning will be done by using simulated data, so let's
 \showCode{R}{Code/ch1sec2.R}[2][6]
 \begin{figure}
 \centering
-\includegraphics[width=0.6\textwidth]{images/simunif1.pdf}
+\includegraphics[width=0.6\textwidth]{images/chapter_1/simunif1.pdf}
 \caption{A histogram of a random sample from a standard uniform distribution.}\label{fig:ch1:simunif1}
 \end{figure}
 
 
 
-From the range and the flatness of the histogram in Figure \ref{fig:ch1:simunif1} we can see that the generated data is indeed uniform on [0,1]. The \code{runif()} function can be used to draw random numbers uniformly on any finite interval. For example, if we want our random numbers to be in the interval [1,5] we will run the following code:
+From the range and the flatness of the histogram in Figure~\ref{fig:ch1:simunif1} we can see that the generated data is indeed uniform on [0,1]. The \code{runif()} function can be used to draw random numbers uniformly on any finite interval. For example, if we want our random numbers to be in the interval [1,5] we will run the following code:
 \showCode{R}{Code/ch1sec2.R}[9][10]
 \noindent Try it, and draw the histogram as in the previous example. Try it with
 a fixed seed and verify that you get the same output each time. Then, run the
@@ -242,11 +244,11 @@ A few comments:
 
 The number of Heads we get (with this seed) is \inlnR{```cat(sum(runif(n.trials) < 0.5))```}. Statistical inference is based on a mental exercise in which we ask, if we could repeat the same experiment infinitely many times, what would we see? With simulations, we can get a good approximation. For example, the 200 coin-tosses experiment can be repeated, say, 100 times. One way is to use loops, like in the following example:
 \showCode{R}{Code/ch1sec2.R}[18][25]
-We've used a \code{for()} loop, with an index variable called \texttt{i} which runs from 1 to 100. In each iteration we simulated n.trials=200 coin tosses, as before. The result from each iteration is stored in the $i$-th position in the vector we called Heads. Figure \ref{fig:ch1:simunif2} shows the distribution of 100 simulations, each of which consists of 200 coin tosses and from each of the 100 simulations we obtain the proportion of times we got Heads.
+We've used a \code{for()} loop, with an index variable called \texttt{i} which runs from 1 to 100. In each iteration we simulated n.trials=200 coin tosses, as before. The result from each iteration is stored in the $i$-th position in the vector we called Heads. Figure~\ref{fig:ch1:simunif2} shows the distribution of 100 simulations, each of which consists of 200 coin tosses and from each of the 100 simulations we obtain the proportion of times we got Heads.
 
 \begin{figure}
 \centering
-\includegraphics[width=0.6\textwidth]{images/simunif2.pdf}
+\includegraphics[width=0.6\textwidth]{images/chapter_1/simunif2.pdf}
 \caption{A histogram of 100 experiments in which we flip a coin 200 time and calculate the proportion of times we get Heads out of 200.}\label{fig:ch1:simunif2}
 \end{figure}
 
@@ -286,7 +288,7 @@ The formula we used, \code{x <- -log(runif(n))/lambda}, generates random number 
 Mathematical analysis of the distribution leads to the fact that the expected value of an exponential random variable with rate $\lambda$, is $1/\lambda$. We see that the theoretical expected value of our example is 0.1, and the sample mean is very close to 0.1. This is no coincidence - we will discuss it in  later chapter.
 
 
-The distribution of \texttt{x} is shown in Figure \ref{fig:ch1:simexp} as a \textit{box-and-whisker plot} (or simply, boxplot). This is a very simple representation of numeric data, which is constructed by summarizing the data using a few numeric characteristics. In Figure \ref{fig:ch1:simexp} the boxplot  is drawn horizontally, and the vertical grey line inside the box is the median. Similar to the median, we find the first quartile -- a point, $x_{0.25}$, such that 25\% of the values are less than $x_{0.25}$ and 75\% are greater than $x_{25}$; and the third quartile -- a point, $x_{0.75}$, such that 75\% of the values are less than $x_{0.75}$ and 25\% are greater than $x_{0.75}$. The first and third quartiles are the vertical edges of the box, also called the lower and upper hinges. So, the box represents the middle 50\% of the data. The range between the first and third quartiles is called the \textit{Inter-Quartile Range}, or IQR, which is sometimes used to estimate the dispersion or spread of the data.
+The distribution of \texttt{x} is shown in Figure~\ref{fig:ch1:simexp} as a \textit{box-and-whisker plot} (or simply, boxplot). This is a very simple representation of numeric data, which is constructed by summarizing the data using a few numeric characteristics. In Figure~\ref{fig:ch1:simexp} the boxplot  is drawn horizontally, and the vertical grey line inside the box is the median. Similar to the median, we find the first quartile -- a point, $x_{0.25}$, such that 25\% of the values are less than $x_{0.25}$ and 75\% are greater than $x_{25}$; and the third quartile -- a point, $x_{0.75}$, such that 75\% of the values are less than $x_{0.75}$ and 25\% are greater than $x_{0.75}$. The first and third quartiles are the vertical edges of the box, also called the lower and upper hinges. So, the box represents the middle 50\% of the data. The range between the first and third quartiles is called the \textit{Inter-Quartile Range}, or IQR, which is sometimes used to estimate the dispersion or spread of the data.
 The `whiskers', which are the dashed grey lines, are {\color{blue} the minimum
   and maximum observations within 1.5$\cdot$IQR to each side of the box}. If the result is smaller than the minimum value (or greater than the maximum), then the whisker only extends to the minimum (maximum). Points within the range between the two whiskers are not plotted individually, since their distribution is summarized succinctly by the box-and-whiskers plot. Points outside the range between the two whiskers are considered `outliers', or extreme values, and are shown explicitly. 
 
@@ -296,7 +298,7 @@ The plot was generated with the following code. Try it, and try changing some of
 
 \begin{figure}
 \centering
-\includegraphics[width=0.95\textwidth]{images/expdistbp.pdf}
+\includegraphics[width=0.95\textwidth]{images/chapter_1/expdistbp.pdf}
 \caption{A boxplot of data generated from an exponential distribution with $\lambda=10$.}\label{fig:ch1:simexp}
 \end{figure}
 
@@ -322,7 +324,7 @@ lines in a histogram.
 
 \begin{figure}
 \centering
-\includegraphics[width=0.7\textwidth]{images/expdisthist.pdf}
+\includegraphics[width=0.7\textwidth]{images/chapter_1/expdisthist.pdf}
 \caption{A histogram of a sample from an exponential distribution, with the 10, 20, 30,... percentiles.}\label{fig:ch1:simexp2}
 \end{figure}
 
@@ -348,13 +350,13 @@ variance and standard deviation, respectively. In the following code we also dem
 We will see in subsequent chapters that the normal distribution plays a major role in statistics. It is defined by a probability density function, with two parameters -- $\mu$ and $\sigma^2$:
 $$\phi(x; \mu,\sigma^2)=\frac{1}{\sqrt{2\pi\sigma^2}}\exp\left[-\frac{(x-\mu)^2}{2\sigma^2}\right]\,.$$
 It is symmetric, `bell-shaped', and centered around the mean, $\mu$, as shown in
-Figure \ref{fig:ch1:simnorm}. The blue histogram is generated by drawing random
+Figure~\ref{fig:ch1:simnorm}. The blue histogram is generated by drawing random
 numbers from a normal distribution, using the \code{rnorm()} function. Here, we
 use $\mu=2.5$ and $\sigma^2=0.25$. The orange curve shows the function $\phi$, by using the \code{dnorm()} function (to obtain the density function of $x$).
 \showCode{R}{Code/ch1sec3.R}[33][36]
 \begin{figure}
 \centering
-\includegraphics[width=0.7\textwidth]{images/normdisthist.pdf}
+\includegraphics[width=0.7\textwidth]{images/chapter_1/normdisthist.pdf}
 \caption{A histogram of a sample from a normal distribution, with mean=2.5 and variance=0.25.}\label{fig:ch1:simnorm}
 \end{figure}
 
