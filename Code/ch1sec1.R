@@ -48,7 +48,7 @@ if (! ("lattice" %in% installed.packages()))
 library("lattice")
 bwplot(voice.part ~ height, data=singer, xlab="Height (inches)")
 
-pdf("images/operaheight.pdf", height=5, width=5)
+pdf("images/chapter_1/operaheight.pdf", height=5, width=5)
 library("lattice")
 plot(bwplot(voice.part ~ height, data=singer, xlab="Height (inches)"))
 dev.off()

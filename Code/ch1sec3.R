@@ -8,7 +8,7 @@ mean(x)
 mean(x, trim=0.1)
 median(x)
 
-pdf("images/expdistbp.pdf", width=6, height=4)
+pdf("images/chapter_1/expdistbp.pdf", width=6, height=4)
 boxplot(x, cex=0.5, col=4, border="grey66", horizontal=TRUE, axes=FALSE,
         at=0.25)
 axis(1, pos=0)
@@ -16,7 +16,7 @@ points(mean(x), 0.25, col=2, pch=19, cex=0.7)
 points(mean(x, trim=0.1), 0.25, col="brown", pch=18)
 dev.off()
 
-pdf("images/expdisthist.pdf", width=6, height=4)
+pdf("images/chapter_1/expdisthist.pdf", width=6, height=4)
 hist(x, breaks=50, border="white", col="lightblue", freq=FALSE,
      xlim=c(0, 0.6), main="")
 deciles <- quantile(x, probs=seq(0.1, 0.9, by=0.1))
@@ -29,7 +29,7 @@ var(x)
 sd(x) # note that sd(x) is sqrt(var(x))
 IQR(x)
 
-pdf("images/normdisthist.pdf", width=6, height=4)
+pdf("images/chapter_1/normdisthist.pdf", width=6, height=4)
 y <- rnorm(10000, mean=2.5, sd=0.5)
 hist(y, breaks=30, border="white", col="navyblue", freq=FALSE, main="")
 xs <- seq (0, 5, length=500)
