@@ -10,15 +10,15 @@ However, probability theory can be confusing and even counter-intuitive in some 
 \section{Probability}\label{probability}}
 \subsection{Basic Definitions}
 %We will go through examples to see how probability helps interpret phenomena in real life and how probability may counter intuition. We begin by introducing some concepts:
-We begin with some essential terminology and notations: 
+We begin with some essential terminology and notation: 
 \begin{itemize}
 \item Experiment: a situation in which the outcome occurs randomly, e.g.,
   flipping a coin, rolling a dice, and picking a card from a deck.
 \item Sample Space: the set of all possible outcomes in an experiment, e.g.,
   \{head, tail\}, \{1, 2, ..., 6\}, and \{all card faces\}.
 \item Event: a subset of the sample space is called an event; an event
-  occur if the outcome from an experiment belong to the event. For example, if
-  you roll a dice, and you are interested in the result of having an even number,
+  occurs if the outcome from an experiment belong to the subset of sample space. For example, if
+  you roll a die, and you are interested in the result of having an even number,
   then the event is $E$=\{2, 4, 6\}.
 \end{itemize}
 
@@ -100,7 +100,12 @@ Once again, it is helpful to visualize such things using a Venn diagram. In Figu
 \bigskip
 Can it be that we are told that some event $A$ has occurred, but this information tells us nothing about the probability of another event, $B$? Yes -- in this case we say that the two events are \emph{independent}, and we have
 $$P(B\mid A) = P(B)\,.$$
-In general, $P(B\mid A) \ge P(B)$.
+
+For example, Abby rolls a fair die, while her roommate Amelia tosses a fair coin at the same time. If $A$ is the event `Abby got a 6' and $B$ is the event `Amelia got Heads', then $P(B\mid A) = 1/2$ because Abby's result has no impact on Amelia's. 
+
+Sometimes establishing that two events are independent is harder. For example, in general, the probability that Abby gets a text message within any given hour is 0.7, and Amelia's is 0.6. Given that Abby got a text between 8 and 9am, does it change the probability the Amelia got a text during the same hour? It may depend on other (latent) events. For example, if they are late paying the rent, then it is quite reasonable that Amelia will get a text from their landlord at approximately the same time as Abby.
+
+Another related notion is that of `mutually exclusive' events. For example, if $A$ =  the Golden State Warriors will win the NBA championship next season, and $B$ = the Boston Celtics will win the NBA championship next season, then these events cannot occur at the same time. Mutually exclusive are not independent. In this example, if we somehow know that  $A$ will happened, then we know for sure that $B$ will not. Moreover, if we assign a probability of 0.6 that the Golden State Warriors will win, then we know that $P(B)\le 0.4$. 
 
 \begin{example}[Two Children]
 Consider the following two problems:
@@ -181,7 +186,7 @@ difficulty of getting a certain box when we know the final coin. We see the six
 possible outcomes in Figure~\ref{fig:probability-flow} are equally likely to
 occur. Two outcomes of a gold coin are through the path of the box with two gold
 coins and one outcome of a gold coin is through the path of the box with a gold
-coin and a silver coin. Thus the answer to this problem is $\frac{2}{3}$.
+coin and a silver coin. Thus the answer to this problem is 2/3.
 
 \begin{figure}[H]
 \centering
@@ -420,9 +425,9 @@ Running the above code gives:
 
 We see that the probability of winning a car is much higher than 0.5 if one chooses to switch. 
 
-We initially have no information where the prize is, so the probability for the prize is behind any door is 1/3.  Intuition often fails in the second step: when another door is opened and it contains no prize, most people think that the total probability has to be divided equally between the two remaining doors. In other words, the 1/3 probability that we assigned to door 3 has to be divided in two, and 1/6 will go to the probability of each of doors 1 and 2 (1/3+1/6=1/2). 
+We initially have no information where the prize is, so the probability for the prize is behind any door is 1/3.  Intuition often fails in the second step: when another door is opened and it contains no prize, most people think that the total probability has to be divided equally between the two remaining doors. In other words, the 1/3 probability that we assigned to door 3 has to be divided in two, and 1/6 will go to the probability of each of doors 1 and 2 (1/3+1/6=1/2). But this is wrong!
 
-Does the fact that we picked initially door 1 makes it special somehow? Strangely, yes!
+Does the fact that we picked initially door 1 (completely by chance) makes any of the doors special somehow? Strangely, yes!
 When we pick door 1 there are two possibilities -- either it's the winner (with probability 1/3) or it's not. If it is, then the host can choose either door 2 or door 3 to open (each with probability 1/2). However, if door 1 is not the winning door, then the host has no choice. If door 2 is the winner then he must open door 3. 
 Since we know he opened door 3, either door 1 is the winner and the host opened door 3 with probability 1/2 or door 2  is the winner and the host opened door 3 with probability 1. So, the probability that the host opened door 3 if door 2 is the winner is twice the probability he opened door 3 if door 1 is the winner. 
 
