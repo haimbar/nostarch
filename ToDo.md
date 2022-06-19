@@ -9,6 +9,7 @@
 - Examples should be numbered within chapter
 - Comments in R – if the whole line, use ##. Inline use #
 - don’t show dev.off() in code
+- Add exercises
 - ~~Fix “hypertarget” in preamble~~
 - ~~Check why vbox contains an extra line fixed by modifying nostarch.cls~~
 - ~~Exercises – define an environment~~
