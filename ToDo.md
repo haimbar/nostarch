@@ -38,8 +38,8 @@
 - ~~Use par or subfigure to show 2.5 and 2.6 together~~
 - ~~In 2.4, use list? Bullets?~~
 
-### Ch 3
-- Remove erroneous inequality
+### Ch3
+- ~~Remove erroneous inequality~~
 - Simpson's paradox
 - Example for the fair division?
 - Add - base rate fallacy? Or in sampling chapter?
