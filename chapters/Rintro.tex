@@ -245,7 +245,7 @@ Try the following code multiple times (do not use \code{set.seed()}). What do yo
 A few comments:
 \begin{itemize}
 \item A comment in \R starts with \#. Any text following the \# sign is considered user-documentation and is not executed by \R.
-\item We have used the \code{cat()} function to print (concatenate) text to the console. Fixed text appears in double (or single) quotes, but the content of variables or output from \R functions should not be quoted. The \verb|\n| symbol tells \R to print a newline character at the end. Try to see what happens if you remove it.
+\item We have used the \code{cat()} function to print (concatenate) text to the console. Fixed text appears in double (or single) quotes, but the content of variables or output from \R functions should not be quoted. The \verb|\n| symbol tells \R to print a newline character. Try to see what happens if you remove it.
 \item The expression within the \code{sum()} function produces TRUE/FALSE (Boolean) values. First, we draw n.trials random numbers from a uniform distribution. Then, each one is compared with 0.5. If the value is less than 0.5, the returned value is TRUE. Otherwise, it's FALSE. This demonstrates one of \R's greatest features - allowing to run `vectorized' code. In one line, we generated 200 random numbers and for each one we checked if it is less than 0.5, and as a result, we got 200 Boolean values which we have added together (TRUE counts as 1, and FALSE counts as 0.) Thus, the result in the sum is the number of Heads in 200 tosses.
 \end{itemize}
 
@@ -313,12 +313,12 @@ The plot was generated with the following code. Try it, and try changing some of
 A boxplot does not include the mean, or the trimmed mean, but we have added them
 here as a red circle and brown diamond, respectively, in order to show that they
 are different than the median. The mean is larger than the median in this case,
-so we say that the distribution is skewed to the right. {\color{blue}\why{
-    Help check this:} The median does not depend on observations in the tails
+so we say that the distribution is skewed to the right. 
+   The median does not depend on observations in the tails
   of the data (small and large observations in the data). It simply represents
-  where the data can be split half. Thus the median is a more robust measure of
-  the central tendency of the data, and it is more appropriate than the mean for
-screwed data such as incomes.}
+  where the data can be split in half. Thus the median is a more robust measure of
+  the central tendency of the data than the mean, and it is more appropriate for
+skewed data such as income.
 
 A more detailed summary of a sample can be obtained by calculating its
 quantiles. In the boxplot, only three quantiles (also called percentiles) are
