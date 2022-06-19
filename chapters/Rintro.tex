@@ -48,7 +48,7 @@ Click on the Environment tab. It should be empty when you start \R for the first
 myFirstVariable <- factorial(5)
 \end{verbatim}
 
-Notice that nothing was printed in the Console, but the Environment tab now contains a table with one row, with `myFirstVariable' appearing in the cell on the left, and its value (120) on the right. Any object appearing in the Environment tab is available to you throughout your \R session, and you don't have to redefine or recalculate it. For example, you try typing the following in the console:
+Notice that nothing was printed in the Console, but the Environment tab now contains a table with one row, with `myFirstVariable' appearing in the cell on the left, and its value (120) on the right. Any object appearing in the Environment tab is available to you throughout your \R session, and you don't have to redefine or recalculate it. For example, type the following in the console:
 
 \begin{verbatim}
 myFirstVariable/6
@@ -69,6 +69,8 @@ cat("Hello, World!\n")
 Then, from the main menu in Rstudio, click on File, then on Save, and in the `Save As' box enter FirstProgram.R and click the Save button. Notice that the tab name is now FirstProgram.R.
 
 In that part of the window, there should now be a small button called Source. Click on it. The program will be executed and the output will be shown in the Console. You can also execute individual lines in the source code. Just put the cursor anywhere in that line, and click on the Run button (which is near the Source button) or click Ctrl+Enter (or Command+Enter on a Mac). 
+
+When you want to finish your \R session, just type \code{quit()}.
 
 That's it. You are now ready to start learning programming in R.
 
@@ -155,7 +157,7 @@ Run each line separately, and check the content of `suits' and what
 \inlnR{```cat(paste(cards))```}[vbox]
 
 
-Let's `deal' five cards to each player for a game of poker. We will use the \code{sample()} function.
+Let's `deal' five cards to each player in a game of poker. We will use the \code{sample()} function.
 \showCode{R}{Code/ch1sec1.R}[32][33]
 The \code{sample()} function in this example is used to draw 20 cards at random from the deck, without replacement. Then, to divide it into four hands, we use the \code{matrix()} function, and specify the number of rows and the number of columns.
 The \code{sample()} function draws a different random sample each time unless we set the random `seed' to a fixed value. The \code{set.seed()} function is used to ensure the reproducibility of the results.  Try running the code without the \code{set.seed()} line, and see that you get different results each time.
@@ -163,7 +165,7 @@ The \code{sample()} function draws a different random sample each time unless we
 
 Check the class and the structure of the variable pokerHand, using the functions we've mentioned earlier.
 
-We can save variables to a file in order to use them in a later session. For example:
+We can save variables to a file in order to use them in a later session. For example, create a folder called `tmp' in your working directory, and type:
 \showCode{R}{Code/ch1sec1.R}[35][35]
 If we don't specify the path, the file will be stored in the current working directory. Recall that you can find out which directory is used with the \code{getwd()} function, and set it to another directory with \code{setwd()}.
 Then, we may get the saved variables by using the following:
@@ -171,7 +173,7 @@ Then, we may get the saved variables by using the following:
 Variables which we do not save will not be available once we terminate the current \R session. When we quit an \R session we have an option to save the entire session's information. However, if there are variables, datasets, or functions which we have created and want to save, it's better to save them explicitly. After you use the \code{load()} function in the example above, the variable pokerHand will be available to use, even if you quit the \R session in which the variable was created.
 
 We can also save and/or load data using other file formats that are easier to edit without \R. For
-example, the following code save \code{plkerHand} in a CSV file and read it as
+example, the following code save \code{plkerHand} in a comma-separated value (CSV) file and read it as
 another variable called \code{pH}: 
 \showCode{R}{Code/ch1sec1-rwdata.R}
 \runR{Code/ch1sec1-rwdata.R}{rwdata}
@@ -200,14 +202,19 @@ In the following example we use a built-in dataset of opera singers, and we plot
 \end{figure}
 \noindent We will learn a lot more about data visualization in subsequent chapters.
 
-We can define our own functions in R. We define a function for finding the
-summation and we see that it produce the same result as the base \code{sum}
-function. 
+
+\subsection{Writing your own functions}
+One of the greatest things about computers is that they can do the same thing many times and not get tired. When we have to compute something many times, it is useful to create a sequence of commands (which we call a function) and give it a name. Then, we don't have to type the whole sequence of commands each time we want to run them -- we can simply run the function. For example, we can define a function for calculating the sum of numbers. Of course, such a function exists in \R, but we just use it to show how you can define your own function, and we will check that it produce the same result as the base \code{sum} function. 
 \showCode{R}{Code/ch1sec1-defFunc.R}
 \runR{Code/ch1sec1-defFunc.R}{defFunc}
 \includeOutput{defFunc}
 
-When you want to finish your session, just type \code{quit()}.
+The function \code{mysum} that we defined, takes one argument from the user, called \code{x}. This is useful because you can use the same function to perform a similar operations on different objects. For example, you can try
+\showCode{R}{Code/ch1sec1-defFuncUsage.R}
+
+Functions can take more than one argument, or no arguments at all. The arguments can also be given a default value, so that if the user does not specify them it will not cause an error. For example, we can create a function to deal poker hands to varying number of players, and we can also choose the number of cards each player gets:
+\showCode{R}{Code/ch1sec1-PokerHand.R}
+Note that we also introduced some error-checking: the function checks if the input is valid, since it's not possible to deal more cards than we have in one deck. If an error is detected, the function uses the built-in \code{stop()} function to abort, and show an error message to the user.  Checking the validity of the input is very important and helpful to the user.
 
 
 \subsection{Generating random numbers}
