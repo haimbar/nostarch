@@ -41,7 +41,7 @@
 ### Ch3
 - ~~Remove erroneous inequality~~
 - Simpson's paradox
-- Example for the fair division?
+- ~~Example for the fair division?~~
 - Add - base rate fallacy? Or in sampling chapter?
 - ? Henry’s choice and 100 prisoner dilemma – keep? Make into an exercise? Simplify?
 
