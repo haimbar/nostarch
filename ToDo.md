@@ -10,6 +10,7 @@
 - Comments in R – if the whole line, use ##. Inline use #
 - don’t show dev.off() in code
 - Add exercises
+- Use 1/n not \frac inline
 - ~~Fix “hypertarget” in preamble~~
 - ~~Check why vbox contains an extra line fixed by modifying nostarch.cls~~
 - ~~Exercises – define an environment~~
@@ -39,7 +40,6 @@
 
 ### Ch 3
 - Remove erroneous inequality
-- Use 1/n not \frac inline
 - Simpson's paradox
 - Example for the fair division?
 - Add - base rate fallacy? Or in sampling chapter?
