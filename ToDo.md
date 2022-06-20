@@ -44,5 +44,10 @@
 - ~~Example for the fair division?~~
 - Add - base rate fallacy? Or in sampling chapter?
 - ? Henry’s choice and 100 prisoner dilemma – keep? Make into an exercise? Simplify?
-
+```latex
+\begin{exercise}
+  Use simulation to find the probability that at least some prisoners open the
+  same draw in the first try if every prisoner selects fifty drawers at random.
+\end{exercise}
+```
 
