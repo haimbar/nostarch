@@ -433,6 +433,154 @@ Since we know he opened door 3, either door 1 is the winner and the host opened 
 
 Notice that this not a consequence of  the host trying to trick us, or on having to perform some reverse psychology and trying to guess what the host thinks. It's purely a consequence of conditioning on what has already happened and the information it revealed about the possible future outcome.
 
+
+\hypertarget{simpsons-paradox}{%
+\subsection{Beware of generalizations}\label{simpsons-paradox}}
+If we observe a delay in flight take-offs in 8 out of 10 airports, can it be that overall in the country the average flight takes off on time? If the average admission rate in a university is greater for women than for men, can it be that in many (or even most) departments in that university the admission rate for men is greater than for women? The answer to both these questions, and many similar scenarios in life, is yes. This phenomenon is called Simpson's paradox.
+
+\begin{example}[Combined percentages]
+Tanya and Sonya are two freshmen players in college. In the first 3 games of the season Tanya had 11 free throws, of which she made 6, and Sonya went 7 times, and made 4 of the free throws.
+If at the end of game three the coach want to pick the player with the best chance of making free throws, who should she choose? 
+
+Tanya's probability based on the first three games is $5/11 = .455$, while Sonya's is $3/7 = .429$, so if the coach picks  Tanya the team has a better chance from the free throws line.
+
+During the next three games  Tanya gets 9 free throws and makes 6. Sonya gets 14 free throws and makes 9.
+Again, at the end of game six the coach has to choose the better free-throw shooter. Based on the last 3 games, Tanya's chances are $6/9 = .667$, while Sonya's are $9/14 = .643$. So once again, the coach picks the player with the better chances, and based on the last three games, it is Tonya once again.
+
+However, if we combine the results from all six games we see that Tanya went to the line 11+9=20 times, and made 11 of the free throws. Sonya got 7+14=21 free throws and made 3+9=12. So, if we combine the results from all six games Tonya's percentage from the free throw line is 55\%, while Sonya's is 57.1\%, so based on the cumulative information Sonya should be the coach's pick!
+\end{example}
+
+%A black urn contains 5 red and 6 green balls,
+%and a white urn contains 3 red and 4 green balls. You are allowed to
+%choose an urn and then pick a ball at random from the urn. If you
+%pick a red ball, you get a prize. Which urn should you choose to
+%draw from?
+%\begin{itemize}
+%\item If you draw from the black urn, the probability of choosing a
+%  red ball is $5/11 = .455$.
+%\item If you choose to draw from the white urn, the probability of
+%  choosing a red ball is $3/7 = .429$.
+%\end{itemize}
+%You should choose to draw from the black urn.
+
+%Now consider another game in which a second black urn has 6 red and
+%3 green balls, and a second white urn has 9 red and 5 green balls.
+%\begin{itemize}
+%\item If you draw from the black urn, the probability of a red ball is
+%  $6/9 = .667$.
+%\item If you choose to draw from the white urn, the probability if
+%  $9/14 = .643$.
+%\end{itemize}
+%Again you should choose to draw from the black urn.
+
+%In the final game, the contents of the second black urn are added to
+%the first black urn, and the contents of the second white urn are
+%added to the first white urn. Again, you can choose which urn to draw
+%from. Which should you choose?
+%
+%Intuition says choose the black urn, but let's calculate the
+%probabilities.
+%\begin{itemize}
+%\item The black urn now contains 11 red and 9 green balls, so the
+%  probability of drawing a red ball from it is 11/20=0.55
+%\item The white urn now contains 12 red and 9 green balls, so the
+%  probability of drawing a red ball from it is 12/21= .571.
+%\end{itemize}
+%You should choose the white urn!
+%\end{example}
+
+% \textbf{UC Berkeley gender bias:}
+\begin{example}[UC Berkeley alleged gender bias]
+A famous example of Simpson's
+paradox is a study of gender bias among graduate school admissions to
+University of California, Berkeley. In 1973 UC Berkeley was sued for
+sex-discrimination. Here are the overall  numbers \textit{combined} from the six largest
+departments in fall admission of 1973.
+
+\begin{table}[H]
+\begin{center}
+  \begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}crrcrr}
+    \toprule
+    \multicolumn{3}{c}{Men} & \multicolumn{3}{c}{Women} \\
+    \cmidrule(lr){1-3}\cmidrule(lr){4-6}
+    Applicants & \multicolumn{2}{c}{Admitted} & Applicants
+                                              & \multicolumn{2}{c}{Admitted} \\
+    \midrule
+    2691 & 1198 & ({\bf 44.5}\%) & 1835 & 557 & (30.4\%) \\
+    \bottomrule
+  \end{tabular*}
+\end{center}
+\end{table}
+
+This table shows that men were much more likely than women to be admitted (by 14.1\%).
+Was there a gender bias? Let's break it down by department (which we call A--F):
+
+\begin{table}[H]
+\centering
+\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} ccrrcrr}
+  \toprule
+  & \multicolumn{3}{c}{Men}  & \multicolumn{3}{c}{Women} \\
+  \cmidrule(lr){2-4}\cmidrule(lr){5-7}
+  Department & Applicants  & \multicolumn{2}{c}{Admitted} & Applicants
+                           & \multicolumn{2}{c}{Admitted} \\
+  \midrule
+A & 825 & 512& (62\%) & 108 & 89 &(\textbf{82\%})  \\ 
+B & 560 & 353& (63\%) & 25  & 17 &(\textbf{68\%})  \\
+C & 325 & 120& (37\%) & 593 & 202& (34\%) \\
+D & 417 & 138& (33\%) & 375 & 131& (\textbf{35\%}) \\
+E & 191 & 53 & (28\%) & 393 & 94 &(24\%)  \\
+F & 373 & 22 & (6\%) & 341 & 24 &(\textbf{7\%})  \\
+  \bottomrule
+\end{tabular*}
+\end{table}
+% \jy{we need to set some style guidelines on code, floats, etc.}
+
+Things get strange after we divide the data according different
+departments. In four of the departments (A, B, D, and F)  women were more likely to be admitted
+than men.  In departments C and E, men were more likely to be admitted (by 3-4\%). In contrast, in department A the acceptance rate for women was 20\% more than for men.
+
+To explain this, \cite{bickel1975sex} noticed that women
+tended to \textit{apply} to more  competitive departments (C and E) with low admission
+rates even among qualified applicants, whereas men tended to apply to
+less competitive departments with high admission rates among the
+qualified applicants.
+
+So, this is not a case of gender discrimination, but rather, what's called `selection bias'. If women were more likely  to apply to a competitive department than men, the overall rejection rate among women can be expected to be higher.
+Consider an extreme example, with department X accepting 1\% of the applicants, and department Y accepting 50\%. Suppose that 500 women  choose to apply to department X and 500 other women apply to department Y, and suppose that 500 men all apply to department Y. Then, department X will have 5 students (all women) and will reject 495 of the applicants (again, all women). Department X, on the other hand will accept 250 men and 250 women. Overall, the acceptance rate for women is $(5+250)/1000=0.255$, while for men it is $250/500=0.5$.
+\end{example}
+
+
+Simpson's paradox is not limited to the scenarios of combined percentages or selection bias. To illustrate it, we use the following example via simulations.
+
+\begin{example}[Reverse trends]
+We use the following code to simulate data from four groups, each with 40 samples.
+
+\showCode{R}{Code/probability-Simpson.R}[1][6]
+\runR{Code/probability-Simpson.R}{Simpson}{}
+% Running the above code gives:
+% \includeOutput{Simpson}
+
+Next, we plot the whole data and fit a trend equation. Clearly, we see in the left panels of Figure \ref{fig:probability-simpson} that as $x$ increases, $y$ increases
+
+\showCode{R}{Code/probability-Simpson.R}[8][9]
+
+If we mark the points by the group to which they belong, and fit a trend line separately for each group, as $x$ increases $y$ decreases in each and every group!
+\showCode{R}{Code/probability-Simpson.R}[10][12]
+
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.45\textwidth]{images/probability-Simpson-plots.pdf}
+\includegraphics[width=0.45\textwidth,page=2]{images/probability-Simpson-plots.pdf}
+\caption{Scatter plot of the whole data without (left) and with (right) group labeled.}
+\label{fig:probability-simpson}
+\end{figure}
+
+\end{example}
+
+The three examples all show that we should be very careful when analyzing data and remember that proportions or trends which are observed in the entire population may be very different when we break down the data into groups.
+
+
 % \hypertarget{Henry-Choice}{%
 %   \section{Henry's Choice}\label{Henry-Choice}}
 
@@ -477,138 +625,6 @@ Running the above code gives:
 
 
 
-
-\hypertarget{simpsons-paradox}{%
-\subsection{Simpson's Paradox}\label{simpsons-paradox}}
-
-It is a phenomenon in which a trend appears in several different
-groups of data but disappears or reverses when these groups are
-combined. 
-
-% \jy{we may define an example environment and a comment/discussion environment}
-% \textbf{An urn example}:
-\begin{example}[Combined urns]
-A black urn contains 5 red and 6 green balls,
-and a white urn contains 3 red and 4 green balls. You are allowed to
-choose an urn and then choose a ball at random from the urn. If you
-choose a red ball, you get a prize. Which urn should you choose to
-draw from?
-\begin{itemize}
-\item If you draw from the black urn, the probability of choosing a
-  red ball is $5/11 = .455$.
-\item If you choose to draw from the white urn, the probability of
-  choosing a red ball is $3/7 = .429$.
-\end{itemize}
-You should choose to draw from the black urn.
-
-Now consider another game in which a second black urn has 6 red and
-3 green balls, and a second white urn has 9 red and 5 green balls.
-\begin{itemize}
-\item If you draw from the black urn, the probability of a red ball is
-  $6/9 = .667$.
-\item If you choose to draw from the white urn, the probability if
-  $9/14 = .643$.
-\end{itemize}
-Again you should choose to draw from the black urn.
-
-In the final game, the contents of the second black urn are added to
-the first black urn, and the contents of the second white urn are
-added to the first white urn. Again, you can choose which urn to draw
-from. Which should you choose?
-
-Intuition says choose the black urn, but let's calculate the
-probabilities.
-\begin{itemize}
-\item The black urn now contains 11 red and 9 green balls, so the
-  probability of drawing a red ball from it is 11/20=0.55
-\item The white urn now contains 12 red and 9 green balls, so the
-  probability of drawing a red ball from it is 12/21= .571.
-\end{itemize}
-You should choose the white urn!
-\end{example}
-
-% \textbf{UC Berkeley gender bias:}
-\begin{example}[UC Berkeley gender bias]
-A famous example of Simpson's
-paradox is a study of gender bias among graduate school admissions to
-University of California, Berkeley. In 1973 UC Berkeley was sued for
-sex-discrimination. Here are the overall numbers for the six largest
-departments in fall admission of 1973.
-
-\begin{table}[H]
-\begin{center}
-  \begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}crrcrr}
-    \toprule
-    \multicolumn{3}{c}{Men} & \multicolumn{3}{c}{Women} \\
-    \cmidrule(lr){1-3}\cmidrule(lr){4-6}
-    Applicants & \multicolumn{2}{c}{Admitted} & Applicants
-                                              & \multicolumn{2}{c}{Admitted} \\
-    \midrule
-    2691 & 1198 & ({\bf 44.5}\%) & 1835 & 557 & (30.4\%) \\
-    \bottomrule
-  \end{tabular*}
-\end{center}
-\end{table}
-
-This table shows that men were more likely than women to be admitted,
-and the difference was so significant. Let's see which departments
-were mainly responsible for this gender bias. To do this we broke open
-the data according to each departments.
-
-\begin{table}[H]
-\centering
-\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} ccrrcrr}
-  \toprule
-  & \multicolumn{3}{c}{Men}  & \multicolumn{3}{c}{Women} \\
-  \cmidrule(lr){2-4}\cmidrule(lr){5-7}
-  Department & Applicants  & \multicolumn{2}{c}{Admitted} & Applicants
-                           & \multicolumn{2}{c}{Admitted} \\
-  \midrule
-A & 825 & 512& (62\%) & 108 & 89 &(82\%)  \\ 
-B & 560 & 353& (63\%) & 25  & 17 &(68\%)  \\
-C & 325 & 120& (37\%) & 593 & 202& (34\%) \\
-D & 417 & 138& (33\%) & 375 & 131& (35\%) \\
-E & 191 & 53 & (28\%) & 393 & 94 &(24\%)  \\
-F & 373 & 22 & (6\%) & 341 & 24 &(7\%)  \\
-  \bottomrule
-\end{tabular*}
-\end{table}
-% \jy{we need to set some style guidelines on code, floats, etc.}
-
-Things get strange after we divide the data according different
-departments. For the six departments, four of them accepted women more
-than men.  To explain this, \cite{bickel1975sex} noticed that women
-tended to apply to more competitive departments with low admission
-rates even among qualified applicants, whereas men tended to apply to
-less competitive departments with high admission rates among the
-qualified applicants.
-\end{example}
-
-To use simulation to further illustrate this, we simulate a data set
-with four groups in the following.
-
-\showCode{R}{Code/probability-Simpson.R}[1][6]
-\runR{Code/probability-Simpson.R}{Simpson}{}
-% Running the above code gives:
-% \includeOutput{Simpson}
-
-We use the following code to first plot the whole data and then mark different
-groups in different colors. 
-\showCode{R}{Code/probability-Simpson.R}[8][9]
-
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.45\textwidth]{images/probability-Simpson-plots.pdf}
-\includegraphics[width=0.45\textwidth,page=2]{images/probability-Simpson-plots.pdf}
-\caption{Scatter plot of the whole data without (left) and with (right) group labeled.}
-\label{fig:probability-simpson}
-\end{figure}
-
-
-The results are displayed in Figure~\ref{fig:probability-simpson}.
-For the whole data $y$ has an increase pattern as $x$ increases, but for each
-sub group $y$ has a decrease pattern as $x$ increases. 
 
 
 % \hypertarget{prisoners-problem}{%
