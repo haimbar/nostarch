@@ -268,6 +268,8 @@
 \NewDocumentCommand{\inln}{m m O{inline}}{\-
   \stepcounter{codeOutput}\unskip
   \unskip\setvalue{\tmpname}{tmp/\jobname_inln\thecodeOutput}\unskip\unskip\unskip
+          %\IfFileExists{\tmpname.tex} {} {
+          \ifruncode % cache mode - don't try to run the code, just get the previous results
   \IfBeginWith{#2}{```}{\ifruncode\immediate\write18{#1 > \tmpname.tex}\unskip\fi}
   {\newwrite\tempfile
     \immediate\openout\tempfile=\tmpname.txt
@@ -276,6 +278,7 @@
     \ifruncode
     \immediate\write18{#1 \tmpname.txt > \tmpname.tex}\unskip
     \fi}
+           \fi % end cache mode
   \IfFileExists{\tmpname.tex}
   {\checkZeroBytes{\tmpname.tex}\unskip
     \ifstrequal{#3}{vbox}

@@ -18,8 +18,13 @@
 % our additions to the preamble (make external)
 %\usepackage[python]{runcode}
 %\usepackage[python,stopserver]{runcode}
-\usepackage[cache,nohup,R]{runcode}%Book}
-%\usepackage[cache]{runcodeBook}
+
+\IfFileExists{ForceCache}{
+\usepackage[cache]{runcode} 
+}
+{
+\usepackage[nohup,R]{runcode} % can add/remove the cache option
+}
 
 \setminted[julia]{linenos, frame=single, bgcolor=bg, breaklines=true}
 \setminted[R]{linenos, frame=single, bgcolor=white, breaklines=true}
