@@ -279,7 +279,7 @@
   \IfFileExists{\tmpname.tex}
   {\checkZeroBytes{\tmpname.tex}\unskip
     \ifstrequal{#3}{vbox}
-        {\begin{tcolorbox}
+        {\begin{tcolorbox}[colframe=blue!25,colback=blue!10]
         \ifminted\unskip
  \inputminted[fontsize=\footnotesize,breaklines=true]{text}{\tmpname.tex}\unskip
         \else\unskip
