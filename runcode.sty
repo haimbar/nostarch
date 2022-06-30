@@ -236,7 +236,7 @@
   \IfFileExists{\tmpname}
   {
     \ifstrequal{#2}{vbox}
-    {\begin{tcolorbox}
+    {\begin{tcolorbox}[colframe=blue!25,colback=blue!10]
         \ifminted\unskip
  \inputminted[fontsize=\footnotesize,breaklines=true]{text}{\tmpname}\unskip
         \else\unskip
