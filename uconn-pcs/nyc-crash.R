@@ -10,7 +10,7 @@ names(crash) <- tolower(names(crash))
 ## frequency table by borough
 xtabs(~ borough, data = crash)
 
-## Create a hour variable with integer values from 0 to 23
+## Create an hour variable with integer values from 0 to 23
 crash$hour <- as.numeric(sub(":[0-9][0-9]", "", crash$crash.time))
 
 table(crash$hour)
