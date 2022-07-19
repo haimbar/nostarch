@@ -29,7 +29,7 @@ The left-hand side of the screen contains the Console tab. Notice the \(>\) sign
 \end{minted}
 and hit Enter on the keyboard. You should get the following on the Console:
 
-\begin{tcolorbox}
+\begin{tcolorbox}[colframe=blue!25,colback=blue!10]
 \begin{minted}{text}
 [1] 4
 \end{minted}
@@ -299,7 +299,7 @@ The distribution of \texttt{x} is shown in Figure~\ref{fig:ch1:simexp} as a \tex
 The `whiskers', which are the dashed grey lines, are {\color{blue} the minimum
   and maximum observations within 1.5$\cdot$IQR to each side of the box}. If the result is smaller than the minimum value (or greater than the maximum), then the whisker only extends to the minimum (maximum). Points within the range between the two whiskers are not plotted individually, since their distribution is summarized succinctly by the box-and-whiskers plot. Points outside the range between the two whiskers are considered `outliers', or extreme values, and are shown explicitly. 
 
-The plot was generated with the following code. Try it, and try changing some of the parameters to understand their role. We will cover the topic of visualization in a different chapter.
+The plot was generated with the following code. Try it, and try changing some of the parameters to understand their role. We will cover the topic of visualization in chapter \ref{EDA}.
 
 \showCode{R}{Code/ch1sec3.R}[12][16]
 
@@ -379,7 +379,7 @@ the kurtosis \textcolor{red}{will we use the kurtosis later? If so, we should
   not show the describe function.}.
 \inlnR{```print(psych::describe(x))```}[vbox]
 
-We conclude this chapter with some functions which can be used to summarize discrete (categorical) data, where the mean, variance, quantiles, etc. are not applicable. We will revisit the topic of summarizing data in the chapter on \textcolor{red}{visualization}.
+We conclude this chapter with some functions which can be used to summarize discrete (categorical) data, where the mean, variance, quantiles, etc. are not applicable. We will revisit the topic of summarizing data in chapter \ref{EDA}.
 
 To simulate categorical data we can use the \code{rmultinom()} function, which simulates putting $N$ objects in $K$ bins with given probabilities for each bin. Another possibility is to use \code{cut()} function which divides a range of numbers into discrete ranges and creates discrete categories in a factor variable.
 For example, suppose there is a town with three hotels (Motel 6, Best Western,  and Hilton) with 400, 300, and 300 rooms, and one auto rental company with only two makes of cars (700 Honda, and 300 Teslas). In the following code we simulate the allocation of 100 visitors to hotels and cars. We use the \code{table()} function to show the counts by hotel, by car, and by both. 
