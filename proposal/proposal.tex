@@ -1,0 +1,303 @@
+\documentclass[12pt, titlepage]{article}
+\usepackage{enumerate, titlesec, natbib, url,pdfpages}
+\usepackage[margin=1in]{geometry}
+
+\usepackage[colorlinks=true, citecolor=blue]{hyperref}
+
+\newcommand{\blue}[1]{{\textcolor{blue}{#1}}}
+\newcommand{\red}[1]{{\textcolor{red}{#1}}}
+\newcommand{\brown}[1]{{\textcolor{brown}{#1}}}
+\newcommand{\green}[1]{{\textcolor{green}{#1}}}
+\newcommand{\jy}[1]{{\textcolor{red}{JY: #1}}}
+
+
+\titleformat{\subsection}{\bf}{Chapter \thesubsection}{1em}{}
+\renewcommand{\thesubsection}{\arabic{subsection}}
+
+\def\R{\textsf{R} }
+
+\begin{document}
+\author{Haim~Bar, HaiYing~Wang, and Jun~Yan}
+\title{Book Proposal\\[5mm]
+  \bf{\huge Stumbling into Data Science}\\
+  A Simulation-Based Introduction}
+\date{}
+\maketitle
+
+
+\tableofcontents
+
+\pagebreak
+
+\section{Description}
+Data science is quite possibly the fastest growing research and business area today. It
+requires skills and knowledge in statistics and computer science. Data scientists must
+also have excellent communications skills in order to convey often-complex ideas in
+a simple, truthful, and effective way to an audience which may not have quantitative
+training. The demand for data scientists is expected to continue increasing, as our 
+society becomes more and more data driven, and as the amount and variety of data
+grows at an exponential rate.
+
+
+There are many books on data science. Many of them focus on the computer-science side
+of things, such as database maintenance, or data acquisition. Other books focus on the
+statistical theories such as regression methods, or machine learning methods. We believe that
+both aspects (computational and statistical) have to be combined, and every data scientist must
+become (eventually) proficient in both.
+
+
+Of books on the statistical aspect of data science, the overwhelming majority
+rely on a certain level of mathematical background. This tends to intimidate
+many students who shy away from anything with a strong
+mathematical flavor. Even for students with a mathematical aptitude,
+most books, even modern ones, are written in a traditional way which does
+not illustrate the logical connection between the fundamental data science
+procedures and the underlying mathematical justification. The advantage of
+computer programming has not been taken in engaging future data scientists.
+
+
+Our book aims to introduce some of the most fundamental ideas in statistical
+data science to a general audience who are interested in data science.
+Instead of equations and formulas, we will explain the same ideas
+via computer simulations to engage the readers at the first sight.
+The content will be accessible to students
+with basic knowledge in math (middle-school algebra). The book will contain
+complete and well documented code, so that students will learn statistical and
+computational skills simultaneously. The code will be in \R, but the ideas and the simulation-based
+approach is easily extendible to other languages, such as Python or Julia. The code and data
+will be publicly available in a GitHub repository which will be constantly maintained by the authors.
+
+
+The book can be used as a textbook in high-school classes, as well as in college classes for students
+who have no background in statistics or computing and have no advanced mathematical training. It can
+also be used as a self-study guide, for example by executives who have to deal with data or
+manage data scientists, but lack the statistical or computational training. 
+
+\section{About the Authors}
+
+\textbf{Haim Bar} is an Associate Professor in the Department of Statistics,
+University of Connecticut. Before joining UConn, he worked as a software
+engineer for Motorola, a director of software development in MicroPatent, LLC, a
+Principal Scientist at ATC-NY, and a statistician at Cornell's Statistical
+Consulting Unit.
+His research interests include Bayesian methods, statistical modeling and variable 
+selection in high-dimensional data, especially in applications to genomics.
+
+
+\noindent\textbf{HaiYing Wang} is an Associate Professor in the Department of
+Statistics, University of Connecticut. He was an Assistant Professor in the
+Department of Mathematics and Statistics at the University of New Hampshire and
+an cooling system engineer in the Midea Group. His research interests include
+informative subdata selection for big data, model selection, model averaging,
+measurement error models, optimal design, and semi-parametric regression.
+
+\noindent\textbf{Jun Yan} is a Professor in the Department of Statistics at the
+University of Connecticut. a Research Fellow in the Center for Population Health
+at UConn Health. He received his PhD in Statistics from University of
+Wisconsin--Madison in 2003. After four years on the faculty of the Department of
+Statistics and Actuarial Science at the University of Iowa, he joined
+UConn in 2007. His methodological research interests include
+survival analysis, clustered data analysis, spatial extremes, and statistical
+computing. His application domains are public health, environmental sciences,
+and sports. With a special interest in making his statistical methods available
+via open source software, he and his coauthors developed and maintain a
+collection of \R packages in the public domain. He
+is an Elected Member of the International Statistical Institute and a Fellow of
+the American Statistical Association.
+
+
+All three authors have been members of the Computer Committee of the Department
+for years, during which time the idea of the book emerged.
+
+\section{Table of Contents}
+
+\begin{enumerate}[{Chapter} 1 -]
+\item Getting to Know R
+\item Summarizing and Visualizing Data
+\item Probability and Paradoxes
+\item Towards the End of the Horizon
+\item Estimation: A Hide-and-Seek Game with the Nature
+\item Data Collection and Selection Bias
+\item Correlation and Regression
+\item Hypothesis Testing
+\item Case Studies with New York Open Data
+\end{enumerate}
+
+\section{Annotated Table of Contents}
+
+\subsection{Getting to Know R}
+Just like a chef needs a set of tools, a kitchen with a large surface to work
+on, and a detailed cookbook with different recipes, a data scientist needs a
+powerful programming language, a convenient development environment, and good
+documentation.
+
+
+We chose the \R language and the RStudio integrated development environment
+(IDE) for this book, and we hope that this book will be your basic guide into
+data science. In order to get started, you must first get the necessary software
+and get acquainted with it, and this is what this chapter is about.
+
+
+\subsection{Summarizing and Visualizing Data}
+People are born with a fantastic ability to detect patterns. However, sometimes the
+information is hidden and the only way to observe a pattern is to change 
+the viewpoint or rearrange the input. In this chapter we will introduce some tools
+to summarize data in order to reveal hidden features. We will also discuss principles of
+graphical excellence. In the words of Edward Tufte, the guru of data visualization,
+`\textit{Graphical excellence consists of complex idea communicated with clarity, precision,
+and efficiency.}'.
+
+
+\subsection{Don't Trust Your Intuition: Probability and Paradoxes}
+The world is random and probability is a tool to quantify the randomness. With
+random events, our intuition may give us high confidence on a wrong
+conclusion. For example, knowing that A is larger than B and B is larger than C,
+can we say A is always larger than C? Not really for random events.
+
+This chapter presents examples to demonstrate how probability helps
+interpret `unusual' phenomena in real life and how may fool us. Simulation is a
+great technique to help us understand these phenomena and find the counter-intuitive answers.
+
+
+\subsection{Towards the End of the Horizon}
+Benjamin Franklin once said `In this world nothing can be said to be certain,
+except death and taxes'. Still, for all the uncertain things in life, and
+especially in science where most theories cannot be proven correct, we would
+like to be able to say something about how confident we are about a conclusion
+we draw. To do that, scientists conduct an experiment in which they collect data
+and check if it provides evidence in favor or against a proposed theory.
+
+
+This chapter describes two of the most important results in probability and
+statistics --- the law of large numbers and the central limit theorem. These
+theorems explain why statistics works and is useful in so many situations! They
+tell us that, if we collect enough data (and conduct a sensible experiment) we
+will be able to say to what extent we can trust our results, and also tell us
+how much data we need in order to draw conclusions with a certain degree of
+confidence. Without these results, conducting experiments would be meaningless,
+no matter how many samples are collected.
+
+\subsection{Estimation: A Hide-and-Seek Game with the Nature}
+
+Estimation is a fundamental question in data science applications. Often times,
+one needs to estimate some target quantity of a population based on a
+sample. How can we say one estimator is better than another? We would expect a
+good estimator to hit the target on average with as small as possible uncertainty.
+
+
+The estimation problem can be thought of as a hide-and-seek game that we play
+with the Nature. The target is hidden by the Nature. Each estimator is a
+strategy to find it with some confidence level. The hide-and-seek game can be
+played easily with computer simulations, through which we can appreciate the
+difference across the estimators.
+
+\subsection{Data Collection and Selection Bias}
+You can't make bricks without straw! Just like a cook may not make healthy and
+tasty dishes from rotten food, a data scientist may not make valid conclusion
+and estimation without appropriate data.
+
+This chapter discusses the importance of obtaining unbiased data and
+representative sample. Common sources of biases will be identified and
+illustrated with real life examples. Some basic sampling designs for
+representative samples will be introduced. 
+
+
+\subsection{Correlation and Regression}
+Hydrostatic weighing is one of the most accurate ways to measure body fat, but the procedure is inconvenient and unpleasant as it requires to
+submerge people in a tub of water to weigh them. This can be avoided by using a
+statistical model which uses a number of convenient body measurements to
+estimate body fat. 
+
+This chapter focuses on modeling the relationship between one variable of
+interest to other variables. Linear regression and least squares estimation will
+be discussed. Logistic regression which is commonly used to model binary data and for classification
+will also be introduced. 
+
+\subsection{Hypothesis Testing}
+
+Hypothesis testing is a fundamental tool in scientific research. A hypothesis
+can be either true or false. It can be either rejected or accepted based on
+whether it is supported by the observed data.  Our decision can be either
+correct or wrong. A good test procedure should control the probability of
+falsely rejecting a true hypothesis, also known as type-I error, while maximizing
+the probability of correctly rejecting a false hypothesis (maximize tthe `power').
+
+Through computer simulations, where the truths are known, different test
+procedures for the same hypothesis are compared in their type-I error rates and
+power in this chapter. We expect a good test to maintain a low type-I error rate
+and detect any deviation from the null hypothesis as much as possible. All tests
+should high power as the sample size increases.
+
+\subsection{Case Studies with NYC Open Data}
+
+\href{https://opendata.cityofnewyork.us}{NYC open data} are free public data
+published by NYC agencies and other partners. One of the most popular datasets is
+the \href{https://data.cityofnewyork.us/Social-Services/311-Service-Requests-from-2010-to-Present/erm2-nwe9}{3-1-1 service requests from 2010 to present},
+which contains 41 variables about each service request, including their creation
+date, closed date, agency, complain type, and even latitude and longitude of the
+location. We will use subsets of this dataset to illustrate some of the concepts
+introduced in the earlier chapters. Our examples will help readers to jumpstart
+their own analysis and visualization that may lead to novel, interesting and impactful
+observations an conclusions.
+
+\section{Sample Chapter}
+
+Chapter~3: Paradoxes and Probability (attached).
+
+
+\section{The Competition}
+\begin{itemize}
+\item Practical Data Science with R, by Nina Zumel and John Mount (2014).   \href{https://www.manning.com/books/practical-data-science-with-r}{ISBN: 9781617291562}.
+\item Computer Age Statistical Inference:
+Algorithms, Evidence and Data Science, by Bradley Efron and Trevor Hastie (2016).  \href{https://hastie.su.domains/CASI/}{ISBN-13: 978-1107149892}.
+\item \R for Data Science, by Hadley Wickham and Garrett Grolemund (2017)  \href{https://r4ds.had.co.nz/}{ISBN-13: 978-1491910399}.
+\item \R in Action, by Robert I, Kabacoff (2018). \href{https://rkabacoff.com/publication/r-in-action/}{ISBN-13: 978-1935182399}.
+\item Data Science from Scratch: First Principles with Python, by Joel Grus
+  (2019, 2nd
+  Edition). \href{https://www.oreilly.com/library/view/data-science-from/9781492041122/}{ISBN:
+    9781492041139}. 
+\item Modern Data Science with R, by Benjamin S. Baumer, Daniel T. Kaplan,
+  Nicholas, J. Horton (2021). \href{https://www.routledge.com/Modern-Data-Science-with-R/Baumer-Kaplan-Horton/p/book/9780367191498}{ISBN: 9780367191498}.
+% \item The ABCs of Data Science: By Real Data Scientists for Future Data
+%   Scientists (Very Young Professionals), by Rikin Mathur
+%   (2020). \href{https://www.theabcsofdatascience.com}{ISBN: 978-1734276305}.
+\item Data Science for Dummies, by Lillian Pierson (2021, 3rd
+  Edition). \href{https://www.wiley.com/en-gb/Data+Science+For+Dummies,+3rd+Edition-p-9781119811558}{ISBN:
+9781119811558}. 
+\item Data Science for Beginners, by Andrew Park
+  (2021). \href{https://www.amazon.com/Data-Science-Beginners-Programming-Learning/dp/B088N2DKVH}{ISBN-13:
+    979-8645845551}. 
+\item Practical Statistics for Data Scientists, by Peter Bruce, Andrew Bruce,
+  and Peter Gedeck (2020, 2nd
+  Edition). \href{https://www.oreilly.com/library/view/practical-statistics-for/9781492072935/}{ISBN:
+    9781492072942}.
+\end{itemize}
+
+None of these books target the same audience as ours. In addition, our book
+focuses on using computation and simulation to introduce and illustrate core
+statistical concepts and techniques. The  books listed above either
+focus on the \R programming language itself or on the statistical
+methods presented at a high level. Our book emphasizes leaning by doing and
+readers will learn by implementing and playing with the examples provided in
+each chapter, following Confucius's philosophy on ``Tell me and I will forget,
+show me and I may remember; involve me and I will understand.''
+
+
+\section{Contact Information}
+
+Haim Bar, Ph.D.\\
+Department of Statistics\\
+University of Connecticut\\
+Email: haim.bar@uconn.edu
+
+\newpage
+
+\includepdf[pages={39-50}]{../main.pdf}
+
+% \bibliographystyle{chicago}
+% \bibliography{../book.bib,../packages.bib}
+
+\end{document}
+
+Xunzi Quote:
+不闻不若闻之，闻之不若见之，见之不若知之，知之不若行之。学至于行之而止矣。
