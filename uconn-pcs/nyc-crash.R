@@ -16,3 +16,7 @@ crash$hour <- as.numeric(sub(":[0-9][0-9]", "", crash$crash.time))
 table(crash$hour)
 hist(crash$hour, breaks=24)
 
+nyczip <- unique(crash$zip.code)
+zcd <- read.csv("nyc-zip.csv", skip = 2, header = FALSE)[,1]
+zcd <- as.numeric(sub("8600000US", "", zcd))
+nyczip %in% zcd
