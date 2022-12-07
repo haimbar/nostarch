@@ -8,6 +8,16 @@
   biases in the process of data collection, and introduces some widely used
   sampling plans and approaches for data collection.}
 
+\hypertarget{ch:data}{%
+\section{A representative sample is more useful than a larger sample}\label{representative}}
+
+ToDo:\\
+1. Representative sample definition
+
+2. Create two figures to show representative and biased samples
+
+3. A real example: The 1936 Literary Digest Poll
+
 \begin{example}[The 1936 Literary Digest Poll]
  For the 1936 presidential election, the Literary Digest poll was one of the
 largest and most expensive polls with a sample size of around 2.4 million
@@ -30,7 +40,7 @@ did not produce a representative sample and thus resulted in a biased estimate
 and a misleading conclusion.  
 \end{example}
 
-\hypertarget{data}{%
+\hypertarget{ch:data}{%
 \section{Berkson's bias}\label{berkson-bias}}
 
 The following impressions are common, but are then really true?
@@ -74,7 +84,7 @@ representative sample of all the stamps you have. The sample is biased.
 Now let's simulate some data to further illustrate.
 
 \showCode{R}{Code/datacollect-berkson.R}
-\runR{Code/datacollect-berkson.R}{datacollect-berkson}[run]
+\runR{Code/datacollect-berkson.R}{datacollect-berkson}
 Running the above code gives:
 \includeOutput{datacollect-berkson}
 
@@ -92,7 +102,7 @@ Running the above code gives:
   \label{fig:berkson}
 \end{figure}
 
-\hypertarget{data}{%
+\hypertarget{ch:data}{%
 \section{Survival Bias}\label{survival-bias}}
 During World War II, aircraft that had returned from missions were examined and  the most-hit areas of the plane are given in Figure~\ref{fig:survival-bias}. Which areas should the army add armor to increase the survivorship of the planes? A direct intuition may suggest to reinforce areas with the most bullet holes. However, this is not a wise decision. Why? The data were collected from the aircraft that had survived their missions so they are biased. Planes that had been shot down or otherwise lost had not been counted. The bullet holes in the returning aircraft represented areas where a plane could take damage and still fly well enough to return safely. Thus, it is the areas where the returning aircraft were unscathed that need additional armor. 
 
@@ -106,7 +116,7 @@ During World War II, aircraft that had returned from missions were examined and 
   \label{fig:survival-bias}
 \end{figure}
 
-\hypertarget{data}{%
+\hypertarget{ch:data}{%
   \section{Common sources of biases}\label{sources-bias}}
 \begin{itemize}
 \item Observation time interval: 
@@ -122,14 +132,14 @@ Early termination of a trial at a time when its results support the desired conc
 
 \end{itemize}
 
-\hypertarget{data}{%
+\hypertarget{ch:data}{%
   \section{Some basic sampling designs}\label{sampling-designs}}
   \begin{itemize}
   \item Simple Random Sampling: Every elements in the target population have equal chances to be selection. Samples are selected strictly by chance. It is probably the most effective method to prevent sampling bias. A disadvantage is the uncertainty may be large.
   \item Stratified Sampling: Divide members of the population into homogeneous subgroups and then use simple random sampling for each subgroups. It helps to reduce the uncertainty. Need to be careful of potential biases.
   \item Weighted Sampling: Let more informative elements have higher chances to be selected. It may increase the estimation efficiency, but the resulting sample may be biased so need special way of estimation.
   \end{itemize}
-\hypertarget{data}{%
+\hypertarget{ch:data}{%
   \section{Different sampling approaches}\label{sampling-approaches}}
 %%%%----------------------------------------------------------
   \begin{itemize}
