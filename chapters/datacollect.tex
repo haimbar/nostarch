@@ -1,7 +1,12 @@
+\chapter{Data Collection and Selection Bias}\label{ch:data}
+\chapterartfile{images/static/GoodBadSamples.pdf}
 \hypertarget{ch:data}{%
-\chapter{Data Collection and Selection Bias}\label{ch:data}}
-In order to obtain valid results from data, it is important the data is an
-unbiased or representative sample of the population in consideration.
+  You can't make bricks without straw. Data is necessary to make
+  inference, and it is important that the data is
+  an unbiased or representative sample of the population in consideration in
+  order to obtain valid conclusion. This chapter discusses common sources of
+  biases in the process of data collection, and introduces some widely used
+  sampling plans and approaches for data collection.}
 
 \begin{example}[The 1936 Literary Digest Poll]
  For the 1936 presidential election, the Literary Digest poll was one of the
@@ -68,7 +73,24 @@ representative sample of all the stamps you have. The sample is biased.
 
 Now let's simulate some data to further illustrate.
 
-\input{Rnw/datacollect-Berkson}
+\showCode{R}{Code/datacollect-berkson.R}
+\runR{Code/datacollect-berkson.R}{datacollect-berkson}[run]
+Running the above code gives:
+\includeOutput{datacollect-berkson}
+
+\begin{figure}
+  \centering
+    \begin{subfigure}{0.485\textwidth}
+      \includegraphics[width=\textwidth]{images/chapter_6/berkson1.pdf}
+      \caption{No linear association between goodness of movie and goodness of book}
+    \end{subfigure}
+  \begin{subfigure}{0.485\textwidth}
+      \includegraphics[width=\textwidth]{images/chapter_6/berkson2.pdf}
+      \caption{Negative linear association for top 10 percent books and/or movie}
+  \end{subfigure}
+  \caption{Goodness of movie v.s. goodness of book}
+  \label{fig:berkson}
+\end{figure}
 
 \hypertarget{data}{%
 \section{Survival Bias}\label{survival-bias}}
@@ -79,8 +101,8 @@ During World War II, aircraft that had returned from missions were examined and 
 
 \begin{figure}
   \centering
-  \includegraphics[width=\textwidth]{images/Survivorship-bias.png}
-  \caption{Most-hit areas of the returned aircraft}
+  \includegraphics[width=\textwidth]{images/static/Survivorship-bias.png}
+  \caption{Most-hit areas of the returned aircraft. Source: \url{https://en.wikipedia.org/wiki/Survivorship_bias}}
   \label{fig:survival-bias}
 \end{figure}
 
@@ -126,10 +148,8 @@ Early termination of a trial at a time when its results support the desired conc
 \end{example}
 
 %%% Local Variables:
-%%% coding: utf-8
 %%% mode: latex
-%%% TeX-engine: xetex
-%%% TeX-master: "../00why.tex"
-%%% End:
-
 %%% TeX-command-extra-options: "-shell-escape"
+%%% TeX-engine: xetex
+%%% TeX-master: "../sidsmain.tex"
+%%% End:
