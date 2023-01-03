@@ -1,63 +1,67 @@
-\chapter{Getting to know R}\label{rintro}
+\chapter{Introduction to R}\label{rintro}
 \chapterartfile{images/static/Rlogo.png}
 \hypertarget{Rintro}{%
-Just like a chef needs a set of tools, a kitchen with a convenient surface to work on, and a detailed cookbook with different recipes, a data scientist needs a powerful programming language, a convenient development environment, and good documentation.
-In this chapter we provide a brief introduction to the \R language and the RStudio integrated development environment (IDE). Here, and in the remainder of the book we provide some essential `recipes' for data scientists.}
+Just as a chef needs a set of tools, a kitchen with a convenient surface to work on, and a detailed cookbook, a data scientist needs a powerful programming language, a convenient development environment, and good documentation.
+In this chapter we'll provide a brief introduction to the \R language and the RStudio integrated development environment (IDE). Here, and in the remainder of the book we'll provide some essential `recipes' for data scientists.}
 
 % for this book, and we hope that this book will be your basic guide into data science. In order to get started, you must first get the necessary software and get acquainted with it, and this is what this chapter is about.
  
 \hypertarget{installing-r-and-rstudio}{%
 \section{Installing \R and Rstudio}\label{installing-r-and-rstudio}}
-To install \R go to the website of the Comprehensive R Archive Network (\url{https://cran.r-project.org/}) and download the latest version of \R for your operating system (Windows, MacOS, or Linux). %As of \today, the latest version is 4.0.4. 
-Follow the installation instructions.
+To install \R go to the website of the Comprehensive R Archive Network website: \url{https://cran.r-project.org/}.  Download the latest version of \R for your operating system (Windows, macOS, or Linux), and then  %As of \today, the latest version is 4.0.4. 
+follow the installation instructions.
 
-Next, go the Rstudio download website
-(\url{https://rstudio.com/products/rstudio/download/}) and get the Desktop version
-(open source license). %As of \today, the version is 1.4.1106. 
-Follow the installation instruction.  An icon that looks like this
+Next, go the Rstudio website:
+\url{https://rstudio.com/products/rstudio/download/}. Download the Desktop version
+(open source license), and %As of \today, the version is 1.4.1106. 
+follow the installation instructions.  An icon that looks like this
 \includegraphics[height=0.02\textheight]{images/static/RstudioLogo.png}
-will be on your computer's desktop. Double-click on this icon to start the \R session. The Rstudio IDE will open, and will look like this:
+will be on your computer's desktop. Double-click on this icon to start the \R session. The Rstudio IDE should open, and it should look like Figure~\ref{fig:r_studio}:
 
-\begin{center}
+
+\begin{figure}[H]
   \includegraphics[width=0.8\linewidth]{images/static/RstudioMain}
-\end{center}
+  \caption{...}
+  \label{fig:r_studio}
+\end{figure}
 
-The left-hand side of the screen contains the Console tab. Notice the \(>\) sign (called the `prompt'). When you see this character, it means that \R is ready for the next command. Put the cursor there, and then type
+The left-hand side of the screen contains the Console tab. Notice the \lstinline{} sign; this is called the \emph{prompt}. When you see this character, it means that \R is ready for the next command. Put the cursor there, and then enter
 
-\begin{minted}{R}
-2 + 2
-\end{minted}
-and hit Enter on the keyboard. You should get the following on the Console:
+\begin{lstlisting}
+> ***2 + 2***
+\end{lstlisting}
 
-\begin{tcolorbox}[colframe=blue!25,colback=blue!10]
-\begin{minted}{text}
+You should get the following output:
+
+\begin{lstlisting}
 [1] 4
-\end{minted}
-\end{tcolorbox}
+\end{lstlisting}
 
-Notice the top-right part of the Rstudio window. You should see an `Environment' and a `History' tab. Click on History. All your previous input appears there. Try entering another calculation or command in the console and see that they appear in the session's history. For example, try entering the following
+Notice the top-right part of the Rstudio window. You should see both an \textbf{Environment} and a \textbf{History} tab. Click on History. All your previous input appears there. Try entering another calculation or command in the console. For example, try entering the following
 
-\begin{verbatim}
-date()
-\end{verbatim}
+\begin{lstlisting}
+> ***date()***
+\end{lstlisting}
 
+You should see that this command appears in the session's history.
 
-Click on the Environment tab. It should be empty when you start \R for the first time. In the Console, type
+Now click on the \textbf{Environment} tab. It should be empty when you start \R for the first time. In the console, type
 
-\begin{verbatim}
-myFirstVariable <- factorial(5)
-\end{verbatim}
+\begin{lstlisting}
+> ***myFirstVariable <- factorial(5)***
+\end{lstlisting}
 
-Notice that nothing was printed in the Console, but the Environment tab now contains a table with one row, with `myFirstVariable' appearing in the cell on the left, and its value (120) on the right. Any object appearing in the Environment tab is available to you throughout your \R session, and you don't have to redefine or recalculate it. For example, type the following in the console:
+Notice that nothing was printed in the console, but the Environment tab now contains a table with one row, with \lstinline{myFirstVariable} appearing in the cell on the left, and its value, \lstinline{120}, on the right. Any object appearing in the Environment tab is available to you throughout your \R session, and you don't have to redefine or recalculate it. For example, enter the following in the console:
 
-\begin{verbatim}
-myFirstVariable/6
-\end{verbatim}
-The Console should now display 20.
+\begin{lstlisting}
+> ***myFirstVariable/6***
+\end{lstlisting}
 
-The lower-right side of the IDE has a few tabs: Files provides a file browser, Packages provides information about installed packages (more about it later), Plots will contain any plot generated during the \R session, and the Help tab is used to obtain information about built-in functions.
+The Console should now display \lstinline{20}.
 
-Finally, before we move on to the next section, in the Rstudio top menu, click on File, then on New File, and then on \R Script. Alternatively, you can click on little green `+' icon in the top-left part of the IDE. This will split the left side of the Rstudio IDE into two parts -- the lower part will contain the Console, and the top part will contain a tab labeled `Untitled1'. This is where you can enter \R code which you will save to a permanent file, and re-use later.
+The lower-right side of the IDE has a few tabs: Files provides a file browser, Packages provides information about installed packages (we'll discuss these more later), Plots will contain any plot generated during the \R session, and the Help tab is used to obtain information about built-in functions.
+
+Finally, before we move on to the next section, in the RStudio top menu, click on \textbf{File}, then on \textbf{New File}, and then on \textbf{R Script}. Alternatively, you can click on little green `+' icon in the top-left part of the IDE. This will split the left side of the Rstudio IDE into two parts -- the lower part will contain the Console, and the top part will contain a tab labeled `Untitled1'. This is where you can enter \R code which you will save to a permanent file, and re-use later.
 For example, enter the following in the blank space in the Untitled1 tab:
 
 \begin{verbatim}
