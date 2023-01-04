@@ -3,7 +3,7 @@ pdf("images/chapter_1/simunif1.pdf",width=4, height=3)
 set.seed(210313)
 n <- 10000
 simData <- runif(n)
-hist(simData)
+hist(simData, main="")
 dev.off()
  
 n <- 10000
@@ -22,7 +22,7 @@ Heads <- rep(0, reps)  # A vector to store the results (initialize with 0s)
 for (i in 1:reps) {
   Heads[i] <- sum((runif(n.trials) < 0.5))
 }
-hist(Heads, breaks=20)
+hist(Heads, breaks=20, main="")
 dev.off()
 
 pdf("images/chapter_1/simunif3.pdf", width=4, height=3)
@@ -30,6 +30,6 @@ set.seed(442886)
 reps <- 100
 n.trials <- 200
 Heads <- rbinom(reps, n.trials, 0.5)
-hist(Heads, breaks=20)
+hist(Heads, breaks=20, main="")
 dev.off()
 
