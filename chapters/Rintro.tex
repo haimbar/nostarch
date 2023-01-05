@@ -37,7 +37,7 @@ You should get the following output:
 [1] 4
 \end{lstlisting}
 
-Notice the top-right part of the Rstudio window. You should see both an \textbf{Environment} and a \textbf{History} tab. Click on History. All your previous input appears there. Try entering another calculation or command in the console. For example, try entering the following
+Notice the top-right part of the Rstudio window. You should see both an Environment and a History tab. Click on \textbf{History}. All your previous input appears there. Try entering another calculation or command in the console. For example, try entering the following
 
 \begin{lstlisting}
 > ***date()***
@@ -61,7 +61,7 @@ The Console should now display \lstinline{20}.
 
 The lower-right side of the IDE has a few tabs: Files provides a file browser, Packages provides information about installed packages (we'll discuss these more later), Plots will contain any plot generated during the \R session, and the Help tab is used to obtain information about built-in functions.
 
-Finally, before we move on to the next section, in the RStudio top menu, click on \textbf{File}, then on \textbf{New File}, and then on \textbf{R Script}. Alternatively, you can click on little green `+' icon in the top-left part of the IDE. This will split the left side of the Rstudio IDE into two parts: the lower part will contain the Console, and the top part will contain a tab labeled `Untitled1'. This is where you can enter \R code that you will save to a permanent file and can re-use later.
+Finally, before we move on to the next section, in the RStudio top menu, click on \textbf{File}, then on \textbf{New File}, and then on \textbf{R Script}. Alternatively, you can click on little green + icon in the top-left part of the IDE. This will split the left side of the Rstudio IDE into two parts: the lower part will contain the Console, and the top part will contain a tab labeled Untitled1. This is where you can enter \R code that you will save to a permanent file and can re-use later.
 
 For example, enter the following in the blank space in the Untitled1 tab:
 
@@ -146,25 +146,30 @@ Another useful function to generate data is \lstinline{rep()}, which replicates 
 \showCode{R}{Code/ch1sec1.R}[20][22]
 The variable \lstinline{ones} contains the values: \inlnR{```cat(paste(ones))```}, and the sum is  \inlnR{```cat(sum(ones))```}. Their cumulative sum of \lstinline{ones} is  a vector of length 10, such that the first value is just the first element of \lstinline{ones}, the second value is the sum of the first two elements in \lstinline{ones}, and so forth: \inlnR{```cat(paste(cumsum(ones)))```}.
 %\inlnR{```ones <- rep(1, 10); cat(ones)```}[vbox]
-Try the following: \lstinline{cumsum(cumsum(ones))} (but first try to think what the result will be).
+Before moving on, think about what the result of \lstinline{cumsum(cumsum(ones))}  will be, and then give it a try..
 
-There are also many functions to handle text. The \lstinline{paste()} function attaches two strings of characters together. The default is to concatenate strings with a space as a separator, but we can use the collapse option (also called an `argument' of the function) to use a different separator. For example,
+
+\subsection{Working with Text}
+There are also many functions to handle text. The \lstinline{paste()} function attaches two strings of characters together. The default is to concatenate strings with a space as a separator, but we can use the collapse option (also called an \emph{argument} of the function) to use a different separator. For example,
 \showCode{R}{Code/ch1sec1.R}[24][25]
 %\inlnR{```cat(paste(courseNames))```}
-\noindent The second line generates the following: \inlnR{```cat(concatvar)```}.
+\noindent Here we've used \lstinline{collapse} to specify that the strings should be separated by a comma followed by a space.  The second line generates the following: \inlnR{```cat(concatvar)```}.
 %%\replace{cat(paste(courseNames, collapse=", "))}{"}{x22}
 %%\inlnR{```cat(paste(courseNames, collapse=x22, x22))```}
 %%\inlnR{\replace{```cat(paste(courseNames, collapse=", "))```}{"}{x22}}
 %%\inlnR{```\replace{cat(paste(courseNames, collapse=", "))}{"}{x22}```}
 
-Let's combine what we've learned so far to create the 52 cards  in a standard deck, which includes four suits: Club, Diamond, Heart, and Spade:
+
+\section{Creating a Deck of Cards}
+Let's combine what we've learned so far to create the 52 cards  in a standard deck, including four suits: Club, Diamond, Heart, and Spade. Here's our initial code:
 \showCode{R}{Code/ch1sec1.R}[28][29]
-Run each line separately, and check the content of `suits' and what
+Run each line separately, and check the content of \lstinline{suits} and what
 \lstinline{rep(1:13, 4)} generates. Note that the function \lstinline{paste0()} is the same as \lstinline{paste(..., collapse="")}. The content of the cards variable is:
 \inlnR{```cat(paste(cards))```}[vbox]
 
 
-Let's `deal' five cards to each player in a game of poker. We will use the \lstinline{sample()} function.
+\subsection{Getting Samples}
+Let's `deal' five cards to each player in a game of poker. We will use the \lstinline{sample()} function to do this:
 \showCode{R}{Code/ch1sec1.R}[32][33]
 The \lstinline{sample()} function in this example is used to draw 20 cards at random from the deck, without replacement. Then, to divide it into four hands, we use the \lstinline{matrix()} function, and specify the number of rows and the number of columns.
 The \lstinline{sample()} function draws a different random sample each time unless we set the random `seed' to a fixed value. The \lstinline{set.seed()} function is used to ensure the reproducibility of the results.  Try running the code without the \lstinline{set.seed()} line, and see that you get different results each time.
@@ -219,12 +224,12 @@ One of the greatest things about computers is that they can do the same thing ma
 The function \lstinline{mysum} that we defined, takes one argument from the user, called \lstinline{x}. This is useful because you can use the same function to perform a similar operations on different objects. For example, you can try
 \showCode{R}{Code/ch1sec1-defFuncUsage.R}
 
-Functions can take more than one argument, or no arguments at all. The arguments can also be given a default value, so that if the user does not specify them it will not cause an error. For example, we can create a function to deal poker hands to varying number of players, and we can also choose the number of cards each player gets:
+Functions can take more than one argument, or  they can take no arguments at all. The arguments can also be given a default value, so that if the user does not specify the argument, it will not cause an error. For example, we can create a function to deal poker hands to varying number of players, and we can also choose the number of cards each player gets:
 \showCode{R}{Code/ch1sec1-PokerHand.R}
 Note that we also introduced some error-checking: the function checks if the input is valid, since it's not possible to deal more cards than we have in one deck. If an error is detected, the function uses the built-in \lstinline{stop()} function to abort, and show an error message to the user.  Checking the validity of the input is very important and helpful to the user.
 
 
-\subsection{Generating random numbers}
+\subsection{Generating Random Numbers}
 In this book much of the learning will be done by using simulated data, so let's start by learning how to generate data. The basic function to generate random data is \lstinline{runif()} which is used to draw random numbers uniformly between 0 and 1. In the following example we create 10,000 random draws from a uniform distribution, we keep these numbers in a variable called simData, and then plot a histogram to show the distribution of the data we have generated. The \lstinline{set.seed()} function is used to ensure that every time we run this code, we will get the same set of random numbers. This is called \textit{reproducible code}. 
 \showCode{R}{Code/ch1sec2.R}[2][6]
 \begin{figure}
@@ -293,16 +298,20 @@ Other ways to estimate some sort of `central tendency' of a distribution are:
  \item The trimmed mean, which is similar to the mean, except that the smallest and largest $p\cdot 100\%$  of the values are excluded from the computation. In our example, if we take $p=0.1$ with the simulated data, only 8,000 data points will be used in the calculation of the trimmed mean; 
  \item The median, which is a number (denoted here by $x_{0.5}$) such that half the data points are greater than $x_{0.5}$ and half are less than or equal to $x_{0.5}$. 
  \end{itemize}
-Let's compute the sample's mean, trimmed mean, and median. Notice that  in this example the mean is greater than trimmed mean, which is greater than the median. In general, the mean is not a great estimate of the `center' of a non-symmetric distribution. We say that the mean is more `sensitive to extreme values' than the median.
+ 
+Let's compute this sample's mean, trimmed mean, and median. Notice that  in this example the mean is greater than trimmed mean, which is greater than the median. In general, the mean is not a great estimate of the `center' of a non-symmetric distribution. We say that the mean is more `sensitive to extreme values' than the median. Here's some code to prove it:
 \showCode{R}{Code/ch1sec3.R}[7][9]
 In this example with n=\inlnR{```cat(n)```} random numbers we get that the mean
 is \inlnR{```cat(mean(x))```}, the trimmed mean is  \inlnR{```cat(mean(x, trim=0.1))```}, and the median is \inlnR{```cat(median(x))```}.
 
-The formula we used, \lstinline{x <- -log(runif(n))/lambda}, generates random number from the so-called exponential distribution with rate parameter $\lambda=10$. We denote it by $X\sim \exp(\lambda)$. The exponential distribution is often used to model random waiting times, like the time between incoming text messages. We would usually generate it by using the \lstinline{rexp()} function in \R, like this: \lstinline{x <- rexp(n, lambda)} .
-Mathematical analysis of the distribution leads to the fact that the expected value of an exponential random variable with rate $\lambda$, is $1/\lambda$. We see that the theoretical expected value of our example is 0.1, and the sample mean is very close to 0.1. This is no coincidence - we will discuss it in  later chapter.
+
+\subsection{Looking at Distributions}
+The formula we used above, \lstinline{x <- -log(runif(n))/lambda}, generates random number from the so-called \emph{exponential distribution} with rate parameter $\lambda=10$. We denote it by $X\sim \exp(\lambda)$. The exponential distribution is often used to model random waiting times, like the time between incoming text messages. We would usually generate it by using the \lstinline{rexp()} function in \R, like this: \lstinline{x <- rexp(n, lambda)} .
+Mathematical analysis of the distribution leads to the fact that the expected value of an exponential random variable with rate $\lambda$, is $1/\lambda$. We see that the theoretical expected value of our example is 0.1, and the sample mean is very close to 0.1. This is no coincidence --- we'll discuss it in a later chapter.
 
 
-The distribution of \lstinline{x} is shown in Figure~\ref{fig:ch1:simexp} as a \textit{box-and-whisker plot} (or simply, boxplot). This is a very simple representation of numeric data, which is constructed by summarizing the data using a few numeric characteristics. In Figure~\ref{fig:ch1:simexp} the boxplot  is drawn horizontally, and the vertical grey line inside the box is the median. Similar to the median, we find the first quartile -- a point, $x_{0.25}$, such that 25\% of the values are less than $x_{0.25}$ and 75\% are greater than $x_{25}$; and the third quartile -- a point, $x_{0.75}$, such that 75\% of the values are less than $x_{0.75}$ and 25\% are greater than $x_{0.75}$. The first and third quartiles are the vertical edges of the box, also called the lower and upper hinges. So, the box represents the middle 50\% of the data. The range between the first and third quartiles is called the \textit{Inter-Quartile Range}, or IQR, which is sometimes used to estimate the dispersion or spread of the data.
+The distribution of \lstinline{x} is shown in Figure~\ref{fig:ch1:simexp} as a \textit{box-and-whisker plot} (or simply, boxplot). This is a very simple representation of numeric data, which is constructed by summarizing the data using a few numeric characteristics. In Figure~\ref{fig:ch1:simexp} the boxplot  is drawn horizontally, and the vertical grey line inside the box is the median. Similar to the median, we find the \emph{first quartile} -- a point, $x_{0.25}$, such that 25 percent of the values are less than $x_{0.25}$ and 75\% are greater than $x_{25}$; and the third quartile -- a point, $x_{0.75}$, such that 75 percent of the values are less than $x_{0.75}$ and 25\% are greater than $x_{0.75}$. The first and third quartiles are the vertical edges of the box, also called the lower and upper hinges. So, the box represents the middle 50\% of the data. The range between the first and third quartiles is called the \emph{Inter-Quartile Range (IQR)}, which is sometimes used to estimate the dispersion or spread of the data.
+
 The `whiskers', which are the dashed grey lines, are {\color{blue} the minimum
   and maximum observations within 1.5$\cdot$IQR to each side of the box}. If the result is smaller than the minimum value (or greater than the maximum), then the whisker only extends to the minimum (maximum). Points within the range between the two whiskers are not plotted individually, since their distribution is summarized succinctly by the box-and-whiskers plot. Points outside the range between the two whiskers are considered `outliers', or extreme values, and are shown explicitly. 
 
@@ -320,7 +329,7 @@ The plot was generated with the following code. Try it, and try changing some of
 A boxplot does not include the mean, or the trimmed mean, but we have added them
 here as a red circle and brown diamond, respectively, in order to show that they
 are different than the median. The mean is larger than the median in this case,
-so we say that the distribution is skewed to the right. 
+so we say that the distribution is \emph{skewed} to the right. 
    The median does not depend on observations in the tails
   of the data (small and large observations in the data). It simply represents
   where the data can be split in half. Thus the median is a more robust measure of
@@ -361,7 +370,7 @@ variance and standard deviation, respectively. In the following code we also dem
 
 \showCode{R}{Code/ch1sec3.R}[28][30]
 
-We will see in subsequent chapters that the normal distribution plays a major role in statistics. It is defined by a probability density function, with two parameters -- $\mu$ and $\sigma^2$:
+We will see in subsequent chapters that the normal distribution plays a major role in statistics. It is defined by a probability density function, with two parameters, $\mu$ and $\sigma^2$, where:
 $$\phi(x; \mu,\sigma^2)=\frac{1}{\sqrt{2\pi\sigma^2}}\exp\left[-\frac{(x-\mu)^2}{2\sigma^2}\right]\,.$$
 It is symmetric, `bell-shaped', and centered around the mean, $\mu$, as shown in
 Figure~\ref{fig:ch1:simnorm}. The blue histogram is generated by drawing random
@@ -386,10 +395,12 @@ the kurtosis \textcolor{red}{will we use the kurtosis later? If so, we should
   not show the describe function.}.
 \inlnR{```print(psych::describe(x))```}[vbox]
 
-We conclude this chapter with some functions which can be used to summarize discrete (categorical) data, where the mean, variance, quantiles, etc. are not applicable. We will revisit the topic of summarizing data in chapter \ref{EDA}.
 
-To simulate categorical data we can use the \lstinline{rmultinom()} function, which simulates putting $N$ objects in $K$ bins with given probabilities for each bin. Another possibility is to use \lstinline{cut()} function which divides a range of numbers into discrete ranges and creates discrete categories in a factor variable.
-For example, suppose there is a town with three hotels (Motel 6, Best Western,  and Hilton) with 400, 300, and 300 rooms, and one auto rental company with only two makes of cars (700 Honda, and 300 Teslas). In the following code we simulate the allocation of 100 visitors to hotels and cars. We use the \lstinline{table()} function to show the counts by hotel, by car, and by both. 
+\subsection{Summarizing Discrete Data}
+Let's  conclude this chapter with some functions that can be used to summarize discrete (categorical) data, where the mean, variance, quantiles, and so on are not applicable. We will revisit the topic of summarizing data in Chapter~\ref{EDA}.
+
+To simulate categorical data we can use the \lstinline{rmultinom()} function, which simulates putting $N$ objects in $K$ bins with given probabilities for each bin. Another possibility is to use \lstinline{cut()} function, which divides a range of numbers into discrete ranges and creates discrete categories in a factor variable.
+For example, suppose there is a town with three hotels (Motel 6, Best Western,  and Hilton) with 400, 300, and 300 rooms, respectively, and one auto rental company with only two makes of cars (700 Honda, and 300 Teslas). In the following code we simulate the allocation of 100 visitors to hotels and cars. We use the \lstinline{table()} function to show the counts by hotel, by car, and by both. 
 \showCode{R}{Code/ch1sec3.R}[42][48]
 \inlnR{```print(table(hotelrooms))```}[vbox]
 \inlnR{```print(autotbl <- table(autorental))```}[vbox]
