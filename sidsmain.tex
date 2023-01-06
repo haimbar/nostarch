@@ -20,16 +20,18 @@
 %\usepackage[python,stopserver]{runcode}
 
 \IfFileExists{ForceCache}{
-\usepackage[cache]{runcode} 
+\usepackage[cache,nominted]{runcode} 
 }
 {
-\usepackage[nohup,R]{runcode} % can add/remove the cache option
+\usepackage[nohup,R,nominted]{runcode} % can add/remove the cache option
 }
 
-\setminted[julia]{linenos, frame=single, bgcolor=bg, breaklines=true}
-\setminted[R]{linenos, frame=single, bgcolor=white, breaklines=true}
-\setminted[python]{linenos, frame=single, bgcolor=white, breaklines=true}
-\tcbset{breakable,colback=red!5!white,colframe=red!75!black,boxsep=-0.5mm}
+%\setminted[julia]{linenos, frame=single, bgcolor=bg, breaklines=true}
+%\setminted[R]{linenos, frame=single, bgcolor=white, breaklines=true}
+%\setminted[python]{linenos, frame=single, bgcolor=white, breaklines=true}
+%\tcbset{breakable,colback=red!5!white,colframe=red!75!black,boxsep=-0.5mm}
+\tcbset{colframe=white,colback=white,% change the default colors of vbox
+boxsep=0pt,left=0pt,right=0pt,top=0pt,bottom=0pt} % change the margins
 
 \usepackage{multirow,amsthm,xspace}
 \usetikzlibrary{shapes,shadows}
@@ -48,7 +50,8 @@
 \let\code\texttt
 \let\proglang\textsf
 \newcommand{\pkg}[1]{{\fontshape{it}\selectfont #1}}
-\newcommand{\R}{\textsf{R}\xspace}
+%\newcommand{\R}{\textsf{R}\xspace}
+\newcommand{\R}{R\xspace}
 \newcommand{\why}[1]{\textcolor{red}{(WHY: #1)}}
 \newcommand{\hyb}[1]{\textcolor{orange}{(HYB: #1)}}
 
@@ -106,7 +109,7 @@
 % \lipsum[77-78]
 
 
-\include{chapters/Rintro}
+\input{chapters/Rintro}
 % \include{chapters/EDA}
 \include{chapters/probability}
 %\include{chapters/llnclt}

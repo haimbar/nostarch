@@ -4,6 +4,8 @@
 %
 %  This package is based on an ongoing work by Haim Bar and HaiYing Wang, and comments and questions are welcome!
 
+\ProvidesPackage{runcode}[2023/02/06 runcode v1.8]
+
 \newif\ifruncode
 % Change to \runcodefalse if you want to suspend code execution
 \runcodetrue
@@ -13,6 +15,16 @@
 \newif\ifminted
 \mintedtrue
 \DeclareOption{nominted}{\mintedfalse}
+
+\newif\iflistings
+\listingstrue
+\DeclareOption{nolistings}{\listingsfalse}
+
+
+\newif\ifreducedspace
+\reducedspacefalse
+\DeclareOption{reducedspace}{\reducedspacetrue}
+
 
 % Some editors terminate all child processes after LaTeX compiling such as Emacs with Auctex. For this case, use the nohup option. It set the variable notnohup to be false, and the server will not be terminated by the parent process.
 \newif\ifnotnohup
@@ -27,7 +39,7 @@
     \immediate\write\tempfile{[SERVERCONFIG]}
     \immediate\write\tempfile{PORT = 65432}
     \immediate\write\tempfile{DEBUGFILE = Rdebug.txt}
-    \immediate\write\tempfile{PIPETIMEOUT = 300}
+    \immediate\write\tempfile{PIPETIMEOUT = 60}
     \immediate\closeout\tempfile
   }
   % Start the server. Need to run just once. Can comment out after the first
@@ -47,7 +59,7 @@
     \immediate\write\tempfile{[SERVERCONFIG]}
     \immediate\write\tempfile{PORT = 65431}
     \immediate\write\tempfile{DEBUGFILE = juliadebug.txt}
-    \immediate\write\tempfile{PIPETIMEOUT = 300}
+    \immediate\write\tempfile{PIPETIMEOUT = 60}
     \immediate\closeout\tempfile
   }
   % Start the server. Need to run just once. Can comment out after the first
@@ -67,7 +79,7 @@
     \immediate\write\tempfile{[SERVERCONFIG]}
     \immediate\write\tempfile{PORT = 65430}
     \immediate\write\tempfile{DEBUGFILE = matlabdebug.txt}
-    \immediate\write\tempfile{PIPETIMEOUT = 300}
+    \immediate\write\tempfile{PIPETIMEOUT = 60}
     \immediate\closeout\tempfile
   }
   % Start the server. Need to run just once. Can comment out after the first
@@ -87,7 +99,7 @@
     \immediate\write\tempfile{[SERVERCONFIG]}
     \immediate\write\tempfile{PORT = 65433}
     \immediate\write\tempfile{DEBUGFILE = pythondebug.txt}
-    \immediate\write\tempfile{PIPETIMEOUT = 300}
+    \immediate\write\tempfile{PIPETIMEOUT = 60}
     \immediate\closeout\tempfile
   }
   % Start the server. Need to run just once. Can comment out after the first
@@ -102,32 +114,48 @@
 \DeclareOption{stopserver}{
   \AtEndDocument{
   %% stop the server when the pdf compilation is done.
-    \immediate\write18{python3 -c 'from talk2stat.talk2stat import client; client("./","R","QUIT")'}
-    \immediate\write18{python3 -c 'from talk2stat.talk2stat import client; client("./","julia","QUIT")'}
-    \immediate\write18{python3 -c 'from talk2stat.talk2stat import client; client("./","matlab","QUIT")'}
-    \immediate\write18{python3 -c 'from talk2stat.talk2stat import client; client("./","python","QUIT")'}
+  \IfFileExists{R.config}{
+      \immediate\write18{python3 -c 'from talk2stat.talk2stat import client; client("./","R","QUIT")'}
+    }{}
+    \IfFileExists{julia.config}{
+      \immediate\write18{python3 -c 'from talk2stat.talk2stat import client; client("./","julia","QUIT")'}
+    }{}
+    \IfFileExists{matlab.config}{
+      \immediate\write18{python3 -c 'from talk2stat.talk2stat import client; client("./","matlab","QUIT")'}
+    }{}
+    \IfFileExists{python.config}{
+      \immediate\write18{python3 -c 'from talk2stat.talk2stat import client; client("./","python","QUIT")'}
+    }{}
 }}
 
 \ProcessOptions*
 
 \usepackage{morewrites}               % allow more than 16 \write
 \usepackage[many]{tcolorbox}            % to put boxes around text
+\tcbset{colframe=blue!25,colback=blue!10} % default colors for box output
 \usepackage{xcolor}               % for highlighting
-\usepackage[utf8x]{inputenc}
+\usepackage{inputenc}
 \usepackage{textgreek}
 \usepackage{filecontents}
 \usepackage{xifthen}
 \usepackage{xparse}
 \usepackage{xstring}
 
-% Use minted if it is loaded; otherwise use fvextra
+% Use minted by default; to use listings set the nominted option. 
+% If nolistings is set, then use fvextra
 \ifminted
 \usepackage[cache=false]{minted}
+\setminted{fontsize=\footnotesize,breaklines=true} % minted default
+\else
+\iflistings
+\usepackage{listings}
 \else
 \usepackage{fvextra}
 \fi
+\fi
 
-\immediate\write18{mkdir tmp}
+\newcommand{\generated}{generated}
+\immediate\write18{mkdir -p \generated}
 
 \definecolor{bg}{rgb}{0.95,0.95,0.95} % code block background color
 
@@ -161,7 +189,7 @@
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
-% \showCode prints the source code, using minted for a pretty layout
+% \showCode prints the source code, using minted or listings for a pretty layout
 % Arg #1 is the programming language,
 % Arg #2 is the source file name,
 % Args #3 and #4 are the first and last line to show (optional).
@@ -171,18 +199,30 @@
     \ifthenelse{\isempty{#3}}{
     \ifminted
     \inputminted{#1}{#2}
-    \vspace{-\medskipamount}
-    \vspace{-\baselineskip}
+    \ifreducedspace
+      \vspace{-\medskipamount}
+      \vspace{-\baselineskip}
+    \fi
     \else
+      \iflistings
+        \lstinputlisting[language=#1]{#2}
+      \else
     \VerbatimInput[fontsize=\footnotesize,linenos=true,frame=single,breaklines]{#2}
+    \fi
     \fi
   }{
     \ifminted
     \inputminted[firstline=#3, lastline=#4, firstnumber=1]{#1}{#2}
-    \vspace{-\medskipamount}
-    \vspace{-\baselineskip}
+    \ifreducedspace
+      \vspace{-\medskipamount}
+      \vspace{-\baselineskip}
+    \fi
     \else
+      \iflistings
+      \lstinputlisting[language=#1,firstline=#3, lastline=#4]{#2}
+      \else
     \VerbatimInput[fontsize=\footnotesize,linenos=true,frame=single,breaklines, firstline=#3, lastline=#4, firstnumber=1]{#2}
+    \fi
     \fi
   } 
   }{
@@ -205,8 +245,8 @@
   \IfFileExists{#2}{
   \stepcounter{codeOutput}
   \ifthenelse{\isempty{#3}}
-    { \setvalue{\tmpname}{tmp/\jobname_tmp\thecodeOutput.tex} }
-    { \setvalue{\tmpname}{tmp/#3.tex} }
+    { \setvalue{\tmpname}{\generated/\jobname_tmp\thecodeOutput.tex} }
+    { \setvalue{\tmpname}{\generated/#3.tex} }
   % toggle \runcode above if you want to enable/disable code execution
     \ifthenelse{\isempty{#4}}
       { \ifruncode
@@ -229,31 +269,34 @@
 
 \NewDocumentCommand{\includeOutput}{m O{vbox}}{\-
   \ifthenelse{\isempty{#1}}
-  {\setvalue{\tmpname}{tmp/\jobname_tmp\thecodeOutput.tex}}
-  {\unskip\setvalue{\tmpname}{tmp/#1.tex}\unskip}\unskip
+  {\setvalue{\tmpname}{\generated/\jobname_tmp\thecodeOutput.tex}}
+  {\unskip\setvalue{\tmpname}{\generated/#1.tex}\unskip}\unskip
   % even if the code is not executed, but we ran it before, we can use a 
   % cached version if it exists.
   \IfFileExists{\tmpname}
   {
     \ifstrequal{#2}{vbox}
-    {\begin{tcolorbox}[colframe=blue!25,colback=blue!10]
+    {\begin{tcolorbox}
         \ifminted\unskip
- \inputminted[fontsize=\footnotesize,breaklines=true]{text}{\tmpname}\unskip
+          \inputminted{text}{\tmpname}\unskip
+        \else\iflistings\unskip
+          \lstinputlisting{\tmpname}\unskip
         \else\unskip
         \VerbatimInput[fontsize=\footnotesize,breaklines]{\tmpname}\unskip
+        \fi
         \fi
       \end{tcolorbox}}
     {\unskip\ifstrequal{#2}{inline}
       {\unskip\input{\tmpname}\unskip}
       {\input{\tmpname}}}}
   % if code execution disabled, and no cache:
-  {\begin{tcolorbox}
+  {\begin{tcolorbox}[colback=red!5!white,colframe=red!75!black]
       \textbf{Output file \tmpname~ not found}. Check the file name (it may be that the file name was given with the suffix .tex. If so, remove it). If the file name is correct the problem may be because code execution is disabled and no cache is available. If so, force the code to run again (using the [run] option).
     \end{tcolorbox}}}
 
 
 \NewDocumentCommand{\checkZeroBytes}{m}{
-  \immediate\write18{python3 -c 'import os; print("ZERO BYTES IN OUTPUT", file=open("#1", "a")) if os.path.getsize("#1") == 0 else True'}
+  \immediate\write18{python3 -c 'import os; print("**ZERO BYTES IN OUTPUT**", file=open("#1", "a")) if os.path.getsize("#1") == 0 else True'}
 }
 
 
@@ -267,24 +310,25 @@
 
 \NewDocumentCommand{\inln}{m m O{inline}}{\-
   \stepcounter{codeOutput}\unskip
-  \unskip\setvalue{\tmpname}{tmp/\jobname_inln\thecodeOutput}\unskip\unskip\unskip
-          %\IfFileExists{\tmpname.tex} {} {
-          \ifruncode % cache mode - don't try to run the code, just get the previous results
-  \IfBeginWith{#2}{```}{\ifruncode\immediate\write18{#1 > \tmpname.tex}\unskip\fi}
-  {\newwrite\tempfile
-    \immediate\openout\tempfile=\tmpname.txt
-    \immediate\write\tempfile{#2}
-    \immediate\closeout\tempfile
-    \ifruncode
-    \immediate\write18{#1 \tmpname.txt > \tmpname.tex}\unskip
+  \unskip\setvalue{\tmpname}{\generated/\jobname_inln\thecodeOutput}\unskip\unskip\unskip
+  \ifruncode % cache mode - don't try to run the code, just get the previous results
+    \IfBeginWith{#2}{```}{\ifruncode\immediate\write18{#1 > \tmpname.tex}\unskip\fi}
+    {\newwrite\tempfile
+      \immediate\openout\tempfile=\tmpname.txt
+      \immediate\write\tempfile{#2}
+      \immediate\closeout\tempfile
+      \ifruncode
+      \immediate\write18{#1 \tmpname.txt > \tmpname.tex}\unskip
     \fi}
-           \fi % end cache mode
+  \fi % end cache mode
   \IfFileExists{\tmpname.tex}
   {\checkZeroBytes{\tmpname.tex}\unskip
     \ifstrequal{#3}{vbox}
-        {\begin{tcolorbox}[colframe=blue!25,colback=blue!10]
+        {\begin{tcolorbox}
         \ifminted\unskip
- \inputminted[fontsize=\footnotesize,breaklines=true]{text}{\tmpname.tex}\unskip
+          \inputminted{text}{\tmpname.tex}\unskip
+        \else\iflistings\unskip
+          \lstinputlisting{\tmpname.tex}\unskip
         \else\unskip
         \VerbatimInput[fontsize=\footnotesize,breaklines]{\tmpname.tex}\unskip
         \fi
@@ -342,17 +386,17 @@
 \NewDocumentCommand{\runPythonBatch}{m m}{%\-\\
    \stepcounter{codeOutput}
    \ifthenelse{\isempty{#2}} % set the output file name
-        { \setvalue{\tmpname}{tmp/\jobname_tmp\thecodeOutput.tex} }
-        { \setvalue{\tmpname}{tmp/#2.tex} }
+        { \setvalue{\tmpname}{\generated/\jobname_tmp\thecodeOutput.tex} }
+        { \setvalue{\tmpname}{\generated/#2.tex} }
 
    \IfFileExists{#1}{
      \ifruncode
           \newwrite\tempfile
-          \immediate\openout\tempfile=tmp/\jobname_#1
+          \immediate\openout\tempfile=\generated/\jobname_#1
           \immediate\write\tempfile{import dill}
           \immediate\write\tempfile{from os.path import exists}
-          \immediate\write\tempfile{if exists('tmp/session'):}
-          \immediate\write\tempfile{    dill.load_session('tmp/session')}
+          \immediate\write\tempfile{if exists('\generated/session'):}
+          \immediate\write\tempfile{    dill.load_session('\generated/session')}
           \immediate\write\tempfile{}
           \newread\infile
           \openin\infile=#1
@@ -363,10 +407,10 @@
           \repeat
           \endgroup
           \closein\infile
-          \immediate\write\tempfile{dill.dump_session('tmp/session')}
+          \immediate\write\tempfile{dill.dump_session('\generated/session')}
           \immediate\write\tempfile{}
           \immediate\closeout\tempfile
-          \immediate\write18{python3  tmp/\jobname_#1 > \tmpname}
+          \immediate\write18{python3  \generated/\jobname_#1 > \tmpname}
        \fi
      }
      {
