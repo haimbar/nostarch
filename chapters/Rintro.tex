@@ -402,9 +402,7 @@ Let's  conclude this chapter with some functions that can be used to summarize d
 To simulate categorical data we can use the \lstinline{rmultinom()} function, which simulates putting $N$ objects in $K$ bins with given probabilities for each bin. Another possibility is to use \lstinline{cut()} function, which divides a range of numbers into discrete ranges and creates discrete categories in a factor variable.
 For example, suppose there is a town with three hotels (Motel 6, Best Western,  and Hilton) with 400, 300, and 300 rooms, respectively, and one auto rental company with only two makes of cars (700 Honda, and 300 Teslas). In the following code we simulate the allocation of 100 visitors to hotels and cars. We use the \lstinline{table()} function to show the counts by hotel, by car, and by both. 
 \showCode{R}{Code/ch1sec3.R}[42][48]
-\inlnR{```print(table(hotelrooms))```}[vbox]
-\inlnR{```print(autotbl <- table(autorental))```}[vbox]
-\inlnR{```print(table(hotelrooms, autorental))```}[vbox]
+\inlnR{```print(table(hotelrooms));print(autotbl <- table(autorental));print(table(hotelrooms, autorental))```}[vbox]
 
 
 We can use the \lstinline{max()} and \lstinline{which.max()} functions to find the mode of the data (the most frequent value).

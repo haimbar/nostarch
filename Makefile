@@ -1,10 +1,10 @@
-# Use the cache, compile from tmp files, remove temporary code files
+# Use the cache, compile from generated files, remove temporary code files
 overleaf:
 	touch ForceCache
 	xelatex -shell-escape sidsmain.tex
 
 clean:
-	rm -f sidsmain.aux tmp/*.txt
+	rm -f sidsmain.aux generated/*.txt
 
 # stop the talk2stat server, but don't compile the book:
 stopserver: clean
