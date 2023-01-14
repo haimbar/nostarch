@@ -21,8 +21,8 @@ hist(x, breaks=50, border="white", col="lightblue", freq=FALSE,
      xlim=c(0, 0.6), main="")
 deciles <- quantile(x, probs=seq(0.1, 0.9, by=0.1))
 abline(v=deciles, lty=2, col="purple", lwd=2)
-text(deciles, dexp(deciles, 10), paste0(seq(10, 90, by=10), "%"), cex=0.7,
-     col="orange")
+text(deciles, dexp(deciles, 10), paste0(seq(10, 90, by=10), "%"),
+     cex=0.7, col="orange")
 dev.off()
 
 var(x)
@@ -37,7 +37,7 @@ lines(xs, dnorm(xs, 2.5, 0.5), col="orange", lwd=4)
 dev.off()
 
 print(summary(y))
-print(psych::describe(y))
+print(pastecs::stat.desc(y))
 
 hotelrooms <- cut(runif(100), breaks=c(0, 0.4, 0.7, 1), include.lowest=TRUE)
 levels(hotelrooms) <- c("Motel 6", "Best Western", "Hilton")

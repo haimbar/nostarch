@@ -7,7 +7,11 @@
 
 \usepackage{natbib}
 \usepackage{nshyper}
-\lstset{fancyvrb=true}
+\lstset{
+  fancyvrb=true,
+  breaklines=true,
+  escapeinside=||
+}
 
 \def\replace#1#2#3{%
  \def\tmp##1#2{##1#3\tmp}%
@@ -20,10 +24,10 @@
 %\usepackage[python,stopserver]{runcode}
 
 \IfFileExists{ForceCache}{
-\usepackage[cache,nominted]{runcode} 
+\usepackage[cache,listings]{runcode} 
 }
 {
-\usepackage[nohup,R,nominted]{runcode} % can add/remove the cache option
+\usepackage[nohup,R,listings]{runcode} % can add/remove the cache option
 }
 
 %\setminted[julia]{linenos, frame=single, bgcolor=bg, breaklines=true}
@@ -32,6 +36,8 @@
 %\tcbset{breakable,colback=red!5!white,colframe=red!75!black,boxsep=-0.5mm}
 \tcbset{colframe=white,colback=white,% change the default colors of vbox
 boxsep=0pt,left=0pt,right=0pt,top=0pt,bottom=0pt} % change the margins
+
+\NewDocumentCommand{\likelst}{m}{\small\texttt{#1}}
 
 \usepackage{multirow,amsthm,xspace}
 \usetikzlibrary{shapes,shadows}
