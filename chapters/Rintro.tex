@@ -172,7 +172,7 @@ The results should look like Figure~\ref{fig:ch1:operaheight}.
 
 \begin{figure}[H]
 \includegraphics[width=0.6\textwidth]{images/chapter_1/operaheight.pdf}
-\caption{Using the \pkg{lattice} package to create boxplots.}\label{fig:ch1:operaheight}
+\caption{Using the \pkg{lattice} package to create boxplots}\label{fig:ch1:operaheight}
 \end{figure}
 \noindent We will learn a lot more about data visualization in subsequent chapters.
 
@@ -423,13 +423,16 @@ We can also use one of several functions from contributed packages in order to g
 \subsection{Summarizing Discrete Data}
 Let's  conclude this chapter with some functions that can be used to summarize discrete (categorical) data, where the mean, variance, quantiles, and so on are not applicable. We will revisit the topic of summarizing data in Chapter~\ref{EDA}.
 
-To simulate categorical data we can use the \lstinline{rmultinom()} function, which simulates putting $N$ objects in $K$ bins with given probabilities for each bin. Another possibility is to use \lstinline{cut()} function, which divides a range of numbers into discrete ranges and creates discrete categories in a factor variable.
+To simulate categorical data we can use the \lstinline{rmultinom()} function, which simulates putting $N$ objects in $K$ bins with given probabilities for each bin. Another possibility is to use the \lstinline{cut()} function, which divides a range of numbers into discrete ranges and creates categories in a \emph{factor} variable.
 For example, suppose there is a town with three hotels (Motel 6, Best Western,  and Hilton) with 400, 300, and 300 rooms, respectively, and one auto rental company with only two makes of cars (700 Honda, and 300 Teslas). In the following code we simulate the allocation of 100 visitors to hotels and cars. We use the \lstinline{table()} function to show the counts by hotel, by car, and by both. 
 \showCode{R}{Code/ch1sec3.R}[42][48]
+
+Note that \lstinline{table()} can take one argument as in \wingding{1} or \wingding{2}, in which case it produces the counts of each value in its input; or it can take two arguments as in \wingding{3}, in which case it will \emph{cross-tabulate} the data, meaning that it shows the counts for each combination of the two categorical variables.
+This code produces the following output:
 \inlnR{```print(table(hotelrooms));print(autotbl <- table(autorental));print(table(hotelrooms, autorental))```}[vbox]
 
 
-We can use the \lstinline{max()} and \lstinline{which.max()} functions to find the mode of the data (the most frequent value):
+We can use the \lstinline{max()} and \lstinline{which.max()} functions to find the \emph{mode} of the data (the most frequent value):
 \showCode{R}{Code/ch1sec3b.R}[1][2]
 The hotel with the largest number of guests is \inlnR{```cat(levels(hotelrooms)[which.max(hoteltbl)])```} with \inlnR{```cat(max(hoteltbl))```} guests, and \inlnR{```cat(levels(autorental)[which.max(autotbl)])```} is rented to \inlnR{```cat(max(autotbl))```} people.
 
