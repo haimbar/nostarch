@@ -30,7 +30,7 @@ cards <- paste0(suits, rep(1:13, 4))
 cat(cards)
 
 set.seed(5252)
-(pokerHand <- matrix(sample(cards, 20, replace=FALSE), nrow=5, ncol=4))
+(pokerHand <- matrix(sample(cards, 20, replace=FALSE), nrow=4, ncol=5))
 
 save(pokerHand, file="tmp/pokerHand.RData")
 load("tmp/pokerHand.RData")
