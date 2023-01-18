@@ -1,5 +1,11 @@
+% !TeX TXS-program:compile = txs:///xelatex/[-shell-escape]
 \PassOptionsToPackage{dvipsnames}{xcolor}
 \documentclass[cfonts]{nostarch}
+
+\edef\TeXjobname{\jobname} % keep a copy just for safety
+
+\edef\jobname{\detokenize{sidsmain}}
+
 
 % \usepackage{lipsum}
 \hyphenation{ve-sti-bu-lum sene-c-tus rut-rum con-sec-te-tu-er
