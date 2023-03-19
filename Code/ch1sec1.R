@@ -42,8 +42,8 @@ cat(month.name)
 cat(pi)
 
 if (! ("lattice" %in% installed.packages()))
-  install.packages("lattice")
-  library("lattice")
+install.packages("lattice")
+library("lattice")
 
 library("lattice")
 bwplot(voice.part ~ height, data=singer, xlab="Height (inches)")

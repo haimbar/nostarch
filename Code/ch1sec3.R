@@ -43,7 +43,7 @@ hotelrooms <- cut(runif(100), breaks=c(0, 0.4, 0.7, 1), include.lowest=TRUE)
 levels(hotelrooms) <- c("Motel 6", "Best Western", "Hilton")
 autorental <- cut(runif(100), breaks=c(0, 0.7, 1), include.lowest=TRUE)
 levels(autorental) <- c("Honda", "Tesla")
-(hoteltbl <- table(hotelrooms)) # `\wingding{1}'
-(autotbl <- table(autorental))  # `\wingding{2}'
-table(hotelrooms, autorental)   # `\wingding{3}'
+(hoteltbl <- table(hotelrooms)) # (@\wingding{1}@)
+(autotbl <- table(autorental))  # (@\wingding{2}@)
+table(hotelrooms, autorental)   # (@\wingding{3}@)
 

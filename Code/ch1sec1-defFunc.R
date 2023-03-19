@@ -1,12 +1,12 @@
-mysum <- function(x) { # `\wingding{1}'
+mysum <- function(x) { # (@\wingding{1}@)
     s = 0
     for (i in x) {
         s = s + i
     }
-    return (s) # `\wingding{2}'
-} # `\wingding{3}'
+    return (s) # (@\wingding{2}@)
+} # (@\wingding{3}@)
 
 set.seed(210313)
 n <- 10000
 simData <- runif(n)
-cat('From sum:', sum(simData), '. From mysum:', mysum(simData))
+cat('From sum:', sum(simData), '. From mysum:', mysum(simData), '\n', sep = '')
