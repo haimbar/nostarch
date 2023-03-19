@@ -12,7 +12,10 @@
   elei-fend no-num-my li-be-ro}
 
 \usepackage{natbib}
+\usepackage{enumitem}
+\usepackage{pdfpages}
 \usepackage{nshyper}
+\usepackage[italic]{mathastext}
 \lstset{
   fancyvrb=true,
   breaklines=true,
@@ -43,7 +46,7 @@
 \tcbset{colframe=white,colback=white,% change the default colors of vbox
 boxsep=0pt,left=0pt,right=0pt,top=0pt,bottom=0pt} % change the margins
 
-\NewDocumentCommand{\likelst}{m}{\small\texttt{#1}}
+\NewDocumentCommand{\likelst}{m}{\texttt{#1}}
 
 \usepackage{multirow,amsthm,xspace}
 \usetikzlibrary{shapes,shadows}
@@ -67,7 +70,38 @@ boxsep=0pt,left=0pt,right=0pt,top=0pt,bottom=0pt} % change the margins
 \newcommand{\why}[1]{\textcolor{red}{(WHY: #1)}}
 \newcommand{\hyb}[1]{\textcolor{orange}{(HYB: #1)}}
 
+% ===== CONFIGURE =====
+\SetLabelAlign{newline}{\makebox[\dimexpr\linewidth-\labelsep][l]{#1}}%
+\newlist{listhead}{description}{3}
+\setlist[listhead]{align=newline, listparindent=\parindent}
+\setlist[enumerate]{leftmargin=36pt,labelsep=0.15in} % Use normal paragraph indentation in enumerate lists
+\setlist[itemize]{leftmargin=36pt,labelsep=0.18in} % Use normal paragraph indentation in itemize lists
+\setlist[description]{leftmargin=18pt,labelwidth=0pt, labelindent=0pt, labelsep=0pt, itemindent=0pt} % Use normal paragraph indentation in description lists
+\renewcommand{\descriptionlabel}[1]{\hspace{\labelsep}\textbf{#1\quad}} % Add em space to description label
+
+\setcounter{secnumdepth}{0} % Unnumbers sections
+
+\usepackage{array}
+\newcolumntype{?}[1]{!{\vrule width #1}}
+
+\usepackage{cellspace}
+\setlength\cellspacetoplimit{2pt}
+\setlength\cellspacebottomlimit{2pt}
+
+\def\UrlFont{\em} % Change URLs to italic
+  
+% ===== INDEX, CHICAGO STYLE =====
+\renewcommand{\seename}{See}
+\renewcommand{\alsoname}{See also}
+
 \makeindex
+\makeatletter
+\def\idxdelim{\@ifnextchar{\hyperindexformat}{. }{, }}
+\makeatother
+
+\let\oldhref\href
+\renewcommand{\href}[2]{\oldhref{#1}{\itshape#2}}
+
 \begin{document}
 
 
