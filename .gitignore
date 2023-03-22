@@ -281,6 +281,8 @@ TSWLatexianTemp*
 *debug.txt
 serverPID*.txt
 
+# specific folders and files
 tmp/
 images/probability-Simpson-plots.pdf
 proposal/proposal.pdf
+.hidden
