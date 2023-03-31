@@ -1,1 +1,0 @@
-cat('From sum:', sum(simData), '. From mysum:', mysum(simData))
