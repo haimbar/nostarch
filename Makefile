@@ -14,4 +14,8 @@ stopserver: clean
 # build the book and use the server, not the cache option:
 build: clean
 	rm -f ForceCache nohup.out
+	mkdir -p tmp
+	@for i in $$(seq 1 8); do \
+	    mkdir -p images/chapter_$$i; \
+	done
 	xelatex -shell-escape sidsmain.tex
