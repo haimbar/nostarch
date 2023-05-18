@@ -19,3 +19,5 @@ build: clean
 	    mkdir -p images/chapter_$$i; \
 	done
 	xelatex -shell-escape sidsmain.tex
+	bibtex sidsmain
+	xelatex -shell-escape sidsmain.tex
