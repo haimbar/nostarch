@@ -16,10 +16,10 @@ and efficiency.}'
 
 \hypertarget{TypesOfData}{%
 \section{Types of Data}}
-In this book we cover several methods to analyze the data with statistical
+In this book we cover several methods to analyze data with statistical
 tools. However, it's very important to always look at the data, and this means
 creating plots and tables in order to understand it better. We call this process
-``exploratory data analysis'', or EDA, and it's a critical step which should
+\emph{exploratory data analysis}, or \emph{EDA}, and it's a critical step which should
 never be skipped. The type of plot which we generate in each case depends on the
 data, and usually there's more than one option to choose from. In this chapter
 we cover several visualization methods, and in subsequent chapters we will see
@@ -27,39 +27,39 @@ additional ones.
 
 It's useful to think of data as a table in which each row represents one
 individual, and each column corresponds to some characteristic of
-individuals. These characteristics are often called `variables', because they
+individuals. These characteristics are often called \emph{variables}, because they
 vary across individuals. There are three broad types of variables:
 \begin{itemize}
-\item \textit{Quantitative}: a variable that can take numerical values. It
+\item \emph{Quantitative}: a variable that can take numerical values. It
   includes two sub-types.
   \begin{itemize}
-  \item \textit{Continuous}: a variable that can take any value within
+  \item \emph{Continuous}: a variable that can take any value within
     some range. For example, a person's income can take any value greater than
     zero. Sometimes the range of values is unbounded (from minus infinity to
     infinity), and sometimes it is bounded (like age, height, weight).
-  \item \textit{Discrete}: a variable that can take at most a countable number
-    of possible values. For example, the number of students in a class. 
+  \item \emph{Discrete}: a variable that can take at most a countable number
+    of possible values. For example, the number of distinct chess games. 
   \end{itemize}
-\item \textit{Categorical}: an individual's characteristic that can only take a finite number of values. For example, sex, marital status, or number of years of education are categorical. The values that a categorical value can take are called \emph{levels}.
-\item \textit{Ordinal}: Categorical variables that have a natural order (like number of years of education).
+\item \emph{Categorical}: an individual's characteristic that can only take a finite number of values. For example, sex, marital status, or number of years of education are categorical. The values that a categorical value can take are called \emph{levels}.
+\item \emph{Ordinal}: Categorical variables that have a natural order (like number of years of education).
 \end{itemize}
 
 In \R there are many other types of variables, but they are generally special cases of these three type of variables. Here are some important examples:
 
 \begin{itemize}
-\item \textit{Dates}: A date is stored in \R as an integer. Arbitrarily, January
+\item \emph{Dates}: A date is stored in \R as an integer. Arbitrarily, January
   1, 1970 was set to 0, and the value for each other date is the number of days
   since 1/1/1970, accounting for leap years. Dates prior to that are given
   negative values.
 
-\item \textit{Boolean}: Some variables are either \lstinline{TRUE} or
+\item \emph{Boolean}: Some variables are either \lstinline{TRUE} or
   \lstinline{FALSE}. In the coin-flipping simulation in Chapter~\ref{rintro} we
   generated a Boolean variable which was \lstinline{TRUE} if a randomly generated
   number drawn uniformly between zero and one was greater than 0.5, and
   \lstinline{FALSE} otherwise. Boolean variables are categorical, with two levels.
 
 \item \textit{Character}: When a variable has a finite number of levels, \R
-  allows to make a distinction between a `factor' type and a `character' type. A
+  allows to make a distinction between a \emph{factor} type and a \emph{character} type. A
   factor is used when the distinct levels of the variable are meaningful for
   analysis and plotting. For example, Sex, marital status, and education level
   are usually used as factors because we are interested in comparing between
@@ -73,44 +73,49 @@ In \R there are many other types of variables, but they are generally special ca
   \lstinline{seq()}, or random generating functions such as
   \lstinline{rnorm()}. Similarly, vectors of the \textit{same type} can be combined
   into a matrix -- a two dimensional rectangular arrangement of values. A data
-  frame is a more general structure -- it is a two dimensional arrangement of
+  frame is a more general structure -- it's a two dimensional arrangement of
   values in which within each column it must contain the same type of variables,
   but different columns can contain different types of variables.
 \end{itemize}
 
-Run the following code:
+Let's generate some data and store it in a data frame by entering the following code:
 
 \showCode{R}{Code/ch2-01gendat.R}
 \runR{Code/ch2-01gendat.R}{ch2-01gendat}
 
-Note that in the third line we create a variable called \lstinline{g} in two steps:
+In \wingding{1} we create a variable called \lstinline{g} in two steps:
 first, we draw a random sample of the same length as that of the vector \lstinline{x}
 from a binomial distribution with probability 0.5. This gives a numeric vector
 in which approximately half the values are 0 and half are 1. Then, we convert it
-to a factor by using the function \lstinline{factor()}. Use the \lstinline{str()} function
-to see the structure and levels of this variable. In line 4 we create the
-variable we are interested in, \lstinline{y}, through some formula which we will
-discuss later. In line 6 we create a Boolean variable, \lstinline{yL}, which is set
-to TRUE if the variable \lstinline{y} exceeds the threshold (25) and FALSE
+to a factor by using the function \lstinline{factor()}. Try entering the command \lstinline{str(g)} 
+in order to see the structure and levels of this variable. In \wingding{2}  we create the
+variable we are interested in, \lstinline{y}, through some formula which we'll
+discuss later. In \wingding{3}  we create a Boolean variable, \lstinline{yL}, which is set
+to \lstinline{TRUE} if the variable \lstinline{y} exceeds the threshold (25) and \lstinline{FALSE}
 otherwise. We then combine the vectors \lstinline{x}, \lstinline{g}, \lstinline{y} and
-\lstinline{yL} into one data frame called \lstinline{df1}.
-Enter \lstinline{str(df1)} to see the structure of \lstinline{df1}. Note that the columns
+\lstinline{yL} into one data frame called \lstinline{df1} (in \wingding{4}).
+
+Enter \lstinline{str(df1)} to see the structure of the data frame \lstinline{df1}. Note that the columns
 in the data frame have different types.
-The last line in the code above produces a summary of each column in the data
+The last line in the code above should produce the following summary of each column in the data
 frame:
 \inlnR{```print(summary(df1))```}[vbox]
 % \includeOutput{ch2_01gendat}
 
 For numerical variables like \lstinline{x} and \lstinline{y}, \R shows the mean and the
-`five-number summary': the minimum, the maximum, and the 25th, 50th, and 75th
+\emph{five-number summary}: the minimum, the maximum, and the 25th, 50th, and 75th
 percentiles. For categorical variables such as \lstinline{g} and \lstinline{yL} it shows
 the counts in each category. For \lstinline{yL} it also shows that it is a special
-kind of categorical variable, namely, it is logical (Boolean).
+kind of categorical variable, namely, that it's \emph{logical} (Boolean).
 
-In the following we are interested in understanding the characteristics of
+In the rest of the chapter we'll  explore the characteristics of
 \lstinline{y} and its possible relationship with other variables. In real life, we
-never know the formula that generates a variable, so let us pretend that we
-don't have access to lines 4-5 in the code above, for now.
+never know the formula that generates a variable, so for now, let's pretend that we
+don't have access to line \wingding{2} in the code above, and we're just given the data frame 
+\lstinline{str(df1)} without any hint about how it was generated.
+
+Let's see how we might analyze the variable \lstinline{y} by using some plots, including 
+a \emph{boxplot}, a \emph{histogram}, and a \emph{scatterplot}.
 
 %% lists?
 
@@ -122,24 +127,24 @@ don't have access to lines 4-5 in the code above, for now.
 
 \subsection{Boxplot}
 Using the data we generated in the previous section, we start by plotting
-\lstinline{y}. The simplest graphical representation is the boxplot which was
-introduced in Chapter~\ref{rintro}, and is constructed from the `five-number
-summary'.
+\lstinline{y}. One of the simplest graphical representation of numerical variables is the boxplot which was
+introduced in Chapter~\ref{rintro}, and is constructed from the \emph{five-number
+summary}. Enter the following code:
 \showCode{R}{Code/ch2-02boxplot.R}[2][3]
 \runR{Code/ch2-02boxplot.R}{ch2-02boxplot}
 
 We can see the boxplot in Figure~\ref{boxploty}.
-Note the usage of the options of the \lstinline{boxplot} function, which are
+Note the usage of the arguments \lstinline{axes}, \lstinline{border}, and \lstinline{col} of the \lstinline{boxplot} function, which are
 optional, but improve the way the plot looks. The \lstinline{axes=F} option means
-that the x and y axes are not shown. In the next line we explicitly draw the
-vertical axis.
-Try changing the values in these options. To see which colors are available, you
+that the x and y axes are not shown. When we later execute \lstinline{axis(2)} we explicitly draw the
+only vertical axis (if we wanted to add the horizontal one, we would use \lstinline{axis(1)}.)
+Try changing the values in these arguments. To see which colors are available, you
 can run the \lstinline{colours()} function.
 
-\begin{figure}
+\begin{figure}[H]
 \begin{center}
 \includegraphics[width=0.6\textwidth]{images/chapter_2/boxploty.pdf}
-\caption{A boxplot.}
+\caption{A boxplot}
 \label{boxploty}
 \end{center}
 \end{figure}
@@ -151,55 +156,60 @@ more about how \lstinline{y} is distributed.
 
 \subsection{Histogram}
 Another way to look at the distribution of a single numeric variables is to draw
-a histogram, as we did in Chapter \ref{rintro}. A histogram is constructed (by
-\R) by dividing the range of a variable into `bins', and simply count the number
-of observations in each bin. This is done with the \lstinline{hist()} function:
+a histogram, as we did in Chapter \ref{rintro}. A histogram is constructed by
+\R by dividing the range of a variable into \emph{bins}, and simply count the number
+of observations in each bin. These counts are depicted as vertical bars. This is done with the \lstinline{hist()} function, like so:
 \showCode{R}{Code/ch2-03hist.R}[2][2]
 \runR{Code/ch2-03hist.R}{ch2-03hist}
 
 Again, notice the usage of the function's arguments. For example, \lstinline{breaks}
-determines the number of bins, which \lstinline{col} and \lstinline{border} determine the
-color of the interior and edges of each bin. The \lstinline{main=""} option is used
+determines the number of bins, and \lstinline{col} and \lstinline{border} determine the
+color of the interior and edges of each bin, respectively. The \lstinline{main=""} option is used
 in order to remove the title of the plot. The result is shown in
 Figure~\ref{histy}.
-Try changing these values. What happens when you set \lstinline{breaks} to be
+Try changing the values given in these arguments. What happens when you set \lstinline{breaks} to be
 smaller, or larger?
 
-\begin{figure}
+\begin{figure}[H]
 \begin{center}
 \includegraphics[width=0.6\textwidth]{images/chapter_2/histy.pdf}
-\caption{A histogram.}
+\caption{A histogram}
 \label{histy}
 \end{center}
 \end{figure}
 
 The histogram gives us more information than the boxplot. It shows a more
 detailed picture of the distribution and, in this particular case we see that
-although the distribution is indeed approximately symmetric, it is also bi-modal
-- it has two noticeable peaks which we cannot see with a boxplot.
+although the distribution is indeed approximately symmetric, it's also bi-modal
+--- it has two noticeable peaks which we cannot see with a boxplot.
 
 Is this enough? Can we use this plot to come up with a plausible explanation for
 the particular shape of the distribution? If we have more variables we can try
 to see if our variable \lstinline{y} is somehow related to any of the other
-variables, which is what we will do next.
+variables, which is what we'll do next.
 
-\subsection{Side by side boxplots}
+\subsection{Side by Side Boxplots}
 In addition to \lstinline{y}, we have a categorical variable called \lstinline{g}. To see
-if it is related to \lstinline{y} we can show one boxplot for each level of the
+if it's related to \lstinline{y} we can show one boxplot for each level of the
 factor \lstinline{g}, which, in this case means two side-by-side boxplots. The syntax
 to do this is as follows:
 
 \showCode{R}{Code/ch2-04sidebox.R}[2][5]
 \runR{Code/ch2-04sidebox.R}{04sidebox}
 
-The notation \lstinline{y} $\sim$ \lstinline{g} 
+The notation \lstinline{y ~ g} 
 means `show how \lstinline{y} varies by \lstinline{g}'. Again, we suppress the axes and
-show only the vertical one. We also suppress the label of the x-axis using
+show only the vertical one. We also suppress the label of the x-axis by using
 \lstinline{xlab=""}. For each level of the factor \lstinline{g} we use a different
-combination of border and interior colors. We set the vertical range of the plot
+combination of border and interior colors. 
+
+We set the vertical range of the plot
 using \lstinline{ylim=c(min(y), max(y)*1.1))}, so that it will have some extra space
-at the top of the figure. We use this space to put the labels for each group
-with the \lstinline{text()} function.
+at the top of the figure. By default, \R sets the vertical range of the histogram to be 
+between zero and the maximum count across the bins. In this example, we set the maximum
+height to be 10\% more than the maximum counts (by using \lstinline{max(y)*1.1}.)
+We use this extra space at the top to put the labels for each group
+with the \lstinline{text()} function, which we describe next. 
 
 The first argument of the \lstinline{text()} function contains the x-coordinates of
 the text. In this case we have two values: 1 and 2. Why not 0 and 1, which are
@@ -208,25 +218,27 @@ factors are stored numerically from 1 to the number of levels of the factor. The
 ordered is determined alphabetically by default, so 0 is represented as 1, and 1
 as 2.
 
-The second argument contains the y-coordinates of the text. We set the maximum
-value on the vertical axis to be max(y)*1.1, so we put the text between the
-maximum value of \lstinline{y} and the upper limit of the vertical axis, so that the
-text does not cover the boxplot, nor is it outside the range of the plot.
+The second argument of the \lstinline{text()} function contains the y-coordinates of the text. 
+The vertical position of the text is set to \lstinline{max(y)*1.05}, so that
+it does not cover the boxplots but it's also below the upper limit for the \lstinline{y}-range.
 
-The third argument is the actual text we want to display, and it is followed by
-\lstinline{cex=0.6} which sets the font size to be 60\% of the default.
+The third argument of the \lstinline{text()} function is the actual text we want to display, and it's followed by
+\lstinline{cex=0.6} which sets the font size to be 60\% of the default value (which is set internally by \R). The result is shown 
+in Figure \ref{sidebysidebp}.
 
-\begin{figure}
+\begin{figure}[H]
 \begin{center}
 \includegraphics[width=0.6\textwidth]{images/chapter_2/sidebysidebp.pdf}
-\caption{Side by side boxplots.}
+\caption{Side by side boxplots}
 \label{sidebysidebp}
 \end{center}
 \end{figure}
 
-Is there a difference between the two groups, as determined by \lstinline{g}? It's
+Is there a difference between the distributions of  \lstinline{y} across the two groups, as determined by the variable \lstinline{g}? It's
 not entirely clear. The medians are about the same but the box of group 2 is
-slightly elevated.
+slightly elevated. We'll try to use additional plots and other variables that are available to us in order to understand the properties of  \lstinline{y}.
+
+\subsection{Overlayed Histograms}
 
 We can also plot a histogram for each group. We can do it in two plots, or in
 one, which makes the comparison between the groups easier. To do that we use the
@@ -267,10 +279,10 @@ Doing this helps to see that there really is a difference between the groups,
 and the blue histogram is similar in shape to the one in orange, but more
 shifted to the right. The bi-modality is common to both groups.
 
-\begin{figure}
+\begin{figure}[H]
 \begin{center}
 \includegraphics[width=0.6\textwidth]{images/chapter_2/histoverlay.pdf}
-\caption{Overlaid histograms.}
+\caption{Overlaid histograms}
 \label{histoverlay}
 \end{center}
 \end{figure}
