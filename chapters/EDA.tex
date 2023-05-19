@@ -246,38 +246,37 @@ following code. The result is depicted in Figure~\ref{histoverlay}.
 \showCode{R}{Code/ch2-05histoverlay.R}[2][6]
 \runR{Code/ch2-05histoverlay.R}{05histoverlay}
 
-When we use the brackets, as in \lstinline{y[g==0]}, we tell \R to apply the
-histogram function only to the subset of the data for which \lstinline{g} has the
-value 1.
+The bracket syntax, as in \lstinline{y[g==0]}, is used to define a \emph{subset} of the data. For example, 
+in the first line we draw a histogram of \lstinline{y} only for rows in the data in which the value of \lstinline{g} is zero,
+and in the second line we do it for the ones with \lstinline{g} equal to 1.
 
-We use the \lstinline{xlim} argument to make sure that the range of the horizontal
-axis will be sufficient in order to show all the data. We need to do that here,
-because our first plot uses only half the data and \R uses it to infer what the
-range should be, and it chooses the range based on the subset, not the entire
-data.
+Because the range of values of \lstinline{y} is different in the two groups (based on the value of \lstinline{g}), 
+we use the \lstinline{xlim} argument to make sure that the range of the horizontal
+axis will be sufficient in order to show all the data. Go ahead and try removing the  \lstinline{xlim} argument, and see what happens.
+
 
 The second time we call \lstinline{hist} we use the \lstinline{add=TRUE} option, which
-means that the second plot will be drawn on top of the first one. In order for
-the second histogram not to hide the first one, we set the color of the second
+means that the second plot will be drawn on top of the first one. If we didn't use this option,
+the second histogram will be drawn in a new figure. Try it without the \lstinline{add=TRUE} option.
+
+In order for the second histogram not to hide the first one, we set the color of the second
 histogram to be partially transparent. To do that, we have to specify the color
 in RGB (Red, Green, Blue) format. Every color can be constructed as a mixture of
 these three base colors. Computers use 256 levels (from 0 to 255) for each of
 the base colors, and they represent them as hexadecimal numbers (base 16,
 instead of the familiar decimal, or base 10 which we use in our daily lives.) It
-may be slightly awkward to think in hexadecimal but, in order to get the code
-for the table you need there are tables to convert from a color name to a
-number. \R also has function to help you do that. Suppose we want to use the
-color "navyblue". If we run \lstinline{col2rgb("navyblue")} we get the numbers 0,0,
+may be slightly awkward to think in hexadecimal but  \R has functions to help you do that. Suppose we want to use the
+color \emph{navyblue}. If we run \lstinline{col2rgb("navyblue")} we get the numbers 0,0,
 and 128, which means that the mixture has 0 red, 0 green, and the intensity for
-the blue is 128/255. We then run \lstinline{rgb(t(col2rgb("navyblue"))/255)} and get
+the blue is 128 out of 255 (which is 90 in hexadecimal notation). We then run \lstinline{rgb(t(col2rgb("navyblue"))/255)} and get
 \#000080. Each pair of digits corresponds to the three base colors. Then, to add
-transparency we can do \lstinline{rgb(t(col2rgb("navyblue"))/255, alpha = 0.5)} add
-another hexadecimal number (with alpha=0.5 we get 80.) For complete transparency
-we use alpha=0, and for no transparency we use alpha=1.
+transparency we can do \lstinline{rgb(t(col2rgb("navyblue"))/255, alpha = 0.5)}. Using the  \lstinline{alpha} argument adds adds to hexadecimal digits to the representation of the chosen color. In our example,
+ with \lstinline{alpha=0.5} we get \#00008080. For complete transparency
+we use \lstinline{alpha=0}, and for no transparency we use \lstinline{alpha=1}.
 
-Doing this helps to see that there really is a difference between the groups,
+What did we learn from the overlayed histograms? This plot helps to see that there really is a difference between the groups,
 and the blue histogram is similar in shape to the one in orange, but more
-shifted to the right. The bi-modality is common to both groups.
+shifted to the right. The bi-modality is a feature that is common to both groups.
 
 \begin{figure}[H]
 \begin{center}
@@ -291,7 +290,7 @@ shifted to the right. The bi-modality is common to both groups.
 \subsection{Scatterplot}
 Next, we want to see if the variable \lstinline{y} is related to \lstinline{x} in some
 way. Since both are continuous variables, we can display the relationship
-between them with a scatterplot. In the following code we use the \lstinline{plot()}
+between them with a \emph{scatterplot}. In the following code we use the \lstinline{plot()}
 function, which \R infers to mean a scatterplot of the first argument \lstinline{x}
 vs. the second, \lstinline{y}, because both are continuous. The other arguments to
 the function should be familiar by now.
@@ -307,28 +306,28 @@ We also see that the data is quite noisy. If we draw (in our mind's eye, for
 now) a line that represents the relationship between \lstinline{x} and \lstinline{y}, the
 points will be scattered around that line.
 
-\begin{figure}
+\begin{figure}[H]
 \begin{center}
 \includegraphics[width=0.48\textwidth]{images/chapter_2/scatter.pdf}
 \includegraphics[width=0.48\textwidth]{images/chapter_2/scatter2.pdf}
-\caption{Scatterplots.}
+\caption{Scatterplots}
 \label{scatter}
 \end{center}
 \end{figure}
 
-\subsection{Adding dimensions to a plot}
+\subsection{Adding Dimensions to a Plot}
 So far we saw that there is a complicated relationship between \lstinline{x} and
 \lstinline{y}, and maybe some relationship between \lstinline{g} and \lstinline{y}. Can we put
 all three variables in one plot, and maybe uncover more complex patterns? Yes!
 We can use different colors, shapes, or sizes for each point. For example, we
-can use different colors for each group, as follows:
+can use different colors for each group, like so:
 \showCode{R}{Code/ch2-07scatter2.R}[2][6]
 \runR{Code/ch2-07scatter2.R}{ch2-07scatter2}
 
 First, we use the \lstinline{ifelse()} function to set the color for each group. The
 first argument is the binary rule we use, the second is the value we assign when
 the first argument is TRUE, and the second is the value being assigned when the
-first argument results in a FALSE value. In this case, all the points for which
+first argument results in FALSE. In this case, all the points for which
 \lstinline{g} is equal to 1, are drawn in navy blue, and all the others in orange.
 
 % \begin{figure}
@@ -339,9 +338,12 @@ first argument results in a FALSE value. In this case, all the points for which
 % \end{center}
 % \end{figure}
 
-The right panel of Figure~\ref{scatter} shows the result. Now, we can see the
-entire picture. The difference between the groups seems real, and both have a
-cyclic pattern and a distinct change-point where the value of \lstinline{y} increases
+The right panel of Figure~\ref{scatter} shows the result. Finally, we can see the
+entire picture. The difference between the groups seems real, because the blue points
+appear higher than the orange ones. In other words, for any fixed value of \lstinline{x},
+the value of \lstinline{y} is likely to be higher if \lstinline{g} is 1 than if \lstinline{g} is 0.
+
+Also, both groups have a clear cyclic pattern and a distinct change-point where the value of \lstinline{y} increases
 abruptly, and then continues to increase as \lstinline{x} becomes larger.
 
 We also added a horizontal reference line at \lstinline{y=30} by using the
@@ -360,22 +362,23 @@ threshold of 30.
 
 %y <- 3*(x>2*pi)*x + 4*sin(3*x) + 10*(as.numeric(g)-1) + rnorm(length(x), mean = 0, sd = 3)
 
-\begin{exercise}
-Try running the simulation code, but with the following changes:
+
+\begin{listhead}
+\item [Exercise~2.1] Try running the simulation code, but with the following changes:
 \begin{enumerate}
-\item Without the $x$ term: \lstinline{y <- 10 * (as.numeric(g) - 1) + rnorm(length(x), mean=0, sd=3)} 
+\item Without the \lstinline{y} term: \lstinline{y <- 10 * (as.numeric(g) - 1) + rnorm(length(x), mean=0, sd=3)}
 \item Without the cyclical term: \lstinline{y <- 3 * (x > 2 * pi) * x +  10 * (as.numeric(g) - 1) + rnorm(length(x), mean=0, sd=3)} 
 \item Without the group term: \lstinline{y <- 3 * (x > 2 * pi) * x +  rnorm(length(x), mean=0, sd=3)} 
 \item Without the random noise: \lstinline{y <- 3 * (x > 2 * pi) * x + 4 * sin(3 * x) + 10 * (as.numeric(g) - 1)} 
 \item With less noise: \lstinline{y <- 3 * (x > 2 * pi) * x + 4 * sin(3 * x) + 10 * (as.numeric(g) - 1) + rnorm(length(x), mean=0, sd=1)} 
-\item With more noise: \lstinline{y <- 3 * (x > 2 * pi) * x + 4 * sin(3 * x) + 10 *( as.numeric(g) - 1) + rnorm(length(x), mean=0, sd=5)} 
+\item With more noise: \lstinline{y <- 3 * (x > 2 * pi) * x + 4 * sin(3 * x) + 10 *(as.numeric(g) - 1) + rnorm(length(x), mean=0, sd=5)} 
 \item Change the coefficients. Include negative values in your attempts.
 \item Use a different marker in the plot (using the \lstinline{pch} option).
 \end{enumerate}
-\end{exercise}
+\end{listhead}
 
 \hypertarget{tables}{%
-\section{Tabulating and cross-tabulating data}}
+\section{Tabulating and Cross-Tabulating Data}}
 In the previous section we were interested in a continuous variable, and how it
 may depend on other variables, both continuous and categorical. When we want to
 explore and investigate categorical variables we often use tables, or their
@@ -397,10 +400,10 @@ Figure~\ref{barplot} (or as a pie chart by using the \lstinline{pie()} function.
 \showCode{R}{Code/ch2-09barplot.R}[2][3]
 \runR{Code/ch2-09barplot.R}{ch2-09barplot}
 
-\begin{figure}
+\begin{figure}[H]
 \begin{center}
 \includegraphics[width=0.8\textwidth]{images/chapter_2/barplot.pdf}
-\caption{A barplot.}
+\caption{A barplot}
 \label{barplot}
 \end{center}
 \end{figure}
@@ -430,10 +433,10 @@ that there is some simple formula to represent the relationship, or when all we
 have is the categorical data, cross-tabulation is the appropriate way to
 visualize and understand the data.
 
-\begin{figure}
+\begin{figure}[H]
 \begin{center}
 \includegraphics[width=0.6\textwidth]{images/chapter_2/spineplot.pdf}
-\caption{A spine plot.}
+\caption{A spine plot}
 \label{spineplot}
 \end{center}
 \end{figure}
