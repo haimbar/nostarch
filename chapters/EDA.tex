@@ -384,21 +384,33 @@ may depend on other variables, both continuous and categorical. When we want to
 explore and investigate categorical variables we often use tables, or their
 graphical representation.
 
-Let's simulate such data:
+Let's simulate some categorical data. In the following code we use the \lstinline{rpois()} function to draw random numbers which are all
+non-negative integers (from the Poisson distribution). We then create categories by using the
+\lstinline{cut()} function is used to create \emph{bins} based on ranges of the original values.
+In this example we have 5 cut-points, which define 4 non-overlapping ranges -- \lstinline{[0, 9]}, 
+\lstinline{(9, 12]}, \lstinline{(12, 16]}, and \lstinline{(16, 25]}. Recall that with the notation \lstinline{(a, b]} we define the range of numbers between a and b, including b but excluding a. 
+ 
+
+
+
 \showCode{R}{Code/ch2-08gendat2.R}
 \runR{Code/ch2-08gendat2.R}{ch2-08gendat2}
 
-We use the \lstinline{rpois()} function to draw random numbers which are all
-non-negative integers (from the Poisson distribution). Use what you learned in
-the previous section to plot this data. We then create categories by using the
-\lstinline{cut()} function is used to create categories from continuous data. It can
-then be summarized by using the \lstinline{table()} function, which simply counts the
-total number of observations in each category:
+Use what you learned in the previous section to plot this \lstinline{x}, \lstinline{xcat}, and the relationship between them.  The data can
+also be summarized by using the \lstinline{table()} function, which simply counts the
+total number of observations in each category. Try entering \lstinline{xcat}. It should give the following: 
+
 \inlnR{```print(table(xcat))```}[vbox]
+You can see that there are \inlnR{```cat(table(xcat)[[1]])```} numbers between 0 and 9, and  \inlnR{```cat(table(xcat)[[4]])```} numbers are greater than 16 and less than or equal to 25.
+
 This can be shown graphically by using the \lstinline{barplot()} function as shown in
 Figure~\ref{barplot} (or as a pie chart by using the \lstinline{pie()} function.)
 \showCode{R}{Code/ch2-09barplot.R}[2][3]
 \runR{Code/ch2-09barplot.R}{ch2-09barplot}
+
+This should give the following graph. Try the \lstinline{barplot()} function, and then try
+it again after changing the number of categories by adding or removing \emph{break-points} in the 
+\lstinline{breaks} argument of the \lstinline{cut} function.
 
 \begin{figure}[H]
 \begin{center}
@@ -408,25 +420,33 @@ Figure~\ref{barplot} (or as a pie chart by using the \lstinline{pie()} function.
 \end{center}
 \end{figure}
 
-When there is more than one variable we can use cross-tabulation, which is also referred to as a `contingency table'. Let's create a new variable called \lstinline{ycat}:
+When there is more than one variable we can use cross-tabulation, which is also referred to as a `contingency table'. 
+Cross-tabulation means that we count all the cases in each \emph{combination} of the variables.
+
+Let's create a new variable called \lstinline{ycat}, based on some ranges of a continuous variable called \lstinline{y}:
 \showCode{R}{Code/ch2-10genycat.R}
 \runR{Code/ch2-10genycat.R}{ch2-10genycat}
 
-The function \lstinline{ftable()} (for `flat table') is used to cross-tabulate.
+The function \lstinline{ftable()} (for `flat table') is used to cross-tabulate. In the following output, 
+you can see the counts per each combination of \lstinline{xcat} and  \lstinline{ycat} values.
 \inlnR{```print(ftable(xcat, ycat))```}[vbox]
 
 There are a few things which this table allows us to see quite easily. It is clear that the distribution in each row is different from the other ones. The same thing can be said about the columns. 
-For example, most of the observations in the (0,30] category of the y variable are in (0,9] or (9,12] categories of the x variable. However, most of the data in the (100,300] y columns are in the (12,16] or (16,25] rows.
+For example, most of the observations in the (0,30] category of the y variable are in (0,9] or (9,12] categories of the x variable. However, most of the data in the (100,300]  column are in the (12,16] or (16,25] rows.
 
-To visualize this table in a plot, we can create a `spine plot', with the \lstinline{spinogram()} function, which shows the table of proportions, rather than counts, which means that the bars all have the same total width and height, and the dimensions of boxes within each bar correspond to the proportion of the corresponding cell in the table relative to the total in the row/column of that cell. This is depicted in Figure~\ref{spineplot}. Equivalently, we can also summarize this data in the form of a table by using the function \lstinline{prop.table()}.
+To visualize this table in a plot, we can create a \emph{spine plot}, with 
+the \lstinline{spinogram()} function as in the following code, which shows the table of proportions, 
+rather than counts. The output is depicted in Figure~\ref{spineplot}.
+Because a spinogram uses proportions and not counts, the bars in the plot all have the same \emph{total} width 
+and height (since the proportions must all add to 1), and the dimensions of boxes within each bar represent the proportion of the corresponding cell in the table relative to the total in the row/column of that cell.  Equivalently, we can also summarize this data in the form of a table by using the function \lstinline{prop.table()}.
 \showCode{R}{Code/ch2-11proptable.R}[2][3]
 \runR{Code/ch2-11proptable.R}{ch2-11proptable}
 
 This simulation can represent a hypothetical job market where the x categories
 correspond to years of education, and the y categories to levels of income (in
-\$10,000). The levels for \lstinline{x} correspond to 1. dropped out before
-high-school, 2. attended or finished high school, 3. college student, and
-4. people who studied for an advanced degree. The relationship between the
+\$10,000). The levels for \lstinline{x} correspond to 1: dropped out before
+high-school, 2: attended or finished high school, 3: college student, and
+4: people who studied for an advanced degree. The relationship between the
 continuous-data variables may not be linear (in this case, we know it is
 quadratic because we simulated it this way) and when there is no reason to think
 that there is some simple formula to represent the relationship, or when all we
@@ -441,6 +461,13 @@ visualize and understand the data.
 \end{center}
 \end{figure}
 
+Figure~\ref{spineplot} shows that most of the people in this sample belong to \lstinline{x} categories 2 and 3 (the widest
+vertical bars). It also shows that all the people in \lstinline{x} category 1 (no high-school education) are in the lowest income category
+(there is only one color in the left-most column). Furthermore, as the level of education increases,
+ the proportion of high income people increases (the darkest rectangles become taller).
+
+
+
 \hypertarget{beyond}{
 \section{Going further}}
 There is \textit{much} more to learn about effective visualization. There are
@@ -450,7 +477,7 @@ feature-rich ggplot2 package \citep{ggplot2}, and other ones such as plotrix
 \citep{plotrix}, gplots \citep{warnes2016package}, plotly \citep{plotly}, etc. 
 You should also explore graphical tools in other languages can be used. For example, Matlab and Python use the very comprehensive and aesthetic matplotlib package, and for interactive plots you may find JavaScript to be very attractive with its many excellent graphing options.
 
-Regardless of which tools you use, the important thing to keep in mind is that effective data visualization is critical and sometimes more persuasive than formal statistical analysis. Thus, we want to conclude this chapter with a few important takeaways.
+Regardless of which tools you use, the important thing to keep in mind is that effective data visualization is critical and sometimes more persuasive than formal statistical analysis. We want to conclude this chapter with a few important takeaways.
 
 \begin{itemize}
 \item Good visualization is almost always multivariate: we learn a lot when we
@@ -474,7 +501,7 @@ Regardless of which tools you use, the important thing to keep in mind is that e
 
 \item Choose the right tool for the job, and make the data the center of
   attention -- not the bells and whistles that some software allows you to
-  produce. Edward Tufte \textcolor{red}{CITE} advocated for the principal of
+  produce. Edward Tufte \citep{Tufte:VisuDispQuanInfo2001} advocated for the principal of
   maximizing the `information to ink ratio', and Albert Einstein said
   `everything should be made as simple as possible, but not simpler.'
 
@@ -489,12 +516,12 @@ Regardless of which tools you use, the important thing to keep in mind is that e
   \showCode{R}{Code/ch2-12smoth.R}[2][5]
   \runR{Code/ch2-12smoth.R}{ch2-12smoth}
 
-  We generate 100,000 points \lstinline{(x,y)} and construct a scatterplot (in line 3, which
+  We generate 100,000 points \lstinline{(x,y)} and construct a scatterplot (in \wingding{1}, which
   we commented out). Try running this line. The large number of points may
   actually hide some of the features of the data. The shape of the function is
   clear, but the points are so dense that it is hard to see that most of the
-  points actually lie close to the center of the curve. When we plot a smooth
-  version of the scatterplot (line 4) we get a much nicer plot, which we show in
+  points actually lie close to the center of the point-cloud. When we plot a smooth
+  version of the scatterplot as in \wingding{2} we get a much nicer plot, which we show in
   Figure~\ref{smooth}. Furthermore, the smooth scatterplot saves us a lot of
   space. In this example with 100,000 points, when we save the the plots in pdf
   format, the simple scatterplot takes 44MB, while the smooth version is more
@@ -503,10 +530,10 @@ Regardless of which tools you use, the important thing to keep in mind is that e
   difference. It may take a long time to download a plot on the Internet, and
   for the viewer (like Adobe) to show it on the screen, or to print it.
 \end{itemize}
-\begin{figure}
+\begin{figure}[H]
 \begin{center}
 \includegraphics[width=0.6\textwidth]{images/chapter_2/smooth.pdf}
-\caption{A smooth scatterplot.}
+\caption{A smooth scatterplot}
 \label{smooth}
 \end{center}
 \end{figure}
