@@ -12,14 +12,14 @@ Let's start with a few simple examples which will be used in this chapter:
 How likely is it that we find a person with IQ greater than 150?\\
 In order to be accepted to the Mensa club a person has to be in the top 2\% of the IQ distribution. What is the minimum score required in order to be a Mensa member?
 \item The pockets of the roulette wheel are numbered from 0 to 36. In number ranges from 1 to 10 and 19 to 28, odd numbers are red and even are black. In ranges from 11 to 18 and 29 to 36, odd numbers are black and even are red. There is a green pocket numbered 0 (zero). Suppose you want to bet on a color, say, red, and if the ball lands in a red pocket your payoff is twice your bet, and otherwise you lose your bet. What is the probability you win? What is your expected payoff? Suppose you have \$10,000, and you bet one dollar each time. How much money will you win or lose?.
-\item Suppose that you get a text message every 6 minutes (a rate of 10 per hour), and suppose that they arrive independently of one another, according to a Poisson distribution. How many messages do you expect to get on an average day, between 8am and 8pm? 
+\item Suppose that you get a text message every 6 minutes (a rate of 10 per hour), and suppose that they arrive independently of one another, according to some presumed distribution. How many messages do you expect to get on an average day, between 8am and 8pm? 
 %\item \hb{homework question?}As of June 16, 2021 Tony Snell from the Atlanta Hawks leads the NBA in 3pt accuracy with 53.8\%.
 %If he takes 3pt 10 shots per game over the next 10 games, how many three-point shots do you expect him to make?
 \end{enumerate}
 
 The main paradigm in statistical inference and prediction in order to answer such question is to take a sample from the population we're interested in, and choose a mathematical model which we believe represents the whole population. Then we check if our model appears to reasonable, in the sense that it fits the data well. If it does, we can use the mathematical properties of the model to draw conclusions about the population. By representing the sample using a mathematical (probabilistic) formula, we essentially augment a finite sample to an infinite one. Working with a formula/model for the data allows us to use the `heavy artillery' of math, like finding maximum/minimum, computing areas under the curve of the function, and so on. 
 
-This chapter deals with inference which can be derived from the mean of a population, and we show the (arguably) two most important results in statistics -- the law of large numbers (LLN), and the central limit theorem (CLT). Together, these two very general theorems make it possible to draw conclusions about the whole population, from a single sample! (as long as the sample size is large enough).
+This chapter deals with inference which can be derived from the mean of a population, and we show the (arguably) two most important results in statistics -- the \emph{law of large numbers} (\emph{LLN}), and the \emph{central limit theorem} (\emph{CLT}). Together, these two very general theorems make it possible to draw conclusions about the whole population, from a single sample! (as long as the sample size is large enough).
 
 
 \section{The Law of Large Numbers}
@@ -27,7 +27,7 @@ This chapter deals with inference which can be derived from the mean of a popula
 \subsection{Example \#1 -- the IQ score}
 We get a random sample of 200 people and give them an IQ test. From this sample, we want to infer the true distribution in the entire population.
 
-Suppose that the IQ in the general population has a normal distribution with mean=100 and  standard deviation =15, and from this population we draw 200 people, and calculate the sample mean and standard deviation:
+Suppose that the IQ in the general population has a normal distribution with mean of 100 and  standard deviation of 15, and from this population we draw 200 people, and calculate the sample mean and standard deviation:
 
 %<<intro-lln1-0, eval=TRUE, fig.align='center', fig.width=3.5, fig.height=3.5, fig.cap="Simulated IQ scores." >>=
 %set.seed(95473)
@@ -38,7 +38,7 @@ Suppose that the IQ in the general population has a normal distribution with mea
 
 We notice that the sample mean is 99.4 and the sample standard deviation is 15.6. Both are very close to the true values.
 
-Let's pretend that just like in real life, we don't know the true distribution, so we have to check if the mathematical model we chose (normal distribution) is appropriate for the data from the finite sample. When it is assumed that the data come from a normal distribution, we can use the \code{qqnorm} function to check if the assumption is reasonable:
+Let's pretend that just like in real life, we don't know the true distribution, so we have to check if the mathematical model we chose (normal distribution) is appropriate for the data from the finite sample. When it's assumed that the data come from a normal distribution, we can use the \lstinline{qqnorm} function to check if the assumption is reasonable:
 
 %<<intro-lln1-1, eval=TRUE, fig.align='center', fig.width=3.5, fig.height=3.5, fig.cap="Q-Q plot for the simulated IQ scores.">>=
 %qqnorm(samp, cex=0.7, pch=18, col="purple")
@@ -105,7 +105,7 @@ As before, the sample mean gets closer to the true mean of the distribution, whi
 To the casino it doesn't matter if one person bets \$1,000,000 or if 1,000 people each bets on \$1,000 -- in both cases the casino will win with probability 19/37.
 
 
-\subsection{Example \#3 -- receiving test messages}
+\subsection{Example \#3 -- receiving text messages}
 Let's simulate $n$ days, and in each one count the number of messages, if they arrive independently from a Poisson distribution with rate=10. In each day we count messages over 12 hours, so notice that how we multiply by 12 in the code below.
 
 %<<intro-lln2-0, eval=TRUE, fig.align='center', fig.width=3.5, fig.height=3.5, fig.cap="Simulated text messages." >>=
@@ -130,7 +130,7 @@ Informally, the law of large number states that the results of an experiment ten
 
 The LLN is very general -- it doesn't matter if the question is about how many boy-births we expect to see (`binomial distribution') or if we measure IQ (`normal distribution'). The only requirements are that the samples are independent, and identically distributed, and that the true distribution actually has a mean. (We will see an example where this is not the case.)
 
-It is important to emphasize that the LLN does not imply that the results of future experiments will balance out what already happened! If we bet 100 times at the roulette wheel and lost each time, this does not mean that we have a better chance of winning the next bet. All the LLN is saying is that if we continue to play many times, the overall probability that we win in each round will converge to 18/37.
+It's important to emphasize that the LLN does not imply that the results of future experiments will balance out what already happened! If we bet 100 times at the roulette wheel and lost each time, this does not mean that we have a better chance of winning the next bet. All the LLN is saying is that if we continue to play many times, the overall probability that we win in each round will converge to 18/37.
 
 \subsection{Example \#4 -- when the LLN doesn't work}
 We have two groups of students who have to take a math test. Group A has a mean score of 70 and a standard deviation of 10, while group B has mean 60 and standard deviation 20. Both groups have a normal distribution.
@@ -176,9 +176,9 @@ The CLT requires very little about the actual distribution of the data. The samp
 \subsection{CLT -- Examples}
 We will draw a random sample of size n from the following distributions:
 \begin{itemize}
-%\item Standard normal (the \code{rnorm(n,0,1)} function).
-%\item Poisson with rate parameter $\lambda=3$ (use \code{rpois(, 3)}).
-\item Exponential with rate parameter 5.5 (use \code{rexp(n, 5.5)}).
+%\item Standard normal (the \lstinline{rnorm(n,0,1)} function).
+%\item Poisson with rate parameter $\lambda=3$ (use \lstinline{rpois(, 3)}).
+\item Exponential with rate parameter 5.5 (use \lstinline{rexp(n, 5.5)}).
 \item Binomial with probability 0.15.
 \end{itemize}
 
@@ -308,7 +308,7 @@ The LLN and CLT are very powerful results. Keep in mind that in real-life when w
 However, these theorems tell us that as long as this one sample is large enough, we can get a very good approximation for the distribution of the sample mean, if we \textit{could} get multiple samples.
 Not only that, but regardless of the distribution of the data, the sample mean will have a normal distribution with mean which is equal to the true mean of the original distribution (even if it's skewed, or discrete), and the variance of the sample mean will shrink as we increase the sample size. This is very convenient for testing hypotheses and constructing confidence intervals (next chapter).
 
-To conclude, let us revisit the IQ example, where we assumed that in the general population IQ scores have a normal distribution with mean=100 and  standard deviation =15.
+To conclude, let's revisit the IQ example, where we assumed that in the general population IQ scores have a normal distribution with mean=100 and  standard deviation =15.
 We drew a sample of 200 people, and calculated the sample mean and standard deviation, which turned out to be 99.4, and 15.6, respectively.
 The red curve shows the true density function, and the dashed green one shows the one estimated from the sample of 200 people. They are very close.
 
@@ -329,7 +329,7 @@ To answer the question how likely  it is to find a person with IQ greater than 1
 %@
 A very select group, indeed.
 
-In order to be accepted to the Mensa club a person has to be in the top 2\% of the IQ distribution. In order to find the minimum score required in order to be a Mensa member, we use the \code{quantile} function, if we want to use the data, or the \code{qnorm} function to get the threshold from distribution of the entire population:
+In order to be accepted to the Mensa club a person has to be in the top 2\% of the IQ distribution. In order to find the minimum score required in order to be a Mensa member, we use the \lstinline{quantile} function, if we want to use the data, or the \lstinline{qnorm} function to get the threshold from distribution of the entire population:
 
 %<<intro-lln5-7, eval=TRUE>>=
 %mensacutoff <- round(quantile(samp,probs = 0.98))
