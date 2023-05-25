@@ -346,7 +346,7 @@ In this example with $n=$ \likelst{\inlnR{```cat(n)```}} random numbers we get t
 is \likelst{\inlnR{```cat(mean(x))```}}, the trimmed mean is  \likelst{\inlnR{```cat(mean(x, trim=0.1))```}}, and the median is \likelst{\likelst{\inlnR{```cat(median(x))```}}}.
 
 
-\subsection{Looking at Distributions}
+\subsection{Looking at Distributions}\label{introdistributions}
 The formula we used above, \lstinline{x <- -log(runif(n))/lambda}, generates random number from the so-called \emph{exponential distribution} with rate parameter $\lambda=10$. (Don't worry about the meaning of the rate parameter.)
 % AF: What does the rate parameter do? If we don't need to worry about that right now, say so.
 We denote the fact that the random variable $X$ follows an exponential distribution with rate $\lambda$  by $X\sim \exp(\lambda)$. The exponential distribution is often used to model random waiting times, like the time between incoming text messages. We would usually generate it by using the \lstinline{rexp()} function in \R, like this: \lstinline{x <- rexp(n, lambda)} .
