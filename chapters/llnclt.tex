@@ -34,50 +34,41 @@ Suppose that the IQ in the general population has a normal distribution with mea
 
 Run this code. You should get that the sample mean is \inlnR{```cat(mean(samp1))```} and the standard deviation is \inlnR{```cat(sd(samp1))```}. Both are very close to the true values.
 
-Let's pretend that just like in real life, we don't know the true distribution, so we have to check if the mathematical model we chose  is appropriate for the data from the finite sample. In this case, we want to check if the normal distribution is a good model for our data.
+Let's pretend that just like in real life, we don't know the true distribution. So, we propose a certain distribution and check if it fits. In the current example,  which we called \lstinline{samp1}, we want to check if the normal distribution is a good model for our data.
 
-On way to check if a sample could have been generated from a certain distribution, if with a graphical tool called
-the \emph{Q-Q plot}. A Q-Q plot is based on the simple idea that a distribution is determined by its \emph{quantiles} (percentiles), so if our sample has the same quantiles as those of the assumed distribution, then the assumption is reasonable. Recall that we defined the quantiles in Chapter \ref{introdistributions}, so that the $q$-th quantile is a number $x_q$, such that $q\times 100\%$ of the data are less than or equal to $x_q$.
-In our example the data has  \inlnR{```cat(n)```} data points, so we can get \inlnR{```cat(n)```} quantiles from our sample. 
+One way to check if a distribution fits our data is with a graphical tool called
+the \emph{Q-Q plot}. A Q-Q plot is based on the simple (and very important) idea that a distribution is determined by its \emph{quantiles} (percentiles), 
+so if the quantiles of our sample match the quantiles of the assumed distribution, then the assumption is reasonable. Recall that we defined the quantiles in Chapter \ref{introdistributions}, so that the $q$-th quantile is a number $x_q$, such that $q\times 100\%$ of the data are less than or equal to $x_q$.
+In our example the data has  \inlnR{```cat(n)```} data points, so we can get \inlnR{```cat(n)```} quantiles from our sample. If we draw the same number of random numbers from the correct distribution, then their quantiles will match the quantiles we got from our data (they will only match approximately, because when we draw finite, random samples, there is always some `noise'.)
 
 When it's assumed that the data come from a normal distribution, we can use the \lstinline{qqnorm()} function to check if the assumption is reasonable:
 \showCode{R}{Code/llnclt_IQ.R}[7][8]
 
-
-
-\ref{qqplot1}
+The points in the Q-Q plot in Figure \ref{qqplot1} shows the actual quantiles (from the data, \lstinline{samp1}) vs. the theoretical quantiles (those that would be obtained if we drew from a normal distribution). The points in the graph lie very close to a straight line, indicating that the sample  was  likely drawn from a normal distribution (here, this is not surprising because we generated it this way. However, when we get a random sample and we do not know the true distribution, this plot is useful to check whether our mathematical model is reasonable.)
 
 \begin{figure}[H]
-\begin{center}
 \includegraphics[width=0.6\textwidth]{images/chapter_4/qqplot1.pdf}
 \caption{A Q-Q plot}
 \label{qqplot1}
-\end{center}
 \end{figure}
 
 
-The points in the Q-Q plot lie very close to a straight line, indicating that the sample  was  likely drawn from a normal distribution (because we generated it this way, this is not surprising. However, when we get a random sample and we do not know the true distribution, this plot is useful to check whether our mathematical model is reasonable.)
 
-To understand what the LLN, let's obtain samples of varying sizes and see what happens to the sample mean as we increase $n$.
+To understand what the Law of Large Numbers says, let's repeat the previous simulation but vary the sample size ($n$) and see what happens to the \emph{sample mean} as we increase $n$.
 
-%<<intro-lln1-2, eval=TRUE, fig.align='center', fig.width=3.5, fig.height=3.5, fig.cap="Q-Q plot for the simulated IQ scores.">>=
-%set.seed(95473)
-%ns <- seq(10, 2000, by=10)
-%L <- length(ns)
-%allMeans <- rep(0, L)
-%for (i in 1:L) {
-%  samp <- rnorm(ns[i], 100, 15)
-%  allMeans[i] <- mean(samp)
-%}
-%plot(ns, allMeans, pch=19, cex=0.5, col=3, axes=FALSE)
-%axis(1); axis(2)
-%abline(h=100, lwd=3,col=2)
-%@
+\showCode{R}{Code/llnclt_IQ.R}[12][22]
 
-%images/chapter_4/LLN_IQ.pdf
+In \wingding{1} we create a vector of sample sizes. We will generate a random sample for each of these \lstinline{ns}. In \wingding{2} we initialize a vector which will hold all the sample means (at first, they are set to zero). The \lstinline{for} loop in \wingding{3} is the same as the previous demonstration, but in each iteration we increase the sample size, which is the first argument of the function \lstinline{rnorm()}. The mean from the $i$-th sample is stored in the $i$-th position of the vector \lstinline{allMeans} (in \wingding{4}.)
 
-We see that as $n$ increases, the sample mean gets closer to the true mean (100).
+Figure \ref{LLNdemo} shows the results. We can see that as $n$ increases, the sample mean gets closer to the true mean (100, in our simulation), which is shown as a horizontal line.
 
+\begin{figure}[H]
+\includegraphics[width=0.5\textwidth]{images/chapter_4/LLN_IQ.pdf}
+\caption{Visualizing the Law of Large Numbers}
+\label{LLNdemo}
+\end{figure}
+
+We also see in Figure \ref{LLNdemo} that the dispersion of the sample means gets smaller and the sample size gets larger, but this is the result of the \emph{Central Limit Theorem}, which will be discussed later in this chapter.
 
 \subsection{Example \#2 -- the roulette wheel}
 Here, the outcome is binary -- we either win or lose. The probability of winning if we choose the red color, is $18/37$.
