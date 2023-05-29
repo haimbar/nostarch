@@ -64,107 +64,87 @@ Figure \ref{LLNdemo} shows the results. We can see that as $n$ increases, the sa
 
 \begin{figure}[H]
 \includegraphics[width=0.5\textwidth]{images/chapter_4/LLN_IQ.pdf}
-\caption{Visualizing the Law of Large Numbers}
+\caption{Visualizing the Law of Large Numbers -- normal data}
 \label{LLNdemo}
 \end{figure}
 
 We also see in Figure \ref{LLNdemo} that the dispersion of the sample means gets smaller and the sample size gets larger, but this is the result of the \emph{Central Limit Theorem}, which will be discussed later in this chapter.
 
-\subsection{Example \#2 -- the roulette wheel}
+\subsection{Example \#2 -- the Roulette Wheel}
 Here, the outcome is binary -- we either win or lose. The probability of winning if we choose the red color, is $18/37$.
 Let's simulate 40 bets at the roulette wheel, where, in each we put a dollar on red. Each bet is won with a Bernoulli distribution, $Ber(18/37)$ and we repeat it 40 times. Equivalently, we can look at it as a single binomial sample, with $n=40$ and $p=18/37$.
 
-%<<intro-lln2-0, eval=TRUE>>=
-%set.seed(75473)
-%n <- 40
-%samp <- rbinom(n, size=1, prob=18/37)
-%cat("Mean=",mean(samp), ", SD=",sd(samp),"\n")
-%@
+\runR{Code/llnclt_roulette.R}{roulette}
+\showCode{R}{Code/llnclt_roulette.R}[1][4]
 
-Notice that in those 40 bets, our probability of winning was 0.575 (greater than 0.5.) This seems great -- if we keep going we might get rich. However, let's see what happens to the sample mean as we increase $n$.
+Run this code. You should get in this particular sample of 40 bets, that the probability of winning (the mean of \lstinline{samp2}) is \inlnR{```cat(mean(samp2))```} (greater than 0.5.) This seems great -- if we keep going we might get rich! However, let's see what happens to the sample mean (which is the probability of winning) as we increase $n$. The following code is nearly identical to the one used in the previous example, except that in this case we draw the random samples from a \emph{binomial} distribution (in \wingding{1}.)
 
-%<<intro-lln1-2, eval=TRUE, fig.align='center', fig.width=3.5, fig.height=3.5, fig.cap="The sample mean from n bets at the roulette wheel.">>=
-%set.seed(95473)
-%ns <- seq(10, 2000, by=10)
-%L <- length(ns)
-%allMeans <- rep(0, L)
-%for (i in 1:L) {
-%  samp <- rbinom(ns[i], size=1, prob=18/37)
-%  allMeans[i] <- mean(samp)
-%}
-%plot(ns, allMeans, pch=19, cex=0.5, col=3, axes=FALSE)
-%axis(1); axis(2)
-%abline(h=18/37, lwd=3,col=2)
-%@
+\showCode{R}{Code/llnclt_roulette.R}[7][17]
 
-As before, the sample mean gets closer to the true mean of the distribution, which is $p=18/37$, which is less than 0.5, so if we keep placing bets we will end up losing money. In fact, we can check how much we will lose if we bet \$1 each time, and do it 10,000 time
+We see the results in Figure \ref{LLNdemoBinomial}. As before, the sample mean gets closer to the true mean of the distribution, which is $p=18/37$, which is less than 0.5, so if we keep placing bets we will end up losing money. In fact, we can check how much we will lose if we bet \$1 each time, and do it 10,000 times.
 
-%<<intro-lln1-3, eval=TRUE>>=
-%n <- 10000
-%roulette <- rbinom(n, 1, 18/37)
-%cat("Prob. win=", mean(roulette),"\n")
-%cat("Paid: $", prettyNum(n, big.mark=","), ". Won: ", sum(roulette), "times.", "Total gain:", prettyNum(2*sum(roulette), big.mark = ","), "dollars. Net gain/loss:", prettyNum(2*sum(roulette)-n,big.mark = ","),"\n")
-%@
+\begin{figure}[H]
+\includegraphics[width=0.5\textwidth]{images/chapter_4/LLN_roulette.pdf}
+\caption{Visualizing the Law of Large Numbers -- binomial data}
+\label{LLNdemoBinomial}
+\end{figure}
 
-To the casino it doesn't matter if one person bets \$1,000,000 or if 1,000 people each bets on \$1,000 -- in both cases the casino will win with probability 19/37.
+To simulate what will happen if we play the roulette table 10,000 times, each time putting a dollar on red, run the following code:
+
+\showCode{R}{Code/llnclt_roulette.R}[20][24]
+
+The probability of winning in this simulation should be \inlnR{```cat(mean(roulette))```}. We bet on \$10,000 and we won \inlnR{```cat(sum(roulette))```} times, so our winnings amounted to \inlnR{```cat(prettyNum(2*sum(roulette), big.mark = ","))```} dollars, which means that we lost  \inlnR{```cat(prettyNum(10000-2*sum(roulette), big.mark = ","))```} dollars.
+
+To the casino it doesn't matter if one person bets \$1,000,000 or if 1,000 people each bets on \$1,000 -- in both cases the casino will win with probability 19/37 and will have a positive net gain (you can't beat the house). Casinos know that, and use the law of large numbers in order to ensure that in the long run, they will win.
 
 
-\subsection{Example \#3 -- receiving text messages}
-Let's simulate $n$ days, and in each one count the number of messages, if they arrive independently from a Poisson distribution with rate=10. In each day we count messages over 12 hours, so notice that how we multiply by 12 in the code below.
+\subsection{Example \#3 -- Receiving Text Messages}
+Let's simulate $n$ days, and in each one count the number of messages, assuming they arrive independently from a Poisson distribution with rate=10. To do that, run the following code:
 
-%<<intro-lln2-0, eval=TRUE, fig.align='center', fig.width=3.5, fig.height=3.5, fig.cap="Simulated text messages." >>=
-%ssize <- c(5,seq(10,1000,by=10))
-%myMsg <- rep(0,length(ssize))
-%set.seed((40001))
-%for (i in 1:length(ssize)) {
-%    myMsg[i] <- mean(12*rpois(ssize[i], 10))
-%}
-%plot(ssize, myMsg,pch=17,col="blue", axes=FALSE)
-%axis(1); axis(2)
-%abline(h=12*10, lwd=2,col=2)
-%@
+\runR{Code/llnclt_texts.R}{texts}
+\showCode{R}{Code/llnclt_texts.R}[2][10]
 
+In each day we count messages over 12 hours, so in \wingding{1} we multiply the (hourly) random sample from the Poisson distribution by 12. Figure \ref{LLNdemoPoisson} shows the results.
+
+\begin{figure}[H]
+\includegraphics[width=0.5\textwidth]{images/chapter_4/LLN_texts.pdf}
+\caption{Visualizing the Law of Large Numbers -- Poisson data}
+\label{LLNdemoPoisson}
+\end{figure}
 
 If we continue to get text messages at this fixed rate over a long period of time, and we calculate the average daily messages (from 8am to 8pm) we see that that average converges to 12*10=120 messages per day.
 
 
 
-\subsection{The LLN -- an intuitive statement of the theorem}
+\subsection{The LLN -- an Intuitive Statement of the Theorem}
 Informally, the law of large number states that the results of an experiment tend to settle down to a fixed average when the experiment is repeated many times. In other words, as the sample size increases, the sample mean will get closer to the true population mean.
 
-The LLN is very general -- it doesn't matter if the question is about how many boy-births we expect to see (`binomial distribution') or if we measure IQ (`normal distribution'). The only requirements are that the samples are independent, and identically distributed, and that the true distribution actually has a mean. (We will see an example where this is not the case.)
+The LLN is very general -- it doesn't matter if the question is about how many boy-births we expect to see (\emph{binomial distribution}), the number of received text messages (\emph{Poisson distibution}), or if we measure IQ (\emph{normal distribution}). The only requirements are that the samples are independent, and identically distributed, and that the true distribution actually has a mean. (We will see an example where this is not the case.)
 
 It's important to emphasize that the LLN does not imply that the results of future experiments will balance out what already happened! If we bet 100 times at the roulette wheel and lost each time, this does not mean that we have a better chance of winning the next bet. All the LLN is saying is that if we continue to play many times, the overall probability that we win in each round will converge to 18/37.
 
-\subsection{Example \#4 -- when the LLN doesn't work}
+\subsection{Example \#4 -- When the LLN Doesn't Work}
 We have two groups of students who have to take a math test. Group A has a mean score of 70 and a standard deviation of 10, while group B has mean 60 and standard deviation 20. Both groups have a normal distribution.
 We take a sample of size $n$ from each group and calculate the sample means. Then, we calculate the difference between the sample means, $d_{AB}=\bar{x}_A-\bar{x}_B$, and the ratio between the means, $r_{AB}=\bar{x}_A/\bar{x}_B$.
 As before, we increase the sample size and see how it affects $d_{AB}$ and $r_{AB}$.
 
-%<<intro-lln4-0, eval=TRUE, fig.align='center', fig.width=6, fig.height=3.5, fig.cap="Simulated test scores - difference and ratio between two groups." >>=
-%n <- seq(50,5000,by=10)
-%set.seed(59112)
-%allDiffs <- rep(0,length(n))
-%allRatios <- rep(0,length(n))
-%for (i in 1:length(n)) {
-%  sA <- rnorm(n[i],70,10)
-%  sB <- rnorm(n[i],60,20)
-%  dAB <- sA - sB
-%  rAB <- sA / sB
-%  allDiffs[i] <- mean(dAB)
-%  allRatios[i] <- mean(rAB)
-%}
-%par(mfrow=c(1,2))
-%plot(n, allDiffs,pch=19,col=3, xlab="n", ylab="Diff.", cex=0.5)
-%abline(h=10,col=2,lwd=2)
-%plot(n, allRatios,pch=19,col="orange", xlab="n", ylab="Ratio", cex=0.5)
-%abline(h=70/60,col=2,lwd=2)
-%par(mfrow=c(1,1))
-%@
+\runR{Code/llnclt_Cauchy.R}{texts}
+\showCode{R}{Code/llnclt_Cauchy.R}[2][19]
 
+In \wingding{1} and \wingding{2} we generate the samples from the two groups (both follow a normal distribution), with the same sample size. In the for loop we vary the sample size to go from 50 to 5,000 in jumps of 10. In \wingding{3} and \wingding{4} we calculate the difference and the ratio between the mean scores in the two groups, respectively. In \wingding{5} and \wingding{6} we keep the calculated values $d_{AB}$ and $r_{AB}$ in vectors called \lstinline{allDiffs} and \lstinline{allRatios}, which are then used in the \lstinline{plot()} function.
+
+
+Figure \ref{LLNdemoCauchy}, which is what you should get after running the code,  shows the distributions of the difference between the average grades ($d_{AB}$) on the left, and of the ratio ($r_{AB}$) on the right.
 What we see here is that the mean difference between the groups, $d_{AB}$, converges to the true difference between the groups (10), but the ratio, $r_{AB}$, does not converge -- $n$ can be as large as we want, and we will still see ratios that are quite extreme. (Note that the mean of a ratio between two distributions is generally not equal to the ratio of the means of the distributions, so we don't expect $r_{AB}$ to converge to exactly 70/60.)
 
-What is happening here? The answer is that while a difference between two normal random variables is still normal (and hence, has a mean), the ratio between two normal distributions follows a Cauchy distribution which doesn't have a theoretical mean, so the LLN does not apply to  $r_{AB}$.
+\begin{figure}[H]
+\includegraphics[width=1\textwidth]{images/chapter_4/LLN_Cauchy.pdf}
+\caption{When the Law of Large Numbers fails}
+\label{LLNdemoCauchy}
+\end{figure}
+
+
+What is happening here? The answer is that while a difference between two normal random variables is still normal (and therefore, has a mean), the ratio between two normal distributions follows a \emph{Cauchy distribution} which doesn't have a theoretical mean, so the LLN does not apply to the ratios between the grades of the two groups,  $r_{AB}$.
 
 Although the LLN applies to almost any distribution we will ever encounter, the lesson here is that taking the ratio between two perfectly well-behaved distributions may lead to a distribution to which the LLN does not apply. Other manipulations of random variables may lead to similar results.
 
