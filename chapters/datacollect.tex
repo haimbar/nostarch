@@ -1,7 +1,78 @@
+\chapter{Data Collection and Selection Bias}\label{ch:data}
+\chapterartfile{images/static/GoodBadSamples.pdf}
+  You can't make bricks without straw. Data is necessary to make inference, and
+it is important that the data is an unbiased or representative sample of the
+population in consideration in order to obtain valid conclusion. This chapter
+discusses common sources of biases in the process of data collection, and
+introduces some widely used sampling plans and approaches for data collection.
+
 \hypertarget{ch:data}{%
-\chapter{Data Collection and Selection Bias}\label{ch:data}}
-In order to obtain valid results from data, it is important the data is an
-unbiased or representative sample of the population in consideration.
+\section{Representative sample}\label{representative}}
+
+In statistics, a population in statistics is the entire set of subjects that we
+are interested in studying, and a sample is a subset of a population.  A
+representative sample means it reflects the characteristics of the population.
+This is important because a main goal of statistical data science is to use the
+smaller sample to obtain conclusions on the population.
+
+We use a simulated population to illustrate the concepts with figures. Assume
+for a group of people, the weight and height has a relationship
+\begin{equation}
+  \label{eq:weightheight}
+  \text{weight} = -194.49 + 5.30\text{height} + \text{Error},
+\end{equation}
+where the Error has a normal distribution with mean zero and standard deviation
+23.26. We simulate such a population with $N=500$ people and plot their weights
+against heights using the following code. The result is given in
+Figure~\ref{fig:representativesample} (a).
+
+\showCode{R}{Code/datacollect-goodbadsample.R}[2][7]
+
+Now we use the following code to uniformly and randomly select $n=50$ people as
+a sample from the population and marked the selected people in
+Figure~\ref{fig:representativesample} (b). We see that the smaller sample of
+$n=50$ gives a similar relationship between weight and height as observed in the
+larger population of $N=500$. Here the sample is a representative sample. 
+
+\showCode{R}{Code/datacollect-goodbadsample.R}[11][15]
+
+Now, let's assume that the way to take a sample depends on both the weights and
+heights in the population. We create a function of weight and height let it
+decide the probability of including a person into the sample. The following code
+use this way to take a sample and plot it in
+Figure~\ref{fig:representativesample} (c). 
+
+\showCode{R}{Code/datacollect-goodbadsample.R}[19][25]
+
+We see that the sample in Figure~\ref{fig:representativesample} (c) does not
+reflect the patterns in the population. The heights in the sample is more
+clustered around 70, and the relationship between weights and heights in the
+sample is dramatically different from that in the population.
+
+\runR{Code/datacollect-goodbadsample.R}{datacollect-goodbadsample}
+% \showCode{R}{Code/datacollect-goodbadsample.R}
+% \includeOutput{datacollect-goodbadsample}
+
+\begin{figure}
+  \centering
+    \begin{subfigure}{0.32\textwidth}
+      \includegraphics[width=\textwidth]{images/chapter_6/population.pdf}
+      \caption{Population}
+    \end{subfigure}
+  \begin{subfigure}{0.32\textwidth}
+      \includegraphics[width=\textwidth]{images/chapter_6/representSample.pdf}
+      \caption{Representative sample}
+  \end{subfigure}
+  \begin{subfigure}{0.32\textwidth}
+      \includegraphics[width=\textwidth]{images/chapter_6/biasedSample.pdf}
+      \caption{Biased sample}
+  \end{subfigure}
+  \caption{An illustrative of representative sample}
+  \label{fig:representativesample}
+\end{figure}
+
+\hypertarget{ch:data}{%
+\subsection{A representative sample is more important than a larger sample}\label{representative}}
 
 \begin{example}[The 1936 Literary Digest Poll]
  For the 1936 presidential election, the Literary Digest poll was one of the
@@ -25,7 +96,7 @@ did not produce a representative sample and thus resulted in a biased estimate
 and a misleading conclusion.  
 \end{example}
 
-\hypertarget{data}{%
+\hypertarget{ch:data}{%
 \section{Berkson's bias}\label{berkson-bias}}
 
 The following impressions are common, but are then really true?
@@ -68,9 +139,26 @@ representative sample of all the stamps you have. The sample is biased.
 
 Now let's simulate some data to further illustrate.
 
-\input{Rnw/datacollect-Berkson}
+\showCode{R}{Code/datacollect-berkson.R}
+\runR{Code/datacollect-berkson.R}{datacollect-berkson}
+Running the above code gives:
+\includeOutput{datacollect-berkson}
 
-\hypertarget{data}{%
+\begin{figure}
+  \centering
+    \begin{subfigure}{0.485\textwidth}
+      \includegraphics[width=\textwidth]{images/chapter_6/berkson1.pdf}
+      \caption{No linear association between goodness of movie and goodness of book}
+    \end{subfigure}
+  \begin{subfigure}{0.485\textwidth}
+      \includegraphics[width=\textwidth]{images/chapter_6/berkson2.pdf}
+      \caption{Negative linear association for top 10 percent books and/or movie}
+  \end{subfigure}
+  \caption{Goodness of movie v.s. goodness of book}
+  \label{fig:berkson}
+\end{figure}
+
+\hypertarget{ch:data}{%
 \section{Survival Bias}\label{survival-bias}}
 During World War II, aircraft that had returned from missions were examined and  the most-hit areas of the plane are given in Figure~\ref{fig:survival-bias}. Which areas should the army add armor to increase the survivorship of the planes? A direct intuition may suggest to reinforce areas with the most bullet holes. However, this is not a wise decision. Why? The data were collected from the aircraft that had survived their missions so they are biased. Planes that had been shot down or otherwise lost had not been counted. The bullet holes in the returning aircraft represented areas where a plane could take damage and still fly well enough to return safely. Thus, it is the areas where the returning aircraft were unscathed that need additional armor. 
 
@@ -79,12 +167,12 @@ During World War II, aircraft that had returned from missions were examined and 
 
 \begin{figure}
   \centering
-  \includegraphics[width=\textwidth]{images/Survivorship-bias.png}
-  \caption{Most-hit areas of the returned aircraft}
+  \includegraphics[width=\textwidth]{images/static/Survivorship-bias.png}
+  \caption{Most-hit areas of the returned aircraft. Source: \url{https://en.wikipedia.org/wiki/Survivorship_bias}}
   \label{fig:survival-bias}
 \end{figure}
 
-\hypertarget{data}{%
+\hypertarget{ch:data}{%
   \section{Common sources of biases}\label{sources-bias}}
 \begin{itemize}
 \item Observation time interval: 
@@ -100,14 +188,14 @@ Early termination of a trial at a time when its results support the desired conc
 
 \end{itemize}
 
-\hypertarget{data}{%
+\hypertarget{ch:data}{%
   \section{Some basic sampling designs}\label{sampling-designs}}
   \begin{itemize}
   \item Simple Random Sampling: Every elements in the target population have equal chances to be selection. Samples are selected strictly by chance. It is probably the most effective method to prevent sampling bias. A disadvantage is the uncertainty may be large.
   \item Stratified Sampling: Divide members of the population into homogeneous subgroups and then use simple random sampling for each subgroups. It helps to reduce the uncertainty. Need to be careful of potential biases.
   \item Weighted Sampling: Let more informative elements have higher chances to be selected. It may increase the estimation efficiency, but the resulting sample may be biased so need special way of estimation.
   \end{itemize}
-\hypertarget{data}{%
+\hypertarget{ch:data}{%
   \section{Different sampling approaches}\label{sampling-approaches}}
 %%%%----------------------------------------------------------
   \begin{itemize}
@@ -126,10 +214,8 @@ Early termination of a trial at a time when its results support the desired conc
 \end{example}
 
 %%% Local Variables:
-%%% coding: utf-8
 %%% mode: latex
-%%% TeX-engine: xetex
-%%% TeX-master: "../00why.tex"
-%%% End:
-
 %%% TeX-command-extra-options: "-shell-escape"
+%%% TeX-engine: xetex
+%%% TeX-master: "../sidsmain.tex"
+%%% End:

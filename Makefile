@@ -1,68 +1,23 @@
-#
-# Makefile for nostarch package
-#
-# This file is in public domain
-#
-# $Id: Makefile,v 1.6 2008-05-25 18:06:28 boris Exp $
-#
-
-PACKAGE=nostarch
-
-SAMPLES = nssample.tex
-
-
-PDF = $(PACKAGE).pdf ${SAMPLES:%.tex=%.pdf}
-
-all:  ${PDF}
-
-
-%.pdf:  %.dtx   $(PACKAGE).cls
-	pdflatex $<
-	- bibtex $*
-	pdflatex $<
-	- makeindex -s gind.ist -o $*.ind $*.idx
-	- makeindex -s gglo.ist -o $*.gls $*.glo
-	pdflatex $<
-	while ( grep -q '^LaTeX Warning: Label(s) may have changed' $*.log) \
-	do pdflatex $<; done
-
-
-%.cls:   %.ins %.dtx  
-	pdflatex $<
-
-%.pdf:  %.tex   $(PACKAGE).cls
-	pdflatex $<
-	- bibtex $*
-	- makeindex -s $(PACKAGE).ist -o $*.ind $*.idx
-	pdflatex $<
-	pdflatex $<
-	- makeindex -s $(PACKAGE).ist -o $*.ind $*.idx
-	while ( grep -q '^LaTeX Warning: Label(s) may have changed' $*.log) \
-	do pdflatex $<; done
-
-
-
-.PRECIOUS:  $(PACKAGE).cfg $(PACKAGE).cls
-
+# Use the cache, compile from generated files, remove temporary code files
+overleaf:
+	touch ForceCache
+	xelatex -shell-escape sidsmain.tex
 
 clean:
-	$(RM)  $(PACKAGE).cls *.log *.aux \
-	*.glo *.idx *.toc *.tbc \
-	*.ilg *.ind *.out *.lof \
-	*.lot *.bbl *.blg *.gls *.sty *.ist \
-	*.dvi *.ps *.thm *.tgz *.zip
+	rm -f sidsmain.aux generated/*.txt
 
-distclean: clean
-	$(RM) $(PDF)
-
-#
-# Archive for the distribution. Includes typeset documentation
-#
-archive:  all clean
-	tar -czvf $(PACKAGE).tgz  --exclude 'debug*' \
-	--exclude '*~' --exclude '*.tgz' --exclude '*.zip'  --exclude CVS .
-
-
-zip:  all clean
-	zip -r  $(PACKAGE).zip * \
-	-x 'debug*' -x '*~' -x '*.tgz' -x '*.zip' -x CVS -x 'CVS/*'
+# stop the talk2stat server, but don't compile the book:
+stopserver: clean
+	python3 -c 'from talk2stat.talk2stat import client; client("./","R","QUIT")'
+	rm -f serverPIDR.txt Rdebug.txt talk2stat.log nohup.out
+ 
+# build the book and use the server, not the cache option:
+build: clean
+	rm -f ForceCache nohup.out
+	mkdir -p tmp
+	@for i in $$(seq 1 8); do \
+	    mkdir -p images/chapter_$$i; \
+	done
+	xelatex -shell-escape sidsmain.tex
+	bibtex sidsmain
+	xelatex -shell-escape sidsmain.tex

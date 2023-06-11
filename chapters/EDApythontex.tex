@@ -1,0 +1,59 @@
+\chapter{Summarizing and Visualizing Data}
+\chapterartfile{images/python-logo-notext.png}
+\hypertarget{EDA}{%
+People are born with a fantastic ability to detect patterns. However, sometimes the
+information is hidden and the only way to observe a pattern is to change
+the viewpoint or rearrange the input. In this chapter we will introduce some tools
+to summarize data in order to reveal hidden features. We will also discuss principles of
+graphical excellence. In the words of Edward Tufte, the guru of data visualization,
+`\textit{Graphical excellence consists of complex idea communicated with clarity, precision,
+and efficiency.}'
+}
+
+%https://python-graph-gallery.com/barplot/
+
+\hypertarget{plots}{%
+\section{plots}}
+In this section we will use two Python packages: Matplotlib and Seaborn. Both have excellent features which will help you produce clear and attractive plots, so install them before you read on.
+
+In this book we cover several methods to analyze the data with statistical tool. However, it is very important to always look at the data, and this means creating plots and tables in order to understand it better. We call this process ``exploratory data analysis'', or EDA, and it is a critical step which should never be skipped. The type of plot which we generate in each case depends on the data, and usually there is more than one option to choose from. In this chapter we cover several visualization methods, and in subsequent chapters we will see additional ones.
+
+\subsection{One variable}
+
+\subsection{Two variables}
+
+To display the relationship between two continuous variables we often use a scatterplot. In Figure \ref{conscatter} we see two variables, $x$ and $y$, and we can see a clear pattern: as $x$ increases, $y$ also increases but we see a cyclical pattern. We can also see that the data is quite noisy. If we draw (in our mind's eye, for now) the line that represents the relationship between $x$ and $y$, the points will be scattered around that line.
+
+\runPython{Code/ScatterPlot.py}{temp}{}
+
+\begin{figure}
+\begin{center}
+\includegraphics[width=\textwidth]{images/ScaPlot.pdf}
+\caption{Scatterplot}
+\label{conscatter}
+\end{center}
+\end{figure}
+
+The actual relationship between $x$ and $y$ in this example is $y=1.6x+2\sin(3x)$, plus an additional random noise which is drawn from a standard normal distribution (with location 0 and scale 1). The code that was used to generate this plot is as follows:
+
+\showCode{python}{Code/ScatterPlot.py}
+
+In line \#3 we create a sequence of points between 0 and $4\pi$, in jumps of 0.01. These are our $x$ values. For each $x_i$ in this sequence, we calculate $y=1.6x + 2sin(3x)$ and add the random (standard normal) noise.
+We use a shorthand notation for the \texttt{matplotlib.pyplot} module and call it \texttt{plt}. This is just used to save us extra typing. The, we can create the scatterplot in line \#5 by using the \texttt{plt.plot} function. Setting the line style to blank means that the points will not be connected to each other with a line. The marker argument allows us to choose the shape of the points. Then, we simply add the axes labels. Finally, note that in order to save the figure to a file we us the \texttt{savefig} function, but if we wanted to view it on the screen, we would use the \texttt{show} function.
+
+
+
+Try running this code, but with the following changes:
+\begin{enumerate}
+\item Without the $x$ term: \texttt{y = 2*np.sin(3*x) + np.random.normal(loc=0.0, scale=1.0, size=len(x))} 
+\item Without the cyclical term: \texttt{y = 1.6*x + np.random.normal(loc=0.0, scale=1.0, size=len(x))} 
+\item Without the random noise: \texttt{y = 1.6*x + 2*np.sin(3*x)} 
+\item With less noise: \texttt{y = 1.6*x + 2*np.sin(3*x) + np.random.normal(loc=0.0, scale=0.1, size=len(x))} 
+\item With more noise: \texttt{y = 1.6*x + 2*np.sin(3*x) + np.random.normal(loc=0.0, scale=2, size=len(x))} 
+\item Change the coefficients (1.6, 2, and 3). Include negative values in your attempts.
+\item Use a different marker in the plot.
+\end{enumerate}
+
+\hypertarget{tables}{%
+\section{Tables}}
+

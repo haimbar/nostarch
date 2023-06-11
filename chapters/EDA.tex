@@ -1,10 +1,10 @@
-\chapter{Summarizing and Visualizing Data}
-\chapterartfile{images/python-logo-notext.png}
+\chapter{Summarizing and Visualizing Data}\label{EDA}
+\chapterartfile{images/static/Rlogo.png}
 \hypertarget{EDA}{%
 People are born with a fantastic ability to detect patterns. However, sometimes the
 information is hidden and the only way to observe a pattern is to change
-the viewpoint or rearrange the input. In this chapter we will introduce some tools
-to summarize data in order to reveal hidden features. We will also discuss principles of
+the viewpoint or rearrange the input. In this chapter we'll introduce some tools
+to summarize data in order to reveal hidden features. We'll also discuss principles of
 graphical excellence. In the words of Edward Tufte, the guru of data visualization,
 `\textit{Graphical excellence consists of complex idea communicated with clarity, precision,
 and efficiency.}'
@@ -12,48 +12,526 @@ and efficiency.}'
 
 %https://python-graph-gallery.com/barplot/
 
-\hypertarget{plots}{%
-\section{plots}}
-In this section we will use two Python packages: Matplotlib and Seaborn. Both have excellent features which will help you produce clear and attractive plots, so install them before you read on.
+% \runR{Code/ch2sec1.R}{ch2sec1}%[cache]
 
-In this book we cover several methods to analyze the data with statistical tool. However, it is very important to always look at the data, and this means creating plots and tables in order to understand it better. We call this process ``exploratory data analysis'', or EDA, and it is a critical step which should never be skipped. The type of plot which we generate in each case depends on the data, and usually there is more than one option to choose from. In this chapter we cover several visualization methods, and in subsequent chapters we will see additional ones.
+\hypertarget{TypesOfData}{%
+\section{Types of Data}}
+In this book we cover several methods to analyze data with statistical
+tools. However, it's very important to always look at the data, and this means
+creating plots and tables in order to understand it better. We call this process
+\emph{exploratory data analysis}, or \emph{EDA}, and it's a critical step which should
+never be skipped. The type of plot which we generate in each case depends on the
+data, and usually there's more than one option to choose from. In this chapter
+we cover several visualization methods, and in subsequent chapters we will see
+additional ones.
 
-\subsection{One variable}
+It's useful to think of data as a table in which each row represents one
+individual, and each column corresponds to some characteristic of
+individuals. These characteristics are often called \emph{variables}, because they
+vary across individuals. There are three broad types of variables:
+\begin{itemize}
+\item \emph{Quantitative}: a variable that can take numerical values. It
+  includes two sub-types.
+  \begin{itemize}
+  \item \emph{Continuous}: a variable that can take any value within
+    some range. For example, a person's income can take any value greater than
+    zero. Sometimes the range of values is unbounded (from minus infinity to
+    infinity), and sometimes it is bounded (like age, height, weight).
+  \item \emph{Discrete}: a variable that can take at most a countable number
+    of possible values. For example, the number of distinct chess games. 
+  \end{itemize}
+\item \emph{Categorical}: an individual's characteristic that can only take a finite number of values. For example, sex, marital status, or number of years of education are categorical. The values that a categorical value can take are called \emph{levels}.
+\item \emph{Ordinal}: Categorical variables that have a natural order (like number of years of education).
+\end{itemize}
 
-\subsection{Two variables}
+In \R there are many other types of variables, but they are generally special cases of these three type of variables. Here are some important examples:
 
-To display the relationship between two continuous variables we often use a scatterplot. In Figure \ref{conscatter} we see two variables, $x$ and $y$, and we can see a clear pattern: as $x$ increases, $y$ also increases but we see a cyclical pattern. We can also see that the data is quite noisy. If we draw (in our mind's eye, for now) the line that represents the relationship between $x$ and $y$, the points will be scattered around that line.
+\begin{itemize}
+\item \emph{Dates}: A date is stored in \R as an integer. Arbitrarily, January
+  1, 1970 was set to 0, and the value for each other date is the number of days
+  since 1/1/1970, accounting for leap years. Dates prior to that are given
+  negative values.
 
-\runPython{Code/ScatterPlot.py}{temp}{}
+\item \emph{Boolean}: Some variables are either \lstinline{TRUE} or
+  \lstinline{FALSE}. In the coin-flipping simulation in Chapter~\ref{rintro} we
+  generated a Boolean variable which was \lstinline{TRUE} if a randomly generated
+  number drawn uniformly between zero and one was greater than 0.5, and
+  \lstinline{FALSE} otherwise. Boolean variables are categorical, with two levels.
 
-\begin{figure}
-\begin{center}
-\includegraphics[width=\textwidth]{images/ScaPlot.pdf}
-\caption{Scatterplot}
-\label{conscatter}
-\end{center}
+\item \textit{Character}: When a variable has a finite number of levels, \R
+  allows to make a distinction between a \emph{factor} type and a \emph{character} type. A
+  factor is used when the distinct levels of the variable are meaningful for
+  analysis and plotting. For example, Sex, marital status, and education level
+  are usually used as factors because we are interested in comparing between
+  different levels. On the other hand, names and student IDs are usually of no
+  interest and are only used as labels or identifiers for individuals in the
+  data.
+
+\item \textit{Vectors, matrices, and data frames}: Multiple values of the
+  \textit{same type of variable} (e.g., numeric, factor, etc.) can be combined
+  into a vector via the \lstinline{c()} function or generated via the \lstinline{rep()},
+  \lstinline{seq()}, or random generating functions such as
+  \lstinline{rnorm()}. Similarly, vectors of the \textit{same type} can be combined
+  into a matrix -- a two dimensional rectangular arrangement of values. A data
+  frame is a more general structure -- it's a two dimensional arrangement of
+  values in which within each column it must contain the same type of variables,
+  but different columns can contain different types of variables.
+\end{itemize}
+
+Let's generate some data and store it in a data frame by entering the following code:
+
+\showCode{R}{Code/ch2-01gendat.R}
+\runR{Code/ch2-01gendat.R}{ch2-01gendat}
+
+In \wingding{1} we create a variable called \lstinline{g} in two steps:
+first, we draw a random sample of the same length as that of the vector \lstinline{x}
+from a binomial distribution with probability 0.5. This gives a numeric vector
+in which approximately half the values are 0 and half are 1. Then, we convert it
+to a factor by using the function \lstinline{factor()}. Try entering the command \lstinline{str(g)} 
+in order to see the structure and levels of this variable. In \wingding{2}  we create the
+variable we are interested in, \lstinline{y}, through some formula which we'll
+discuss later. In \wingding{3}  we create a Boolean variable, \lstinline{yL}, which is set
+to \lstinline{TRUE} if the variable \lstinline{y} exceeds the threshold (25) and \lstinline{FALSE}
+otherwise. We then combine the vectors \lstinline{x}, \lstinline{g}, \lstinline{y} and
+\lstinline{yL} into one data frame called \lstinline{df1} (in \wingding{4}).
+
+Enter \lstinline{str(df1)} to see the structure of the data frame \lstinline{df1}. Note that the columns
+in the data frame have different types.
+The last line in the code above should produce the following summary of each column in the data
+frame:
+\inlnR{```print(summary(df1))```}[vbox]
+% \includeOutput{ch2_01gendat}
+
+For numerical variables like \lstinline{x} and \lstinline{y}, \R shows the mean and the
+\emph{five-number summary}: the minimum, the maximum, and the 25th, 50th, and 75th
+percentiles. For categorical variables such as \lstinline{g} and \lstinline{yL} it shows
+the counts in each category. For \lstinline{yL} it also shows that it is a special
+kind of categorical variable, namely, that it's \emph{logical} (Boolean).
+
+In the rest of the chapter we'll  explore the characteristics of
+\lstinline{y} and its possible relationship with other variables. In real life, we
+never know the formula that generates a variable, so for now, let's pretend that we
+don't have access to line \wingding{2} in the code above, and we're just given the data frame 
+\lstinline{str(df1)} without any hint about how it was generated.
+
+Let's see how we might analyze the variable \lstinline{y} by using some plots, including 
+a \emph{boxplot}, a \emph{histogram}, and a \emph{scatterplot}.
+
+%% lists?
+
+%as.numeric(as.Date("1970-01-01"))
+%as.numeric(Sys.Date())
+
+\hypertarget{Plots}{%
+\section{Plots}}
+
+\subsection{Boxplot}
+Using the data we generated in the previous section, we start by plotting
+\lstinline{y}. One of the simplest graphical representation of numerical variables is the boxplot which was
+introduced in Chapter~\ref{rintro}, and is constructed from the \emph{five-number
+summary}. Enter the following code:
+\showCode{R}{Code/ch2-02boxplot.R}[2][3]
+\runR{Code/ch2-02boxplot.R}{ch2-02boxplot}
+
+We can see the boxplot in Figure~\ref{boxploty}.
+Note the usage of the arguments \lstinline{axes}, \lstinline{border}, and \lstinline{col} of the \lstinline{boxplot} function, which are
+optional, but improve the way the plot looks. The \lstinline{axes=F} option means
+that the x and y axes are not shown. When we later execute \lstinline{axis(2)} we explicitly draw the
+only vertical axis (if we wanted to add the horizontal one, we would use \lstinline{axis(1)}.)
+Try changing the values in these arguments. To see which colors are available, you
+can run the \lstinline{colours()} function.
+
+\begin{figure}[H]
+\includegraphics[width=0.6\textwidth]{images/chapter_2/boxploty.pdf}
+\caption{A boxplot}
+\label{boxploty}
 \end{figure}
 
-The actual relationship between $x$ and $y$ in this example is $y=1.6x+2\sin(3x)$, plus an additional random noise which is drawn from a standard normal distribution (with location 0 and scale 1). The code that was used to generate this plot is as follows:
+What can we learn from this boxplot? Besides the five-number summary which is
+depicted graphically, we can see that the distribution of \lstinline{y} is
+approximately symmetric, and there are no outliers. However, we can't say much
+more about how \lstinline{y} is distributed.
 
-\showCode{python}{Code/ScatterPlot.py}
+\subsection{Histogram}
+Another way to look at the distribution of a single numeric variables is to draw
+a histogram, as we did in Chapter \ref{rintro}. A histogram is constructed by
+\R by dividing the range of a variable into \emph{bins}, and simply count the number
+of observations in each bin. These counts are depicted as vertical bars. This is done with the \lstinline{hist()} function, like so:
+\showCode{R}{Code/ch2-03hist.R}[2][2]
+\runR{Code/ch2-03hist.R}{ch2-03hist}
 
-In line \#3 we create a sequence of points between 0 and $4\pi$, in jumps of 0.01. These are our $x$ values. For each $x_i$ in this sequence, we calculate $y=1.6x + 2sin(3x)$ and add the random (standard normal) noise.
-We use a shorthand notation for the \texttt{matplotlib.pyplot} module and call it \texttt{plt}. This is just used to save us extra typing. The, we can create the scatterplot in line \#5 by using the \texttt{plt.plot} function. Setting the line style to blank means that the points will not be connected to each other with a line. The marker argument allows us to choose the shape of the points. Then, we simply add the axes labels. Finally, note that in order to save the figure to a file we us the \texttt{savefig} function, but if we wanted to view it on the screen, we would use the \texttt{show} function.
+Again, notice the usage of the function's arguments. For example, \lstinline{breaks}
+determines the number of bins, and \lstinline{col} and \lstinline{border} determine the
+color of the interior and edges of each bin, respectively. The \lstinline{main=""} option is used
+in order to remove the title of the plot. The result is shown in
+Figure~\ref{histy}.
+Try changing the values given in these arguments. What happens when you set \lstinline{breaks} to be
+smaller, or larger?
+
+\begin{figure}[H]
+\includegraphics[width=0.6\textwidth]{images/chapter_2/histy.pdf}
+\caption{A histogram}
+\label{histy}
+\end{figure}
+
+The histogram gives us more information than the boxplot. It shows a more
+detailed picture of the distribution and, in this particular case we see that
+although the distribution is indeed approximately symmetric, it's also bi-modal
+--- it has two noticeable peaks which we cannot see with a boxplot.
+
+Is this enough? Can we use this plot to come up with a plausible explanation for
+the particular shape of the distribution? If we have more variables we can try
+to see if our variable \lstinline{y} is somehow related to any of the other
+variables, which is what we'll do next.
+
+\subsection{Side by Side Boxplots}
+In addition to \lstinline{y}, we have a categorical variable called \lstinline{g}. To see
+if it's related to \lstinline{y} we can show one boxplot for each level of the
+factor \lstinline{g}, which, in this case means two side-by-side boxplots. The syntax
+to do this is as follows:
+
+\showCode{R}{Code/ch2-04sidebox.R}[2][5]
+\runR{Code/ch2-04sidebox.R}{04sidebox}
+
+The notation \lstinline{y ~ g} 
+means `show how \lstinline{y} varies by \lstinline{g}'. Again, we suppress the axes and
+show only the vertical one. We also suppress the label of the x-axis by using
+\lstinline{xlab=""}. For each level of the factor \lstinline{g} we use a different
+combination of border and interior colors. 
+
+We set the vertical range of the plot
+using \lstinline{ylim=c(min(y), max(y)*1.1))}, so that it will have some extra space
+at the top of the figure. By default, \R sets the vertical range of the histogram to be 
+between zero and the maximum count across the bins. In this example, we set the maximum
+height to be 10\% more than the maximum counts (by using \lstinline{max(y)*1.1}.)
+We use this extra space at the top to put the labels for each group
+with the \lstinline{text()} function, which we describe next. 
+
+The first argument of the \lstinline{text()} function contains the x-coordinates of
+the text. In this case we have two values: 1 and 2. Why not 0 and 1, which are
+the actual levels of the factor \lstinline{g}? This is because, within \R levels of
+factors are stored numerically from 1 to the number of levels of the factor. The
+ordered is determined alphabetically by default, so 0 is represented as 1, and 1
+as 2.
+
+The second argument of the \lstinline{text()} function contains the y-coordinates of the text. 
+The vertical position of the text is set to \lstinline{max(y)*1.05}, so that
+it does not cover the boxplots but it's also below the upper limit for the \lstinline{y}-range.
+
+The third argument of the \lstinline{text()} function is the actual text we want to display, and it's followed by
+\lstinline{cex=0.6} which sets the font size to be 60\% of the default value (which is set internally by \R). The result is shown 
+in Figure \ref{sidebysidebp}.
+
+\begin{figure}[H]
+\includegraphics[width=0.6\textwidth]{images/chapter_2/sidebysidebp.pdf}
+\caption{Side by side boxplots}
+\label{sidebysidebp}
+\end{figure}
+
+Is there a difference between the distributions of  \lstinline{y} across the two groups, as determined by the variable \lstinline{g}? It's
+not entirely clear. The medians are about the same but the box of group 2 is
+slightly elevated. We'll try to use additional plots and other variables that are available to us in order to understand the properties of  \lstinline{y}.
+
+\subsection{Overlayed Histograms}
+
+We can also plot a histogram for each group. We can do it in two plots, or in
+one, which makes the comparison between the groups easier. To do that we use the
+following code. The result is depicted in Figure~\ref{histoverlay}.
+\showCode{R}{Code/ch2-05histoverlay.R}[2][6]
+\runR{Code/ch2-05histoverlay.R}{05histoverlay}
+
+The bracket syntax, as in \lstinline{y[g==0]}, is used to define a \emph{subset} of the data. For example, 
+in the first line we draw a histogram of \lstinline{y} only for rows in the data in which the value of \lstinline{g} is zero,
+and in the second line we do it for the ones with \lstinline{g} equal to 1.
+
+Because the range of values of \lstinline{y} is different in the two groups (based on the value of \lstinline{g}), 
+we use the \lstinline{xlim} argument to make sure that the range of the horizontal
+axis will be sufficient in order to show all the data. Go ahead and try removing the  \lstinline{xlim} argument, and see what happens.
 
 
+The second time we call \lstinline{hist} we use the \lstinline{add=TRUE} option, which
+means that the second plot will be drawn on top of the first one. If we didn't use this option,
+the second histogram will be drawn in a new figure. Try it without the \lstinline{add=TRUE} option.
 
-Try running this code, but with the following changes:
+In order for the second histogram not to hide the first one, we set the color of the second
+histogram to be partially transparent. To do that, we have to specify the color
+in RGB (Red, Green, Blue) format. Every color can be constructed as a mixture of
+these three base colors. Computers use 256 levels (from 0 to 255) for each of
+the base colors, and they represent them as hexadecimal numbers (base 16,
+instead of the familiar decimal, or base 10 which we use in our daily lives.) It
+may be slightly awkward to think in hexadecimal but  \R has functions to help you do that. Suppose we want to use the
+color \emph{navyblue}. If we run \lstinline{col2rgb("navyblue")} we get the numbers 0,0,
+and 128, which means that the mixture has 0 red, 0 green, and the intensity for
+the blue is 128 out of 255 (which is 90 in hexadecimal notation). We then run \lstinline{rgb(t(col2rgb("navyblue"))/255)} and get
+\#000080. Each pair of digits corresponds to the three base colors. Then, to add
+transparency we can do \lstinline{rgb(t(col2rgb("navyblue"))/255, alpha = 0.5)}. Using the  \lstinline{alpha} argument adds adds to hexadecimal digits to the representation of the chosen color. In our example,
+ with \lstinline{alpha=0.5} we get \#00008080. For complete transparency
+we use \lstinline{alpha=0}, and for no transparency we use \lstinline{alpha=1}.
+
+What did we learn from the overlayed histograms? This plot helps to see that there really is a difference between the groups,
+and the blue histogram is similar in shape to the one in orange, but more
+shifted to the right. The bi-modality is a feature that is common to both groups.
+
+\begin{figure}[H]
+\includegraphics[width=0.6\textwidth]{images/chapter_2/histoverlay.pdf}
+\caption{Overlaid histograms}
+\label{histoverlay}
+\end{figure}
+
+
+\subsection{Scatterplot}
+Next, we want to see if the variable \lstinline{y} is related to \lstinline{x} in some
+way. Since both are continuous variables, we can display the relationship
+between them with a \emph{scatterplot}. In the following code we use the \lstinline{plot()}
+function, which \R infers to mean a scatterplot of the first argument \lstinline{x}
+vs. the second, \lstinline{y}, because both are continuous. The other arguments to
+the function should be familiar by now.
+\showCode{R}{Code/ch2-06scatter.R}[2][4]
+\runR{Code/ch2-06scatter.R}{ch2-06scatter}
+
+In the left panel of Figure~\ref{scatter} we can see an interesting pattern
+which we could not observe in the previous plots. First, there seems to be a
+cyclic pattern. Second, in the first half of the x-range, \lstinline{y} appears to
+remain constant (except for the cyclic pattern). However, in the second half we
+see that there is a distinct `jump' which is followed by an increasing trend.
+We also see that the data is quite noisy. If we draw (in our mind's eye, for
+now) a line that represents the relationship between \lstinline{x} and \lstinline{y}, the
+points will be scattered around that line.
+
+\begin{figure}[H]
+\includegraphics[width=0.48\textwidth]{images/chapter_2/scatter.pdf}
+\includegraphics[width=0.48\textwidth]{images/chapter_2/scatter2.pdf}
+\caption{Scatterplots}
+\label{scatter}
+\end{figure}
+
+\subsection{Adding Dimensions to a Plot}
+So far we saw that there is a complicated relationship between \lstinline{x} and
+\lstinline{y}, and maybe some relationship between \lstinline{g} and \lstinline{y}. Can we put
+all three variables in one plot, and maybe uncover more complex patterns? Yes!
+We can use different colors, shapes, or sizes for each point. For example, we
+can use different colors for each group, like so:
+\showCode{R}{Code/ch2-07scatter2.R}[2][6]
+\runR{Code/ch2-07scatter2.R}{ch2-07scatter2}
+
+First, we use the \lstinline{ifelse()} function to set the color for each group. The
+first argument is the binary rule we use, the second is the value we assign when
+the first argument is TRUE, and the second is the value being assigned when the
+first argument results in FALSE. In this case, all the points for which
+\lstinline{g} is equal to 1, are drawn in navy blue, and all the others in orange.
+
+% \begin{figure}
+% \begin{center}
+% \includegraphics[width=0.6\textwidth]{images/chapter_2/scatter2.pdf}
+% \caption{A scatterplot with group colors}
+% \label{scatter2}
+% \end{center}
+% \end{figure}
+
+The right panel of Figure~\ref{scatter} shows the result. Finally, we can see the
+entire picture. The difference between the groups seems real, because the blue points
+appear higher than the orange ones. In other words, for any fixed value of \lstinline{x},
+the value of \lstinline{y} is likely to be higher if \lstinline{g} is 1 than if \lstinline{g} is 0.
+
+Also, both groups have a clear cyclic pattern and a distinct change-point where the value of \lstinline{y} increases
+abruptly, and then continues to increase as \lstinline{x} becomes larger.
+
+We also added a horizontal reference line at \lstinline{y=30} by using the
+\lstinline{abline()} function. We set its type to dashed, its color to red, and its
+width to 3 times the default width, in order to create a clear visual effect. It
+is also possible to add vertical or slanted reference lines using the same
+function.
+
+We can imagine a hypothetical situation where \lstinline{y} is a temperature of an
+air-conditioned storage facility, with cyclic fluctuations which perhaps
+correspond to the time of day. Then, at some point the A/C system malfunctioned,
+and the temperature increased and then continued an upward trend as heat was
+building up. An alarm was set off as soon as the temperature exceeded the
+threshold of 30.
+
+
+%y <- 3*(x>2*pi)*x + 4*sin(3*x) + 10*(as.numeric(g)-1) + rnorm(length(x), mean = 0, sd = 3)
+
+
+\begin{listhead}
+\item [Exercise~2.1] Try running the simulation code, but with the following changes:
 \begin{enumerate}
-\item Without the $x$ term: \texttt{y = 2*np.sin(3*x) + np.random.normal(loc=0.0, scale=1.0, size=len(x))} 
-\item Without the cyclical term: \texttt{y = 1.6*x + np.random.normal(loc=0.0, scale=1.0, size=len(x))} 
-\item Without the random noise: \texttt{y = 1.6*x + 2*np.sin(3*x)} 
-\item With less noise: \texttt{y = 1.6*x + 2*np.sin(3*x) + np.random.normal(loc=0.0, scale=0.1, size=len(x))} 
-\item With more noise: \texttt{y = 1.6*x + 2*np.sin(3*x) + np.random.normal(loc=0.0, scale=2, size=len(x))} 
-\item Change the coefficients (1.6, 2, and 3). Include negative values in your attempts.
-\item Use a different marker in the plot.
+\item Without the \lstinline{y} term: \lstinline{y <- 10 * (as.numeric(g) - 1) + rnorm(length(x), mean=0, sd=3)}
+\item Without the cyclical term: \lstinline{y <- 3 * (x > 2 * pi) * x +  10 * (as.numeric(g) - 1) + rnorm(length(x), mean=0, sd=3)} 
+\item Without the group term: \lstinline{y <- 3 * (x > 2 * pi) * x +  rnorm(length(x), mean=0, sd=3)} 
+\item Without the random noise: \lstinline{y <- 3 * (x > 2 * pi) * x + 4 * sin(3 * x) + 10 * (as.numeric(g) - 1)} 
+\item With less noise: \lstinline{y <- 3 * (x > 2 * pi) * x + 4 * sin(3 * x) + 10 * (as.numeric(g) - 1) + rnorm(length(x), mean=0, sd=1)} 
+\item With more noise: \lstinline{y <- 3 * (x > 2 * pi) * x + 4 * sin(3 * x) + 10 *(as.numeric(g) - 1) + rnorm(length(x), mean=0, sd=5)} 
+\item Change the coefficients. Include negative values in your attempts.
+\item Use a different marker in the plot (using the \lstinline{pch} option).
 \end{enumerate}
+\end{listhead}
 
 \hypertarget{tables}{%
-\section{Tables}}
+\section{Tabulating and Cross-Tabulating Data}}
+In the previous section we were interested in a continuous variable, and how it
+may depend on other variables, both continuous and categorical. When we want to
+explore and investigate categorical variables we often use tables, or their
+graphical representation.
 
+Let's simulate some categorical data. In the following code we use the \lstinline{rpois()} function to draw random numbers which are all
+non-negative integers (from the Poisson distribution). We then create categories by using the
+\lstinline{cut()} function is used to create \emph{bins} based on ranges of the original values.
+In this example we have 5 cut-points, which define 4 non-overlapping ranges -- \lstinline{[0, 9]}, 
+\lstinline{(9, 12]}, \lstinline{(12, 16]}, and \lstinline{(16, 25]}. Recall that with the notation \lstinline{(a, b]} we define the range of numbers between a and b, including b but excluding a. 
+ 
+
+
+
+\showCode{R}{Code/ch2-08gendat2.R}
+\runR{Code/ch2-08gendat2.R}{ch2-08gendat2}
+
+Use what you learned in the previous section to plot this \lstinline{x}, \lstinline{xcat}, and the relationship between them.  The data can
+also be summarized by using the \lstinline{table()} function, which simply counts the
+total number of observations in each category. Try entering \lstinline{xcat}. It should give the following: 
+
+\inlnR{```print(table(xcat))```}[vbox]
+You can see that there are \inlnR{```cat(table(xcat)[[1]])```} numbers between 0 and 9, and  \inlnR{```cat(table(xcat)[[4]])```} numbers are greater than 16 and less than or equal to 25.
+
+This can be shown graphically by using the \lstinline{barplot()} function as shown in
+Figure~\ref{barplot} (or as a pie chart by using the \lstinline{pie()} function.)
+\showCode{R}{Code/ch2-09barplot.R}[2][3]
+\runR{Code/ch2-09barplot.R}{ch2-09barplot}
+
+This should give the following graph. Try the \lstinline{barplot()} function, and then try
+it again after changing the number of categories by adding or removing \emph{break-points} in the 
+\lstinline{breaks} argument of the \lstinline{cut} function.
+
+\begin{figure}[H]
+\includegraphics[width=0.8\textwidth]{images/chapter_2/barplot.pdf}
+\caption{A barplot}
+\label{barplot}
+\end{figure}
+
+When there is more than one variable we can use cross-tabulation, which is also referred to as a `contingency table'. 
+Cross-tabulation means that we count all the cases in each \emph{combination} of the variables.
+
+Let's create a new variable called \lstinline{ycat}, based on some ranges of a continuous variable called \lstinline{y}:
+\showCode{R}{Code/ch2-10genycat.R}
+\runR{Code/ch2-10genycat.R}{ch2-10genycat}
+
+The function \lstinline{ftable()} (for `flat table') is used to cross-tabulate. In the following output, 
+you can see the counts per each combination of \lstinline{xcat} and  \lstinline{ycat} values.
+\inlnR{```print(ftable(xcat, ycat))```}[vbox]
+
+There are a few things which this table allows us to see quite easily. It is clear that the distribution in each row is different from the other ones. The same thing can be said about the columns. 
+For example, most of the observations in the (0,30] category of the y variable are in (0,9] or (9,12] categories of the x variable. However, most of the data in the (100,300]  column are in the (12,16] or (16,25] rows.
+
+To visualize this table in a plot, we can create a \emph{spine plot}, with 
+the \lstinline{spinogram()} function as in the following code, which shows the table of proportions, 
+rather than counts. The output is depicted in Figure~\ref{spineplot}.
+Because a spinogram uses proportions and not counts, the bars in the plot all have the same \emph{total} width 
+and height (since the proportions must all add to 1), and the dimensions of boxes within each bar represent the proportion of the corresponding cell in the table relative to the total in the row/column of that cell.  Equivalently, we can also summarize this data in the form of a table by using the function \lstinline{prop.table()}.
+\showCode{R}{Code/ch2-11proptable.R}[2][3]
+\runR{Code/ch2-11proptable.R}{ch2-11proptable}
+
+This simulation can represent a hypothetical job market where the x categories
+correspond to years of education, and the y categories to levels of income (in
+\$10,000). The levels for \lstinline{x} correspond to 1: dropped out before
+high-school, 2: attended or finished high school, 3: college student, and
+4: people who studied for an advanced degree. The relationship between the
+continuous-data variables may not be linear (in this case, we know it is
+quadratic because we simulated it this way) and when there is no reason to think
+that there is some simple formula to represent the relationship, or when all we
+have is the categorical data, cross-tabulation is the appropriate way to
+visualize and understand the data.
+
+\begin{figure}[H]
+\includegraphics[width=0.6\textwidth]{images/chapter_2/spineplot.pdf}
+\caption{A spine plot}
+\label{spineplot}
+\end{figure}
+
+Figure~\ref{spineplot} shows that most of the people in this sample belong to \lstinline{x} categories 2 and 3 (the widest
+vertical bars). It also shows that all the people in \lstinline{x} category 1 (no high-school education) are in the lowest income category
+(there is only one color in the left-most column). Furthermore, as the level of education increases,
+ the proportion of high income people increases (the darkest rectangles become taller).
+
+
+
+\hypertarget{beyond}{
+\section{Going further}}
+There is \textit{much} more to learn about effective visualization. There are
+many plotting tools and packages which greatly enhance the number of
+possibilities for data visualization. In \R, one can use the very popular and
+feature-rich ggplot2 package \citep{ggplot2}, and other ones such as plotrix
+\citep{plotrix}, gplots \citep{warnes2016package}, plotly \citep{plotly}, etc. 
+You should also explore graphical tools in other languages can be used. For example, Matlab and Python use the very comprehensive and aesthetic matplotlib package, and for interactive plots you may find JavaScript to be very attractive with its many excellent graphing options.
+
+Regardless of which tools you use, the important thing to keep in mind is that effective data visualization is critical and sometimes more persuasive than formal statistical analysis. We want to conclude this chapter with a few important takeaways.
+
+\begin{itemize}
+\item Good visualization is almost always multivariate: we learn a lot when we
+  compare and contrast things. Side by side boxplots, scatterplots, and
+  cross-tabulation are a few techniques to allow us to put things in
+  perspective.
+
+  % overlayed histogram, density
+\item It is critical that the plot, table, or summary of the data is accurate
+  and honest. Show the data and insights obtained from the visualization without
+  introducing any bias. For example, if you exclude points or rescale the plot,
+  you must have a good reason to do so, and make this decision known to the
+  audience of your visualization.
+
+\item Always strive to produce effective data visualization, so that the
+  conclusions are conveyed clearly and with little mental effort on the part of
+  the reader. This will often require a substantial mental effort on your
+  part. Do not assume that a graph that you find clear and effective also works
+  for other people. Try to show it to many people and improve your presentation
+  by taking into account other peoples' suggestions.
+
+\item Choose the right tool for the job, and make the data the center of
+  attention -- not the bells and whistles that some software allows you to
+  produce. Edward Tufte \citep{Tufte:VisuDispQuanInfo2001} advocated for the principal of
+  maximizing the `information to ink ratio', and Albert Einstein said
+  `everything should be made as simple as possible, but not simpler.'
+
+\item Don't just rely on excellent tools, and don't be lazy -- explore ways to
+  make the visualization better. For example, choosing the type of graph, the
+  point sizes, shapes, or colors, choosing the best scale, can all make a big
+  difference.
+
+\item Finally, we live in an era of big data, and for that we sometimes need to
+  choose plots based on computational constraints. To demonstrate it, consider
+  the following code:
+  \showCode{R}{Code/ch2-12smoth.R}[2][5]
+  \runR{Code/ch2-12smoth.R}{ch2-12smoth}
+
+  We generate 100,000 points \lstinline{(x,y)} and construct a scatterplot (in \wingding{1}, which
+  we commented out). Try running this line. The large number of points may
+  actually hide some of the features of the data. The shape of the function is
+  clear, but the points are so dense that it is hard to see that most of the
+  points actually lie close to the center of the point-cloud. When we plot a smooth
+  version of the scatterplot as in \wingding{2} we get a much nicer plot, which we show in
+  Figure~\ref{smooth}. Furthermore, the smooth scatterplot saves us a lot of
+  space. In this example with 100,000 points, when we save the the plots in pdf
+  format, the simple scatterplot takes 44MB, while the smooth version is more
+  than 2000 time smaller and takes only 18kB. In real life you will come across
+  much larger datasets, and then the size of the plot (in bytes) will make a big
+  difference. It may take a long time to download a plot on the Internet, and
+  for the viewer (like Adobe) to show it on the screen, or to print it.
+\end{itemize}
+\begin{figure}[H]
+\includegraphics[width=0.6\textwidth]{images/chapter_2/smooth.pdf}
+\caption{A smooth scatterplot}
+\label{smooth}
+\end{figure}
+
+
+\section{Summary}
+In this chapter we described how to visualize data by using plots, tables, or summary statistics. 
+The process of exploratory data analysis is critical to understanding the data, and to communicating 
+results.
+In the next chapter we will introduce probability --- the mathematical basis for all statistical reasoning.
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-command-extra-options: "-shell-escape"
+%%% TeX-engine: xetex
+%%% TeX-master: "../sidsmain.tex"
+%%% End:

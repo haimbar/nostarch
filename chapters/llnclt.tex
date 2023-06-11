@@ -1,9 +1,9 @@
 \hypertarget{ch:llnclt}{%
 %  \chapter{The Law of Large Numbers and the Central Limit Theorem}\label{ch:llnclt}}
 \chapter{Towards the End of the Horizon}\label{ch:llnclt}}
-\chapterartfile{images/dnormplot.pdf}
+\chapterartfile{images/static/Rlogo.png}
 Benjamin Franklin once said `In this world nothing can be said to be certain, except death and taxes'. Still, for all the uncertain things in life, and especially in science where most theories cannot be proven correct, we would like to be able to say something about how confident we are about a conclusion we draw. To do that, scientists conduct an experiment in which they collect data and check if it provides evidence in favor or against a proposed theory.
-This chapter describes two of the most important results in probability and statistics -- the law of large numbers and the central limit theorem. These theorems explain why statistics works and is useful in so many situations! They tell us that, if we collect enough data (and conduct a sensible experiment) we will be able to say to what extent we can trust our results, and also tell us how much data we need in order to draw conclusions with a certain degree of confidence. Without these results, conducting experiments would be meaningless, no matter how many samples are collected.
+This chapter describes two of the most important results in probability and statistics --- the law of large numbers and the central limit theorem. These theorems explain why statistics works and is useful in so many situations! They tell us that, if we collect enough data (and conduct a sensible experiment) we'll be able to say to what extent we can trust our results, and also tell us how much data we need in order to draw conclusions with a certain degree of confidence. Without these results, conducting experiments would be meaningless, no matter how many samples are collected.
 
 \section{Introduction}
 Let's start with a few simple examples which will be used in this chapter:
@@ -12,32 +12,142 @@ Let's start with a few simple examples which will be used in this chapter:
 How likely is it that we find a person with IQ greater than 150?\\
 In order to be accepted to the Mensa club a person has to be in the top 2\% of the IQ distribution. What is the minimum score required in order to be a Mensa member?
 \item The pockets of the roulette wheel are numbered from 0 to 36. In number ranges from 1 to 10 and 19 to 28, odd numbers are red and even are black. In ranges from 11 to 18 and 29 to 36, odd numbers are black and even are red. There is a green pocket numbered 0 (zero). Suppose you want to bet on a color, say, red, and if the ball lands in a red pocket your payoff is twice your bet, and otherwise you lose your bet. What is the probability you win? What is your expected payoff? Suppose you have \$10,000, and you bet one dollar each time. How much money will you win or lose?.
-\item Suppose that you get a text message every 6 minutes (a rate of 10 per hour), and suppose that they arrive independently of one another, according to a Poisson distribution. How many messages do you expect to get on an average day, between 8am and 8pm? 
+\item Suppose that you get a text message every 6 minutes (a rate of 10 per hour), and suppose that they arrive independently of one another, according to some presumed distribution. How many messages do you expect to get on an average day, between 8am and 8pm? 
 %\item \hb{homework question?}As of June 16, 2021 Tony Snell from the Atlanta Hawks leads the NBA in 3pt accuracy with 53.8\%.
 %If he takes 3pt 10 shots per game over the next 10 games, how many three-point shots do you expect him to make?
 \end{enumerate}
 
 The main paradigm in statistical inference and prediction in order to answer such question is to take a sample from the population we're interested in, and choose a mathematical model which we believe represents the whole population. Then we check if our model appears to reasonable, in the sense that it fits the data well. If it does, we can use the mathematical properties of the model to draw conclusions about the population. By representing the sample using a mathematical (probabilistic) formula, we essentially augment a finite sample to an infinite one. Working with a formula/model for the data allows us to use the `heavy artillery' of math, like finding maximum/minimum, computing areas under the curve of the function, and so on. 
 
-This chapter deals with inference which can be derived from the mean of a population, and we show the (arguably) two most important results in statistics -- the law of large numbers (LLN), and the central limit theorem (CLT). Together, these two very general theorems make it possible to draw conclusions about the whole population, from a single sample! (as long as the sample size is large enough).
+This chapter deals with inference which can be derived from the mean of a population, and we show the (arguably) two most important results in statistics -- the \emph{law of large numbers} (\emph{LLN}), and the \emph{central limit theorem} (\emph{CLT}). Together, these two very general theorems make it possible to draw conclusions about the whole population, from a single sample! (as long as the sample size is large enough).
 
 
 \section{The Law of Large Numbers}
 
-\input{Rnw/LLNCLT1}
+\subsection{Example \#1 -- the IQ score}
+%We get a random sample of 200 people and give them an IQ test. From this sample, we want to infer the true distribution in the entire population.
 
-\input{Rnw/LLNCLT2}
+Suppose that the IQ in the general population has a normal distribution with mean of 100 and  standard deviation of 15, and from this population we draw 200 people, and calculate the sample mean and standard deviation, like so:
 
-\input{Rnw/LLNCLT3}
+\showCode{R}{Code/llnclt_IQ.R}[1][3]
+\runR{Code/llnclt_IQ.R}{llnclt_IQ}
 
-\subsection{The LLN -- an intuitive statement of the theorem}
+Run this code. You should get that the sample mean is \inlnR{```cat(mean(samp1))```} and the standard deviation is \inlnR{```cat(sd(samp1))```}. Both are very close to the true values.
+
+Let's pretend that just like in real life, we don't know the true distribution. So, we propose a certain distribution and check if it fits. In the current example,  which we called \lstinline{samp1}, we want to check if the normal distribution is a good model for our data.
+
+One way to check if a distribution fits our data is with a graphical tool called
+the \emph{Q-Q plot}. A Q-Q plot is based on the simple (and very important) idea that a distribution is determined by its \emph{quantiles} (percentiles), 
+so if the quantiles of our sample match the quantiles of the assumed distribution, then the assumption is reasonable. Recall that we defined the quantiles in Chapter \ref{introdistributions}, so that the $q$-th quantile is a number $x_q$, such that $q\times 100\%$ of the data are less than or equal to $x_q$.
+In our example the data has  \inlnR{```cat(n)```} data points, so we can get \inlnR{```cat(n)```} quantiles from our sample. If we draw the same number of random numbers from the correct distribution, then their quantiles will match the quantiles we got from our data (they will only match approximately, because when we draw finite, random samples, there is always some `noise'.)
+
+When it's assumed that the data come from a normal distribution, we can use the \lstinline{qqnorm()} function to check if the assumption is reasonable:
+\showCode{R}{Code/llnclt_IQ.R}[7][8]
+
+The points in the Q-Q plot in Figure \ref{qqplot1} shows the actual quantiles (from the data, \lstinline{samp1}) vs. the theoretical quantiles (those that would be obtained if we drew from a normal distribution). The points in the graph lie very close to a straight line, indicating that the sample  was  likely drawn from a normal distribution (here, this is not surprising because we generated it this way. However, when we get a random sample and we do not know the true distribution, this plot is useful to check whether our mathematical model is reasonable.)
+
+\begin{figure}[H]
+\includegraphics[width=0.6\textwidth]{images/chapter_4/qqplot1.pdf}
+\caption{A Q-Q plot}
+\label{qqplot1}
+\end{figure}
+
+
+
+To understand what the Law of Large Numbers says, let's repeat the previous simulation but vary the sample size ($n$) and see what happens to the \emph{sample mean} as we increase $n$.
+
+\showCode{R}{Code/llnclt_IQ.R}[12][22]
+
+In \wingding{1} we create a vector of sample sizes. We will generate a random sample for each of these \lstinline{ns}. In \wingding{2} we initialize a vector which will hold all the sample means (at first, they are set to zero). The \lstinline{for} loop in \wingding{3} is the same as the previous demonstration, but in each iteration we increase the sample size, which is the first argument of the function \lstinline{rnorm()}. The mean from the $i$-th sample is stored in the $i$-th position of the vector \lstinline{allMeans} (in \wingding{4}.)
+
+Figure \ref{LLNdemo} shows the results. We can see that as $n$ increases, the sample mean gets closer to the true mean (100, in our simulation), which is shown as a horizontal line.
+
+\begin{figure}[H]
+\includegraphics[width=0.5\textwidth]{images/chapter_4/LLN_IQ.pdf}
+\caption{Visualizing the Law of Large Numbers -- normal data}
+\label{LLNdemo}
+\end{figure}
+
+We also see in Figure \ref{LLNdemo} that the dispersion of the sample means gets smaller and the sample size gets larger, but this is the result of the \emph{Central Limit Theorem}, which will be discussed later in this chapter.
+
+\subsection{Example \#2 -- the Roulette Wheel}
+Here, the outcome is binary -- we either win or lose. The probability of winning if we choose the red color, is $18/37$.
+Let's simulate 40 bets at the roulette wheel, where, in each we put a dollar on red. Each bet is won with a Bernoulli distribution, $Ber(18/37)$ and we repeat it 40 times. Equivalently, we can look at it as a single binomial sample, with $n=40$ and $p=18/37$.
+
+\runR{Code/llnclt_roulette.R}{roulette}
+\showCode{R}{Code/llnclt_roulette.R}[1][4]
+
+Run this code. You should get in this particular sample of 40 bets, that the probability of winning (the mean of \lstinline{samp2}) is \inlnR{```cat(mean(samp2))```} (greater than 0.5.) This seems great -- if we keep going we might get rich! However, let's see what happens to the sample mean (which is the probability of winning) as we increase $n$. The following code is nearly identical to the one used in the previous example, except that in this case we draw the random samples from a \emph{binomial} distribution (in \wingding{1}.)
+
+\showCode{R}{Code/llnclt_roulette.R}[7][17]
+
+We see the results in Figure \ref{LLNdemoBinomial}. As before, the sample mean gets closer to the true mean of the distribution, which is $p=18/37$, which is less than 0.5, so if we keep placing bets we will end up losing money. In fact, we can check how much we will lose if we bet \$1 each time, and do it 10,000 times.
+
+\begin{figure}[H]
+\includegraphics[width=0.5\textwidth]{images/chapter_4/LLN_roulette.pdf}
+\caption{Visualizing the Law of Large Numbers -- binomial data}
+\label{LLNdemoBinomial}
+\end{figure}
+
+To simulate what will happen if we play the roulette table 10,000 times, each time putting a dollar on red, run the following code:
+
+\showCode{R}{Code/llnclt_roulette.R}[20][24]
+
+The probability of winning in this simulation should be \inlnR{```cat(mean(roulette))```}. We bet on \$10,000 and we won \inlnR{```cat(sum(roulette))```} times, so our winnings amounted to \inlnR{```cat(prettyNum(2*sum(roulette), big.mark = ","))```} dollars, which means that we lost  \inlnR{```cat(prettyNum(10000-2*sum(roulette), big.mark = ","))```} dollars.
+
+To the casino it doesn't matter if one person bets \$1,000,000 or if 1,000 people each bets on \$1,000 -- in both cases the casino will win with probability 19/37 and will have a positive net gain (you can't beat the house). Casinos know that, and use the law of large numbers in order to ensure that in the long run, they will win.
+
+
+\subsection{Example \#3 -- Receiving Text Messages}
+Let's simulate $n$ days, and in each one count the number of messages, assuming they arrive independently from a Poisson distribution with rate=10. To do that, run the following code:
+
+\runR{Code/llnclt_texts.R}{texts}
+\showCode{R}{Code/llnclt_texts.R}[2][10]
+
+In each day we count messages over 12 hours, so in \wingding{1} we multiply the (hourly) random sample from the Poisson distribution by 12. Figure \ref{LLNdemoPoisson} shows the results.
+
+\begin{figure}[H]
+\includegraphics[width=0.5\textwidth]{images/chapter_4/LLN_texts.pdf}
+\caption{Visualizing the Law of Large Numbers -- Poisson data}
+\label{LLNdemoPoisson}
+\end{figure}
+
+If we continue to get text messages at this fixed rate over a long period of time, and we calculate the average daily messages (from 8am to 8pm) we see that that average converges to 12*10=120 messages per day.
+
+
+
+\subsection{The LLN -- an Intuitive Statement of the Theorem}
 Informally, the law of large number states that the results of an experiment tend to settle down to a fixed average when the experiment is repeated many times. In other words, as the sample size increases, the sample mean will get closer to the true population mean.
 
-The LLN is very general -- it doesn't matter if the question is about how many boy-births we expect to see (`binomial distribution') or if we measure IQ (`normal distribution'). The only requirements are that the samples are independent, and identically distributed, and that the true distribution actually has a mean. (We will see an example where this is not the case.)
+The LLN is very general -- it doesn't matter if the question is about how many boy-births we expect to see (\emph{binomial distribution}), the number of received text messages (\emph{Poisson distibution}), or if we measure IQ (\emph{normal distribution}). The only requirements are that the samples are independent, and identically distributed, and that the true distribution actually has a mean. (We will see an example where this is not the case.)
 
-It is important to emphasize that the LLN does not imply that the results of future experiments will balance out what already happened! If we bet 100 times at the roulette wheel and lost each time, this does not mean that we have a better chance of winning the next bet. All the LLN is saying is that if we continue to play many times, the overall probability that we win in each round will converge to 18/37.
+It's important to emphasize that the LLN does not imply that the results of future experiments will balance out what already happened! If we bet 100 times at the roulette wheel and lost each time, this does not mean that we have a better chance of winning the next bet. All the LLN is saying is that if we continue to play many times, the overall probability that we win in each round will converge to 18/37.
 
-\input{Rnw/LLNCLT4}
+\subsection{Example \#4 -- When the LLN Doesn't Work}
+We have two groups of students who have to take a math test. Group A has a mean score of 70 and a standard deviation of 10, while group B has mean 60 and standard deviation 20. Both groups have a normal distribution.
+We take a sample of size $n$ from each group and calculate the sample means. Then, we calculate the difference between the sample means, $d_{AB}=\bar{x}_A-\bar{x}_B$, and the ratio between the means, $r_{AB}=\bar{x}_A/\bar{x}_B$.
+As before, we increase the sample size and see how it affects $d_{AB}$ and $r_{AB}$.
+
+\runR{Code/llnclt_Cauchy.R}{texts}
+\showCode{R}{Code/llnclt_Cauchy.R}[2][19]
+
+In \wingding{1} and \wingding{2} we generate the samples from the two groups (both follow a normal distribution), with the same sample size. In the for loop we vary the sample size to go from 50 to 5,000 in jumps of 10. In \wingding{3} and \wingding{4} we calculate the difference and the ratio between the mean scores in the two groups, respectively. In \wingding{5} and \wingding{6} we keep the calculated values $d_{AB}$ and $r_{AB}$ in vectors called \lstinline{allDiffs} and \lstinline{allRatios}, which are then used in the \lstinline{plot()} function.
+
+
+Figure \ref{LLNdemoCauchy}, which is what you should get after running the code,  shows the distributions of the difference between the average grades ($d_{AB}$) on the left, and of the ratio ($r_{AB}$) on the right.
+What we see here is that the mean difference between the groups, $d_{AB}$, converges to the true difference between the groups (10), but the ratio, $r_{AB}$, does not converge -- $n$ can be as large as we want, and we will still see ratios that are quite extreme. (Note that the mean of a ratio between two distributions is generally not equal to the ratio of the means of the distributions, so we don't expect $r_{AB}$ to converge to exactly 70/60.)
+
+\begin{figure}[H]
+\includegraphics[width=1\textwidth]{images/chapter_4/LLN_Cauchy.pdf}
+\caption{When the Law of Large Numbers fails}
+\label{LLNdemoCauchy}
+\end{figure}
+
+
+What is happening here? The answer is that while a difference between two normal random variables is still normal (and therefore, has a mean), the ratio between two normal distributions follows a \emph{Cauchy distribution} which doesn't have a theoretical mean, so the LLN does not apply to the ratios between the grades of the two groups,  $r_{AB}$.
+
+Although the LLN applies to almost any distribution we will ever encounter, the lesson here is that taking the ratio between two perfectly well-behaved distributions may lead to a distribution to which the LLN does not apply. Other manipulations of random variables may lead to similar results.
+
 
 
 \section{The Central Limit Theorem}
@@ -47,4 +157,179 @@ The central limit theorem (CLT) says that, in many (most) situations, when indep
 
 The CLT requires very little about the actual distribution of the data. The sample has to be i.i.d., and the distribution must have a finite variance. 
 
-\input{Rnw/LLNCLT5}
+\subsection{CLT -- Examples}
+We will draw a random sample of size n from the following distributions:
+\begin{itemize}
+%\item Standard normal (the \lstinline{rnorm(n,0,1)} function).
+%\item Poisson with rate parameter $\lambda=3$ (use \lstinline{rpois(, 3)}).
+\item Exponential with rate parameter 5.5 (use \lstinline{rexp(n, 5.5)}).
+\item Binomial with probability 0.15.
+\end{itemize}
+
+In each case, we will plot a histogram of the sample, and overlay the probability density function on top of it.  We will repeat it 10,000 times and each time calculate the sample mean. Then, we will plot a histogram of the 10,000 sample means.
+
+\subsubsection{Exponential distribution}
+
+%<<intro-lln5-0, eval=TRUE, fig.align='center', fig.width=3.5, fig.height=3.5, fig.cap="Simulated data from an exponential distribution." >>=
+%# one iteration to show the actual distribution of the sample (not normal)
+%n <- 100
+%samp <- rexp(n, 5.5)
+%hist(samp, freq = F, breaks=20,main="", xlab="x", border="white") # show the empirical distribution
+%xs <- seq(0, max(samp), length=1000)
+%lines(xs, dexp(xs,5.5), lwd=3, col=2) # show the true distribution
+%@
+
+Notice that the distribution is very skewed, and not at all like a normal distribution.
+To understand the CLT, we will compare the distribution of the 10,000 means for two different sample sizes, 50 and 500.
+
+%<<intro-lln5-1, eval=TRUE, fig.align='center', fig.width=7, fig.height=3.5, fig.cap="The distribution of the sample mean from 10,000 simulated data from an exponential distribution. Left: $n=50$, right: $n=500$" >>=
+%# 10000 iterations - show the distribution of the sample means:
+%n <- 50
+%allMeans <- rep(0, 10000)
+%for (i in 1:10000) {
+%  samp <- rexp(n,5.5)
+%  allMeans[i] <- mean(samp)
+%}
+%par(mfrow=c(1,2))
+%m <- min(allMeans)
+%M <- max(allMeans)
+%hist(allMeans, freq = F, breaks=40, xlim=c(m, M), main="", xlab="Sample mean", border="white", col="orchid")
+%abline(v=1/5.5, lwd=3, col="green")
+%# repeat, this time with a larger sample size:
+%# 10000 iterations - show the distribution of the sample means:
+%n <- 500
+%allMeans <- rep(0, 10000)
+%for (i in 1:10000) {
+%  samp <- rexp(n,5.5)
+%  allMeans[i] <- mean(samp)
+%}
+%hist(allMeans, freq = F, breaks=40, xlim=c(m, M), main="", xlab="Sample mean", border="white", col="orange")
+%abline(v=1/5.5, lwd=3, col="green")
+%par(mfrow=c(1,1))
+%@
+
+The mean is estimated quite accurately in both cases, and the overall shape of the 10,000 sample means has the shape of a normal distribution. However, the spread (variance) of the distribution decreases as the sample size increases.
+
+\subsubsection{Binomial distribution}
+In this example, our data come from a discrete and skewed distribution.
+
+%<<intro-lln5-2, eval=TRUE, fig.align='center', fig.width=7, fig.height=3.5, fig.cap="The distribution of the sample mean from 10,000 simulated data from a binomial distribution. Left: $n=50$, right: $n=500$" >>=
+%# 10000 iterations - show the distribution of the sample means:
+%n <- 50
+%allMeans <- rep(0, 10000)
+%for (i in 1:10000) {
+%  samp <- rbinom(n,1,0.15)
+%  allMeans[i] <- mean(samp)
+%}
+%par(mfrow=c(1,2))
+%m <- min(allMeans)
+%M <- max(allMeans)
+%hist(allMeans, freq = F, breaks=40, xlim=c(m, M), main="", xlab="Sample mean", border="white", col="orchid")
+%abline(v=0.15, lwd=3, col="green")
+%
+%# repeat, this time with a larger sample size:
+%# 10000 iterations - show the distribution of the sample means:
+%n <- 500
+%allMeans <- rep(0, 10000)
+%for (i in 1:10000) {
+%  samp <- rbinom(n,1,0.15)
+%  allMeans[i] <- mean(samp)
+%}
+%hist(allMeans, freq = F, breaks=40, xlim=c(m, M), main="", xlab="Sample mean", border="white", col="orange")
+%abline(v=0.15, lwd=3, col="green")
+%par(mfrow=c(1,1))
+%@
+
+Notice that because p=0.15 is quite small, when n=50 the shape of the distribution of sample means is still a bit skewed, but when n is large the bell shape appears!
+
+\subsubsection{Application to child births -- boy/girl ratio}
+In 2021 the boy to girl birth ratio in the USA is estimated to be 1.05. If we took a random sample of 300 newborns across the USA, how many do you expect to be boys?
+
+%<<intro-lln5-3, eval=TRUE >>=
+%b2g <- 1.05 # B/G
+%# We need B/(B+G)
+%# Since B/G=1.05, B=1.05G, so:
+%pboy <- 1.05/(1+1.05)
+%n <- 300
+%nsim <- 1
+%set.seed(100091)
+%boysInSample <- rbinom(nsim, n, pboy)
+%cat("Prob. boy:", pboy, ". Simulated number of boys in a sample of 300 is:", mean(boysInSample),"\n")
+%@
+
+Would it be very surprising if we actually see 148 in the random sample?\\
+Suppose we took a sample of 3,000, instead. Would is be surprising if we observed 1,480 boys?\\
+How about if we took a sample of 30,000, instead. Would is be surprising if we observed 14,800 boys?
+
+The probability of a boy birth does not depend on the sample size, and we calculated it to be 0.512, so the expected number of boys when the sample size is 300, 3000, and 30000 is 151, 1510, and 15100, respectively. So, it may appear that actually observing 148 instead of 151 is as likely as observing 1480 instead of 1510, or 14800 instead of 15100, but that is not true!
+The CLT tells us that when the sample size increases, the dispersion of the sample means around the true mean gets smaller and smaller. This is demonstrated in the code below. The green vertical line represents the expected number of boys, and the red one represents the observed ones. Notice that as we increase the sample size, the likelihood of the observed number of boys (148, 1480, 14800) gets smaller. When $n=30000$ the red line is well outside the range of the simulated sample means.
+
+%<<intro-lln5-4, eval=TRUE, fig.align='center', fig.width=9, fig.height=3.5, fig.cap="Number of boy births." >>=
+%n <- 300
+%nsim <- 10000
+%par(mfrow=c(1,3))
+%set.seed(100091)
+%boysInSample <- rbinom(nsim, n, pboy)
+%hist(boysInSample, breaks=30,border="white", col="grey66", xlim=c(130,190), freq=FALSE, main="n=300")
+%abline(v=pboy*n, col=3, lwd=3)
+%abline(v=148, col=2, lwd=2)
+%
+%# sample size is 10 times larger:
+%boysInSample2 <- rbinom(nsim, 10*n, pboy)
+%hist(boysInSample2, breaks=30, border="white", col="grey66", xlim=c(1400,1700), freq=FALSE, main="n=3,000")
+%abline(v=pboy*10*n, col=3, lwd=3)
+%abline(v=1480, col=2, lwd=2)
+%# sample size is 100 times larger than the original example:
+%boysInSample3 <- rbinom(nsim, 100*n, pboy)
+%hist(boysInSample3, breaks=30,border="white", col="grey66", xlim=c(14500,16000), freq=FALSE, main="n=30,000")
+%abline(v=pboy*100*n, col=3, lwd=3)
+%abline(v=14800, col=2, lwd=2)
+%par(mfrow=c(1,1))
+%@
+
+\subsection{Summary}
+The LLN and CLT are very powerful results. Keep in mind that in real-life when we do not know the true distribution, we can usually get just \textit{one sample}, not 10,000 like we did in our simulations.
+However, these theorems tell us that as long as this one sample is large enough, we can get a very good approximation for the distribution of the sample mean, if we \textit{could} get multiple samples.
+Not only that, but regardless of the distribution of the data, the sample mean will have a normal distribution with mean which is equal to the true mean of the original distribution (even if it's skewed, or discrete), and the variance of the sample mean will shrink as we increase the sample size. This is very convenient for testing hypotheses and constructing confidence intervals (next chapter).
+
+To conclude, let's revisit the IQ example, where we assumed that in the general population IQ scores have a normal distribution with mean=100 and  standard deviation =15.
+We drew a sample of 200 people, and calculated the sample mean and standard deviation, which turned out to be 99.4, and 15.6, respectively.
+The red curve shows the true density function, and the dashed green one shows the one estimated from the sample of 200 people. They are very close.
+
+%<<intro-lln5-5, eval=TRUE, fig.align='center', fig.width=3.5, fig.height=3.5, fig.cap="Simulated IQ scores." >>=
+%set.seed(95473)
+%n <- 200
+%samp <- rnorm(n, 100, 15)
+%hist(samp, freq=FALSE, main="", xlab="IQ score", border="white", col="lightblue")
+%xs <- seq(40,180, length=1000)
+%lines(xs, dnorm(xs, 100, 15), col=2, lwd=3)
+%lines(xs, dnorm(xs, mean(samp), sd(samp)), col=3, lwd=3, lty=2)
+%@
+
+To answer the question how likely  it is to find a person with IQ greater than 150, we can calculate the area of the right tail of the distribution:
+
+%<<intro-lln5-6, eval=TRUE>>=
+%cat(1-pnorm(150, mean=mean(samp), sd=sd(samp)),"\n")
+%@
+A very select group, indeed.
+
+In order to be accepted to the Mensa club a person has to be in the top 2\% of the IQ distribution. In order to find the minimum score required in order to be a Mensa member, we use the \lstinline{quantile} function, if we want to use the data, or the \lstinline{qnorm} function to get the threshold from distribution of the entire population:
+
+%<<intro-lln5-7, eval=TRUE>>=
+%mensacutoff <- round(quantile(samp,probs = 0.98))
+%cat("Sample quantile:", mensacutoff,"\n")
+%cat("Population quantile:", qnorm(0.98, mean=mean(samp), sd=sd(samp)),"\n")
+%@
+
+We can show it graphically:
+%<<intro-lln5-8, eval=TRUE, fig.align='center', fig.width=3.5, fig.height=3.5, fig.cap="The distribution of IQ's and the acceptance range to the Mensa club." >>=
+%xs <- seq(40,180, length=1000)
+%plot(xs, dnorm(xs, 100, 15), col=2, lwd=2, type='l', axes=F, ylab="", xlab="IQ")
+%axis(1); axis(2)
+%xx <- seq(qnorm(0.98, mean=mean(samp), sd=sd(samp)), 200, length=20)
+%yy <- dnorm(xx, 100, 15)
+%polygon(c(xx, rev(xx)), c(rep(0,length(xx)), rev(yy)), col="green", border="green", lwd=2)
+%@
+
+In chapter \ref{ch:hypothesis} we will see how the CLT can be use to form hypotheses and construct confident intervals. For example, we will be able to answer questions such as: "You are given the IQ test results of 13 people and they are: 139, 104, 115, 151, 116, 141, 117, 105, 134, 155, 130, 139, 121.
+Is this group different than the overall population?"
