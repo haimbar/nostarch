@@ -1,17 +1,16 @@
 set.seed(123)
 n <- 100 # number of prisoners
 prisoners <- 1:n # prisoners' numbers
-# simulate the procedure of randomly open 50 (n/2) drawers
 open.random <- function(prisoners, n=length(prisoners)) {
+    ## simulate the procedure of randomly open 50 (n/2) drawers
     drawers <- sample(1:n, size=n, replace=FALSE)
-    # randomly put prisoners’ numbers in the drawers
+    ## randomly put prisoners' numbers in the drawers
     pardon <- TRUE # initialize pardon to be true
     for (i in prisoners) {
         opens <- sample(drawers, n/2)
-        # randomly open n/2 drawers
+        ## randomly open n/2 drawers
         if (!(i %in% opens)) {
-            # if any prisoner does not find his number
-            # all prisoners die
+            ## if any prisoner does not find his number all prisoners die
             pardon <- FALSE
             break
         }
@@ -20,6 +19,7 @@ open.random <- function(prisoners, n=length(prisoners)) {
 }
 
 open.smart <- function(prisoners, n=length(prisoners)) {
+    ## simulate the procedure of smartly open 50 (n/2) drawers
     drawers <- sample(1:n, size=n, replace=FALSE)
     pardon <- TRUE
     for (i in prisoners) {
@@ -39,7 +39,8 @@ open.smart <- function(prisoners, n=length(prisoners)) {
     }
     return (pardon)
 }
-# survival probability of randomly open
+
+## survival probability of randomly open
 print(mean(replicate(10000, open.random(prisoners))))
-# survival probability of using the better strategy
+## survival probability of using the better strategy
 print(mean(replicate(10000, open.smart(prisoners))))

@@ -3,7 +3,7 @@
   \label{ch:probability}}
 
 \chapterartfile{images/static/Black_Dice_PNG_Clip_Art-2653.png}
-\hypertarget{Rintro}{The world is random and probability is a tool to quantify the randomness. It is the mathematical basis for all statistical reasoning. It helps us to determine how likely it is that we'll win a lottery, or the chances that our town will be hit by an earthquake in the next month.
+\hypertarget{Randomworld}{The world is random and probability is a tool to quantify the randomness. It is the mathematical basis for all statistical reasoning. It helps us to determine how likely it is that we'll win a lottery, or the chances that our town will be hit by an earthquake in the next month.
 However, probability theory can be confusing and even counter-intuitive in some cases. In this chapter we review basic concepts in probability, we show some examples in which our intuition may fail us (and even the best mathematician), and provide guidance how to avoid common errors in probabilistic thinking.}
 
 \hypertarget{probability}{%
@@ -29,7 +29,6 @@ six possible outcomes. The event $E$ of rolling an even number is represented
 by the inner, rounded rectangle  that contains the numbers 2, 4, and 6.
 
 \begin{figure}[htbp]
-\centering
 \begin{tikzpicture}
   \draw (-2, 2) rectangle (2, 0);
   \draw[rounded corners=10pt, fill = cyan!20, draw=blue] (-0.7,0.1) rectangle ++(2.5,0.8);
@@ -69,7 +68,7 @@ We can simulate this situation:
 
 \showCode{R}{Code/probability-elevator.R}
 \runR{Code/probability-elevator.R}{elevator}{}
-Running the above code gives:
+Running the above code should give:
 \includeOutput{elevator}
 
   
@@ -82,7 +81,6 @@ Using mathematical notation, we write  $P(B\mid A)=1/3$ which stands for ``condi
 Once again, it is helpful to visualize such things using a Venn diagram. In Figure~\ref{fig:probability-conditional}, the sample space $S$ consists of the six possible outcomes and the two events are depicted as a circle (event $A$) and as a rounded rectangle ($B$). To say that we condition on $A$ means that we restrict our view and look only at outcomes that could occur if we are told that $A$ has occurred. In other words, our sample space becomes $A$, instead of the whole set, $S$.
 
 \begin{figure}[htbp]
-\centering
 \begin{tikzpicture}[thick,fill opacity=0.5]
   \draw (-2, 2) rectangle (2.5, -0.5);
 \draw[fill=MidnightBlue!80, draw=MidnightBlue] (-0.5, 1.05) circle (0.8);
@@ -103,9 +101,21 @@ $$P(B\mid A) = P(B)\,.$$
 
 For example, Abby rolls a fair die, while her roommate Amelia tosses a fair coin at the same time. If $A$ is the event `Abby got a 6' and $B$ is the event `Amelia got Heads', then $P(B\mid A) = 1/2$ because Abby's result has no impact on Amelia's. 
 
-Sometimes establishing that two events are independent is harder. For example, in general, the probability that Abby gets a text message within any given hour is 0.7, and Amelia's is 0.6. Given that Abby got a text between 8 and 9am, does it change the probability the Amelia got a text during the same hour? It may depend on other (latent) events. For example, if they are late paying the rent, then it is quite reasonable that Amelia will get a text from their landlord at approximately the same time as Abby.
+Sometimes establishing that two events are independent is harder. For example,
+in general, the probability that Abby gets a text message within any given hour
+is 0.7, and Amelia's is 0.6. Given that Abby got a text between 8 and 9am, does
+it change the probability that Amelia got a text during the same hour? It may
+depend on other (latent) events. For example, if they are late paying the rent,
+then it is quite reasonable that Amelia will get a text from their landlord at
+approximately the same time as Abby. 
 
-Another related notion is that of `mutually exclusive' events. For example, if $A$ =  the Golden State Warriors will win the NBA championship next season, and $B$ = the Boston Celtics will win the NBA championship next season, then these events cannot occur at the same time. Mutually exclusive are not independent. In this example, if we somehow know that  $A$ will happened, then we know for sure that $B$ will not. Moreover, if we assign a probability of 0.6 that the Golden State Warriors will win, then we know that $P(B)\le 0.4$. 
+Another related notion is that of `mutually exclusive' events. For example, if
+$A$ =  the Golden State Warriors will win the NBA championship next season, and
+$B$ = the Boston Celtics will win the NBA championship next season, then these
+events cannot occur at the same time. Mutually exclusive are not independent. In
+this example, if we somehow know that $A$ has happened, then we know for sure
+that $B$ will not. Moreover, if we assign a probability of 0.6 that the Golden
+State Warriors will win, then we know that $P(B) = 0.4$. 
 
 \begin{example}[Two Children]
 Consider the following two problems:
@@ -116,8 +126,10 @@ Consider the following two problems:
   probability that both children are girls?
 \end{enumerate}
 \end{example}
-In a family with two children there are four possible combinations of boy/girl in when we take into consideration their ages: \{Boy, Boy\},
-\{Boy, Girl\}, \{Girl, Boy\}, \{Girl,Girl\}. Suppose that they all have the same probability to occur.
+In a family with two children there are four possible combinations of boy/girl
+when we take into consideration their ages: \{Boy, Boy\}, \{Boy, Girl\}, \{Girl,
+Boy\}, and \{Girl,Girl\}. Suppose that they all have the same probability to
+occur.
 
 For the first question: the sample space for the given situation consists of only two events -- \{Girl, Boy\}, \{Girl,Girl\}; and only one of them corresponds to the event of having two girls. Thus the
 probability of two girls is 1/2. This question can also be solved this
@@ -125,13 +137,13 @@ way: Since the older child is a girl, the probability of two girls is the
 probability that the younger child is a girl which is 1/2.
 
 For the second question, the sample space includes three possibilities: \{Boy, Girl\}, \{Girl, Boy\}, \{Girl,Girl\}. Thus the
-probability of having two girls, given that at least one of them is a girl  is 1/3.
+probability of having two girls, given that at least one of them is a girl, is 1/3.
 
 If we simulate many families, we can find the numerical answer quite accurately.
 
 \showCode{R}{Code/probability-TwoChildren.R}
 \runR{Code/probability-TwoChildren.R}{TwoChildren}{}
-Running the above code gives:
+Running the above code should give:
 \includeOutput{TwoChildren}
 
 
@@ -140,24 +152,33 @@ Running the above code gives:
 
 \subsection{Bayes' Rule}\label{Bayes}
 One of the most important results in probability and statistics looks deceivingly simple, but has deep consequences, as we will see in some of the subsequent examples. It is called Bayes' Rule, named after the reverend Thomas Bayes who discovered it in the 18th century. Consider two events, $A$ and $B$, such that $P(A)$ is greater than zero. Then
-\begin{align}
-  P(B\mid A) = \frac{P(A\mid B)P(B)}{P(A)},
-\end{align}
+\begin{equation}\label{eq:bayes}
+  P(B\mid A) = \frac{P(A\mid B)P(B)}{P(A)}.
+\end{equation}
+This formula is very useful when the conditional probability $P(B\mid A)$ is
+difficult to find but the conditional probability $P(A\mid B)$ as well as the
+unconditional probabilities are easy to find.
 
  \begin{example}[Football or ballet?]
-Jane has season tickets to the home games of her town's football team, which she attends  80\% of the time, and she also has season tickets to the town's ballet which she attends 20\% of the time. In 10\% of the weeks she attends both the weekly football game and the ballet. This is depicted in Figure~\ref{fig:bayes-rule}. 
+Jane has season tickets to the home games of her town's football team, which she
+attends 80\% of the time, and she also has season tickets to the town's ballet
+which she attends 20\% of the time. If she attends the ballet in a week, she
+will flip a fair coin to decide if she will attend the football game.
+% In 10\% of the weeks she attends both the weekly football game and the ballet. 
+This is depicted in Figure~\ref{fig:bayes-rule}, which shows that $P(F)=0.8$ and
+$P(B)=0.2$. If we see Jane in the ballet, what is the probability that we'll see
+her in the game in the same week?
 
-If we see Jane in a game, what is the probability that we'll see her in the ballet in the same week?
-Using Bayes' rule, $P(B\mid A) =0.5\times0.2/0.8=0.125$.
-
-If we see her in the ballet, what is the probability that we will see her in the football game, as well?
-With Bayes' rule we get $P(A\mid B) =0.125\times0.8/0.2=0.5$.
-
-So, although Jane goes to  80\% of the football games, if she ends up going to the ballet then she is less likely to go to the game in the same week (50\%). 
+% If we see her in the ballet, what is the probability that we will see her in the football game, as well?
+% With Bayes' rule we get $P(A\mid B) =0.125\times0.8/0.2=0.5$.
+% So, although Jane goes to  80\% of the football games, if she ends up going to the ballet then she is less likely to go to the game in the same week (50\%). 
 \end{example}
 
+We know that if we see her in a game, then the probability of seeing her in the
+ballet is $P(B \mid F)=0.5$. Using Bayes' rule, $P(F\mid B)
+=0.5\times0.2/0.8=0.125$.
+
 \begin{figure}[htbp]
-\centering
 \begin{tikzpicture}[fill opacity=0.7]
   \draw (0,3) rectangle (4, 0);
   \draw[fill = red!80, draw=red] (1, 0.5) rectangle ++(2,2) node[midway,white]{F};
@@ -170,26 +191,25 @@ So, although Jane goes to  80\% of the football games, if she ends up going to t
 
 
 \begin{example}[Bertrand's Box]
-Bertrand's box paradox was first posed by Joseph Bertrand 1889. Here is the
+Bertrand's box paradox was first posed by Joseph Bertrand in 1889. Here is the
 question: There are three boxes, one contains two gold coins, one contains two
 silver coins, and one contains a gold coin and a silver coin.
 A box is selected at random and a coin is taken from that box at random. If the
 coin is a gold coin, what is the probability that the other coin in that box is
-also a gold coin.
+also a gold coin?
 \end{example}
 
 This problem is about conditional probability. It is easy to find the
 probability of getting a certain box, and it is easy to find the probability of
 getting a gold coin if we know the box, as shown in
 Figure~\ref{fig:probability-flow}. However, it is non-trivial to find the
-difficulty of getting a certain box when we know the final coin. We see the six
+probability of getting a certain box when we know the final coin. We see the six
 possible outcomes in Figure~\ref{fig:probability-flow} are equally likely to
 occur. Two outcomes of a gold coin are through the path of the box with two gold
 coins and one outcome of a gold coin is through the path of the box with a gold
 coin and a silver coin. Thus the answer to this problem is 2/3.
 
 \begin{figure}[H]
-\centering
 \resizebox{0.6\columnwidth}{!}{%
 \begin{tikzpicture}[%scale=0.5,
   edge from parent/.style={draw,-latex},
@@ -236,18 +256,12 @@ child{ [sibling distance=2cm]
 \label{fig:probability-flow}
 \end{figure}
 
-This problem can also be solved using the Bayesian formula. It says 
-\begin{align}
-  P(B\mid A) = \frac{P(A\mid B)P(B)}{P(A)},
-\end{align}
-where the conditional probability $P(B\mid A)$ is difficult to find but the
-conditional probability $P(A\mid B)$ as well as the unconditional probabilities
-are easy to find. If $A$ be the event of getting a gold coin and $B$ be the
+This problem can also be solved using the Bayesian formula in
+(\ref{eq:bayes}). Let $A$ be the event of getting a gold coin and $B$ be the
 event of getting a box with two gold coins, then $P(A)=1/2$,
 $P(B)=1/3$, and $P(A|B)=1$. Now the probability of a box with two gold
 coins given a final gold coin is 
 \begin{align}
-  % P(GG\mid G) = \frac{P(G\mid GG)P(GG)}{P(G)}
   P(B\mid A) = \frac{P(A\mid B)P(B)}{P(A)}
   = \frac{1\times\frac{1}{3}}{\frac{1}{2}}
   =\frac{2}{3}.
@@ -260,7 +274,7 @@ game and approximate the probability numerically.
 
 \showCode{R}{Code/probability-BertrandBox.R}
 \runR{Code/probability-BertrandBox.R}{BertrandBox}{}
-Running the above code gives:
+Running the above code should give:
 \includeOutput{BertrandBox}
 
 \section{When Intuition May Fail}
@@ -268,7 +282,7 @@ Probability-based logic may be confusing and even counter-intuitive in some case
 
 \hypertarget{Intransitive-Dice}{%
   \subsection{Intransitivity -- when $A>B$ and $B>C$ does not imply $A>C$}\label{Intransitive-Dice}}
-Real numbers are transitive, meaning that if we know that $x>y$ and $y>z$ then $x>z$. However, probability of events are not always transitive. 
+Real numbers are transitive, meaning that if we know that $x>y$ and $y>z$ then $x>z$. However, probabilities of events are not always transitive. 
 \begin{example}[Intransitive Dice]
 We have three unusual dice:
 \begin{itemize}
@@ -281,35 +295,37 @@ We have three unusual dice:
 To play a game you and your opponent choose two of the dice, say, A and B, and you get to choose which die you roll (and your opponent will roll the other.) The one who tolls a larger number wins. Which die do you want to choose?
 
 Let's tabulate the possible results if dice A and B were chosen, and see which  die is preferred.
-\begin{center}
-  \begin{tabular}{cc|ccc}\hline
+\begin{table}[H]
+  \begin{tabular}{cc|ccc}
+    \toprule
     &   & \multicolumn{3}{c}{B} \\
-    % \cline{3-5}
-    &   & 1                & 6                & 8                \\ \hline
+    &   & 1                & 6                & 8                \\
+    \midrule
     \multirow{3}{*}{A}
     & 2 & \color{red}$A>B$ & $A<B$            & $A<B$            \\
     & 4 & \color{red}$A>B$ & $A<B$            & $A<B$            \\
-    & 9 & \color{red}$A>B$ & \color{red}$A>B$ & \color{red}$A>B$ \\\hline
+    & 9 & \color{red}$A>B$ & \color{red}$A>B$ & \color{red}$A>B$ \\
+    \bottomrule
   \end{tabular}
-\end{center}
-
+\end{table}
 Since die A wins five out of the nine possible results and all possible results
 occur with equal probability, we know that die A has a higher winning
 probability (5/9) than die B. We should choose die A over die B.
 
 Now suppose we choose dice B and C.
-\begin{center}
-  \begin{tabular}{cc|ccc}\hline
-    &   & \multicolumn{3}{c}{B} \\
-    % \cline{3-5}
-    &   & 1                & 6                & 8                \\ \hline
+\begin{table}[H]
+  \begin{tabular}{cc|ccc}
+    \toprule
+    &   & \multicolumn{3}{c}{B}                       \\
+    &   & 1                & 6                & 8     \\
+    \midrule
     \multirow{3}{*}{C}
-    & 3 & \color{red}$C>B$ & $C<B$            & $C<B$            \\
-    & 5 & \color{red}$C>B$ & $C<B$            & $C<B$            \\
-    & 7 & \color{red}$C>B$ & \color{red}$C>B$ & $C<B$ \\\hline
+    & 3 & \color{red}$C>B$ & $C<B$            & $C<B$ \\
+    & 5 & \color{red}$C>B$ & $C<B$            & $C<B$ \\
+    & 7 & \color{red}$C>B$ & \color{red}$C>B$ & $C<B$ \\
+    \bottomrule
   \end{tabular}
-\end{center}
-
+\end{table}
 We see that die B has a higher winning probability (5/9) than die C,
 so we should choose die B over die C.
 
@@ -317,23 +333,25 @@ Since we should choose die A over die B, and choose die B over die C, does this
 mean that we should choose die A over die C if these two dice are to be
 selected? Surprisingly, the answer is NO. Here is the table of the possible
 results.
-\begin{center}
-  \begin{tabular}{cc|ccc}\hline
+\begin{table}[H]
+  \begin{tabular}{cc|ccc}
+    \toprule
     &   & \multicolumn{3}{c}{C} \\
-    % \cline{3-5}
-    &   & 3                & 5                & 7                \\ \hline
+    &   & 3                & 5                & 7                \\
+    \midrule
     \multirow{3}{*}{A}
     & 2 & $A<C$            & $A<C$            & $A<C$            \\
     & 4 & \color{red}$A>C$ & $A<C$            & $A<C$            \\
-    & 9 & \color{red}$A>C$ & \color{red}$A>C$ & \color{red}$A>C$ \\\hline
+    & 9 & \color{red}$A>C$ & \color{red}$A>C$ & \color{red}$A>C$ \\
+    \bottomrule
   \end{tabular}
-\end{center}
+\end{table}
 We should choose die C over die A!
 
 Here is an experiment to simulate the intransitive dice.
 
 \showCode{R}{Code/probability-IntransitiveDice.R}
-Running this code gives the following:
+Running this code should give the following:
 \runR{Code/probability-IntransitiveDice.R}{IntransitiveDice}{}
 \includeOutput{IntransitiveDice}
 
@@ -344,71 +362,120 @@ For example, suppose you want to purchase a new phone which is offered by three 
 
 
 \hypertarget{birthday-problem}{%
-  \subsection{Rare Events Still Happen}\label{birthday-problem}}
+  \subsection{Seemingly Rare Events}\label{birthday-problem}}
 
-\begin{example}[Birthday Problem]
-You go on a long trip on your birthday and take a bus. There are 23 people on the bus, and to make the ride more fun you ask all the other passengers for their birth date (month and day, not year) and see if you can celebrate together. How likely it is that someone on the bus shares your birthday?
-
-The chance that a random person has the same birthday as yours is $1/365\approx0.0027$, so it may seem pretty unlikely, but with 23 people on the bus it turns out the the probability that at least one of them shares your birthday is much higher ($\approx0.061$.) In you took a plane with 253 passengers the probability that at least one of them shares your birthday is 0.5.
-
-We will also answer the following question: what is the probability that on the bus/plane there are at least two people who share a birthday (even if it's not the same as yours)?
+\begin{example}[Birthday Problem]\label{exam:birthday}
+You go on a long trip on your birthday and take a bus. There are 23 people on
+the bus, and to make the ride more fun you ask all the other passengers for
+their birth date (month and day, not year) and see if you can celebrate
+together. How likely is it that someone on the bus shares your birthday? How
+likely are there at least two of the other 23 people who share a birthday (even
+if it's not the same as yours)?
 \end{example}
 
-Let's use simulation to answer these questions.
+The chance that a random person has the same birthday as yours is
+$1/365\approx0.0027$, so this is a rare event.
+With 23 other people on the bus, the probability that someone shares your
+birthday is about $0.061$ which is quite small, so it is pretty unlikely. For
+the second question that two of the 23 people share a birthday, it seems that
+the answer is similar, but the actually probability is surprisingly much
+higher. The probability that at least two people share a birthday is about 0.5.
+
+If you took a plane with 253 passengers, the probability that someone shares
+your birthday is around 0.5. But you are almost certain at least two people
+share a birthday on that plane, because the probability is almost one.
+
+% We will also answer the following question: what is the probability that on the bus/plane there are at least two people who share a birthday (even if it's not the same as yours)?
+
+Let's use simulation to find answers to these questions.
 
 \showCode{R}{Code/probability-birthday.R}
-\runR{Code/probability-birthday.R}{birthday}{}
-Running the above code gives results which are very close to the number we stated above, as predicted by probability. That is, if there are 23 people on the bus the probability that some people
-share the same birthday is \inlnR{```cat(prob.p23[1])```} and the probability
-that at least one person's birthday is the same as yours is
-\inlnR{```cat(prob.p23[2])```}. If there are 253 people on the plane, the two
-probabilities are \inlnR{```cat(prob.p253[1])```} and \inlnR{```cat(prob.p253[2])```}, respectively. 
+\runR{Code/probability-birthday.R}{birthday}{} Running the above code gives
+results which are very close to the number we stated above, as predicted by
+probability. That is, if there are 23 other people on the bus the probability
+that some person's birthday is the same as yours is
+\inlnR{```cat(prob.p23[1])```} and the probability that some other people share
+the same birthday is \inlnR{```cat(prob.p23[2])```} . If there are 253 people on
+the plane, the two probabilities are \inlnR{```cat(prob.p253[1])```} and
+\inlnR{```cat(prob.p253[2])```}, respectively.
 
-This is an example that shows that rare events can occur quite often, if we have a large enough sample.
-This is particularly important in trials, where DNA match is often used as evidence that a defendant has committed a crime. The chance that a DNA sample from a crime scene matches a random person is extremely low, but not zero. With nine billion people in the world, the probability that at least one other person's DNA (other than the true offender) will match the DNA sample from the scene is not negligible.
+This example shows that some seemingly rare events are not rare, and they occur
+quite often. The second event has a large probability to occur, because the
+number of possible pairs is much larger. When you want to see if any of the 23
+people has the same birthday as yours, there are only 23 pairs (comparing yours
+with each of them) to consider for the event to occur. When you want to see if
+any of the 23 people share the same birthday, there are $23\times22/2=253$ pairs
+(each two persons of the 23) to consider for the event to occur.
 
-\textcolor{red}{Exercise}
-Adapt the previous code by changing $N$ and $n$, to check the probability that a 1 in a billion event will be observed if you run the experiment with 1 million people.
+This is particularly important in trials, where DNA match is often
+used as evidence that a defendant has committed a crime. The chance that a DNA
+sample from a particular crime scene matches a random person is extremely low,
+but not zero. With nine billion people in the world and many crime scenes, the
+probability that some other person's DNA (other than the true offender) matches
+the DNA sample from a scene is not negligible.
+
+\begin{listhead}\color{red}
+\item [Exercise] Adapt the previous code by changing $N$ and $n$, to check the
+  probability that someone will be selected multiple times if you pick a
+  name from a list of one million names for one thousand times.
+\end{listhead}
 
 \subsection{Predictions}
 The following example is one of the earliest questions in probability, when the field was mostly of interest among gamblers (who were also prominent mathematicians).
 
 \begin{example}[Fair Division]
-Tom and Jerry each put 30 dollar in a jackpot to start a tennis match. They are equally good players, and have equal chance to win a match. They decide that the first one to win three matches will win the \$60. 
-Now, Tom has won twice and Jerry has won once, but the matches took a long time and they had to go back home before a winner was declared. How should they split the 60 dollars, given the current position (Tom leading 2-1)?
+Tom and Jerry each put 30 dollar in a jackpot to start a tennis match. They are
+equally good players, and have equal chance to win a match. They decide that the
+first one to win three matches will win the \$60.  Now, Tom has won twice and
+Jerry has won once, but the matches took a long time and they had to go back
+home before a winner was declared. How should they split the 60 dollars, given
+the current position (Tom leading 2-1)?
 \end{example}
 
 It seems Tom has won twice and Jerry has won once so the 60 dollars should be
 split as $40:20$. However, these are not proportional to their probabilities of
 winning. They need at most another two games to know the final winner. Here are
 the four possible winners of the next two games: \{Tom, Tom\}, \{Tom, Jerry\},
-\{Jerry, Tom\}, \{Jerry, Jerry\}. In the first three possible outcome Tom ends up with 3 wins, and therefore would get the \$60, and only the fourth outcome leads to Jerry being the first to reach three wins.
-So the probabilities that Tom and Jerry would be
-the final winner are 3/4 and 1/4, respectively, and the fair
-division should be $45:15$.
+\{Jerry, Tom\}, and \{Jerry, Jerry\}. In the first three possible outcome Tom
+ends up with 3 wins, and therefore would get the \$60, and only the fourth
+outcome leads to Jerry being the first to reach three wins.
+So the probabilities that Tom and Jerry would be the final winner are 3/4 and
+1/4, respectively, and thus the fair division should be $45:15$.
 
 Let's use simulation to solve this problem.
 
 \showCode{R}{Code/probability-FairDivision.R}
 \runR{Code/probability-FairDivision.R}{FairDivision}{}
-Running the above code gives:
+Running the above code should give:
 \includeOutput{FairDivision}
 
-The takeaway from this example is that it is not sufficient to know what has happened in the past in order to make accurate predictions. It is also necessary to know the `horizon' of the experiment (how much longer the experiment can run.) The same logic would apply if the winning probabilities in each match are not equal, and when the horizon is farther (more matches are needed in order to declare the winner.)
+The takeaway from this example is that it is not sufficient to know what has
+happened in the past in order to make accurate predictions. It is also necessary
+to know the `horizon' of the experiment (how much longer the experiment needs to
+run.) The same logic would apply if the winning probabilities in each match are
+not equal, and when the horizon is farther (more matches are needed in order to
+declare the winner.)
 
-This can be applied in financial disputes over inheritance. Suppose that Tom and Jerry are heirs to a big fortune and the go to court, each one hoping to get the full amount. It may be a lengthy procedure, and maybe at some point they feel that Tom is leading in the eyes of the judge, but they know that the process may continue for a long time and they might even die before a decision is made. So, they can reach a settlement on their own, and avoid the remaining legal proceedings. This is an oversimplified situation, because there is no clear score as in tennis, but the main idea is that the horizon is as important as the past in making such decisions.
-
-
+This can be applied in financial disputes over inheritance. Suppose that Tom and
+Jerry are heirs to a big fortune and the go to court, each one hoping to get the
+full amount. It may be a lengthy procedure, and maybe at some point they feel
+that Tom is leading in the eyes of the judge, but they know that the process may
+continue for a long time and they might even die before a decision is made. So,
+they can reach a settlement on their own, and avoid the remaining legal
+proceedings. This is an oversimplified situation, because there is no clear
+score as in a game, but the main idea is that the horizon is as important as the
+past in making such decisions.
 
 \hypertarget{Monty-Hall-problem}{%
 \subsection{Jumping Probabilities}\label{Monty-Hall-problem}}
 
 \begin{example}[Monty Hall Problem]
 Suppose you're on a game show, and you're given the choice of three doors:
-Behind one door is a car; behind the others, goats. Whichever door you pick, you get what's behind it.
-You pick a door, say No. 1, and the host, who knows what's behind the doors, opens another door, say No. 3,
-which has a goat. He then says to you, ``Do you want to pick door No. 2?'' Is it
-to your advantage to switch your choice?
+Behind one door is a car; behind the others, goats. Whichever door you pick, you
+get what's behind it.  You pick a door, say No. 1, and the host, who knows
+what's behind the doors, opens another door, say No. 3, which has a goat. He
+then says to you, ``Do you want to pick door No. 2?'' Is it to your advantage to
+switch your choice?
 \end{example}
 
 This famous example has confused many smart people. It is also about conditional
@@ -420,85 +487,76 @@ repetitions.
 
 \showCode{R}{Code/probability-MontyHall.R}
 \runR{Code/probability-MontyHall.R}{MontyHall}%[run]
-Running the above code gives:
+Running the above code should give:
 \includeOutput{MontyHall}
 
-We see that the probability of winning a car is much higher than 0.5 if one chooses to switch. 
+We see that the probability of winning a car is much higher than 0.5 if one
+chooses to switch.
 
-We initially have no information where the prize is, so the probability for the prize is behind any door is 1/3.  Intuition often fails in the second step: when another door is opened and it contains no prize, most people think that the total probability has to be divided equally between the two remaining doors. In other words, the 1/3 probability that we assigned to door 3 has to be divided in two, and 1/6 will go to the probability of each of doors 1 and 2 (1/3+1/6=1/2). But this is wrong!
+We initially have no information where the prize is, so the probability that the
+prize is behind any door is 1/3. Intuition often fails in the second step: when
+another door is opened and it contains no prize, most people think that the
+total probability has to be divided equally between the two remaining doors. In
+other words, the 1/3 probability that we assigned to door 3 has to be divided in
+two, and 1/6 will go to the probability of each of doors 1 and 2
+(1/3+1/6=1/2). But this is wrong!
 
-Does the fact that we picked initially door 1 (completely by chance) makes any of the doors special somehow? Strangely, yes!
-When we pick door 1 there are two possibilities -- either it's the winner (with probability 1/3) or it's not. If it is, then the host can choose either door 2 or door 3 to open (each with probability 1/2). However, if door 1 is not the winning door, then the host has no choice. If door 2 is the winner then he must open door 3. 
-Since we know he opened door 3, either door 1 is the winner and the host opened door 3 with probability 1/2 or door 2  is the winner and the host opened door 3 with probability 1. So, the probability that the host opened door 3 if door 2 is the winner is twice the probability he opened door 3 if door 1 is the winner. 
+Does the fact that we picked initially door 1 (completely by chance) makes any
+of the doors special somehow? Strangely, yes!  When we pick door 1 there are two
+possibilities -- either it's the winner (with probability 1/3) or it's not. If
+it is, then the host can choose either door 2 or door 3 to open (each with
+probability 1/2). However, if door 1 is not the winning door, then the host has
+no choice. If door 2 is the winner then he must open door 3.  Since we know he
+opened door 3, either door 1 is the winner and the host opened door 3 with
+probability 1/2 or door 2 is the winner and the host opened door 3 with
+probability 1. So, the probability that the host opened door 3 if door 2 is the
+winner is twice the probability he opened door 3 if door 1 is the winner.
 
-Notice that this not a consequence of  the host trying to trick us, or on having to perform some reverse psychology and trying to guess what the host thinks. It's purely a consequence of conditioning on what has already happened and the information it revealed about the possible future outcome.
-
+Notice that this not a consequence of the host trying to trick us, or we having
+to perform some reverse psychology and trying to guess what the host
+thinks. It's purely a consequence of conditioning on what has already happened
+and the information it revealed about the possible future outcome.
 
 \hypertarget{simpsons-paradox}{%
 \subsection{Beware of generalizations}\label{simpsons-paradox}}
-If we observe a delay in flight take-offs in 8 out of 10 airports, can it be that overall in the country the average flight takes off on time? If the average admission rate in a university is greater for women than for men, can it be that in many (or even most) departments in that university the admission rate for men is greater than for women? The answer to both these questions, and many similar scenarios in life, is yes. This phenomenon is called Simpson's paradox.
+If we observe a delay in flight take-offs in 8 out of 10 airports, can it be
+that overall in the country the average flight takes off on time? If the average
+admission rate in a university is greater for women than for men, can it be that
+in many (or even most) departments in that university the admission rate for men
+is greater than for women? The answer to both these questions, and many similar
+scenarios in life, is yes. This phenomenon is called Simpson's paradox.
 
 \begin{example}[Combined percentages]
-Tanya and Sonya are two freshmen players in college. In the first 3 games of the season Tanya had 11 free throws, of which she made 6, and Sonya went 7 times, and made 4 of the free throws.
-If at the end of game three the coach want to pick the player with the best chance of making free throws, who should she choose? 
+Tanya and Sonya are two freshmen players in college. In the first 3 games of the
+season, Tanya had 11 free throws of which she made 6, and Sonya went 7 times and
+made 4 of the free throws.  If at the end of game three the coach want to pick
+the player with the best chance of making free throws, who should she choose?
 
-Tanya's probability based on the first three games is $5/11 = .455$, while Sonya's is $3/7 = .429$, so if the coach picks  Tanya the team has a better chance from the free throws line.
+Tanya's probability based on the first three games is $5/11 = .455$, while
+Sonya's is $3/7 = .429$, so if the coach picks Tanya the team has a better
+chance from the free throws line.
 
-During the next three games  Tanya gets 9 free throws and makes 6. Sonya gets 14 free throws and makes 9.
-Again, at the end of game six the coach has to choose the better free-throw shooter. Based on the last 3 games, Tanya's chances are $6/9 = .667$, while Sonya's are $9/14 = .643$. So once again, the coach picks the player with the better chances, and based on the last three games, it is Tonya once again.
+During the next three games, Tanya got 9 free throws and made 6, and Sonya got
+14 free throws and made 9.  Again, at the end of game six the coach has to
+choose the better free-throw shooter. Based on the last 3 games, Tanya's chances
+are $6/9 = .667$, while Sonya's are $9/14 = .643$. So once again, the coach
+picks the player with the better chances, and based on the last three games, it
+is Tonya once again.
 
-However, if we combine the results from all six games we see that Tanya went to the line 11+9=20 times, and made 11 of the free throws. Sonya got 7+14=21 free throws and made 3+9=12. So, if we combine the results from all six games Tonya's percentage from the free throw line is 55\%, while Sonya's is 57.1\%, so based on the cumulative information Sonya should be the coach's pick!
+However, if we combine the results from all six games we see that Tanya went to
+the line 11+9=20 times and made 11 of the free throws, and Sonya got 7+14=21
+free throws and made 3+9=12. So, if we combine the results from all six games
+Tonya's percentage from the free throw line is 55\%, while Sonya's is 57.1\%, so
+based on the cumulative information Sonya should be the coach's pick!
 \end{example}
 
-%A black urn contains 5 red and 6 green balls,
-%and a white urn contains 3 red and 4 green balls. You are allowed to
-%choose an urn and then pick a ball at random from the urn. If you
-%pick a red ball, you get a prize. Which urn should you choose to
-%draw from?
-%\begin{itemize}
-%\item If you draw from the black urn, the probability of choosing a
-%  red ball is $5/11 = .455$.
-%\item If you choose to draw from the white urn, the probability of
-%  choosing a red ball is $3/7 = .429$.
-%\end{itemize}
-%You should choose to draw from the black urn.
-
-%Now consider another game in which a second black urn has 6 red and
-%3 green balls, and a second white urn has 9 red and 5 green balls.
-%\begin{itemize}
-%\item If you draw from the black urn, the probability of a red ball is
-%  $6/9 = .667$.
-%\item If you choose to draw from the white urn, the probability if
-%  $9/14 = .643$.
-%\end{itemize}
-%Again you should choose to draw from the black urn.
-
-%In the final game, the contents of the second black urn are added to
-%the first black urn, and the contents of the second white urn are
-%added to the first white urn. Again, you can choose which urn to draw
-%from. Which should you choose?
-%
-%Intuition says choose the black urn, but let's calculate the
-%probabilities.
-%\begin{itemize}
-%\item The black urn now contains 11 red and 9 green balls, so the
-%  probability of drawing a red ball from it is 11/20=0.55
-%\item The white urn now contains 12 red and 9 green balls, so the
-%  probability of drawing a red ball from it is 12/21= .571.
-%\end{itemize}
-%You should choose the white urn!
-%\end{example}
-
-% \textbf{UC Berkeley gender bias:}
 \begin{example}[UC Berkeley alleged gender bias]
-A famous example of Simpson's
-paradox is a study of gender bias among graduate school admissions to
-University of California, Berkeley. In 1973 UC Berkeley was sued for
-sex-discrimination. Here are the overall  numbers \textit{combined} from the six largest
-departments in fall admission of 1973.
+A famous example of Simpson's paradox is a study of gender bias among graduate
+school admissions to University of California, Berkeley. In 1973 UC Berkeley was
+sued for sex-discrimination. Here are the overall numbers \textit{combined} from
+the six largest departments in fall admission of 1973.
 
 \begin{table}[H]
-\begin{center}
   \begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}crrcrr}
     \toprule
     \multicolumn{3}{c}{Men} & \multicolumn{3}{c}{Women} \\
@@ -509,14 +567,13 @@ departments in fall admission of 1973.
     2691 & 1198 & ({\bf 44.5}\%) & 1835 & 557 & (30.4\%) \\
     \bottomrule
   \end{tabular*}
-\end{center}
 \end{table}
 
-This table shows that men were much more likely than women to be admitted (by 14.1\%).
-Was there a gender bias? Let's break it down by department (which we call A--F):
+This table shows that men were much more likely than women to be admitted (by
+14.1\%). Was there a gender bias? Let's break it down by department (which we
+call A--F):
 
 \begin{table}[H]
-\centering
 \begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} ccrrcrr}
   \toprule
   & \multicolumn{3}{c}{Men}  & \multicolumn{3}{c}{Women} \\
@@ -533,43 +590,57 @@ F & 373 & 22 & (6\%) & 341 & 24 &(\textbf{7\%})  \\
   \bottomrule
 \end{tabular*}
 \end{table}
-% \jy{we need to set some style guidelines on code, floats, etc.}
 
-Things get strange after we divide the data according different
-departments. In four of the departments (A, B, D, and F)  women were more likely to be admitted
-than men.  In departments C and E, men were more likely to be admitted (by 3-4\%). In contrast, in department A the acceptance rate for women was 20\% more than for men.
+Things get strange after we divide the data according different departments. In
+four of the departments (A, B, D, and F) women were more likely to be admitted
+than men.  In departments C and E, men were more likely to be admitted (by
+3-4\%). In contrast, the acceptance rate for womenin department A was 20\% more
+than for men.
 
 To explain this, \cite{bickel1975sex} noticed that women
-tended to \textit{apply} to more  competitive departments (C and E) with low admission
+tended to \textit{apply} to more competitive departments (C and E) with low admission
 rates even among qualified applicants, whereas men tended to apply to
 less competitive departments with high admission rates among the
 qualified applicants.
 
-So, this is not a case of gender discrimination, but rather, what's called `selection bias'. If women were more likely  to apply to a competitive department than men, the overall rejection rate among women can be expected to be higher.
-Consider an extreme example, with department X accepting 1\% of the applicants, and department Y accepting 50\%. Suppose that 500 women  choose to apply to department X and 500 other women apply to department Y, and suppose that 500 men all apply to department Y. Then, department X will have 5 students (all women) and will reject 495 of the applicants (again, all women). Department X, on the other hand will accept 250 men and 250 women. Overall, the acceptance rate for women is $(5+250)/1000=0.255$, while for men it is $250/500=0.5$.
+So, this is not a case of gender discrimination, but rather, what's called
+`confounding bias'. If women were more likely to apply to a competitive
+department than men, the overall rejection rate among women can be expected to
+be higher.  Consider an extreme example, with department X accepting 1\% of the
+applicants, and department Y accepting 50\%. Suppose that 500 women choose to
+apply to department X and 500 other women apply to department Y, and suppose
+that 1000 men all apply to department Y. Then, department X will have 5 students
+(all women) and will reject 495 of the applicants (again, all women). Department
+Y, on the other hand will accept 500 men and 250 women. Overall, the acceptance
+rate for women is $(5+250)/1000=0.255$, while for men it is $500/1000=0.5$.
 \end{example}
 
-
-Simpson's paradox is not limited to the scenarios of combined percentages or selection bias. To illustrate it, we use the following example via simulations.
+Simpson's paradox is not limited to the scenarios of combined percentages or
+confounding bias. To illustrate it, we use the following example via
+simulations.
 
 \begin{example}[Reverse trends]
-We use the following code to simulate data from four groups, each with 40 samples.
+We use the following code to simulate data from four groups, each with 40
+samples.
 
 \showCode{R}{Code/probability-Simpson.R}[1][6]
 \runR{Code/probability-Simpson.R}{Simpson}{}
 % Running the above code gives:
 % \includeOutput{Simpson}
 
-Next, we plot the whole data and fit a trend equation. Clearly, we see in the left panels of Figure \ref{fig:probability-simpson} that as $x$ increases, $y$ increases
+Next, we plot the whole data and fit a trend equation. Clearly, we see in the
+left panels of Figure~\ref{fig:probability-simpson} that as $x$ increases $y$
+increases.
 
 \showCode{R}{Code/probability-Simpson.R}[8][9]
 
-If we mark the points by the group to which they belong, and fit a trend line separately for each group, as $x$ increases $y$ decreases in each and every group!
+If we mark the points by the group to which they belong, and fit a trend line
+separately for each group, as $x$ increases $y$ decreases in each and every
+group!
 \showCode{R}{Code/probability-Simpson.R}[10][12]
 
 
 \begin{figure}[H]
-\centering
 \includegraphics[width=0.45\textwidth]{images/chapter_3/probability-Simpson-plots.pdf}
 \includegraphics[width=0.45\textwidth,page=2]{images/chapter_3/probability-Simpson-plots.pdf}
 \caption{Scatter plot of the whole data without (left) and with (right) group labeled.}
@@ -578,17 +649,15 @@ If we mark the points by the group to which they belong, and fit a trend line se
 
 \end{example}
 
-The three examples all show that we should be very careful when analyzing data and remember that proportions or trends which are observed in the entire population may be very different when we break down the data into groups.
+The three examples all show that we should be very careful when analyzing data
+and remember that proportions or trends which are observed in the entire
+population may be very different when we break down the data into groups.
 
-
-% \hypertarget{Henry-Choice}{%
-%   \section{Henry's Choice}\label{Henry-Choice}}
 
 \hypertarget{further}{%
 \section{Further Examples}\label{further}}
 
-
-\begin{example}[Henry's Choice]
+\begin{example}[Henry's Choice\footnote{\url{https://www.braingle.com/brainteasers/20227/loaded-revolver.html}}]
 Henry has been caught stealing cattle, and is brought into town for justice. The
 judge is his ex-wife Gretchen, who wants to show him some sympathy, but the law
 clearly calls for two shots to be taken at Henry from close range. To make
@@ -615,20 +684,15 @@ If Gretchen spins the chamber again, the probability that she shoots Henry would
 be 2/6, or 1/3, since there are two possible bullets that would be in firing
 position out of the six possible chambers that would be in position.
 
+Let's solve this problem using the following simulation.
+
 \showCode{R}{Code/probability-HenryChoice.R}
 \runR{Code/probability-HenryChoice.R}{HenryChoice}{}
-Running the above code gives:
+Running the above code should give:
 \includeOutput{HenryChoice}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%\input{Rnw/probability-HenryChoice}
 
-
-
-
-
-
-% \hypertarget{prisoners-problem}{%
-\subsection{100 Prisoners Problem}\label{prisoners-problem}%}
+% % \hypertarget{prisoners-problem}{%
+% \subsection{100 Prisoners Problem}\label{prisoners-problem}%}
 
 The technique of simulation is useful in finding answers in very complicated
 problems. Consider the following example modified from
@@ -652,7 +716,6 @@ The situation is hopeless if every prisoner selects fifty drawers at
 random. The probability that a single prisoner finds his number is
 0.5, so the probability that all prisoners find their numbers is
 $0.5^{100} = 7.89\times10^{-31}\approx0$. However, a better strategy
-% gives the prisoners more than 0.30 probability to survive
 is given in \citep{stanley2013algebraic}, which is described below:
 \begin{enumerate}
 \item Each prisoner first opens the drawer with his own number.
@@ -667,16 +730,24 @@ is given in \citep{stanley2013algebraic}, which is described below:
 This strategy is better than randomly opening because it utilizes the
 information from other prisoners. For example, different prisoners all start
 from opening different drawers, while it is almost certain that some prisoners
-start from opening the same drawer {\color{red} WHY: this may be an exercise
-problem.}. The probability of survival with the this strategy is complicate to
-derive analytically.
+start from opening the same drawer if they start with a draw at random.
 
-In the following, we define two functions to simulate the method of randomly
-open 50 drawers and the better strategy, respectively.
+\begin{listhead}
+\item [Exercise] Use simulation to find the probability that some prisoners
+start from opening the same drawer if they all start with a draw at random.\\
+\emph{Hint:} Consider the birthday problem in Example~\ref{exam:birthday}.
+\end{listhead}
 
-\showCode{R}{Code/probability-100prisoners.R}
+The probability of survival with the better strategy is complicate to derive
+analytically.  In the following, we define two functions to simulate the method
+of randomly open 50 drawers and the better strategy, respectively.
+
+\showCode{R}{Code/probability-100prisoners.R}[1][41]
 \runR{Code/probability-100prisoners.R}{100prisoners}
-Running the above code gives:
+\noindent If we run the following code
+\showCode{R}{Code/probability-100prisoners.R}[43][46]
+\noindent we should get the following two probabilities for randomly and smartly open the
+drawers, respectively:
 \includeOutput{100prisoners}
 
 We see that opening drawers randomly has a survival probability of almost zero

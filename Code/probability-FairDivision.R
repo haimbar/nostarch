@@ -1,7 +1,6 @@
 set.seed(123)
 players <- c("Tom", "Jerry")
-res <- replicate(n=1000, sample(players, 5, replace=TRUE))
-## Simulate the game n times
+res <- replicate(n=1000, sample(players, 5, replace=TRUE)) # Simulate n games
 TomFirst = (res[1:3,] == "Tom")
 ## Whether Tom won in the first three rounds
 TomTwice = colSums(TomFirst) == 2
