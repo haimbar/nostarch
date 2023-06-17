@@ -7,7 +7,7 @@ for (i in 1:n){
     if (prize[i] == 1){                # if the car is behind door 1
         host[i] <- sample(c(2, 3), 1)  # the host will open door 2 or 3
     } else if (prize[i] == 2) {        # if the car is behind door 2
-        host[i] <- 3                   # the host will open dorr 3
+        host[i] <- 3                   # the host will open door 3
     } else if (prize[i] == 3) {        # if the car is behind door 3
         host[i] <- 2                   # the host will open door 2
     }

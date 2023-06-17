@@ -3,7 +3,7 @@
   \label{ch:probability}}
 
 \chapterartfile{images/static/Black_Dice_PNG_Clip_Art-2653.png}
-\hypertarget{Randomworld}{The world is random and probability is a tool to quantify the randomness. It is the mathematical basis for all statistical reasoning. It helps us to determine how likely it is that we'll win a lottery, or the chances that our town will be hit by an earthquake in the next month.
+\hypertarget{Randomworld}{The world is random and probability is a tool to quantify the randomness. It's the mathematical basis for all statistical reasoning. It helps us to determine how likely it is that we'll win a lottery, or the chances that our town will be hit by an earthquake in the next month.
 However, probability theory can be confusing and even counter-intuitive in some cases. In this chapter we review basic concepts in probability, we show some examples in which our intuition may fail us (and even the best mathematician), and provide guidance how to avoid common errors in probabilistic thinking.}
 
 \hypertarget{probability}{%
@@ -28,7 +28,7 @@ sample space labeled as $S$ is represented by the outer rectangle that contains 
 six possible outcomes. The event $E$ of rolling an even number is represented
 by the inner, rounded rectangle  that contains the numbers 2, 4, and 6.
 
-\begin{figure}[htbp]
+\begin{figure}[H]
 \begin{tikzpicture}
   \draw (-2, 2) rectangle (2, 0);
   \draw[rounded corners=10pt, fill = cyan!20, draw=blue] (-0.7,0.1) rectangle ++(2.5,0.8);
@@ -37,7 +37,7 @@ by the inner, rounded rectangle  that contains the numbers 2, 4, and 6.
   \draw (-0.5, 0.5) node{2} (0.5, 0.5) node{4} (1.5, 0.5) node{6};
   \draw[text = blue] (0, 0.3) node{$E$};
 \end{tikzpicture}
-\caption{Sample space (the outcomes of a fair six-sided die) and event (rolling an even number) illustrated with Venn diagram. }
+\caption{Sample space (the outcomes of a fair six-sided die) and event (rolling an even number) illustrated with Venn diagram}
 \label{fig:probability-event}
 \end{figure}
 
@@ -109,10 +109,11 @@ depend on other (latent) events. For example, if they are late paying the rent,
 then it is quite reasonable that Amelia will get a text from their landlord at
 approximately the same time as Abby. 
 
-Another related notion is that of `mutually exclusive' events. For example, if
+Another related notion is that of `mutually exclusive' events. For example, suppose that
+the Golden State Warriors and the Boston Celtics make it to the NBA finals. If
 $A$ =  the Golden State Warriors will win the NBA championship next season, and
 $B$ = the Boston Celtics will win the NBA championship next season, then these
-events cannot occur at the same time. Mutually exclusive are not independent. In
+events cannot occur at the same time. Mutually exclusive events are not independent. In
 this example, if we somehow know that $A$ has happened, then we know for sure
 that $B$ will not. Moreover, if we assign a probability of 0.6 that the Golden
 State Warriors will win, then we know that $P(B) = 0.4$. 
@@ -128,15 +129,15 @@ Consider the following two problems:
 \end{example}
 In a family with two children there are four possible combinations of boy/girl
 when we take into consideration their ages: \{Boy, Boy\}, \{Boy, Girl\}, \{Girl,
-Boy\}, and \{Girl,Girl\}. Suppose that they all have the same probability to
+Boy\}, and \{Girl, Girl\}. Suppose that they all have the same probability to
 occur.
 
-For the first question: the sample space for the given situation consists of only two events -- \{Girl, Boy\}, \{Girl,Girl\}; and only one of them corresponds to the event of having two girls. Thus the
+For the first question: the sample space for the given situation consists of only two events -- \{Girl, Boy\}, \{Girl, Girl\}; and only one of them corresponds to the event of having two girls. Thus the
 probability of two girls is 1/2. This question can also be solved this
-way: Since the older child is a girl, the probability of two girls is the
+way: since the older child is a girl, the probability of two girls is the
 probability that the younger child is a girl which is 1/2.
 
-For the second question, the sample space includes three possibilities: \{Boy, Girl\}, \{Girl, Boy\}, \{Girl,Girl\}. Thus the
+For the second question, the sample space includes three possibilities: \{Boy, Girl\}, \{Girl, Boy\}, \{Girl, Girl\}. Thus the
 probability of having two girls, given that at least one of them is a girl, is 1/3.
 
 If we simulate many families, we can find the numerical answer quite accurately.
@@ -151,7 +152,7 @@ Running the above code should give:
 
 
 \subsection{Bayes' Rule}\label{Bayes}
-One of the most important results in probability and statistics looks deceivingly simple, but has deep consequences, as we will see in some of the subsequent examples. It is called Bayes' Rule, named after the reverend Thomas Bayes who discovered it in the 18th century. Consider two events, $A$ and $B$, such that $P(A)$ is greater than zero. Then
+One of the most important results in probability and statistics looks deceivingly simple, but has deep consequences, as we'll see in some of the subsequent examples. It is called Bayes' Rule, named after the reverend Thomas Bayes who discovered it in the 18th century. Consider two events, $A$ and $B$, such that $P(A)$ is greater than zero. Then
 \begin{equation}\label{eq:bayes}
   P(B\mid A) = \frac{P(A\mid B)P(B)}{P(A)}.
 \end{equation}
@@ -178,32 +179,34 @@ We know that if we see her in a game, then the probability of seeing her in the
 ballet is $P(B \mid F)=0.5$. Using Bayes' rule, $P(F\mid B)
 =0.5\times0.2/0.8=0.125$.
 
-\begin{figure}[htbp]
+\begin{figure}[H]
 \begin{tikzpicture}[fill opacity=0.7]
   \draw (0,3) rectangle (4, 0);
   \draw[fill = red!80, draw=red] (1, 0.5) rectangle ++(2,2) node[midway,white]{F};
   \draw[fill = blue!80, draw=blue] (0.5,0.5) rectangle ++(1,1)  node[midway,white]{B};
 \end{tikzpicture}
-\caption{Bayes' rule. $F$ is the event that Jane attends the weekly football game, and $B$ is the events that she attends the weekly ballet.}
+\caption{Bayes' rule. $F$ is the event that Jane attends the weekly football game, and $B$ is the events that she attends the weekly ballet}
 \label{fig:bayes-rule}
 \end{figure}
 
 
 
 \begin{example}[Bertrand's Box]
-Bertrand's box paradox was first posed by Joseph Bertrand in 1889. Here is the
-question: There are three boxes, one contains two gold coins, one contains two
+Bertrand's box paradox was first posed by Joseph Bertrand in 1889. Here's the
+question: there are three boxes, one contains two gold coins, one contains two
 silver coins, and one contains a gold coin and a silver coin.
 A box is selected at random and a coin is taken from that box at random. If the
-coin is a gold coin, what is the probability that the other coin in that box is
+coin is a gold coin, what's the probability that the other coin in that box is
 also a gold coin?
 \end{example}
 
-This problem is about conditional probability. It is easy to find the
+This problem is about conditional probability. It's easy to find the
 probability of getting a certain box, and it is easy to find the probability of
 getting a gold coin if we know the box, as shown in
 Figure~\ref{fig:probability-flow}. However, it is non-trivial to find the
-probability of getting a certain box when we know the final coin. We see the six
+probability of getting a certain box after we take out just one coin.
+%when we know the final coin.
+We see the six
 possible outcomes in Figure~\ref{fig:probability-flow} are equally likely to
 occur. Two outcomes of a gold coin are through the path of the box with two gold
 coins and one outcome of a gold coin is through the path of the box with a gold
@@ -267,9 +270,9 @@ coins given a final gold coin is
   =\frac{2}{3}.
 \end{align}
 
-Both of the aforementioned two approaches give us the correct answer. However,
+Both of the aforementioned approaches give us the correct answer. However,
 we don't have to go through the counting or reasoning. If we can simulate the
-game, we can find the result pretty accurately. The following code simulate the 
+game, we can find the result pretty accurately. The following code simulates the 
 game and approximate the probability numerically.
 
 \showCode{R}{Code/probability-BertrandBox.R}
@@ -382,7 +385,7 @@ the answer is similar, but the actually probability is surprisingly much
 higher. The probability that at least two people share a birthday is about 0.5.
 
 If you took a plane with 253 passengers, the probability that someone shares
-your birthday is around 0.5. But you are almost certain at least two people
+your birthday is around 0.5. But you are almost certain that at least two people
 share a birthday on that plane, because the probability is almost one.
 
 % We will also answer the following question: what is the probability that on the bus/plane there are at least two people who share a birthday (even if it's not the same as yours)?
@@ -400,11 +403,12 @@ the plane, the two probabilities are \inlnR{```cat(prob.p253[1])```} and
 \inlnR{```cat(prob.p253[2])```}, respectively.
 
 This example shows that some seemingly rare events are not rare, and they occur
-quite often. The second event has a large probability to occur, because the
-number of possible pairs is much larger. When you want to see if any of the 23
-people has the same birthday as yours, there are only 23 pairs (comparing yours
-with each of them) to consider for the event to occur. When you want to see if
-any of the 23 people share the same birthday, there are $23\times22/2=253$ pairs
+quite often, especially when we get mutiple samples. %The second event has a large probability to occur, because the
+%number of possible pairs is much larger.
+When you want to see if any of the 23
+people has the same birthday as yours, there are only 23 pairs to consider for the event to occur
+(comparing your birth date with each of the birth dates of the other people). When you want to see if
+any of the 23 people share the same birthday, there are $23\times22/2=253$ possible pairs
 (each two persons of the 23) to consider for the event to occur.
 
 This is particularly important in trials, where DNA match is often
@@ -424,7 +428,7 @@ the DNA sample from a scene is not negligible.
 The following example is one of the earliest questions in probability, when the field was mostly of interest among gamblers (who were also prominent mathematicians).
 
 \begin{example}[Fair Division]
-Tom and Jerry each put 30 dollar in a jackpot to start a tennis match. They are
+Tom and Jerry each put 30 dollars in a jackpot to start a tennis match. They are
 equally good players, and have equal chance to win a match. They decide that the
 first one to win three matches will win the \$60.  Now, Tom has won twice and
 Jerry has won once, but the matches took a long time and they had to go back
@@ -433,9 +437,10 @@ the current position (Tom leading 2-1)?
 \end{example}
 
 It seems Tom has won twice and Jerry has won once so the 60 dollars should be
-split as $40:20$. However, these are not proportional to their probabilities of
-winning. They need at most another two games to know the final winner. Here are
-the four possible winners of the next two games: \{Tom, Tom\}, \{Tom, Jerry\},
+split as $40:20$. However, this split is proportional to their current scor, but
+it's not proportional to their probabilities of
+winning. They need at most another two matches in order to know the final winner. Here are
+the four possible winners of the next two matches: \{Tom, Tom\}, \{Tom, Jerry\},
 \{Jerry, Tom\}, and \{Jerry, Jerry\}. In the first three possible outcome Tom
 ends up with 3 wins, and therefore would get the \$60, and only the fourth
 outcome leads to Jerry being the first to reach three wins.
@@ -450,7 +455,7 @@ Running the above code should give:
 \includeOutput{FairDivision}
 
 The takeaway from this example is that it is not sufficient to know what has
-happened in the past in order to make accurate predictions. It is also necessary
+happened in the past in order to make accurate predictions. It's also necessary
 to know the `horizon' of the experiment (how much longer the experiment needs to
 run.) The same logic would apply if the winning probabilities in each match are
 not equal, and when the horizon is farther (more matches are needed in order to
@@ -478,10 +483,10 @@ then says to you, ``Do you want to pick door No. 2?'' Is it to your advantage to
 switch your choice?
 \end{example}
 
-This famous example has confused many smart people. It is also about conditional
+This famous example has confused many smart people. It's also about conditional
 probability and can be solved by using the Bayesian formula. However, setting up
 the conditional and unconditional probabilities for this problem is
-complicated. Some people did not believe the result answer until they see some
+complicated. Some people did not believe the result answer until they were shown some
 simulations. The following code provide a simulation based on \code{n=1000}
 repetitions.   
 
@@ -594,7 +599,7 @@ F & 373 & 22 & (6\%) & 341 & 24 &(\textbf{7\%})  \\
 Things get strange after we divide the data according different departments. In
 four of the departments (A, B, D, and F) women were more likely to be admitted
 than men.  In departments C and E, men were more likely to be admitted (by
-3-4\%). In contrast, the acceptance rate for womenin department A was 20\% more
+3-4\%). In contrast, the acceptance rate for women in department A was 20\% more
 than for men.
 
 To explain this, \cite{bickel1975sex} noticed that women
@@ -643,7 +648,7 @@ group!
 \begin{figure}[H]
 \includegraphics[width=0.45\textwidth]{images/chapter_3/probability-Simpson-plots.pdf}
 \includegraphics[width=0.45\textwidth,page=2]{images/chapter_3/probability-Simpson-plots.pdf}
-\caption{Scatter plot of the whole data without (left) and with (right) group labeled.}
+\caption{Scatter plot of the whole data without (left) and with (right) group labeled}
 \label{fig:probability-simpson}
 \end{figure}
 
@@ -738,9 +743,9 @@ start from opening the same drawer if they all start with a draw at random.\\
 \emph{Hint:} Consider the birthday problem in Example~\ref{exam:birthday}.
 \end{listhead}
 
-The probability of survival with the better strategy is complicate to derive
+The probability of survival with the better strategy is complicated to derive
 analytically.  In the following, we define two functions to simulate the method
-of randomly open 50 drawers and the better strategy, respectively.
+of randomly openning 50 drawers and the better strategy, respectively.
 
 \showCode{R}{Code/probability-100prisoners.R}[1][41]
 \runR{Code/probability-100prisoners.R}{100prisoners}
@@ -751,7 +756,7 @@ drawers, respectively:
 \includeOutput{100prisoners}
 
 We see that opening drawers randomly has a survival probability of almost zero
-while the smarting strategy gives a survival probability close to 0.3.
+while the smart strategy gives a survival probability close to 0.3.
 
 % Axioms?
 % inequalities
