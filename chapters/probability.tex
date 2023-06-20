@@ -380,18 +380,18 @@ For example, suppose you want to purchase a new phone which is offered by three 
   \subsection{Seemingly Rare Events}\label{birthday-problem}}
 
 \begin{example}[Birthday Problem]\label{exam:birthday}
-You go on a long trip on your birthday and take a bus. There are 23 people on
+You go on a long trip on your birthday and take a bus. There are 23 people (including you) on
 the bus, and to make the ride more fun you ask all the other passengers for
 their birth date (month and day, not year) and see if you can celebrate
 together. How likely is it that someone on the bus shares your birthday? How
-likely are there at least two of the other 23 people who share a birthday (even
+likely that some of the 23 people share a birthday (even
 if it's not the same as yours)?
 \end{example}
 
 The chance that a random person has the same birthday as yours is
 $1/365\approx0.0027$, so this is a rare event.
-With 23 other people on the bus, the probability that someone shares your
-birthday is about $0.061$ which is quite small, so it's pretty unlikely. For
+With 22 other people on the bus, the probability that someone shares your
+birthday is $1-(364/365)^{22}=0.0586$ which is quite small, so it's pretty unlikely. For
 the second question that two of the 23 people share a birthday, it seems that
 the answer is similar, but the actually probability is surprisingly much
 higher. The probability that at least two people share a birthday is about 0.5.
@@ -407,9 +407,9 @@ Let's use simulation to find answers to these questions.
 \showCode{R}{Code/probability-birthday.R}
 \runR{Code/probability-birthday.R}{birthday}{} Running the above code gives
 results which are very close to the number we stated above, as predicted by
-probability. That is, if there are 23 other people on the bus the probability
+probability. That is, if there are 22 other people on the bus the probability
 that some person's birthday is the same as yours is
-\inlnR{```cat(prob.p23[1])```} and the probability that some other people share
+\inlnR{```cat(prob.p23[1])```} and the probability that some people share
 the same birthday is \inlnR{```cat(prob.p23[2])```} . If there are 253 people on
 the plane, the two probabilities are \inlnR{```cat(prob.p253[1])```} and
 \inlnR{```cat(prob.p253[2])```}, respectively.
@@ -417,8 +417,8 @@ the plane, the two probabilities are \inlnR{```cat(prob.p253[1])```} and
 This example shows that some seemingly rare events are not rare, and they occur
 quite often, especially when we get mutiple samples. %The second event has a large probability to occur, because the
 %number of possible pairs is much larger.
-When you want to see if any of the 23
-people has the same birthday as yours, there are only 23 pairs to consider for the event to occur
+When you want to see if any of the other 22
+people has the same birthday as yours, there are only 22 pairs to consider for the event to occur
 (comparing your birth date with each of the birth dates of the other people). When you want to see if
 any of the 23 people share the same birthday, there are $23\times22/2=253$ possible pairs
 (each two persons of the 23) to consider for the event to occur.
