@@ -15,4 +15,4 @@ twoshots <- function() {
 shot.again <- replicate(n, twoshots())
 first.blank <- shot.again[1,] > 2
 prob2 <- sum(shot.again[2,first.blank] <= 2) / sum(first.blank)
-print(c(prob1, prob2))
+print(prob.revolver <- round(c(prob1, prob2), digits=3))

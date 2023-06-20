@@ -41,6 +41,6 @@ open.smart <- function(prisoners, n=length(prisoners)) {
 }
 
 ## survival probability of randomly open
-print(mean(replicate(10000, open.random(prisoners))))
+print(prob.openrandom <- mean(replicate(10000, open.random(prisoners))))
 ## survival probability of using the better strategy
-print(mean(replicate(10000, open.smart(prisoners))))
+print(prob.opensmart <- mean(replicate(10000, open.smart(prisoners))))
