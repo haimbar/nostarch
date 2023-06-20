@@ -13,4 +13,4 @@ for (i in 1:n){
     }
 }
 observed <- prize[host == 3] # we see the cases that the host open door 3
-print(sum(observed == 2) / length(observed))
+print(prob.monty <- sum(observed == 2) / length(observed))

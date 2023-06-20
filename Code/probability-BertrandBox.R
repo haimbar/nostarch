@@ -7,5 +7,6 @@ boxcoin <- function(boxs){
     coin <- substr(box, start=idx, stop=idx)
     return(c(box, coin))
 }
-res <- replicate(n=1000, boxcoin(boxs))     # play the game for n times
-print(mean(res[1, res[2,] == "G"] == "GG")) # approximate the probability
+res <- replicate(n=1000, boxcoin(boxs)) # play the game for n times
+## approximate the probability
+cat(prob.twogold <- mean(res[1, res[2,] == "G"] == "GG"))
