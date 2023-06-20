@@ -121,7 +121,7 @@ We can now do things with this variable. For example, we check the variable type
 We can also get a bit more detailed information about a variable by checking its structure; to do this, we use the \lstinline{str()} function:
 \showCode{R}{Code/ch1sec1.R}[11][11]
 \noindent As you should see in the output, this shows that the variable is of class  \lstinline{character}, and it has three values:
-\inlnR{```str(courseNames)```}[vbox]
+\inlnR{```str(courseNames)```}[][vbox]
 % AF: Spacing here is off at the bottom. Too much space after the frame. Can we use \lstlisting instead?
 
 Our \lstinline{courseNames} is what's called a \emph{vector}, a one-dimensional array of objects of the same type (in this case, strings of characters).
@@ -190,7 +190,7 @@ Let's combine what we've learned so far to create the 52 cards in a standard dec
 \showCode{R}{Code/ch1sec1.R}[28][29]
 Run each line separately and check the content of \lstinline{suits} and what
 \lstinline{rep(1:13, 4)} generates. Note that the function \lstinline{paste0()} is the same as \lstinline{paste(..., collapse="")}. The content of the cards variable should be:
-\inlnR{```cat(paste(cards))```}[vbox]
+\inlnR{```cat(paste(cards))```}[][vbox]
 % AF: We want to avoid "stacking" our listings on top of headers, so let's add some filler text here.
 Now that we have our cards, let's use them.
 
@@ -201,7 +201,7 @@ The \lstinline{sample()} function in this example is used to draw 20 cards at ra
 The \lstinline{sample()} function draws a different random sample each time unless we set the random \emph{seed} to a fixed value. The \lstinline{set.seed()} function is used to ensure the reproducibility of the results.  Try running the code without the \lstinline{set.seed()} line, and you should see that you get different results each time.
 
 This is what the results look like with the seed:
-\inlnR{```print(pokerHand)```}[vbox]
+\inlnR{```print(pokerHand)```}[][vbox]
 
 Check the class and the structure of the variable \lstinline{pokerHand}, using the functions we've mentioned earlier.
 
@@ -440,7 +440,7 @@ In the next chapter we'll go into more detail about how to generate plots, but n
 We can obtain more detailed summaries about the sample by using the \lstinline{summary()} function. It gives the minimum, maximum, the 25th, 50th, and 75th percentiles, as well as the mean of the sample. If we use the random numbers from the normal distribution in the previous code:
 \showCode{R}{Code/ch1sec3.R}[39][39]
 This should give us the following output:
-\inlnR{```print(summary(x))```}[vbox]
+\inlnR{```print(summary(x))```}[][vbox]
 We can also use one of several functions from contributed packages in order to get more detailed summaries of data. For example, the \lstinline{stat.desc()} function from the pastecs package, or the \lstinline{describe()} function from the psych package give additional details such as the sample size, the minimum, the maximum, the standard deviation, and so forth.
 
 \subsection{Summarizing Discrete Data}
@@ -453,7 +453,7 @@ For example, suppose there is a town with three hotels (Motel 6, Best Western,  
 % AF: Update wingdings, as mentioned above.
 Note that \lstinline{table()} can take one argument as in \wingding{1} or \wingding{2}, in which case it produces the counts of each value in its input; or it can take two arguments as in \wingding{3}, in which case it will \emph{cross-tabulate} the data, meaning that it shows the counts for each combination of the two categorical variables.
 This code produces the following output:
-\inlnR{```print(table(hotelrooms));print(autotbl <- table(autorental));print(table(hotelrooms, autorental))```}[vbox]
+\inlnR{```print(table(hotelrooms));print(autotbl <- table(autorental));print(table(hotelrooms, autorental))```}[][vbox]
 
 
 We can use the \lstinline{max()} and \lstinline{which.max()} functions to find the \emph{mode} of the data (the most frequent value):
