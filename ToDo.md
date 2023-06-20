@@ -51,3 +51,15 @@
 \end{exercise}
 ```
 
+
+### Misc
+- p4: could introduce file.path(), which is cross-platform
+- p4, last line: comma at the beginning of the line
+- p7: R output chunk suspicious
+- p10: wrap long lines at better places
+- p10: commenting style at line start ## not #
+- Figures: why 0.6 textwidth?
+- p12: vertical align of comments
+- p12: one-line for loop does need curly braces
+- Figure 1-5: remove extra blanks
+

@@ -18,6 +18,9 @@ build: clean
 	@for i in $$(seq 1 8); do \
 	    mkdir -p images/chapter_$$i; \
 	done
-	xelatex -shell-escape sidsmain.tex
-	bibtex sidsmain
-	xelatex -shell-escape sidsmain.tex
+	latexmk -pdflatex='xelatex -shell-escape %O %S' -pdf sidsmain.tex
+	# xelatex -shell-escape sidsmain.tex
+	# bibtex sidsmain
+	# xelatex -shell-escape sidsmain.tex
+	# xelatex -shell-escape sidsmain.tex
+
