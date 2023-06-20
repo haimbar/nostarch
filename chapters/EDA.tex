@@ -99,7 +99,7 @@ Enter \lstinline{str(df1)} to see the structure of the data frame \lstinline{df1
 in the data frame have different types.
 The last line in the code above should produce the following summary of each column in the data
 frame:
-\inlnR{```print(summary(df1))```}[vbox]
+\inlnR{```print(summary(df1))```}[][vbox]
 % \includeOutput{ch2_01gendat}
 
 For numerical variables like \lstinline{x} and \lstinline{y}, \R shows the mean and the
@@ -390,7 +390,7 @@ Use what you learned in the previous section to plot this \lstinline{x}, \lstinl
 also be summarized by using the \lstinline{table()} function, which simply counts the
 total number of observations in each category. Try entering \lstinline{xcat}. It should give the following: 
 
-\inlnR{```print(table(xcat))```}[vbox]
+\inlnR{```print(table(xcat))```}[][vbox]
 You can see that there are \inlnR{```cat(table(xcat)[[1]])```} numbers between 0 and 9, and  \inlnR{```cat(table(xcat)[[4]])```} numbers are greater than 16 and less than or equal to 25.
 
 This can be shown graphically by using the \lstinline{barplot()} function as shown in
@@ -417,7 +417,7 @@ Let's create a new variable called \lstinline{ycat}, based on some ranges of a c
 
 The function \lstinline{ftable()} (for `flat table') is used to cross-tabulate. In the following output, 
 you can see the counts per each combination of \lstinline{xcat} and  \lstinline{ycat} values.
-\inlnR{```print(ftable(xcat, ycat))```}[vbox]
+\inlnR{```print(ftable(xcat, ycat))```}[][vbox]
 
 There are a few things which this table allows us to see quite easily. It is clear that the distribution in each row is different from the other ones. The same thing can be said about the columns. 
 For example, most of the observations in the (0,30] category of the y variable are in (0,9] or (9,12] categories of the x variable. However, most of the data in the (100,300]  column are in the (12,16] or (16,25] rows.
