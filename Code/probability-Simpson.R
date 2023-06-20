@@ -9,5 +9,5 @@ plot(x, y, pch=19, col=4, cex=0.7) # plot the whole data
 abline(lm(y ~ x), lwd=3, col="navyblue")   # show the overall linear trend
 plot(x, y, pch = z, col = z)       # plot the data with group labeled
 for (grp in 1:g) # fit a line for each group
-    abline(lm(y[z==grp] ~ x[z==grp]), lwd=3, col=grp, lty=2)
+    abline(lm(y[z==grp] ~ x[z==grp]), lwd=3, col=grp, lty=2) # (@\wingding{1}@)
 dev.off()
