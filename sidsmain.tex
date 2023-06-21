@@ -16,24 +16,11 @@
 \usepackage{pdfpages}
 \usepackage{nshyper}
 \usepackage[italic]{mathastext}
-\lstset{
-  fancyvrb=true,
-  breaklines=true,
-  escapeinside=||
-}
 
-
-
-
-\def\replace#1#2#3{%
- \def\tmp##1#2{##1#3\tmp}%
-   \tmp#1\stopreplace#2\stopreplace}
-\def\stopreplace#1\stopreplace{}
-
-
-% our additions to the preamble (make external)
-%\usepackage[python]{runcode}
-%\usepackage[python,stopserver]{runcode}
+% \def\replace#1#2#3{%
+%  \def\tmp##1#2{##1#3\tmp}%
+%    \tmp#1\stopreplace#2\stopreplace}
+% \def\stopreplace#1\stopreplace{}
 
 \IfFileExists{ForceCache}{
 \usepackage[cache,listings]{runcode} 
@@ -41,6 +28,12 @@
 {
 \usepackage[nohup,R,listings]{runcode} % can add/remove the cache option
 }
+\lstset{
+  fancyvrb=true,
+  breaklines=true,
+  escapeinside={(@}{@)}
+}
+\lstalias{R}{}
 
 %\setminted[julia]{linenos, frame=single, bgcolor=bg, breaklines=true}
 %\setminted[R]{linenos, frame=single, bgcolor=white, breaklines=true}
@@ -104,52 +97,6 @@ boxsep=0pt,left=0pt,right=0pt,top=0pt,bottom=0pt} % change the margins
 
 \let\oldhref\href
 \renewcommand{\href}[2]{\oldhref{#1}{\itshape#2}}
-
-
-% ===== nostarch code ======
-
-\lstset{escapeinside={(@}{@)},}
-% \showCode prints the source code, using minted or listings for a pretty layout
-% Arg #1 is the programming language,
-% Arg #2 is the source file name,
-% Args #3 and #4 are the first and last line to show (optional).
-
-\RenewDocumentCommand{\showCode}{m m O{} O{}}{% \-\\
-  \IfFileExists{#2}{
-    \ifthenelse{\isempty{#3}}{
-    \ifminted
-    \inputminted{text}{#2}
-    \ifreducedspace
-      \vspace{-\medskipamount}
-      \vspace{-\baselineskip}
-    \fi
-    \else
-      \iflistings
-        \lstinputlisting[]{#2}
-      \else
-    \VerbatimInput[fontsize=\footnotesize,linenos=true,frame=single,breaklines]{#2}
-    \fi
-    \fi
-  }{
-    \ifminted
-    \inputminted[firstline=#3, lastline=#4, firstnumber=1]{text}{#2}
-    \ifreducedspace
-      \vspace{-\medskipamount}
-      \vspace{-\baselineskip}
-    \fi
-    \else
-      \iflistings
-      \lstinputlisting[firstline=#3, lastline=#4]{#2}
-      \else
-    \VerbatimInput[fontsize=\footnotesize,linenos=true,frame=single,breaklines, firstline=#3, lastline=#4, firstnumber=1]{#2}
-    \fi
-    \fi
-  } 
-  }{
-    \textcolor{red}{\textbf{showCode: File #2 does not exist!}}
-  }
-
-}
 
 \begin{document}
 
