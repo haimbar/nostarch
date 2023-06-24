@@ -153,183 +153,137 @@ Although the LLN applies to almost any distribution we will ever encounter, the 
 \section{The Central Limit Theorem}
 The LLN says that as we increase the sample size, the sample mean converges to a fixed value (the true population mean).  It does not say anything, however, about how close the sample estimate is to the true value. In other words, it says nothing about our level of (un)certainty. 
 
-The central limit theorem (CLT) says that, in many (most) situations, when independent random variables are averaged, their normalized mean tends toward a normal distribution. This is true even if the original variables themselves are not normally distributed!
+The central limit theorem (CLT) says that, in most situations, if we could get many random samples from the population, and calculate the mean from each sample, and then plotted the many sample means as a histogram, then this histogram will look like a normal distribution. This is true even if the original variables themselves are not normally distributed!
 
-The CLT requires very little about the actual distribution of the data. The sample has to be i.i.d., and the distribution must have a finite variance. 
+The CLT requires very little about the actual distribution of the data: the sample has to be i.i.d., and the distribution must have a finite variance. 
 
 \subsection{CLT -- Examples}
 We will draw a random sample of size n from the following distributions:
 \begin{itemize}
 %\item Standard normal (the \lstinline{rnorm(n,0,1)} function).
 %\item Poisson with rate parameter $\lambda=3$ (use \lstinline{rpois(, 3)}).
-\item Exponential with rate parameter 5.5 (use \lstinline{rexp(n, 5.5)}).
+\item Exponential with rate parameter 5.5 (using \lstinline{rexp(n, 5.5)}).
 \item Binomial with probability 0.15.
 \end{itemize}
 
 In each case, we will plot a histogram of the sample, and overlay the probability density function on top of it.  We will repeat it 10,000 times and each time calculate the sample mean. Then, we will plot a histogram of the 10,000 sample means.
 
-\subsubsection{Exponential distribution}
+\subsubsection{Exponential Distribution}
+First, let's draw one sample from Exp(5.5) with $n$=100 random i.i.d. draws, and see that the distribution of the sample is very different from normal. In the following code, we plot a histogram from one sample (with n=100) and overlay the graph of the probability distribution function of Exp(5.5), in order to show that the sample is representative of the true distribution:
 
-%<<intro-lln5-0, eval=TRUE, fig.align='center', fig.width=3.5, fig.height=3.5, fig.cap="Simulated data from an exponential distribution." >>=
-%# one iteration to show the actual distribution of the sample (not normal)
-%n <- 100
-%samp <- rexp(n, 5.5)
-%hist(samp, freq = F, breaks=20,main="", xlab="x", border="white") # show the empirical distribution
-%xs <- seq(0, max(samp), length=1000)
-%lines(xs, dexp(xs,5.5), lwd=3, col=2) # show the true distribution
-%@
+\showCode{R}{Code/llnclt_CLTexp.R}[2][7]
+\runR{Code/llnclt_CLTexp.R}{cltsimexp}
 
-Notice that the distribution is very skewed, and not at all like a normal distribution.
-To understand the CLT, we will compare the distribution of the 10,000 means for two different sample sizes, 50 and 500.
+Notice that the distribution in Figure \ref{CLTexp} is very skewed, and doesn't look at all like a normal distribution. Try running \lstinline{mean(samp)}. you should get \inlnR{```cat(mean(samp))```}[meansampexp], which is approximately 1/5.5, the theoretical mean of the Exp(5.5) distribution.
 
-%<<intro-lln5-1, eval=TRUE, fig.align='center', fig.width=7, fig.height=3.5, fig.cap="The distribution of the sample mean from 10,000 simulated data from an exponential distribution. Left: $n=50$, right: $n=500$" >>=
-%# 10000 iterations - show the distribution of the sample means:
-%n <- 50
-%allMeans <- rep(0, 10000)
-%for (i in 1:10000) {
-%  samp <- rexp(n,5.5)
-%  allMeans[i] <- mean(samp)
-%}
-%par(mfrow=c(1,2))
-%m <- min(allMeans)
-%M <- max(allMeans)
-%hist(allMeans, freq = F, breaks=40, xlim=c(m, M), main="", xlab="Sample mean", border="white", col="orchid")
-%abline(v=1/5.5, lwd=3, col="green")
-%# repeat, this time with a larger sample size:
-%# 10000 iterations - show the distribution of the sample means:
-%n <- 500
-%allMeans <- rep(0, 10000)
-%for (i in 1:10000) {
-%  samp <- rexp(n,5.5)
-%  allMeans[i] <- mean(samp)
-%}
-%hist(allMeans, freq = F, breaks=40, xlim=c(m, M), main="", xlab="Sample mean", border="white", col="orange")
-%abline(v=1/5.5, lwd=3, col="green")
-%par(mfrow=c(1,1))
-%@
+\begin{figure}[H]
+\includegraphics[width=0.6\textwidth]{images/chapter_4/CLT_exp.pdf}
+\caption{Simulated data from an exponential distribution}
+\label{CLTexp}
+\end{figure}
 
-The mean is estimated quite accurately in both cases, and the overall shape of the 10,000 sample means has the shape of a normal distribution. However, the spread (variance) of the distribution decreases as the sample size increases.
+To understand the CLT, we will draw 10,000 samples, calculate the mean of each sample, and plot a histogram of those 10,000 sample means. We will first do it with $n$=50, like so:
 
-\subsubsection{Binomial distribution}
-In this example, our data come from a discrete and skewed distribution.
+\showCode{R}{Code/llnclt_CLTexp.R}[12][22]
 
-%<<intro-lln5-2, eval=TRUE, fig.align='center', fig.width=7, fig.height=3.5, fig.cap="The distribution of the sample mean from 10,000 simulated data from a binomial distribution. Left: $n=50$, right: $n=500$" >>=
-%# 10000 iterations - show the distribution of the sample means:
-%n <- 50
-%allMeans <- rep(0, 10000)
-%for (i in 1:10000) {
-%  samp <- rbinom(n,1,0.15)
-%  allMeans[i] <- mean(samp)
-%}
-%par(mfrow=c(1,2))
-%m <- min(allMeans)
-%M <- max(allMeans)
-%hist(allMeans, freq = F, breaks=40, xlim=c(m, M), main="", xlab="Sample mean", border="white", col="orchid")
-%abline(v=0.15, lwd=3, col="green")
-%
-%# repeat, this time with a larger sample size:
-%# 10000 iterations - show the distribution of the sample means:
-%n <- 500
-%allMeans <- rep(0, 10000)
-%for (i in 1:10000) {
-%  samp <- rbinom(n,1,0.15)
-%  allMeans[i] <- mean(samp)
-%}
-%hist(allMeans, freq = F, breaks=40, xlim=c(m, M), main="", xlab="Sample mean", border="white", col="orange")
-%abline(v=0.15, lwd=3, col="green")
-%par(mfrow=c(1,1))
-%@
+In \wingding{1} we prepare a vector which will hold the sample mean from 10,000 simulated datasets. In \wingding{2} we get the sample mean for the $i$th random sample, and update the vector \lstinline{allMeans}. Then, we plot the histogram and use \lstinline{abline} to show the true mean of the population (which is 1/5.5).
 
-Notice that because p=0.15 is quite small, when n=50 the shape of the distribution of sample means is still a bit skewed, but when n is large the bell shape appears!
+Repeat the same code, but change the first line to \lstinline{n <- 500}. Figure \ref{CLTexp2} shows the results for $n=50$ (left) and $n=500$ (right).
 
-\subsubsection{Application to child births -- boy/girl ratio}
-In 2021 the boy to girl birth ratio in the USA is estimated to be 1.05. If we took a random sample of 300 newborns across the USA, how many do you expect to be boys?
+\begin{figure}[H]
+\includegraphics[width=0.9\textwidth]{images/chapter_4/CLT_exp2.pdf}
+\caption{The distribution of the sample mean from 10,000 simulated data from an exponential distribution. Left: $n=50$, right: $n=500$}
+\label{CLTexp2}
+\end{figure}
 
-%<<intro-lln5-3, eval=TRUE >>=
-%b2g <- 1.05 # B/G
-%# We need B/(B+G)
-%# Since B/G=1.05, B=1.05G, so:
-%pboy <- 1.05/(1+1.05)
-%n <- 300
-%nsim <- 1
-%set.seed(100091)
-%boysInSample <- rbinom(nsim, n, pboy)
-%cat("Prob. boy:", pboy, ". Simulated number of boys in a sample of 300 is:", mean(boysInSample),"\n")
-%@
+We can see that the mean is estimated quite accurately in both cases, and the overall shape of the 10,000 sample means has the shape of a normal distribution. However, the spread (variance) of the distribution decreases as the sample size increases. This is the essence of the CLT!
+It tells us that the \emph{single} sample mean that we actually have is most likely not exactly the true mean in the population, but if we can get a larger sample size ($n$) then we'll know that the range in which we can expect to find the true mean is getting smaller.
 
-Would it be very surprising if we actually see 148 in the random sample?\\
-Suppose we took a sample of 3,000, instead. Would is be surprising if we observed 1,480 boys?\\
+\subsubsection{Binomial Distribution}
+In order to see the generality of the CLT, we demonstrate it again with another, very different distribution. This time our data come from a discrete and skewed distribution (the binomial).
+
+The following code is very similar to the previous one, except that we use \lstinline{rbinom} to generate the data. Try it, and then change the first line to \lstinline{n <- 500}, and run it again.
+
+\showCode{R}{Code/llnclt_CLTbinom.R}[3][13]
+\runR{Code/llnclt_CLTbinom.R}{cltsimbinom}
+
+You should get the plot in Figure \ref{CLTbinom}. Notice that because we've simulated data with a relatively small probability of getting a success ($p$=0.15), when $n$=50 the shape of the distribution of sample means is still a bit skewed, but when $n$ is large the bell shape appears!
+
+\begin{figure}[H]
+\includegraphics[width=0.9\textwidth]{images/chapter_4/CLT_binom.pdf}
+\caption{The distribution of the sample mean from 10,000 simulated data from a binomial distribution. Left: $n=50$, right: $n=500$}
+\label{CLTbinom}
+\end{figure}
+
+Once again, in both cases the mean of 10,000 simulated sample means is very close to the true value (0.15), but as $n$ gets larger, we are more confident that the \emph{only} value that we got from \emph{a single} experiment is close to the true value, because the range in which we can find the true value is narrower.
+
+\subsubsection{Application to Child Births -- Boy/Girl Ratio}
+In 2021 the boy to girl birth ratio in the USA is estimated to be 1.05. If we took a random sample of 300 newborns across the USA, how many do you expect to be boys? Run the following code:
+
+\showCode{R}{Code/llnclt_boygirl.R}[1][8]
+\runR{Code/llnclt_boygirl.R}{boygirl}
+
+This should give the following:
+ \includeOutput{boygirl}%[inline]
+
+Would it be very surprising if we actually saw 148 in the random sample?
+Suppose we took a sample of 3,000, instead. Would is be surprising if we observed 1,480 boys?
 How about if we took a sample of 30,000, instead. Would is be surprising if we observed 14,800 boys?
 
-The probability of a boy birth does not depend on the sample size, and we calculated it to be 0.512, so the expected number of boys when the sample size is 300, 3000, and 30000 is 151, 1510, and 15100, respectively. So, it may appear that actually observing 148 instead of 151 is as likely as observing 1480 instead of 1510, or 14800 instead of 15100, but that is not true!
-The CLT tells us that when the sample size increases, the dispersion of the sample means around the true mean gets smaller and smaller. This is demonstrated in the code below. The green vertical line represents the expected number of boys, and the red one represents the observed ones. Notice that as we increase the sample size, the likelihood of the observed number of boys (148, 1480, 14800) gets smaller. When $n=30000$ the red line is well outside the range of the simulated sample means.
+The probability of a boy birth does not depend on the sample size, and we calculated it to be 0.512, so the expected number of boys when the sample size is 300, 3,000, and 30,000 is 151, 1,510, and 15,100, respectively. So, it may appear that actually observing 148 instead of 151 is as likely as observing 1,480 instead of 1,510, or 14,800 instead of 15,100, but that is not true!
+The CLT tells us that when the sample size increases, the dispersion of the sample means around the true mean gets smaller and smaller. This is demonstrated in the code below. 
+\showCode{R}{Code/llnclt_boygirl.R}[14][32]
 
-%<<intro-lln5-4, eval=TRUE, fig.align='center', fig.width=9, fig.height=3.5, fig.cap="Number of boy births." >>=
-%n <- 300
-%nsim <- 10000
-%par(mfrow=c(1,3))
-%set.seed(100091)
-%boysInSample <- rbinom(nsim, n, pboy)
-%hist(boysInSample, breaks=30,border="white", col="grey66", xlim=c(130,190), freq=FALSE, main="n=300")
-%abline(v=pboy*n, col=3, lwd=3)
-%abline(v=148, col=2, lwd=2)
-%
-%# sample size is 10 times larger:
-%boysInSample2 <- rbinom(nsim, 10*n, pboy)
-%hist(boysInSample2, breaks=30, border="white", col="grey66", xlim=c(1400,1700), freq=FALSE, main="n=3,000")
-%abline(v=pboy*10*n, col=3, lwd=3)
-%abline(v=1480, col=2, lwd=2)
-%# sample size is 100 times larger than the original example:
-%boysInSample3 <- rbinom(nsim, 100*n, pboy)
-%hist(boysInSample3, breaks=30,border="white", col="grey66", xlim=c(14500,16000), freq=FALSE, main="n=30,000")
-%abline(v=pboy*100*n, col=3, lwd=3)
-%abline(v=14800, col=2, lwd=2)
-%par(mfrow=c(1,1))
-%@
+The result is shown in Figure \ref{CLTboygirl}.
+The green vertical line represents the expected number of boys, and the red one represents the observed ones. Notice that as we increase the sample size, the likelihood of the observed number of boys (148, 1,480, 14,800) gets smaller. When $n=30000$ the red line is well outside the range of the simulated sample means.
 
-\subsection{Summary}
-The LLN and CLT are very powerful results. Keep in mind that in real-life when we do not know the true distribution, we can usually get just \textit{one sample}, not 10,000 like we did in our simulations.
-However, these theorems tell us that as long as this one sample is large enough, we can get a very good approximation for the distribution of the sample mean, if we \textit{could} get multiple samples.
-Not only that, but regardless of the distribution of the data, the sample mean will have a normal distribution with mean which is equal to the true mean of the original distribution (even if it's skewed, or discrete), and the variance of the sample mean will shrink as we increase the sample size. This is very convenient for testing hypotheses and constructing confidence intervals (next chapter).
+\begin{figure}[H]
+\includegraphics[width=\textwidth]{images/chapter_4/CLT_boygirl.pdf}
+\caption{Number of boy births with different sample sizes ($n$=300, 3,000, and 30,000)}
+\label{CLTboygirl}
+\end{figure}
 
-To conclude, let's revisit the IQ example, where we assumed that in the general population IQ scores have a normal distribution with mean=100 and  standard deviation =15.
+
+\section{Application -- the  IQ Scores}
+Let's revisit the IQ example, where we assumed that in the general population IQ scores have a normal distribution with mean of 100 and  standard deviation of 15.
 We drew a sample of 200 people, and calculated the sample mean and standard deviation, which turned out to be 99.4, and 15.6, respectively.
-The red curve shows the true density function, and the dashed green one shows the one estimated from the sample of 200 people. They are very close.
 
-%<<intro-lln5-5, eval=TRUE, fig.align='center', fig.width=3.5, fig.height=3.5, fig.cap="Simulated IQ scores." >>=
-%set.seed(95473)
-%n <- 200
-%samp <- rnorm(n, 100, 15)
-%hist(samp, freq=FALSE, main="", xlab="IQ score", border="white", col="lightblue")
-%xs <- seq(40,180, length=1000)
-%lines(xs, dnorm(xs, 100, 15), col=2, lwd=3)
-%lines(xs, dnorm(xs, mean(samp), sd(samp)), col=3, lwd=3, lty=2)
-%@
+In the following code, we plot two curves on top of the histogram we obtain from the sample -- one for the true normal distribution, and one using the sample mean and sample standard deviation:
+\showCode{R}{Code/llnclt_IQ2.R}[2][8]
+\runR{Code/llnclt_IQ2.R}{cltiq2}
 
-To answer the question how likely  it is to find a person with IQ greater than 150, we can calculate the area of the right tail of the distribution:
+Figure \ref{CLTIQfit} shows the result. The red curve shows the true density function, and the dashed green one shows the one estimated from the sample of 200 people. They are very close. The LLN tells us that as we increase our sample size, the sample mean will be closer to the true mean.
+The CLT tells us how close to the true mean we can expect that our sample mean to be. As the sample size gets larger, our confidence in how close we are to the true value increases (because the range of the values we can get from random sampling becomes narrower.)
 
-%<<intro-lln5-6, eval=TRUE>>=
-%cat(1-pnorm(150, mean=mean(samp), sd=sd(samp)),"\n")
-%@
-A very select group, indeed.
+\begin{figure}[H]
+\includegraphics[width=0.6\textwidth]{images/chapter_4/IQfit.pdf}
+\caption{Distribution of 200 IQ scores}
+\label{CLTIQfit}
+\end{figure}
 
-In order to be accepted to the Mensa club a person has to be in the top 2\% of the IQ distribution. In order to find the minimum score required in order to be a Mensa member, we use the \lstinline{quantile} function, if we want to use the data, or the \lstinline{qnorm} function to get the threshold from distribution of the entire population:
 
-%<<intro-lln5-7, eval=TRUE>>=
-%mensacutoff <- round(quantile(samp,probs = 0.98))
-%cat("Sample quantile:", mensacutoff,"\n")
-%cat("Population quantile:", qnorm(0.98, mean=mean(samp), sd=sd(samp)),"\n")
-%@
+In order to answer the question how likely  it is to find a person with IQ greater than 150, we can calculate the area of the right tail of the distribution. We can do it with the following code:
+\showCode{R}{Code/llnclt_IQ2.R}[11][11]
+Try it. You should get that the probability to get a score of 150 or more is only \inlnR{```cat(1-pnorm(150, mean=mean(samp), sd=sd(samp)))```}[IQtail]. A very select group, indeed.
 
-We can show it graphically:
-%<<intro-lln5-8, eval=TRUE, fig.align='center', fig.width=3.5, fig.height=3.5, fig.cap="The distribution of IQ's and the acceptance range to the Mensa club." >>=
-%xs <- seq(40,180, length=1000)
-%plot(xs, dnorm(xs, 100, 15), col=2, lwd=2, type='l', axes=F, ylab="", xlab="IQ")
-%axis(1); axis(2)
-%xx <- seq(qnorm(0.98, mean=mean(samp), sd=sd(samp)), 200, length=20)
-%yy <- dnorm(xx, 100, 15)
-%polygon(c(xx, rev(xx)), c(rep(0,length(xx)), rev(yy)), col="green", border="green", lwd=2)
-%@
+In the introduction to this chapter we also asked what has to be the minimum IQ score required in order to be a Mensa member (the top 2\% in the IQ distributions.) In the following code we use the \lstinline{quantile} function, if we want to use the sample of 200 people and not make any assumption about the shape of the distribution of IQ scores, or the \lstinline{qnorm} function if we want to calculate the threshold based on the assumption that the scores in the entire population follow a normal distribution. We can do it like so:
+ 
+\showCode{R}{Code/llnclt_IQ2.R}[13][15]
+Try it. You should get that the Mensa threshold is approximately \inlnR{```cat(mensacutoff)```}[mensa].
+We can show this threshold graphically. In the following code we draw the density function of the normal distribution, and fill the 2\% right tail of it 
+\showCode{R}{Code/llnclt_IQ2.R}[18][23]
 
-In chapter \ref{ch:hypothesis} we will see how the CLT can be use to form hypotheses and construct confident intervals. For example, we will be able to answer questions such as: "You are given the IQ test results of 13 people and they are: 139, 104, 115, 151, 116, 141, 117, 105, 134, 155, 130, 139, 121.
-Is this group different than the overall population?"
+Figure \ref{CLTIQMensa} shows the result. The shaded area covers exactly 2\% of the area under the curve.
+
+\begin{figure}[H]
+\includegraphics[width=0.6\textwidth]{images/chapter_4/IQtail.pdf}
+\caption{The distribution of IQ's and the acceptance range to the Mensa club}
+\label{CLTIQMensa}
+\end{figure}
+
+
+\section{Summary}
+The LLN and CLT are very powerful results. Keep in mind that in real-life when we do not know the true distribution, we can usually get just \textit{one sample}, not 10,000 like we did in our simulations.
+However, these theorems tell us that as long as this one sample is large enough, we can get a very good approximation for the distribution of the sample mean, \emph{as if we had multiple samples}.
+Not only that, but regardless of the distribution of the data, the sample mean will have a normal distribution with mean which is equal to the true mean of the original distribution (even if it's skewed, or discrete), and the variance of the sample mean will shrink as we increase the sample size. 
+In the next chapter we will see how the CLT can be used to test hypotheses and construct confident intervals for estimates. For example, we will be able to answer questions such as: "You are given the IQ test results of 13 people and they are: 139, 104, 115, 151, 116, 141, 117, 105, 134, 155, 130, 139, 121. Is this group different than the overall population?"
