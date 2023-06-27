@@ -3,12 +3,13 @@ title: "Project - NYC Crashes"
 author: "PUT YOUR NAME HERE"
 subtitle: PCS - UConn, July 2022
 output:
-  pdf_document
+  pdf_document:
+    keep_tex: true
 ---
 
 The NYC motor vehicle collisions crash table contains details on the crashes.
 The dataset we are using contains the crashes in [January,
-2022](https://github.com/statds/ids-s22/raw/main/notes/data/nyc_mv_collisions_202201.csv).
+2022](https://github.com/statds/ids-s22/blob/main/notes/data/nyc_mv_collisions_202201.csv)
 The real-time full data with documentation is available from 
 [NYC Open
 Data](https://data.cityofnewyork.us/Public-Safety/Motor-Vehicle-Collisions-Crashes/h9gi-nx95).
