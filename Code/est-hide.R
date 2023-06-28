@@ -5,7 +5,7 @@ x <- rnorm(n, mean = mu, sd = 1)    # clues are in the sample
 summary(x)
 
 ## point estimates
-(estimates <- c(mu1 = mean(x), mu2 = median(x), mu3 = mean(range(x))))
+estimates <- c(mu1 = mean(x), mu2 = median(x), mu3 = mean(range(x)))
 
 
 
