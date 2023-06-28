@@ -12,7 +12,7 @@ nrep <- 1000                                  # number of replicates
 n <- 20                                       # sample size
 sim <- replicate(nrep, do1rep(n, mu))         # run the race
 rowMeans(sim)                                 # summarize the means
-print(rowMeans(sim))
+
 
 
 

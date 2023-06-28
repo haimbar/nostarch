@@ -334,6 +334,33 @@ well for $n = 20$.
 
 \subsection{Resampling}
 
+Constructing confidence intervals depends on the uncertainty of the
+estimator. Often times, a point estimator can be easily obtained, for example,
+through optmizing an objective function or solving some estimating
+equations. The variation of a point estimator, however, can be much more
+difficult to obtain. Asymptotic approximations of the variance of an estimator
+may be derived in some situations, but even in these situations, the asyptotic
+variance approximation may not work well with small to moderate sample sizes.
+
+
+\emph{Bootstrap}\index{bootstrap} is a powerful tool to approximate the
+uncertainty of an estimator.
+A self-assisted approach, it approximates the variation of the sample by
+treating the sample as a population and resample repeatedly from it with
+replacement, each time forming a so-called bootstrap sample of the same size as
+the original sample. For each bootstrap sample, we can obtain the point
+estimator. The variation of the original point estimator can be approximated by
+the empirical variation of a collection of the point estimators obtained from
+the bootstrap samples.
+
+
+\begin{example}[Bootstrap approximation of variance]
+Here we demonstrate how well bootstrap can approximate the variance of some
+simple statistics.
+
+
+
+
 
 %%% Local Variables:
 %%% mode: latex
