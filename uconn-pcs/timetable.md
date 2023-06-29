@@ -19,8 +19,8 @@ Wednesday
 + 11:00--12:00: Estimation
 
 Thursday
-+ 09:00--10:30: Sampling
-+ 10:30--12:00: Regression + Correlation
++ 09:00--10:30: Regression + Correlation
++ 10:30--12:00: Sampling
 + 14:00--15:00: Hypothesis testing
 + 15:00--16:00: Lab hours for project preparation
 
