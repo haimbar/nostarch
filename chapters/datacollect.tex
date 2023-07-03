@@ -99,14 +99,16 @@ and a misleading conclusion.
 \hypertarget{ch:data}{%
 \section{Berkson's bias}\label{berkson-bias}}
 
-The following impressions are common, but are then really true?
+The following impressions are common, but are they real facts?
 \begin{itemize}
 \item Hollywood ruins good books. You can find a lot of good books made into
-  terrible movies (e.g.,
-  \href{https://www.yardbarker.com/entertainment/articles/popular_books_that_were_made_into_terrible_movies/s1__29971472}{here})
-  and a lot of great films made from bad books (e.g.,
-  \href{https://www.cinelinx.com/movie-news/movie-stuff/bad-books-that-made-great-films/}{here}).
+  terrible movies
+  % (e.g., \href{https://www.yardbarker.com/entertainment/articles/popular_books_that_were_made_into_terrible_movies/s1__29971472}{here})
+  and a lot of great films made from bad books.
+  % (e.g.,
+  % \href{https://www.cinelinx.com/movie-news/movie-stuff/bad-books-that-made-great-films/}{here}).
 \item Handsome men are such jerks.
+\item Pretty girls are meaner.
 \item More talented people are less attractive.
 \item Smarter students spend less time on studying.
 \item The list can go on forever ...
@@ -126,7 +128,7 @@ Berkson's bias. Let's start with an example to explain.
 
 Let's calculate some numbers to see the answer. For all the stamps, the
 probability that a stamp is pretty is 300/1000=0.3; for rare stamps, the
-probability that a stamp is pretty is 30/100=0.3. Thus, a rare stamp is not more
+probability that a stamp is pretty is 30/100=0.3. Thus, a rare stamp is not less
 likely to be pretty.
 
 For the stamps your friends saw, the probability that a stamp is pretty is
@@ -137,81 +139,135 @@ to be pretty!
 The reason for their incorrect conclusion is that the 370 stumps are not a
 representative sample of all the stamps you have. The sample is biased.
 
-Now let's simulate some data to further illustrate.
+Now let's simulate some data to further illustrate the problem.
 
-\showCode{R}{Code/datacollect-berkson.R}
-\runR{Code/datacollect-berkson.R}{datacollect-berkson}
-Running the above code gives:
-\includeOutput{datacollect-berkson}
+\showCode{R}{Code/datacollect-berkson.R} %
+\runR{Code/datacollect-berkson.R}{datacollect-berkson} %
+Running the above code should give the two figures in Figure~\ref{fig:berkson}
+and the following output.
+\includeOutput{datacollect-berkson} %
+We see from the output and Figure~\ref{fig:berkson} that the correlation between
+the goodness of books and the goodness of movies is very close to zero and there
+is no linear association between them. However, if we only see the good books or
+good movies (a biased sample), the negative linear relationship is very evident
+in Figure~\ref{fig:berkson} (b) and the correlation has a large
+magnitude. People typically only recommend good books or good movies to other
+people, so what we see are only these with some good characters. If a book is
+bad and the movie based on it is terrible, it is very likely that you never have
+a chance to know them. Thus, the impression that Hollywood ruins good books is
+not a real fact, but just an impression based on a biased sample. This explains
+other impressions on the previous list as well.
 
-\begin{figure}
-  \centering
-    \begin{subfigure}{0.485\textwidth}
-      \includegraphics[width=\textwidth]{images/chapter_6/berkson1.pdf}
-      \caption{No linear association between goodness of movie and goodness of book}
-    \end{subfigure}
+\begin{figure}[H]
   \begin{subfigure}{0.485\textwidth}
-      \includegraphics[width=\textwidth]{images/chapter_6/berkson2.pdf}
-      \caption{Negative linear association for top 10 percent books and/or movie}
+    \includegraphics[width=\textwidth]{images/chapter_6/berkson1.pdf}
+    \caption{No linear association between goodness of movies and goodness of
+      books}
   \end{subfigure}
-  \caption{Goodness of movie v.s. goodness of book}
+  \begin{subfigure}{0.485\textwidth}
+    \includegraphics[width=\textwidth]{images/chapter_6/berkson2.pdf}
+    \caption{Negative linear association for top 10 percent books and/or movies}
+  \end{subfigure}
+  \caption{Goodness of movies v.s. goodness of books}
   \label{fig:berkson}
 \end{figure}
 
 \hypertarget{ch:data}{%
 \section{Survival Bias}\label{survival-bias}}
-During World War II, aircraft that had returned from missions were examined and  the most-hit areas of the plane are given in Figure~\ref{fig:survival-bias}. Which areas should the army add armor to increase the survivorship of the planes? A direct intuition may suggest to reinforce areas with the most bullet holes. However, this is not a wise decision. Why? The data were collected from the aircraft that had survived their missions so they are biased. Planes that had been shot down or otherwise lost had not been counted. The bullet holes in the returning aircraft represented areas where a plane could take damage and still fly well enough to return safely. Thus, it is the areas where the returning aircraft were unscathed that need additional armor. 
+Survival bias often occurs when subjects or objects can be observed only if they
+have survived or completed a certain process. Ignoring the survival bias may lead
+to inaccurate or opposite conclusions.
+
+\begin{example}[hit aircraft]
+During World War II, aircraft that had returned from missions were examined and
+the most-hit areas of the plane are given in
+Figure~\ref{fig:survival-bias}. Which areas should the army add armor to
+increase the survivorship of the planes?
+
+A direct intuition may suggest to reinforce areas with the most bullet holes
+because these are the most hit region. However, the data were collected from the
+aircraft that had survived their missions, and if an aircraft was hit and down
+it would not be included in the data. If there is a bullet hole in the engine
+area or in the cockpit, then it would unlikely that the aircraft could
+return. This was actually the reason why the engine and cockpit regions were
+almost free of bullet holes. Knowing that the marked dots for bullets holes were
+a biased sample and the cause of the bias, we should realized that these regions
+with bullet holes could take damage and the aircraft could still fly well enough
+to return safely. These regions did not need additional armor. It is the areas
+where the returning aircraft were unscathed that need additional armor.
+\end{example}
+
+This example shows that ignoring the bias may give a very wrong conclusion. If
+we take into account the source of the bias, then we can still obtain valid
+result from a biased sample.
 
 % the statistician Abraham Wald took survivorship bias into his calculations when considering how to minimize bomber losses to enemy fire.[11] The Statistical Research Group (SRG) at Columbia University, which Wald was a part of, examined the damage done to aircraft that had returned from missions and recommended adding armor to the areas that showed the least damage, based on his reasoning.
 % This contradicted the US military's conclusions that the most-hit areas of the plane needed additional armor.[12][13][14] Wald noted that the military only considered the aircraft that had survived their missions; any bombers that had been shot down or otherwise lost had logically also been rendered unavailable for assessment. The bullet holes in the returning aircraft, then, represented areas where a bomber could take damage and still fly well enough to return safely to base. Thus, Wald proposed that the Navy reinforce areas where the returning aircraft were unscathed,[11]:88 since those were the areas that, if hit, would cause the plane to be lost. His work is considered seminal in the then-nascent discipline of operational research.[15]
 
-\begin{figure}
-  \centering
+\begin{figure}[H]
   \includegraphics[width=\textwidth]{images/static/Survivorship-bias.png}
   \caption{Most-hit areas of the returned aircraft. Source: \url{https://en.wikipedia.org/wiki/Survivorship_bias}}
   \label{fig:survival-bias}
 \end{figure}
 
 \hypertarget{ch:data}{%
-  \section{Common sources of biases}\label{sources-bias}}
+  \section{Common biases}\label{sources-bias}}
+Here is a list of common biases and their sources.
 \begin{itemize}
-\item Observation time interval: 
-Early termination of a trial at a time when its results support the desired conclusion.
-\item Data partition: divide data with knowledge of the contents of the partitions. 
-\item Confirmation bias: to search for, interpret, favor, and recall information in a way that confirms or supports one's prior beliefs or values. A famous is cherry picking. % The term is based on the perceived process of harvesting fruit, such as cherries.
-  The picker would be expected to select only the ripest and healthiest fruits. An observer who sees only the selected fruit may thus wrongly conclude that most, or even all, of the tree's fruit is in a likewise good condition.
-\item Rejection of bad data on (1) arbitrary grounds, instead of according to previously stated or generally agreed criteria or (2) discarding "outliers" on statistical grounds that fail to take into account important information that could be derived from "wild" observations.
-\item Self-selection bias or a volunteer bias.  % in studies offer further threats to the validity of a study as these participants may have intrinsically different characteristics from the target population of the study. Studies have shown that volunteers tend to come from a higher social standing than from a lower socio-economic background.[20] Further, to this another study shows that women are more probable to volunteer for studies than males. Volunteer bias is evident throughout the study life-cycle, from recruitment to follow-ups. More generally speaking volunteer response can be put down to individual altruism, a desire for approval, personal relation to the study topic and other reasons.[20][14] As with most instances mitigation in the case of volunteer bias is an increased sample size.[c
-\item Nonresponse bias: It is often related to sensitive questions.
-\item Rejection of bad data on (1) arbitrary grounds, instead of according to previously stated criteria or (2) discarding ``outliers'' on statistical grounds that fail to take into account important information that could be derived from ``wild'' observations.
-\item Length time bias: It often occurs in cancer screening studies. Compared with fast-growing tumors, slow-growing tumors has a longer period of time during which the cancer is in the body but not large enough to cause symptoms. Thus if the same number of slow-growing and fast-growing tumors appear in a year, the screening test detects more slow-growers than fast-growers. If the slow growing tumors are less likely to be fatal than the fast growers, the people whose cancer is detected by screening do better, on average, than the people whose tumors are detected from symptoms. This may give the impression that detecting cancers by screening causes cancers to be less dangerous.  % even if less dangerous cancers are simply more likely to be detected by screening.[1]
-
+\item Observation time interval bias. it is caused by early termination of a
+trial or experiment at a time when its results support the desired
+conclusion. This is closely related to the next confirmation bias.
+\item Confirmation bias occurs when people tries to search for, interpret, favor, and recall information in a way that confirms or supports one's prior beliefs or values. A famous is cherry picking. 
+  The picker would be expected to select only the ripest and healthiest fruits.
+  Thus the resulting picked cherries represent the condition of the good fruit
+  in the garden instead of the condition for all the fruit in the garden. 
+\item Data partition bias is caused by dividing data with knowledge of the contents of the partitions. 
+\item Rejection of bad data on arbitrary grounds instead of according to
+  previously stated or generally agreed criteria also cause biases. Another
+  closely related scenario is to discard ``outliers'' without valid reasons.
+\item Self-selection bias or a volunteer bias happens when objects in
+  consideration decide on their own if they will be included in a
+  sample. Volunteers tend to have intrinsically different characteristics from
+  the whole population of people in consideration. 
+\item Nonresponse bias means the bias caused by subjects not answering relevant
+  questions. It is often related to sensitive questions.
 \end{itemize}
 
 \hypertarget{ch:data}{%
-  \section{Some basic sampling designs}\label{sampling-designs}}
-  \begin{itemize}
-  \item Simple Random Sampling: Every elements in the target population have equal chances to be selection. Samples are selected strictly by chance. It is probably the most effective method to prevent sampling bias. A disadvantage is the uncertainty may be large.
-  \item Stratified Sampling: Divide members of the population into homogeneous subgroups and then use simple random sampling for each subgroups. It helps to reduce the uncertainty. Need to be careful of potential biases.
-  \item Weighted Sampling: Let more informative elements have higher chances to be selected. It may increase the estimation efficiency, but the resulting sample may be biased so need special way of estimation.
-  \end{itemize}
-\hypertarget{ch:data}{%
-  \section{Different sampling approaches}\label{sampling-approaches}}
-%%%%----------------------------------------------------------
-  \begin{itemize}
-  \item Sampling with replacement: An element may be included in a sample more than once. It is possible to have replicates in the sample.
-  \item Sampling without replacement: An element can be included in a sample at most once. There is no replicates in the sample.
-  \item Poisson sampling: determines if each element of the population is selected in the sample independently. The sample size is random.
-  \item Between Sampling with replacement and without replacement, which is more efficient?
-  \end{itemize}
-%%%%----------------------------------------------------------
-\begin{example}[Numerical comparisons]
-  \begin{itemize}
-  \item To simulation hosehold incomes, generate a population P of size $N$ from a $P\sim\chi^2$ distribution with degrees of freedom one.
-  \item Take samples of size $n$ from P to estimator the population mean, say $\mu$, using simple random sampling both with and without replacement. Compare their efficiency.
-  \item Assume another variable $A=P+Unif(0,2)$ is available to define informative sampling weights. Evaluate the efficiency of weighted sampling both with and without replacement. 
-  \end{itemize}
-\end{example}
+  \section{Basic sampling designs}\label{sampling-designs}}
+There are three basic sampling designs. Most of advanced and complicated
+sampling designs are developed by combing these basic designs in layers.
+\begin{itemize}
+\item Simple Random Sampling: Every elements in the target population have equal
+  chances to be selection. Samples are selected strictly by chance. It is
+  probably the most effective method to prevent sampling bias. A disadvantage is
+  the uncertainty may be large.
+\item Stratified Sampling: Divide members of the population into homogeneous
+  subgroups and then use simple random sampling for each subgroups. It helps to
+  reduce the uncertainty. Need to be careful of potential biases.
+\item Weighted Sampling: Let more informative elements have higher chances to be
+  selected. It may increase the estimation efficiency, but the resulting sample
+  may be biased so need special way of estimation.
+\end{itemize}
+
+% \hypertarget{ch:data}{%
+%   \section{Different sampling approaches}\label{sampling-approaches}}
+% %%%%----------------------------------------------------------
+%   \begin{itemize}
+%   \item Sampling with replacement: An element may be included in a sample more than once. It is possible to have replicates in the sample.
+%   \item Sampling without replacement: An element can be included in a sample at most once. There is no replicates in the sample.
+%   \item Poisson sampling: determines if each element of the population is selected in the sample independently. The sample size is random.
+%   \item Between Sampling with replacement and without replacement, which is more efficient?
+%   \end{itemize}
+
+% %%%%----------------------------------------------------------
+% \begin{example}[Numerical comparisons]
+%   \begin{itemize}
+%   \item To simulation hosehold incomes, generate a population P of size $N$ from a $P\sim\chi^2$ distribution with degrees of freedom one.
+%   \item Take samples of size $n$ from P to estimator the population mean, say $\mu$, using simple random sampling both with and without replacement. Compare their efficiency.
+%   \item Assume another variable $A=P+Unif(0,2)$ is available to define informative sampling weights. Evaluate the efficiency of weighted sampling both with and without replacement. 
+%   \end{itemize}
+% \end{example}
 
 %%% Local Variables:
 %%% mode: latex
