@@ -254,6 +254,7 @@ the unknown target parameter with certaiin probability. A
 estimator of the target parameter such that the probability that the interval
 covers the target is~$\gamma$.
 
+
 \subsection{Large sample approximation}
 One way to construct confidence intervals is to use the asymptotic
 distributional properties of some estimator. In the simple situation of
@@ -313,6 +314,7 @@ of the gamma distribution to be known as~$2$.
 The resulting 95\% confidence interval is
 $(\inlnR{```cat(ci[1])```}, \inlnR{```cat(ci[2])```})$.
 
+
 Does a 95\% onfidence interval constructed this way really give 95\%
 probability of covering the truth? By theory, it should when the
 sample size is large. Is $n = 50$ large enough for this to be good?
@@ -327,6 +329,7 @@ What if the sample size is smaller, say 20?
 The empirical coverage now is
 $\inlnR{```cat(mean(sim_20[1, ] < mu & sim_20[2,] > mu))```}$.
 
+
 The simulation shows that the confidence intervals constructed from
 the large sample theory works well for sample size $n = 50$ but not so
 well for $n = 20$.
@@ -336,15 +339,15 @@ well for $n = 20$.
 
 Constructing confidence intervals depends on the uncertainty of the
 estimator. Often times, a point estimator can be easily obtained, for example,
-through optmizing an objective function or solving some estimating
+through optimizing an objective function or solving some estimating
 equations. The variation of a point estimator, however, can be much more
 difficult to obtain. Asymptotic approximations of the variance of an estimator
 may be derived in some situations, but even in these situations, the asyptotic
 variance approximation may not work well with small to moderate sample sizes.
 
 
-\emph{Bootstrap}\index{bootstrap} is a powerful tool to approximate the
-uncertainty of an estimator.
+\emph{Bootstrap}\index{bootstrap}
+is a powerful tool to approximate the uncertainty of an estimator.
 A self-assisted approach, it approximates the variation of the sample by
 treating the sample as a population and resample repeatedly from it with
 replacement, each time forming a so-called bootstrap sample of the same size as
@@ -354,10 +357,82 @@ the empirical variation of a collection of the point estimators obtained from
 the bootstrap samples.
 
 
-\begin{example}[Bootstrap approximation of variance]
+
 Here we demonstrate how well bootstrap can approximate the variance of some
-simple statistics.
+simple statistics. Suppose that \lstinline{statistic} is a function that takes a
+random sample \lstinline{x} as input and returns a scalar statistic. A bootstrap
+procedure to obtain a large number \lstinline{R} of bootstrap copies of the
+statistic from a sample \lstinline{x} is implemented in the following function
+\lstinline{myboot}.
+\showCode{R}{Code/est-ci-boot.R}[1][10]
+
+
+Function \lstinline{myboot} returns a list with two components. The first
+component \lstinline{t0} is the scalar statistics computed from the observed
+sample \lstinline{x}; the second component \lstinline{t} is a vector of dimension
+\lstinline{R}, each element of which is a scalar statistic computed from a
+bootstrap sample. We use the empirical variation of \lstinline{t} to approximate
+the variation of \lstinline{t0}. An 95\% confidence interval can be constructed
+simply by the 2.5 and 97.5 percentiles of \lstinline{t}. This type of confidence
+interval is known as \emph{percentile bootstrap confidence
+interval}\index{bootstrap|percentile confidence interval}.
+
+
+\begin{example}[Bootstrap approximation of variance of sample median]
+\runR{Code/est-ci-boot.R}
+Consider estimating the population median of a Gamma distribution with
+shape 2 and scale 2 using the sample median. The population median can be
+obtained from the \lstinline{qgamma()} function evaluated at 0.5 with the
+specified parameters. Let's see how this works in action for a sample of
+size~50.
+\showCode{R}{Code/est-ci-boot.R}[14][20]
+
+
+%% Tried putting cat(medBoot$t0) in math mode; not working
+For this sample, our point estimate is
+\inlnR{```cat(medBoot$t0)```}, with 95\% confidence
+interval \lstinline{medCI}, which is
+$(\inlnR{```cat(medCI[1])```}, \inlnR{```cat(medCI[2])```})$.
+The true value \inlnR{```cat(target)```} is nicely captured by the interval
+from this sample.
+
+
+To investigate the coverage rate of the percentile bootstrap confidence
+interval, we need to run a simulation study. Again, we layout what we need to do
+in one replicate first:
+\showCode{R}{Code/est-ci-boot.R}[23][27]
+
+
+Function \lstinline{do1rep()} generates a random sample of size \lstinline{n}
+from the $\Gamma(2, 2)$ distribution, performs a bootstrap procedure with 1000
+bootstrap samples, and returns a vector of 3 elements: the point estimate and
+the lower and upper bounds of a 95\% confidence interval. We replicate the
+experiment \lstinline{nrep = 200} times and check the performance of the point
+estimate and the empirical coverage rate of the 95\% confidence interval.
+\showCode{R}{Code/est-ci-boot.R}[30][35]
+
+
+The mean of the point estimate \lstinline{mean(sim_50[1])} from the
+\inlnR{```cat(nrep)```} replicates is
+\inlnR{```cat(mean(sim_50[1,]))```}, which is very close to the true target
+\inlnR{```cat(target)```}.
+
+
+The empirical coverate rate of the 95\% confidence interval from the
+\inlnR{```cat(nrep)```} replicates is
+\inlnR{```cat(mean(sim_50[2,] < target & target < sim_50[3,]))```},
+which is reasonably close to the nominal level 95\%.
+
+
+We repeate the process for a smaller sample size~20:
+\showCode{R}{Code/est-ci-boot.R}[39][40]
+The empirical coverate rate of the 95\% confidence interval from the
+\inlnR{```cat(nrep)```} replicates is
+\inlnR{```cat(mean(sim_20[2,] < target & target < sim_20[3,]))```},
+which is still reasonably close to the nominal level 95\%.
 \end{example}
+
+
 
 
 
