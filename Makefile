@@ -6,6 +6,9 @@ overleaf:
 clean:
 	rm -f sidsmain.aux generated/*.txt
 
+deepclean:
+	rm -f sidsmain.aux generated/*
+
 # stop the talk2stat server, but don't compile the book:
 stopserver: clean
 	python3 -c 'from talk2stat.talk2stat import client; client("./","R","QUIT")'
