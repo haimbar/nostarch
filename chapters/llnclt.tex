@@ -63,7 +63,7 @@ In \wingding{1} we create a vector of sample sizes. We will generate a random sa
 Figure \ref{LLNdemo} shows the results. We can see that as $n$ increases, the sample mean gets closer to the true mean (100, in our simulation), which is shown as a horizontal line.
 
 \begin{figure}[H]
-\includegraphics[width=0.5\textwidth]{images/chapter_4/LLN_IQ.pdf}
+\includegraphics[width=0.5\textwidth]{images/chapter_4/LLNIQ.pdf}
 \caption{Visualizing the Law of Large Numbers -- normal data}
 \label{LLNdemo}
 \end{figure}
@@ -84,7 +84,7 @@ Run this code. You should get in this particular sample of 40 bets, that the pro
 We see the results in Figure \ref{LLNdemoBinomial}. As before, the sample mean gets closer to the true mean of the distribution, which is $p=18/37$, which is less than 0.5, so if we keep placing bets we will end up losing money. In fact, we can check how much we will lose if we bet \$1 each time, and do it 10,000 times.
 
 \begin{figure}[H]
-\includegraphics[width=0.5\textwidth]{images/chapter_4/LLN_roulette.pdf}
+\includegraphics[width=0.5\textwidth]{images/chapter_4/LLNroulette.pdf}
 \caption{Visualizing the Law of Large Numbers -- binomial data}
 \label{LLNdemoBinomial}
 \end{figure}
@@ -107,7 +107,7 @@ Let's simulate $n$ days, and in each one count the number of messages, assuming 
 In each day we count messages over 12 hours, so in \wingding{1} we multiply the (hourly) random sample from the Poisson distribution by 12. Figure \ref{LLNdemoPoisson} shows the results.
 
 \begin{figure}[H]
-\includegraphics[width=0.5\textwidth]{images/chapter_4/LLN_texts.pdf}
+\includegraphics[width=0.5\textwidth]{images/chapter_4/LLNtexts.pdf}
 \caption{Visualizing the Law of Large Numbers -- Poisson data}
 \label{LLNdemoPoisson}
 \end{figure}
@@ -138,7 +138,7 @@ Figure \ref{LLNdemoCauchy}, which is what you should get after running the code,
 What we see here is that the mean difference between the groups, $d_{AB}$, converges to the true difference between the groups (10), but the ratio, $r_{AB}$, does not converge -- $n$ can be as large as we want, and we will still see ratios that are quite extreme. (Note that the mean of a ratio between two distributions is generally not equal to the ratio of the means of the distributions, so we don't expect $r_{AB}$ to converge to exactly 70/60.)
 
 \begin{figure}[H]
-\includegraphics[width=1\textwidth]{images/chapter_4/LLN_Cauchy.pdf}
+\includegraphics[width=1\textwidth]{images/chapter_4/LLNCauchy.pdf}
 \caption{When the Law of Large Numbers fails}
 \label{LLNdemoCauchy}
 \end{figure}
@@ -177,7 +177,7 @@ First, let's draw one sample from Exp(5.5) with $n$=100 random i.i.d. draws, and
 Notice that the distribution in Figure \ref{CLTexp} is very skewed, and doesn't look at all like a normal distribution. Try running \lstinline{mean(samp)}. you should get \inlnR{```cat(mean(samp))```}[meansampexp], which is approximately 1/5.5, the theoretical mean of the Exp(5.5) distribution.
 
 \begin{figure}[H]
-\includegraphics[width=0.6\textwidth]{images/chapter_4/CLT_exp.pdf}
+\includegraphics[width=0.6\textwidth]{images/chapter_4/CLTexp.pdf}
 \caption{Simulated data from an exponential distribution}
 \label{CLTexp}
 \end{figure}
@@ -191,7 +191,7 @@ In \wingding{1} we prepare a vector which will hold the sample mean from 10,000 
 Repeat the same code, but change the first line to \lstinline{n <- 500}. Figure \ref{CLTexp2} shows the results for $n=50$ (left) and $n=500$ (right).
 
 \begin{figure}[H]
-\includegraphics[width=0.9\textwidth]{images/chapter_4/CLT_exp2.pdf}
+\includegraphics[width=0.9\textwidth]{images/chapter_4/CLTexp2.pdf}
 \caption{The distribution of the sample mean from 10,000 simulated data from an exponential distribution. Left: $n=50$, right: $n=500$}
 \label{CLTexp2}
 \end{figure}
@@ -210,7 +210,7 @@ The following code is very similar to the previous one, except that we use \lsti
 You should get the plot in Figure \ref{CLTbinom}. Notice that because we've simulated data with a relatively small probability of getting a success ($p$=0.15), when $n$=50 the shape of the distribution of sample means is still a bit skewed, but when $n$ is large the bell shape appears!
 
 \begin{figure}[H]
-\includegraphics[width=0.9\textwidth]{images/chapter_4/CLT_binom.pdf}
+\includegraphics[width=0.9\textwidth]{images/chapter_4/CLTbinom.pdf}
 \caption{The distribution of the sample mean from 10,000 simulated data from a binomial distribution. Left: $n=50$, right: $n=500$}
 \label{CLTbinom}
 \end{figure}
@@ -224,7 +224,7 @@ In 2021 the boy to girl birth ratio in the USA is estimated to be 1.05. If we to
 \runR{Code/llnclt_boygirl.R}{boygirl}
 
 This should give the following:
- \includeOutput{boygirl}%[inline]
+\includeOutput{boygirl}%[inline]
 
 Would it be very surprising if we actually saw 148 in the random sample?
 Suppose we took a sample of 3,000, instead. Would is be surprising if we observed 1,480 boys?
@@ -238,7 +238,7 @@ The result is shown in Figure \ref{CLTboygirl}.
 The green vertical line represents the expected number of boys, and the red one represents the observed ones. Notice that as we increase the sample size, the likelihood of the observed number of boys (148, 1,480, 14,800) gets smaller. When $n=30000$ the red line is well outside the range of the simulated sample means.
 
 \begin{figure}[H]
-\includegraphics[width=\textwidth]{images/chapter_4/CLT_boygirl.pdf}
+\includegraphics[width=\textwidth]{images/chapter_4/CLTboygirl.pdf}
 \caption{Number of boy births with different sample sizes ($n$=300, 3,000, and 30,000)}
 \label{CLTboygirl}
 \end{figure}

@@ -10,7 +10,7 @@ deepclean:
 	rm -f sidsmain.aux generated/*
 
 # stop the talk2stat server, but don't compile the book:
-stopserver: clean
+stopserver: deepclean
 	python3 -c 'from talk2stat.talk2stat import client; client("./","R","QUIT")'
 	rm -f serverPIDR.txt Rdebug.txt talk2stat.log nohup.out
  

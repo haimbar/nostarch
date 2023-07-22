@@ -1,4 +1,4 @@
-pdf("images/chapter_4/CLT_binom.pdf", width=8, height=5)
+pdf("images/chapter_4/CLTbinom.pdf", width=8, height=5)
 par(mfrow=c(1, 2))
 
 n <- 50

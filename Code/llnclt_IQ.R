@@ -8,7 +8,7 @@ qqnorm(samp1, cex=0.9, pch=18, col="purple")
 abline(100, 15, col="orange", lwd=3)
 dev.off()
 
-pdf("images/chapter_4/LLN_IQ.pdf")
+pdf("images/chapter_4/LLNIQ.pdf")
 set.seed(95473)
 ns <- seq(10, 2000, by=10)      # (@\wingding{1}@)
 L <- length(ns)

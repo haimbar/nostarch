@@ -8,7 +8,7 @@ boysInSample <- rbinom(nsim, n, pboy)
 cat("Prob. boy:", pboy, ". Simulated number of boys in a sample of 300 is:", mean(boysInSample),"\n")
 
 
-pdf("images/chapter_4/CLT_boygirl.pdf", width=10, height=4)
+pdf("images/chapter_4/CLTboygirl.pdf", width=10, height=4)
 par(mfrow=c(1, 3))
 
 n <- 300
