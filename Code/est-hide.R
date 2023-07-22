@@ -13,5 +13,3 @@ estimates <- c(mu1 = mean(x), mu2 = median(x), mu3 = mean(range(x)))
 err <- (estimates - mu)^2
 
 
-
-

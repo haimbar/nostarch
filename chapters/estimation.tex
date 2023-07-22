@@ -312,10 +312,10 @@ distribution with mean~$\mu$. For simplicity, let's set the the scale parameter
 of the gamma distribution to be known as~$2$.
 \showCode{R}{Code/est-ci-clt.R}[9][12]
 The resulting 95\% confidence interval is
-$(\inlnR{```cat(ci[1])```}, \inlnR{```cat(ci[2])```})$.
+$($\inlnR{```cat(ci[1])```}, \inlnR{```cat(ci[2])```}$)$.
 
 
-Does a 95\% onfidence interval constructed this way really give 95\%
+Does a 95\% confidence interval constructed this way really give 95\%
 probability of covering the truth? By theory, it should when the
 sample size is large. Is $n = 50$ large enough for this to be good?
 We can check the actual coverage rate in a simulation study.
@@ -327,7 +327,8 @@ The empirical coverage rate from the 1000 replicates is
 What if the sample size is smaller, say 20?
 \showCode{R}{Code/est-ci-clt.R}[26][27]
 The empirical coverage now is
-$\inlnR{```cat(mean(sim_20[1, ] < mu & sim_20[2,] > mu))```}$.
+% the following causes a problem
+%%%\inlnR{```cat(mean(sim_20[1, ] < mu & sim_20[2,] > mu))```}.
 
 
 The simulation shows that the confidence intervals constructed from
@@ -390,9 +391,9 @@ size~50.
 
 %% Tried putting cat(medBoot$t0) in math mode; not working
 For this sample, our point estimate is
-\inlnR{```cat(medBoot$t0)```}, with 95\% confidence
+\inlnR{```cat(medBoot["t0"])```}, with 95\% confidence
 interval \lstinline{medCI}, which is
-$(\inlnR{```cat(medCI[1])```}, \inlnR{```cat(medCI[2])```})$.
+$($\inlnR{```cat(medCI[1])```}, \inlnR{```cat(medCI[2])```}$)$.
 The true value \inlnR{```cat(target)```} is nicely captured by the interval
 from this sample.
 
@@ -424,11 +425,11 @@ The empirical coverate rate of the 95\% confidence interval from the
 which is reasonably close to the nominal level 95\%.
 
 
-We repeate the process for a smaller sample size~20:
+We repeat the process for a smaller sample size~20:
 \showCode{R}{Code/est-ci-boot.R}[39][40]
 The empirical coverate rate of the 95\% confidence interval from the
 \inlnR{```cat(nrep)```} replicates is
-\inlnR{```cat(mean(sim_20[2,] < target & target < sim_20[3,]))```},
+%\inlnR{```cat(mean(sim_20[2,] < target & target < sim_20[3,]))```},
 which is still reasonably close to the nominal level 95\%.
 \end{example}
 

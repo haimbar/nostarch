@@ -1,4 +1,4 @@
-pdf("images/chapter_4/LLN_texts.pdf")
+pdf("images/chapter_4/LLNtexts.pdf")
 ssize <- c(5, seq(10, 1000, by=10))
 myMsg <- rep(0, length(ssize))
 set.seed((40001))

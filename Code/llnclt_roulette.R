@@ -3,7 +3,7 @@ n <- 40
 samp2 <- rbinom(n, size=1, prob=18/37)
 cat("Mean=",mean(samp2), ", SD=",sd(samp2),"\n")
 
-pdf("images/chapter_4/LLN_roulette.pdf")
+pdf("images/chapter_4/LLNroulette.pdf")
 set.seed(95473)
 ns <- seq(10, 2000, by=10)
 L <- length(ns)
@@ -21,4 +21,4 @@ set.seed(15472)
 n <- 10000
 roulette <- rbinom(n, 1, 18/37)
 cat("Prob. win=", mean(roulette),"\n")
-cat("Paid: $", prettyNum(n, big.mark=","), ". Won: ", sum(roulette), "times.", "Total gain:", prettyNum(2*sum(roulette), big.mark = ","), "dollars. Net gain/loss:", prettyNum(2*sum(roulette)-n,big.mark = ","),"\n")
+cat("Paid: ", prettyNum(n, big.mark=","), "dollars . Won: ", sum(roulette), "times.", "Total gain:", prettyNum(2*sum(roulette), big.mark = ","), "dollars. Net gain/loss:", prettyNum(2*sum(roulette)-n,big.mark = ","),"\n")
