@@ -1,3 +1,12 @@
+\runR{Code/llnclt_IQ.R}{llnclt_IQ}
+\runR{Code/llnclt_roulette.R}{roulette}
+\runR{Code/llnclt_texts.R}{texts}
+\runR{Code/llnclt_Cauchy.R}{texts}
+\runR{Code/llnclt_CLTexp.R}{cltsimexp}
+\runR{Code/llnclt_CLTbinom.R}{cltsimbinom}
+\runR{Code/llnclt_boygirl.R}{boygirl}
+\runR{Code/llnclt_IQ2.R}{cltiq2}
+
 \hypertarget{ch:llnclt}{%
 %  \chapter{The Law of Large Numbers and the Central Limit Theorem}\label{ch:llnclt}}
 \chapter{Towards the End of the Horizon}\label{ch:llnclt}}
@@ -30,7 +39,7 @@ This chapter deals with inference which can be derived from the mean of a popula
 Suppose that the IQ in the general population has a normal distribution with mean of 100 and  standard deviation of 15, and from this population we draw 200 people, and calculate the sample mean and standard deviation, like so:
 
 \showCode{R}{Code/llnclt_IQ.R}[1][3]
-\runR{Code/llnclt_IQ.R}{llnclt_IQ}
+%\runR{Code/llnclt_IQ.R}{llnclt_IQ}
 
 Run this code. You should get that the sample mean is \inlnR{```cat(mean(samp1))```} and the standard deviation is \inlnR{```cat(sd(samp1))```}. Both are very close to the true values.
 
@@ -74,7 +83,7 @@ We also see in Figure \ref{LLNdemo} that the dispersion of the sample means gets
 Here, the outcome is binary -- we either win or lose. The probability of winning if we choose the red color, is $18/37$.
 Let's simulate 40 bets at the roulette wheel, where, in each we put a dollar on red. Each bet is won with a Bernoulli distribution, $Ber(18/37)$ and we repeat it 40 times. Equivalently, we can look at it as a single binomial sample, with $n=40$ and $p=18/37$.
 
-\runR{Code/llnclt_roulette.R}{roulette}
+%\runR{Code/llnclt_roulette.R}{roulette}
 \showCode{R}{Code/llnclt_roulette.R}[1][4]
 
 Run this code. You should get in this particular sample of 40 bets, that the probability of winning (the mean of \lstinline{samp2}) is \inlnR{```cat(mean(samp2))```} (greater than 0.5.) This seems great -- if we keep going we might get rich! However, let's see what happens to the sample mean (which is the probability of winning) as we increase $n$. The following code is nearly identical to the one used in the previous example, except that in this case we draw the random samples from a \emph{binomial} distribution (in \wingding{1}.)
@@ -101,7 +110,7 @@ To the casino it doesn't matter if one person bets \$1,000,000 or if 1,000 peopl
 \subsection{Example \#3 -- Receiving Text Messages}
 Let's simulate $n$ days, and in each one count the number of messages, assuming they arrive independently from a Poisson distribution with rate=10. To do that, run the following code:
 
-\runR{Code/llnclt_texts.R}{texts}
+%\runR{Code/llnclt_texts.R}{texts}
 \showCode{R}{Code/llnclt_texts.R}[2][10]
 
 In each day we count messages over 12 hours, so in \wingding{1} we multiply the (hourly) random sample from the Poisson distribution by 12. Figure \ref{LLNdemoPoisson} shows the results.
@@ -128,7 +137,7 @@ We have two groups of students who have to take a math test. Group A has a mean 
 We take a sample of size $n$ from each group and calculate the sample means. Then, we calculate the difference between the sample means, $d_{AB}=\bar{x}_A-\bar{x}_B$, and the ratio between the means, $r_{AB}=\bar{x}_A/\bar{x}_B$.
 As before, we increase the sample size and see how it affects $d_{AB}$ and $r_{AB}$.
 
-\runR{Code/llnclt_Cauchy.R}{texts}
+%\runR{Code/llnclt_Cauchy.R}{texts}
 \showCode{R}{Code/llnclt_Cauchy.R}[2][19]
 
 In \wingding{1} and \wingding{2} we generate the samples from the two groups (both follow a normal distribution), with the same sample size. In the for loop we vary the sample size to go from 50 to 5,000 in jumps of 10. In \wingding{3} and \wingding{4} we calculate the difference and the ratio between the mean scores in the two groups, respectively. In \wingding{5} and \wingding{6} we keep the calculated values $d_{AB}$ and $r_{AB}$ in vectors called \lstinline{allDiffs} and \lstinline{allRatios}, which are then used in the \lstinline{plot()} function.
@@ -172,7 +181,7 @@ In each case, we will plot a histogram of the sample, and overlay the probabilit
 First, let's draw one sample from Exp(5.5) with $n$=100 random i.i.d. draws, and see that the distribution of the sample is very different from normal. In the following code, we plot a histogram from one sample (with n=100) and overlay the graph of the probability distribution function of Exp(5.5), in order to show that the sample is representative of the true distribution:
 
 \showCode{R}{Code/llnclt_CLTexp.R}[2][7]
-\runR{Code/llnclt_CLTexp.R}{cltsimexp}
+%\runR{Code/llnclt_CLTexp.R}{cltsimexp}
 
 Notice that the distribution in Figure \ref{CLTexp} is very skewed, and doesn't look at all like a normal distribution. Try running \lstinline{mean(samp)}. you should get \inlnR{```cat(mean(samp))```}[meansampexp], which is approximately 1/5.5, the theoretical mean of the Exp(5.5) distribution.
 
@@ -205,7 +214,7 @@ In order to see the generality of the CLT, we demonstrate it again with another,
 The following code is very similar to the previous one, except that we use \lstinline{rbinom} to generate the data. Try it, and then change the first line to \lstinline{n <- 500}, and run it again.
 
 \showCode{R}{Code/llnclt_CLTbinom.R}[3][13]
-\runR{Code/llnclt_CLTbinom.R}{cltsimbinom}
+%\runR{Code/llnclt_CLTbinom.R}{cltsimbinom}
 
 You should get the plot in Figure \ref{CLTbinom}. Notice that because we've simulated data with a relatively small probability of getting a success ($p$=0.15), when $n$=50 the shape of the distribution of sample means is still a bit skewed, but when $n$ is large the bell shape appears!
 
@@ -221,7 +230,7 @@ Once again, in both cases the mean of 10,000 simulated sample means is very clos
 In 2021 the boy to girl birth ratio in the USA is estimated to be 1.05. If we took a random sample of 300 newborns across the USA, how many do you expect to be boys? Run the following code:
 
 \showCode{R}{Code/llnclt_boygirl.R}[1][8]
-\runR{Code/llnclt_boygirl.R}{boygirl}
+%\runR{Code/llnclt_boygirl.R}{boygirl}
 
 This should give the following:
 \includeOutput{boygirl}%[inline]
@@ -250,7 +259,7 @@ We drew a sample of 200 people, and calculated the sample mean and standard devi
 
 In the following code, we plot two curves on top of the histogram we obtain from the sample -- one for the true normal distribution, and one using the sample mean and sample standard deviation:
 \showCode{R}{Code/llnclt_IQ2.R}[2][8]
-\runR{Code/llnclt_IQ2.R}{cltiq2}
+%\runR{Code/llnclt_IQ2.R}{cltiq2}
 
 Figure \ref{CLTIQfit} shows the result. The red curve shows the true density function, and the dashed green one shows the one estimated from the sample of 200 people. They are very close. The LLN tells us that as we increase our sample size, the sample mean will be closer to the true mean.
 The CLT tells us how close to the true mean we can expect that our sample mean to be. As the sample size gets larger, our confidence in how close we are to the true value increases (because the range of the values we can get from random sampling becomes narrower.)
