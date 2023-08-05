@@ -22,8 +22,10 @@ build: clean
 	    mkdir -p images/chapter_$$i; \
 	done
 #	latexmk -pdflatex='xelatex -shell-escape %O %S' -pdf sidsmain.tex
-	xelatex -shell-escape sidsmain.tex
+	xelatex -shell-escape --no-pdf sidsmain.tex
+	touch ForceCache
 	bibtex sidsmain
+	makeindex sidsmain
 	xelatex -shell-escape sidsmain.tex
 	xelatex -shell-escape sidsmain.tex
 
