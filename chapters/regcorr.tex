@@ -1,0 +1,218 @@
+\hypertarget{ch:regression}{%
+  \chapter{Correlation and Linear Regression}
+  \label{ch:regression}}
+
+\hypertarget{regression}{A single variable is seldom sufficient to account for
+  real life phenomena. When there are multiple variables, we need to describe
+  and measure their relationships. Furthermore, the variable of our interest may
+  be very difficult or expensive to observe, while some other variables not of
+  our direct interest may be easy and cheap to measure. We may use these
+  easier-to-obtain variables to help us predict the variable of our interest.}
+
+\hypertarget{correlation}{%
+\section{Sample Correlation}\label{correlation}}
+
+Suppose we want to study the relationship between systolic blood pressure ($y$)
+and age ($x$). The data below contain measurements of 30 individuals.
+Figure~\ref{fig:agesbp} plots the systolic blood pressure against age for
+thirty individuals. It's created with the following code:
+
+\showCode{R}{Code/regression-AgeSBP.R}[1][4] % 
+
+The overall increasing pattern of systolic blood pressure as
+age increases is evident. How can we describe this relationship quantitatively? 
+The \emph{sample Pearson's correlation coefficient}, often denoted as $r$,
+measures the strength and direction of linear association between two variables
+$x$ and $y$.
+
+
+\runR{Code/regression-AgeSBP.R}{regression-AgeSBP}
+\begin{figure}[htp]
+  \includegraphics[width=0.7\textwidth]{images/chapter_regression/agesbp.pdf}
+  \caption{Scatter plot for systolic blood pressure against age}
+  \label{fig:agesbp}
+\end{figure}
+
+Let's use some simulated data to see the meaning of Pearson's correlation
+coefficient. We use the following code to generate a variable $x$ and an error
+term, and then we generate five variables, $y_1$ -- $y_5$. We let $y_1$ and
+$y_5$ be mainly determined by $x$ in opposite directions, let $y_2$ and $y_4$ be
+influenced by $x$ in opposite direction, and let $y_3$ be independent of $x$. We
+then plot each $y$ variable against $x$, using their sample Pearson's
+correlations as the titles of the figures. The correlation coefficient between
+two variable is calculated using the function \code{cor}, e.g., the correlation
+coefficient between $x$ and $y_1$ can be calculated with \code{cor(x,y1)}.
+
+\showCode{R}{Code/regression-corrLinear.R}[2][17] % 
+\runR{Code/regression-corrLinear.R}{regression-corrLinear} %
+
+Running the above code should produce Figure~\ref{fig:corrLinear}. We see how
+the Pearson's correlation measures both the direction and strength of the linear
+association. For data shown in Figure~\ref{fig:agesbp}, the correlation between
+systolic blood pressure and age is 
+\inlnR{```cat(cor(sbp$AGE, sbp$SBP))```}[corr-AgeSBP].
+
+
+
+\begin{figure}[htp]
+  \includegraphics[width=\textwidth]{images/chapter_regression/corrLinear.pdf}
+  \caption{Sample correlation measures direction and strength of linear
+    association.}
+  \label{fig:corrLinear}
+\end{figure}
+
+We need to emphasize that Pearson's correlation only measures the direction and
+strength of linear association. When Pearson's correlation efficient is very
+close to zero, it only means there is no linear association; it does not mean
+there is no association. It is possible that two variables have a very strong
+non-linear association, but their Pearson's correlation efficient is very close
+to zero. We use the following code to generate an example. 
+
+\showCode{R}{Code/regression-nonLinear.R}[2][7] % 
+\runR{Code/regression-nonLinear.R}{regression-nonLinear} %
+
+We see in the above code that $y$ is highly dependent on $x$, but their Person's
+correlation is only \inlnR{```cat(cor(x,y))```}[corr-quadratic]. Running the code should gives
+Figure~\Ref{fig:nonLinear}, which shows that there is a very strong quadratic
+relationship between $x$ and $y$.
+
+\begin{figure}[htp]
+  \includegraphics[width=0.6\textwidth]{images/chapter_regression/nonLinear.pdf}
+  \caption{A sample correlation close to zero does not mean there is no
+    association between the two variables.}
+  \label{fig:nonLinear}
+\end{figure}
+
+\section{Regression}
+The correlation coefficient we discussed in the previous section only describes
+how two variable are co-varying. It does not distinguish which variable is more
+of our interest, i.e., the correlation between $x$ and $y$ is always the same as
+the correlation between $y$ and $x$. 
+
+In practice, we are often more interest in one variable than other
+variables. The variable of our primary interest is often called the response
+variable, often denoted as $y$. The response variable may be difficult to
+observe and we may want to use some other variable that are easy to measure to
+model the response variable. These variables used to model the response variable
+are often called covariates. 
+
+We illustrate with a motivating example. Body fat percentage is an important
+measure of health, so it is often of our interest. However, accurately measuring
+the percentage of body fat requires to obtain an individual's weight under
+water, which needs to put the individual in the water for weighing, as
+illustrated in Figure~\ref{fig:underwater}. This method is called hydrostatic
+weighing. Although being accurate and precise, it is very expensive,
+inconvenient, and uncomfortable. There are other variables that are much easier
+to measure, such as weight, chest circumference, wrist circumference, and body
+mess index (BMI=$703\times\frac{\text{weight (lb)}}{\text{[height (in)]}^2}$).
+Although these variables do not have a perfect relationship with the percentage
+of body fat, they are all related to body fat and may be used to build a model for reasonable estimates of persons' body fat percentages. 
+
+\begin{figure}[H]
+    \includegraphics[width=0.5\textwidth]{images/static/huw.png}
+    \caption{Hydrostatic underwater weighing (\url{https://www.measurement-toolkit.org/anthropometry/objective-methods/hydrostatic-underwater-weighing})}
+    \label{fig:underwater}
+\end{figure}
+
+Let's start with some basic notations and definitions in a simplified situation
+of using one covariate to model the response variable. A widely used model is
+the simple linear regression model, which assumes that the covariate variable
+$x$ and the response variable $y$ satisfies 
+\begin{equation*}
+  y=\beta_0+\beta_1x+\varepsilon,
+\end{equation*}
+where $\varepsilon$ is unobserved random error that accounts for other sources
+of changes for $y$. It is often assumed that $\varepsilon$ follows a normal
+distribution with mean zero and unknown variance $\sigma^2$. Here $\beta_0$ is
+called the intercept, and $\beta_1$ is called the slope which is the amount of
+change in $y$ for per unit of change in $x$. Both parameters $\beta_0$ and
+$\beta_1$ are unknown and need to be estimated from data.
+
+Let's use the systolic blood pressure data in Figure~\ref{fig:agesbp} to
+illustrate the idea of least squares in estimating the unknown $\beta_0$ and
+$\beta_1$. Estimators are often denoted by putting a $\hat{}$ on the parameter,
+such as $\hat\beta_0$ and $\hat\beta_1$. 
+ 
+\begin{figure}[h]
+  \includegraphics[width=0.45\textwidth,page=3]{images/static/LeastSquares.pdf}
+  \includegraphics[width=0.45\textwidth,page=5]{images/static/LeastSquares.pdf}
+  \caption{Idea of least squares}
+  \label{fig:fittingLS}
+\end{figure}
+
+We see from the left of  Figure~\ref{fig:fittingLS} that any given values of $\hat\beta_0$
+and $\hat\beta_1$ corresponds to a straight line relationship between $y$ (SBP)
+and $x$ (Age). There is no straight line that can fit all the thirty persons; no
+straight line passes all the thirty points. The gap between the actual value of
+$y$ and the value on the line $\hat{y}$ with the same $x$ is the error, called the
+residual. These errors may be positive (points above the line) or negative
+(points below the line). The squared errors are the shaded regions on the right
+of Figure~\ref{fig:fittingLS}. The least squares line minimizes the total shaded
+regions, that is, it minimize. 
+\begin{equation}
+  \sum_{i=1}^n(y_i - \hat y_i)^2.
+\end{equation}
+Mathematically, the least squares line
+$\hat y = \hat{\beta}_0 + \hat{\beta}_1 x$ that minimizes the total error
+squares is calculated as
+\begin{equation}\label{eq:1}
+  \hat{\beta}_1 =
+  \frac{\sum_{i=1}^n (x_i - \bar x)(y_i - \bar y)}
+  {\sum_{i=1}^n (x_i - \bar x)^2},
+  \text{ and }
+  \hat{\beta}_0 = \bar y - \hat{\beta}_1 \bar x.
+\end{equation}
+
+The least squares has a lot of disable properties besides minimizing the fitting
+error. For example, the distributions of $\hat{\beta}_0$ and $\hat{\beta}_1$ are
+(asymptotically) normal. The expression in~(\ref{eq:1}) is complicated to
+calculate manually, but it is very easy with R.
+\showCode{R}{Code/regression-AgeSBP.R}[9][9] % 
+The above code should give
+\includeOutput{regression-AgeSBP}
+We see that the least squares estimates with the blood pressure data are $\hat{\beta}_0$=\inlnR{```cat(b[1])```}[sbp-beta0] and $\hat{\beta}_1$=\inlnR{```cat(b[2])```}[sbp-beta1].
+
+Now let's look at the motivating example of body fat measurement. 
+
+
+\runRIncOut{Code/regression-fitbodyfat.R}[][regression-fitbodyfat]
+
+\begin{figure}[htp]
+  \includegraphics[width=0.7\textwidth]{images/chapter_regression/fitbodyfat.pdf}
+  \caption{Estimated body fat v.s. actual body fat}
+  \label{fig:fitbodyfat}
+\end{figure}
+
+
+
+the precise method of determining \%Body Fat is
+hydrostatic weighing.
+
+  It requires to submerse individuals in a tub of water and weigh them (hopefully before drowning).
+%%%% -------------------------------------------------
+{Linear regression for body fat measurement}
+  \begin{itemize}
+  % \item A measure of health for an individual is \%Body Fat.
+  % \item Unfortunately, the most accurate and precise method of determining body fat content is hydrostatic weighing.
+  % \item It requires to submerse an individual in a tub of water and weigh them (hopefully before drowning).
+  \item Since underwater weighing is inconvenient and unpleasant for the subject, researchers have attempted to use a number of convenient body measurements to estimate \%body fat.
+  \item One model found by the researchers has the following inputs:
+  \end{itemize}
+  \begin{align*}
+    BodyFat \approx  -6.22 & + 0.18\text{Age} + 0.10\text{Weight} \\
+              & + 0.51\text{Chest} - 3.02\text{Wrist} + 0.07\text{BMI}
+  \end{align*}
+%%%% -------------------------------------------------
+
+{Correctness v.s. usefulness}
+  ``All models are wrong, but some are useful.'' -- George E. P. Box
+\subsection{Basic Definitions}
+
+\section{Summary}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-command-extra-options: "-shell-escape"
+%%% TeX-engine: xetex
+%%% TeX-master: "../sidsmain.tex"
+%%% End:
