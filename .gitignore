@@ -283,6 +283,7 @@ serverPID*.txt
 
 # specific folders and files
 tmp/
+old/
 images/probability-Simpson-plots.pdf
 proposal/proposal.pdf
 .hidden
@@ -295,4 +296,7 @@ images/chapter_5/
 images/chapter_6/
 images/chapter_7/
 images/chapter_8/
+images/regression/
 uconn-pcs/syllabus.pdf
+cclt/syllabus-23.pdf
+uconn-pcs/projects.pdf
