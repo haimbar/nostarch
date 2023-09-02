@@ -7,7 +7,7 @@ clean:
 	rm -f sidsmain.aux generated/*.txt
 
 deepclean:
-	rm -f sidsmain.aux generated/*
+	rm -f sidsmain.aux sidsmain.mw generated/*
 
 # stop the talk2stat server, but don't compile the book:
 stopserver: deepclean
