@@ -165,48 +165,61 @@ squares is calculated as
 
 The least squares has a lot of disable properties besides minimizing the fitting
 error. For example, the distributions of $\hat{\beta}_0$ and $\hat{\beta}_1$ are
-(asymptotically) normal. The expression in~(\ref{eq:1}) is complicated to
-calculate manually, but it is very easy with R.
+(asymptotically) normal. The expression in~(\ref{eq:1}) is tedious to
+calculate manually, but it is very easy with \R.
 \showCode{R}{Code/regression-AgeSBP.R}[9][9] % 
 The above code should give
 \includeOutput{regression-AgeSBP}
-We see that the least squares estimates with the blood pressure data are $\hat{\beta}_0$=\inlnR{```cat(b[1])```}[sbp-beta0] and $\hat{\beta}_1$=\inlnR{```cat(b[2])```}[sbp-beta1].
+We see that the least squares estimates with the blood pressure data are
+$\hat{\beta}_0$=\inlnR{```cat(b[1])```}[sbp-beta0] (in the column of Intercept)
+and $\hat{\beta}_1$=\inlnR{```cat(b[2])```}[sbp-beta1] (in the column of AGE).
 
-Now let's look at the motivating example of body fat measurement. 
+Now let's look at the motivating example of body fat measurement. Since
+underwater weighing is inconvenient and unpleasant for the subject, researchers
+attempted to use a number of convenient body measurements to estimate body fat
+percentage. The data file "bodyfat.csv" contains measured body fat percentages
+(\code{BodyFat}) of 252 adults using the traditional dunking method. It also
+contains other variables for these adults that are easy to measure. As an
+illustration, we use the following variables to mode the body fat percentage:
+\code{Age}, \code{Weight}, \code{Chest}, \code{Wrist}, and \code{BMI}. Running
+the following code
 
+\showCode{R}{Code/regression-fitbodyfat.R}[1][3] % 
+should gives the following output: %
+{\lstset{basicstyle=\scriptsize} %
+\runRIncOut{Code/regression-fitbodyfat.R}[][regression-fitbodyfat]} %
 
-\runRIncOut{Code/regression-fitbodyfat.R}[][regression-fitbodyfat]
+From this result, one can predicts his body fat percentage using
+\begin{equation}\label{eq:2}
+\text{BodyFat} \approx  -6.22  + 0.18\text{Age} + 0.10\text{Weight} 
+  + 0.51\text{Chest} - 3.02\text{Wrist} + 0.07\text{BMI}
+\end{equation}
 
+Let's see how this model in~(\ref{eq:2}) performs. We use it to estimate the body
+fat percentages of the 252 adults and plot the predicted values again the actual
+body fat percentages using the following code. %
+\showCode{R}{Code/regression-fitbodyfat.R}[10][11] % 
+The result from running the above code in in Figure~\ref{fig:fitbodyfat}.
 \begin{figure}[htp]
   \includegraphics[width=0.7\textwidth]{images/chapter_regression/fitbodyfat.pdf}
   \caption{Estimated body fat v.s. actual body fat}
   \label{fig:fitbodyfat}
 \end{figure}
+We see that there are some variations between the estimated and actual body fat
+percentages, but the estimated values centered around the actual body fat
+percentages.
 
-
-
-the precise method of determining \%Body Fat is
-hydrostatic weighing.
-
-  It requires to submerse individuals in a tub of water and weigh them (hopefully before drowning).
-%%%% -------------------------------------------------
-{Linear regression for body fat measurement}
-  \begin{itemize}
-  % \item A measure of health for an individual is \%Body Fat.
-  % \item Unfortunately, the most accurate and precise method of determining body fat content is hydrostatic weighing.
-  % \item It requires to submerse an individual in a tub of water and weigh them (hopefully before drowning).
-  \item Since underwater weighing is inconvenient and unpleasant for the subject, researchers have attempted to use a number of convenient body measurements to estimate \%body fat.
-  \item One model found by the researchers has the following inputs:
-  \end{itemize}
-  \begin{align*}
-    BodyFat \approx  -6.22 & + 0.18\text{Age} + 0.10\text{Weight} \\
-              & + 0.51\text{Chest} - 3.02\text{Wrist} + 0.07\text{BMI}
-  \end{align*}
-%%%% -------------------------------------------------
-
-{Correctness v.s. usefulness}
-  ``All models are wrong, but some are useful.'' -- George E. P. Box
-\subsection{Basic Definitions}
+The method based on (\ref{eq:2}) is not as accurate as the dunking method, but
+it does provide useful estimates and it is very easy to implement. One also
+needs to be careful when using this equation to estimate her/his body fat
+percentage. The model is build based on measurement for adults only, so it may
+not be suitable for children. The 252 adults in the dataset were all males, so
+the model may be biased for females. Even if we use it for an adult male, we
+should keep in mind that the data are random so the estimated value is subject
+to uncertainty. In addition, a linear model is a simplified assumption of the
+relationship between body fat percentage and other variables; it can't be the
+true relationship. Yet, it could provide some useful information. Remember that
+``All models are wrong, but some are useful.'' -- George E. P. Box
 
 \section{Summary}
 
