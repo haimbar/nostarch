@@ -175,7 +175,7 @@ We can now do things with this variable. For example, we check the variable type
 using the \lstinline{class()} function:
 \showCode{R}{Code/ch1sec1.R}[10][10]
 \noindent In this case the output should be
- \likelst{\inlnR{```cat(class(courseNames))```}}, which means that this variable is
+ \inlnR{```cat(class(courseNames))```}[introcoursenames], which means that this variable is
  used to store text. % (\lstinline{character} class):
 %\inlnR{```print(class(courseNames))```}[vbox]
 %\includeOutput{ch1ex1class}
@@ -184,7 +184,7 @@ its structure; to do this, we use the \lstinline{str()} function:
 \showCode{R}{Code/ch1sec1.R}[11][11]
 \noindent As you should see in the output, this shows that the variable is of class 
 \lstinline{character}, and it has three values:
-\inlnR{```str(courseNames)```}[][vbox]
+\inlnR{```str(courseNames)```}[introstrcoursenames][vbox]
 % AF: Spacing here is off at the bottom. Too much space after the frame. Can we use \lstlisting instead?
 
 Our \lstinline{courseNames} is what's called a \emph{vector}, a one-dimensional
@@ -207,7 +207,7 @@ we use the \lstinline{seq()} function. For example, we can create a variable tha
 contains all the odd numbers between 1 and 20:
 \showCode{R}{Code/ch1sec1.R}[14][14]
 The variable \lstinline{oddLT20} should contain the following values: 
-\likelst{\inlnR{```cat(paste(oddLT20))```}}.
+\inlnR{```cat(paste(oddLT20))```}[introoddlt20].
 % AF: This command was changing the font size of the rest of the PDF. I've gone into your commands and updated it so it no longer does this.
 %\runR{Code/ch1ex2.R}{ch1ex2}[cache]
 %\includeOutput{ch1ex2}
@@ -223,11 +223,11 @@ a vector of ones or zeros). We can do it like so:
 \showCode{R}{Code/ch1sec1.R}[20][22]
 Note we've introduced two new functions: the sum (\lstinline{sum()}) and cumulative
 sum (\lstinline{cumsum()}) functions.
-The variable \lstinline{ones} contains the values: \likelst{\inlnR{```cat(paste(ones))```}},
-and the sum is  \likelst{\inlnR{```cat(sum(ones))```}}. Their cumulative sum of
+The variable \lstinline{ones} contains the values: \inlnR{```cat(paste(ones))```}[introones],
+and the sum is  \inlnR{```cat(sum(ones))```}[introsumones]. Their cumulative sum of
  \lstinline{ones} is  a vector of length 10, where the first value is just the first 
  element of \lstinline{ones}, the second value is the sum of the first two elements 
- in \lstinline{ones}, and so forth: \likelst{\inlnR{```cat(paste(cumsum(ones)))```}}.
+ in \lstinline{ones}, and so forth: \inlnR{```cat(paste(cumsum(ones)))```}[introcumsumones].
 %\inlnR{```ones <- rep(1, 10); cat(ones)```}[vbox]
 Before moving on, think about what the result of \lstinline{cumsum(cumsum(ones))}
 will be, and then give it a try.
@@ -242,7 +242,7 @@ There are many functions to handle text. The \lstinline{paste()} function attach
 %\inlnR{```cat(paste(courseNames))```}
 \noindent Here we've used \lstinline{collapse} to specify that the strings should be 
 separated by a comma followed by a space.  The second line generates the 
-following: \likelst{\inlnR{```cat(concatvar)```}}.
+following: \inlnR{```cat(concatvar)```}[introcatvar].
 %%\replace{cat(paste(courseNames, collapse=", "))}{"}{x22}
 %%\inlnR{```cat(paste(courseNames, collapse=x22, x22))```}
 %%\inlnR{\replace{```cat(paste(courseNames, collapse=", "))```}{"}{x22}}
@@ -285,7 +285,7 @@ including four suits: clubs, diamonds, hearts, and spades. Here's our initial co
 Run each line separately and check the content of \lstinline{suits} and what
 \lstinline{rep(1:13, 4)} generates. Note that the function \lstinline{paste0()} is the
 same as \lstinline{paste(..., collapse="")}. The content of the cards variable should be:
-\inlnR{```cat(paste(cards))```}[][vbox]
+\inlnR{```cat(paste(cards))```}[introcards][vbox]
 % AF: We want to avoid "stacking" our listings on top of headers, so let's add some filler text here.
 Now that we have our cards, let's use them.
 
@@ -303,7 +303,7 @@ used to ensure the reproducibility of the results.  Try running the code without
 \lstinline{set.seed()} line, and you should see that you get different results each time.
 
 This is what the results look like with the seed:
-\inlnR{```print(pokerHand)```}[][vbox]
+\inlnR{```print(pokerHand)```}[intropokerhand][vbox]
 
 Check the class and the structure of the variable \lstinline{pokerHand}, using the
 functions we've mentioned earlier.
@@ -390,7 +390,7 @@ We store these 10,000 random numbers in a vector called \lstinline{simData}.
 We then use it as the argument in the function \lstinline{mysum}, as well as in
 \lstinline{sum}, and we print both values.
 We should get the following when we run the code: 
-\likelst{\inlnR{cat('From sum:', sum(simData), '. From mysum:', mysum(simData))}}.
+\inlnR{cat('From sum:', sum(simData), '. From mysum:', mysum(simData))}[introsumsimdat].
 
 Using arguments in function definitions is useful because you can use the
 same function to perform a similar operation on different objects. For example,
@@ -478,7 +478,7 @@ and FALSE counts as 0.) Thus, the result in the sum is the number of heads
 in 200 tosses.
 
 The number of heads we get in this case (with this seed) is 
-\likelst{\inlnR{```cat(sum(runif(ntrials) < 0.5))```}}. Statistical inference is based
+\inlnR{```cat(sum(runif(ntrials) < 0.5))```}[introsumruinif]. Statistical inference is based
 on a mental exercise in which we ask, if we could repeat the same experiment
 infinitely many times, what would we see? With simulations, we can get a good
 approximation. For example, the 200 coin-tosses experiment can be repeated,
@@ -560,11 +560,11 @@ the median. In general, the mean is not a great estimate of the `center' of a
 non-symmetric distribution. We say that the mean is more ``sensitive to extreme
 values'' than the median. Here's some code to prove it:
 \showCode{R}{Code/ch1sec3.R}[7][9]
-In this example with $n=$ \likelst{\inlnR{```cat(n)```}} random numbers we
+In this example with $n=$ \inlnR{```cat(n)```}[introcatn] random numbers we
 get that the mean
-is \likelst{\inlnR{```cat(mean(x))```}}, the trimmed mean is
-\likelst{\inlnR{```cat(mean(x, trim=0.1))```}}, and the median is
-\likelst{\likelst{\inlnR{```cat(median(x))```}}}.
+is \inlnR{```cat(mean(x))```}[intromeanx], the trimmed mean is
+\inlnR{```cat(mean(x, trim=0.1))```}[introtrimmeanx], and the median is
+\inlnR{```cat(median(x))```}[intromedianx].
 
 
 \subsection{Looking at Distributions}\label{introdistributions}
@@ -709,7 +709,7 @@ and 75th percentiles, as well as the mean of the sample. If we use the random
 numbers from the normal distribution in the previous code:
 \showCode{R}{Code/ch1sec3.R}[39][39]
 This should give us the following output:
-\inlnR{```print(summary(x))```}[][vbox]
+\inlnR{```print(summary(x))```}[introsummaryx][vbox]
 We can also use one of several functions from contributed packages
 in order to get more detailed summaries of data. For example, the
 \lstinline{stat.desc()} function from the pastecs package, or the
@@ -743,17 +743,17 @@ each value in its input; or it can take two arguments as in \wingding{3},
 in which case it will \emph{cross-tabulate} the data, meaning that it
 shows the counts for each combination of the two categorical variables.
 This code produces the following output:
-\inlnR{```print(table(hotelrooms));print(autotbl <- table(autorental));print(table(hotelrooms, autorental))```}[][vbox]
+\inlnR{```print(table(hotelrooms));print(autotbl <- table(autorental));print(table(hotelrooms, autorental))```}[introhotel][vbox]
 
 
 We can use the \lstinline{max()} and \lstinline{which.max()} functions
 to find the \emph{mode} of the data (the most frequent value):
 \showCode{R}{Code/ch1sec3b.R}[1][2]
 The hotel with the largest number of guests is
-\inlnR{```cat(levels(hotelrooms)[which.max(hoteltbl)])```} with
-\inlnR{```cat(max(hoteltbl))```} guests, and
-\inlnR{```cat(levels(autorental)[which.max(autotbl)])```}
-is rented to \inlnR{```cat(max(autotbl))```} people.
+\inlnR{```cat(levels(hotelrooms)[which.max(hoteltbl)])```}[introhotellevel] with
+\inlnR{```cat(max(hoteltbl))```}[introhotelguests] guests, and
+\inlnR{```cat(levels(autorental)[which.max(autotbl)])```}[introauto]
+is rented to \inlnR{```cat(max(autotbl))```}[introautorentals] people.
 
 \section{Summary}
 % AF: End chapters with a summary section that briefly summarizes what we've covered, and previews the next chapter.

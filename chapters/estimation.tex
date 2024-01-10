@@ -328,7 +328,7 @@ What if the sample size is smaller, say 20?
 \showCode{R}{Code/est-ci-clt.R}[26][27]
 The empirical coverage now is
 % the following causes a problem
-%%%\inlnR{```cat(mean(sim_20[1, ] < mu & sim_20[2,] > mu))```}.
+\inlnR{```cat(mean(sim_20[1, ] < mu & sim_20[2,] > mu))```}.
 
 
 The simulation shows that the confidence intervals constructed from
@@ -413,7 +413,7 @@ estimate and the empirical coverage rate of the 95\% confidence interval.
 \showCode{R}{Code/est-ci-boot.R}[30][35]
 
 
-The mean of the point estimate \lstinline{mean(sim_50[1,])} from the
+The mean of the point estimate \lstinline{mean(sim\_50[1,])} from the
 \inlnR{```cat(nrep)```} replicates is
 \inlnR{```cat(mean(sim_50[1,]))```}, which is very close to the true target
 \inlnR{```cat(target)```}.
