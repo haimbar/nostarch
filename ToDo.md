@@ -1,16 +1,24 @@
-## Meeting, January 10
+### Conventions
 
-### General comments:
-- HaiYing+Haim: find out why \inln adds a space after the output.
+- Code width - change font type so that we can show 80 characters per line
+- Use consistent code style
+  + space before and after each = sign, and after commas
+  + Comments in R – if the whole line, use ##. Inline use #
+  + other things?
+- Label prefix conventions. For example: ch: eqn: tab: fig:
+- Homework exercises - within sections.
+  Choose a format for exercise environment.
+- Latex source - use 80 characters per line
+- Create figures with width that can span the text width, so that there
+   is not that much white space -  use the golden ratio for the asp, unless symmetry 
+  is required (like Q-Q plots).
+  Use label sizes and point sizes that don't look too small after rescaling.
+- Use labels to identify chunks, instead of line numbers
+- Named \inlnR
+- Add index terms
+- Compile based on change time of files.
 - Ask Jill if we can avoid breaking a function or variable at the
   end of the line.
-- Choose a format for exercise environment.
-- Add exercises in-place.
-- In figures, use the golden ratio for the asp, unless symmetry 
-  is required (like Q-Q plots).
-- In figures use label sizes and point sizes that don't look too small
-  after rescaling.
-- Intsoduce the crash data in chapter 2, and use it in subsequent chapters.
 
 ### Specific chapter comments
 
@@ -27,22 +35,3 @@
   Ellenberg (or other sources with nice examples about correlation and
   regression). Maybe this one? https://tylervigen.com/spurious-correlations
 
-
-## previous notes:
-
-### Conventions
-
-- Code width - change font type so that we can show 80 characters per line
-- Use consistent code style
-  + space before and after each = sign, and after commas
-  + Comments in R – if the whole line, use ##. Inline use #
-  + other things?
-- Label prefix conventions. For example: ch: eqn: tab: fig:
-- Homework exercises - within sections, or end of chapter, or both?
-- Latex source - use 80 characters per line
-- Create figures with width that can span the text width, so that there
-   is not that much white space
-- Use labels to identify chunks, instead of line numbers
-- Named \inlnR
-- Add index terms
-- Compile based on change time of files.

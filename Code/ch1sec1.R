@@ -30,7 +30,7 @@ cards <- paste0(suits, rep(1:13, 4))
 cat(cards)
 
 set.seed(5252)
-(pokerHand <- matrix(sample(cards, 20, replace=FALSE), nrow=4, ncol=5))
+(pokerHand <- matrix(sample(cards, 20, replace=FALSE), nrow=4, ncol=5,  dimnames=list(paste("Player", 1:nrow(pokerHand)), paste("card", 1:ncol(pokerHand)))))
 
 save(pokerHand, file="tmp/pokerHand.RData")
 load("tmp/pokerHand.RData")
@@ -48,9 +48,9 @@ library("lattice")
 library("lattice")
 bwplot(voice.part ~ height, data=singer, xlab="Height (inches)")
 
-pdf("images/chapter_1/operaheight.pdf", height=5, width=5)
+pdf("images/chapter_1/operaheight.pdf", height=5, width=8)
 library("lattice")
-plot(bwplot(voice.part ~ height, data=singer, xlab="Height (inches)"))
+plot(bwplot(voice.part ~ height, data=singer, xlab="Height (inches)"), asp=1/1.6)
 dev.off()
 
 cat("  ", getwd(), "done\n")

@@ -1,4 +1,4 @@
-pdf("images/chapter_1/simunif1.pdf",width=4, height=3)
+pdf("images/chapter_1/simunif1.pdf",width=5, height=3)
 # Generate 10,000 points from a uniform distribution
 set.seed(210313)
 n <- 10000
@@ -14,7 +14,7 @@ set.seed(220513)
 ntrials <- 200
 cat("Number of Heads is: ", sum(runif(ntrials) < 0.5), "\n")
 
-pdf("images/chapter_1/simunif2.pdf", width=4, height=3)
+pdf("images/chapter_1/simunif2.pdf", width=5, height=3)
 set.seed(442886)
 ntrials <- 200  # the number of coin-tosses in each experiment
 nreps <- 100  # the number of experiments
@@ -25,7 +25,7 @@ for (i in 1:nreps) {
 hist(Heads, breaks=20, main="")
 dev.off()
 
-pdf("images/chapter_1/simunif3.pdf", width=4, height=3)
+pdf("images/chapter_1/simunif3.pdf", width=5, height=3)
 set.seed(442886)
 nreps <- 100
 ntrials <- 200
