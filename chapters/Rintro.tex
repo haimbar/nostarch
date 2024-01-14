@@ -183,7 +183,7 @@ We can also get a bit more detailed information about a variable by checking
 its structure; to do this, we use the \lstinline{str()} function:
 \showCode{R}{Code/ch1sec1.R}[11][11]
 \noindent As you should see in the output, this shows that the variable is of class 
-\lstinline{character}, and it has three values:
+\lstinline{chr} (which stands for character), and it has three values:
 \inlnR{```str(courseNames)```}[introstrcoursenames][vbox]
 % AF: Spacing here is off at the bottom. Too much space after the frame. Can we use \lstlisting instead?
 
@@ -258,7 +258,6 @@ emphasis on multivariate data.'' To install the package, we use the
 \lstinline{install.packages()} function. In order to use the package, you have to load
 it using the \lstinline{library()} function:
 \showCode{R}{Code/ch1sec1.R}[45][46]
-% AF: This is indented a few spaces. Can we delete those?
 
 Installing the package has to be done just once. Occasionally, you may be prompted
 to install updates, which can also be done by using the \lstinline{update.packages()}
@@ -268,12 +267,11 @@ To see a package in action, let's use a built-in dataset of opera singers and pl
 heights by their vocal range:
 
 \showCode{R}{Code/ch1sec1.R}[48][49]
-% AF: If possible, I would change code to read "voice.range", unless "part" is their name for the data component.
 
 The results should look like Figure~\ref{fig:ch1:operaheight}.
 
 \begin{figure}[H]
-\includegraphics[width=0.6\textwidth]{images/chapter_1/operaheight.pdf}
+\includegraphics[width=0.9\textwidth]{images/chapter_1/operaheight.pdf}
 \caption{Using the lattice package to create boxplots}\label{fig:ch1:operaheight}
 \end{figure}
 \noindent We will learn a lot more about data visualization in subsequent chapters.
@@ -286,7 +284,6 @@ Run each line separately and check the content of \lstinline{suits} and what
 \lstinline{rep(1:13, 4)} generates. Note that the function \lstinline{paste0()} is the
 same as \lstinline{paste(..., collapse="")}. The content of the cards variable should be:
 \inlnR{```cat(paste(cards))```}[introcards][vbox]
-% AF: We want to avoid "stacking" our listings on top of headers, so let's add some filler text here.
 Now that we have our cards, let's use them.
 
 \subsection{Getting Samples}
@@ -301,6 +298,10 @@ The \lstinline{sample()} function draws a different random sample each time unle
 set the random \emph{seed} to a fixed value. The \lstinline{set.seed()} function is
 used to ensure the reproducibility of the results.  Try running the code without the
 \lstinline{set.seed()} line, and you should see that you get different results each time.
+When we create a matrix, we may want to name the rows and columns. If we choose
+to do so, we can do it by using the \lstinline{dimnames} options, which is a \emph{list}
+consisting of two vectors -- the first one is used to create row names, and the second
+in used to name the columns.
 
 This is what the results look like with the seed:
 \inlnR{```print(pokerHand)```}[intropokerhand][vbox]
@@ -332,8 +333,7 @@ example, the following code saves \lstinline{pokerHand} in a
  represents one observation, and  each observation consists of one or more
  fields (columns) that are separated by commas. In our example, the rows correspond
  to the four players, and the columns to the five cards each player was dealt.
-In the code below, we read it as
-another variable called \lstinline{pH}: 
+In the code below, we read it as another variable called \lstinline{pH}: 
 \showCode{R}{Code/ch1sec1-rwdata.R}
 \runR{Code/ch1sec1-rwdata.R}{rwdata}
 The output is:
@@ -341,6 +341,9 @@ The output is:
 % AF: same here, want to avoid stacking. Add some explanation of the output.
 In this example, player 3 got two aces (clubs and spades), the queen of hearts,
 4-diamond, and 7 of spades.
+Note that when we saved the file as CSV we chose the  \lstinline{row.names=TRUE}
+option, in order to preserve the row names. Also, note that when a column name has a 
+space, \R replaces it with a period, since spaces are not allowed in variable names.
 
 %There are a few constants in \R, including the letters of the alphabet (upper- and lower-case), the month names, and the number $\pi$. Try running the following:
 %\showCode{R}{Code/ch1sec1.R}[38][42]
@@ -390,7 +393,7 @@ We store these 10,000 random numbers in a vector called \lstinline{simData}.
 We then use it as the argument in the function \lstinline{mysum}, as well as in
 \lstinline{sum}, and we print both values.
 We should get the following when we run the code: 
-\inlnR{cat('From sum:', sum(simData), '. From mysum:', mysum(simData))}[introsumsimdat].
+\inlnR{cat('From sum: ', sum(simData), '. From mysum: ', mysum(simData), sep='')}[introsumsimdat].
 
 Using arguments in function definitions is useful because you can use the
 same function to perform a similar operation on different objects. For example,
@@ -433,7 +436,7 @@ are put in a number of bins, and the height of each bin corresponds to the numbe
 observations in that bin. The histogram from the previous code segment should look
 like Figure~\ref{fig:ch1:simunif1}.
 \begin{figure}[H]
-\includegraphics[width=0.6\textwidth]{images/chapter_1/simunif1.pdf}
+\includegraphics[width=0.9\textwidth]{images/chapter_1/simunif1.pdf}
 \caption{A histogram of a random sample from a standard uniform distribution}\label{fig:ch1:simunif1}
 \end{figure}
 
@@ -494,7 +497,7 @@ each simulation consists of 200 coin tosses; from each of the 100 simulations,
 we obtain the proportion of times we got heads.
 
 \begin{figure}[H]
-\includegraphics[width=0.6\textwidth]{images/chapter_1/simunif2.pdf}
+\includegraphics[width=0.9\textwidth]{images/chapter_1/simunif2.pdf}
 \caption{A histogram of 100 experiments in which we flip a coin 200 time and
 calculate the proportion of times we get heads out of 200}\label{fig:ch1:simunif2}
 \end{figure}
