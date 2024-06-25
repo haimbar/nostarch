@@ -1,120 +1,185 @@
-## roll a die
-die <- 1:6
-n <- 1000
-set.seed(1)
-rolls <- sample(die, n, replace = TRUE)
-E = c(2, 4, 6)
-even <- rolls %in% E
-sum(even) / n
-
 ## Elevator waiting time
-set.seed(1)
+set.seed(2023)
 n <- 1000
-days <- runif(n, min=1, max=15)
-## cat(days <- runif(n, min=1, max=15))
-event <- days < 13
-sum(event) / n
-12 / 14
+elevators <- runif(n, min=1, max=15)
+up <- elevators < 13
+sum(up) / n
 
 ## Intransitive Dice
 A <- c(2, 2, 4, 4, 9, 9)
 B <- c(1, 1, 6, 6, 8, 8)
 C <- c(3, 3, 5, 5, 7, 7)
-
-set.seed(1)
 n <- 1000
-Ascore <- sample(A, n, replace = TRUE)
-Bscore <- sample(B, n, replace = TRUE)
-Cscore <- sample(C, n, replace = TRUE)
-AwinB <- Ascore > Bscore
-BwinC <- Bscore > Cscore
-CwinA <- Cscore > Ascore
-sum(AwinB) / n # mean(AwinB)
-sum(BwinC) / n
-sum(CwinA) / n
+set.seed(2023)
+sum(sample(A, n, replace = TRUE) > sample(B, n, replace = TRUE)) / n
+set.seed(2023)
+ab <- mean(sample(A, n, replace = TRUE) > sample(B, n, replace = TRUE))
+bc <- mean(sample(B, n, replace = TRUE) > sample(C, n, replace = TRUE))
+ac <- mean(sample(A, n, replace = TRUE) > sample(C, n, replace = TRUE))
+c(ab, bc, ac)
 
-## Two Children Problem
-gender <- c("boy", "girl")
-family <- sample(gender, 2, replace=TRUE)
 
-set.seed(1)
+rollA <- sample(A, n, replace=TRUE)
+rollB <- sample(B, n, replace=TRUE)
+rollC <- sample(C, n, replace=TRUE)
+mean(rollA > rollB)
+mean(rollB > rollC)
+mean(rollC > rollA)
+
+## Two Child Problem
+kids <- c("boy", "girl")
+set.seed(2023)
+n <- 10000
+sample(kids, 2, replace = TRUE)
+res = replicate(n, sample(kids, 2, replace = TRUE))
+firstgirl <- res[1,] == "girl"
+mean(res[2,firstgirl] == "girl")
+
+set.seed(2023)
 n <- 1000
-families <- replicate(n,
-                      sample(gender, 2, replace=TRUE)
-                      )
-firstgirl <- families[1,] == "girl"
-Jones <- families[,firstgirl]
-JonesGirls <- colSums(Jones == 'girl')
-mean(JonesGirls == 2)
+res = replicate(n, sample(kids, 2, replace = TRUE))
+onegirl <- res[1,] == "girl" | res[2,] == "girl"
+twogirls <- (res[1,onegirl] == "girl") & (res[2,onegirl] == "girl")
+mean(twogirls)
 
-secondgirl <- families[2,] == "girl"
-
-withgirl <- firstgirl | secondgirl
-Smith <- families[,withgirl]
-
-SmithGirls <- colSums(Smith == 'girl')
-mean(SmithGirls == 2)
+boygirl <- (res[,onegirl] == "girl")
+mean(colSums(boygirl) == 2)
 
 ## Bertrand’s Box
-boxes <- matrix(
-    c("G", "G", "G", "S", "S", "S"),
-      nrow=2, ncol=3)
+set.seed(2023)
 
-bert <- function(boxes){
+boxes <- matrix(c("G", "G", "G", "S", "S", "S"), 2, 3)
+
+boxcoin <- function(boxes) {
     boxid <- sample(1:3, 1)
     box <- boxes[,boxid]
     coin <- sample(box, 1)
-    return(c(boxid, coin)) 
+    return(c(boxid, coin))
 }
 
-bert(boxes)
-
 n <- 1000
-set.seed(1)
-games <- replicate(n, bert(boxes))
-godcoin <- games[2,] == "G"
-godcoingames <- games[,godcoin]
-mean(godcoingames[1,] == "1")
+res <- replicate(n, boxcoin(boxes))
+id <- res[2,] == "G"
+boxG <- res[1,id]
+mean(boxG == "1")
+
+## another data structure
+boxes <- c("GG", "GS", "SS")
+
+boxcoin <- function(boxes) {
+    box <- sample(boxes, 1)
+    idx <- sample(1:2, 1)
+    coin <- substr(box, start=idx, stop=idx)
+    return(c(box, coin))
+}
+boxcoin(boxes)
+
+res <- replicate(n=100000, boxcoin(boxes))
+sum(res[1,] == "GG" & res[2,] == "G") / sum(res[2,] == "G")
+
+mean(res[1, res[2,] == "G"] == "GG")
+
 
 ## Monty Hall problem
-choice <- 3
+set.seed(2023)
+choice <- 1
 
-mont <- function(choice){
+monty <- function(choice) {
     car <- sample(1:3, 1)
-    if (choice == car){
-        host <- sample((1:3)[-c(choice)], 1)
+    if (car == choice) {
+        host <- sample(c(1:3)[-choice], 1)
     } else {
-        host <- (1:3)[-c(choice, car)]
+        host <- c(1:3)[-c(choice, car)]
     }
-    return(c(car, host))
+    c(car, host)
 }
 
-mont(choice)
-
-set.seed(1)
 n <- 1000
-result <- replicate(n, mont(choice))
-open2 <- result[2,] == 2
-open2games <- result[,open2]
-mean(open2games[1,] == 1)
+res <- replicate(n, monty(1))
+open3id <- res[2,] == 3
+open3 <- res[,open3id]
+car.open3 <- open3[1,]
+stick <- mean(car.open3 == 1)
+switch <- mean(car.open3 == 2)
+c(stick, switch)
+
+n <- 1000
+n.open3 <- 0
+n.door1 <- n.door2 <- 0
+for (i in 1:n){
+    onegame <- monty(1)
+    if (onegame[2] == 3){
+        n.open3 <- n.open3 + 1
+        if (onegame[1] == 2) {
+            n.door2 <- n.door2 +1
+        }
+        if (onegame[1] == 1) {
+            n.door1 <- n.door1 +1
+        }
+    }
+}
+c(n.door1, n.door2) / n.open3
+
 
 ## Birthday Problem
-share <- function(){
-    room <- sample(1:365, 23, replace = TRUE)
-    length(unique(room)) < 23
+n <- 1000
+n.same <- 0
+for (i in 1:n){
+    oneroom <- sample(1:365, 23, replace = TRUE)
+    uni <- unique(oneroom)
+    if (length(uni) < 23){
+        n.same <- n.same +1    
+    }
 }
+n.same / n
 
 n <- 1000
-set.seed(1)
-res <- replicate(n, share())
-mean(res)
+n.same <- 0
+for (i in 1:n){
+    oneroom <- sample(1:2400000, 500, replace = TRUE)
+    uni <- unique(oneroom)
+    if (length(uni) < 500){
+        n.same <- n.same +1    
+    }
+}
+n.same / n
 
-same <- function(){
-    room <- sample(1:365, 23, replace = TRUE)
-    1 %in% room
+birth <- function(n.person, N.days, n.trials=1000) {
+    n.same <- 0
+    for (i in 1:n.trials){
+        oneroom <- sample(1:N.days, n.person, replace = TRUE)
+        uni <- unique(oneroom)
+        if (length(uni) < n.person){
+            n.same <- n.same +1    
+        }
+    }
+    n.same / n.trials
+    ## return(n.same / n.trials)
 }
 
-n <- 1000
-set.seed(1)
-res <- replicate(n, same())
-mean(res)
+birth(23, 365, 100000)
+birth(28, 365)
+birth(500, 2400000)
+
+## Simpson’s Paradox
+5 / (5 + 6)
+3 / (3 + 4)
+
+6 / (6 + 3)
+9 / (9 + 5)
+
+(5 + 6) / (5 + 6 + 6 + 3)
+(3 + 9) / (3 + 4 + 9 + 5)
+
+set.seed(2023)
+g <- 4                            # number of groups
+n <- 40                           # number of instances in each group
+z <- rep(1:g, each = n)           # grouping variable
+x <- runif(n * g, 0, 2) + z       # x variable that depends on z
+y <- 3 * z - x + rnorm(n * g)     # y variable that depends on x and z
+plot(x, y, pch=19, col=4, cex=0.7) # plot the whole data
+abline(lm(y ~ x), lwd=3, col="navyblue")   # show the overall linear trend
+
+plot(x, y, pch = z, col = z)      # plot the data with group labeled
+for (grp in 1:g)
+  abline(lm(y[z==grp] ~ x[z==grp]), lwd=3, col=grp, lty=2)
