@@ -300,3 +300,12 @@ images/chapter_regression/
 uconn-pcs/syllabus.pdf
 cclt/syllabus-23.pdf
 uconn-pcs/projects.pdf
+
+.RData
+.Rhistory
+others/
+*.Rproj
+uconn-pcs/slides/Probability/.hide.sh
+uconn-pcs/slides/Probability/Probability.pdf
+uconn-pcs/slides/Probability/probability_code.R
+uconn-pcs/slides/Probability/project/Project_probability.pdf
