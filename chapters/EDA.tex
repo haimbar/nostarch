@@ -99,7 +99,7 @@ Enter \lstinline{str(df1)} to see the structure of the data frame \lstinline{df1
 in the data frame have different types.
 The last line in the code above should produce the following summary of each column in the data
 frame:
-\inlnR{```print(summary(df1))```}[][vbox]
+\inlnR{```print(summary(df1))```}[edastrdat][vbox]
 % \includeOutput{ch2_01gendat}
 
 For numerical variables like \lstinline{x} and \lstinline{y}, \R shows the mean and the
@@ -190,7 +190,7 @@ if it's related to \lstinline{y} we can show one boxplot for each level of the
 factor \lstinline{g}, which, in this case means two side-by-side boxplots. The syntax
 to do this is as follows:
 
-\showCode{R}{Code/ch2-04sidebox.R}[2][5]
+\showCode{R}{Code/ch2-04sidebox.R}[2][6]
 \runR{Code/ch2-04sidebox.R}{04sidebox}
 
 The notation \lstinline{y ~ g} 
@@ -237,7 +237,7 @@ slightly elevated. We'll try to use additional plots and other variables that ar
 We can also plot a histogram for each group. We can do it in two plots, or in
 one, which makes the comparison between the groups easier. To do that we use the
 following code. The result is depicted in Figure~\ref{histoverlay}.
-\showCode{R}{Code/ch2-05histoverlay.R}[2][6]
+\showCode{R}{Code/ch2-05histoverlay.R}[2][4]
 \runR{Code/ch2-05histoverlay.R}{05histoverlay}
 
 The bracket syntax, as in \lstinline{y[g==0]}, is used to define a \emph{subset} of the data. For example, 
@@ -390,8 +390,10 @@ Use what you learned in the previous section to plot this \lstinline{x}, \lstinl
 also be summarized by using the \lstinline{table()} function, which simply counts the
 total number of observations in each category. Try entering \lstinline{xcat}. It should give the following: 
 
-\inlnR{```print(table(xcat))```}[][vbox]
-You can see that there are \inlnR{```cat(table(xcat)[[1]])```} numbers between 0 and 9, and  \inlnR{```cat(table(xcat)[[4]])```} numbers are greater than 16 and less than or equal to 25.
+\inlnR{```print(table(xcat))```}[edatablecat][vbox]
+You can see that there are \inlnR{```cat(table(xcat)[[1]])```}[edacatcount]
+numbers between 0 and 9, and  \inlnR{```cat(table(xcat)[[4]])```}[edacatcount2]
+ numbers are greater than 16 and less than or equal to 25.
 
 This can be shown graphically by using the \lstinline{barplot()} function as shown in
 Figure~\ref{barplot} (or as a pie chart by using the \lstinline{pie()} function.)
@@ -417,7 +419,7 @@ Let's create a new variable called \lstinline{ycat}, based on some ranges of a c
 
 The function \lstinline{ftable()} (for `flat table') is used to cross-tabulate. In the following output, 
 you can see the counts per each combination of \lstinline{xcat} and  \lstinline{ycat} values.
-\inlnR{```print(ftable(xcat, ycat))```}[][vbox]
+\inlnR{```print(ftable(xcat, ycat))```}[edaftable][vbox]
 
 There are a few things which this table allows us to see quite easily. It is clear that the distribution in each row is different from the other ones. The same thing can be said about the columns. 
 For example, most of the observations in the (0,30] category of the y variable are in (0,9] or (9,12] categories of the x variable. However, most of the data in the (100,300]  column are in the (12,16] or (16,25] rows.
@@ -511,10 +513,10 @@ Regardless of which tools you use, the important thing to keep in mind is that e
   Figure~\ref{smooth}. Furthermore, the smooth scatterplot saves us a lot of
   space. In this example with 100,000 points, when we save the the plots in pdf
   format, the simple scatterplot takes 44MB, while the smooth version is more
-  than 2000 time smaller and takes only 18kB. In real life you will come across
+  than 2000 times smaller and takes only 18kB. In real life you will come across
   much larger datasets, and then the size of the plot (in bytes) will make a big
   difference. It may take a long time to download a plot on the Internet, and
-  for the viewer (like Adobe) to show it on the screen, or to print it.
+  for the viewer (like Adobe's Acrobat) to show it on the screen, or to print it.
 \end{itemize}
 \begin{figure}[H]
 \includegraphics[width=0.6\textwidth]{images/chapter_2/smooth.pdf}

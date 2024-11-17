@@ -109,7 +109,7 @@ click on \textbf{File}, then on \textbf{Save}, and in the Save As box enter
 named \emph{FirstProgram.R}; notice that the tab name is now FirstProgram.R.
 
 In that part of the window, there should now be a small button called Source.
-Click on it. The program will  execute and the output, \lstinline{Hello, World!},
+Click on it. The program will execute and the output, \lstinline{Hello, World!},
 should be shown in the console. If you want to execute individual lines in the
 source code, put the cursor anywhere in that line, and click on the Run button
 (which is near the Source button) or click Ctrl+Enter (or Command+Enter on a Mac). 
@@ -119,6 +119,7 @@ Congratulations! You're now ready to start learning programming in R.
 
 
 \section{Some Useful R Functions}
+\runR{Code/bookinit.R}{bookinit}%[cache]
 \runR{Code/ch1sec1.R}{ch1init}%[cache]
 \runR{Code/ch1sec2.R}{ch1init2}%[cache]
 \runR{Code/ch1sec3.R}{ch1init3}%[cache]
@@ -312,13 +313,13 @@ functions we've mentioned earlier.
 \subsection{Saving to a File}
 We can save variables to a file in order to use them in a later session. Create a
 folder called \emph{tmp} in your working directory, and enter:
-\showCode{R}{Code/ch1sec1.R}[35][35]
+\showCode{R}{Code/ch1sec1.R}[36][36]
 If we don't specify the path, the file will be stored in the current working directory.
 Recall that you can find out the working directory with the \lstinline{getwd()} function;
 you can set it to another directory with \lstinline{setwd()}.
 
 We can get the saved variables using the following:
-\showCode{R}{Code/ch1sec1.R}[36][36]
+\showCode{R}{Code/ch1sec1.R}[37][37]
 Variables that we don't save will not be available once we terminate the current
 \R session. When we quit an \R session, we have an option to save the entire session's
 information. However, if there are variables, datasets, or functions that we have created

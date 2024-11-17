@@ -1,0 +1,6 @@
+if (! ("lattice" %in% installed.packages()))
+	install.packages("lattice")
+library("lattice")
+if (! ("xtable" %in% installed.packages()))
+	install.packages("xtable")
+library("xtable")
