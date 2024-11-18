@@ -1,4 +1,4 @@
-pdf("images/chapter_regression/corrLinear.pdf", width=9, height=2)
+pdf("images/chapter_8/corrLinear.pdf", width=9, height=2)
 set.seed(1)
 n <- 200
 x <- rnorm(n)        # generate observations on the variable x

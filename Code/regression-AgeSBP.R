@@ -1,4 +1,4 @@
-pdf("images/chapter_regression/agesbp.pdf", width=6, height=4)
+pdf("images/chapter_8/agesbp.pdf", width=6, height=4)
 sbp <- read.table("Data/systolic.txt", header=T)
 plot(sbp$AGE, sbp$SBP, xlab="Age", ylab="Systolic Blood Pressure")
 dev.off()

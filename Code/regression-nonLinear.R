@@ -1,4 +1,4 @@
-pdf("images/chapter_regression/nonLinear.pdf", height=3.6, width=6)
+pdf("images/chapter_8/nonLinear.pdf", height=3.6, width=6)
 set.seed(1)
 n <- 200
 x <- rnorm(n) # generate observations for variable x
