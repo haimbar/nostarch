@@ -3,8 +3,14 @@
   \label{ch:probability}}
 
 \chapterartfile{images/static/Black_Dice_PNG_Clip_Art-2653.png}
-\hypertarget{Randomworld}{The world is random and probability is a tool to quantify the randomness. It's the mathematical basis for all statistical reasoning. It helps us to determine how likely it's that we'll win a lottery, or the chances that our town will be hit by an earthquake in the next month.
-However, probability theory can be confusing and even counter-intuitive in some cases. In this chapter we review basic concepts in probability, we show some examples in which our intuition may fail us (and even the best mathematician), and provide guidance how to avoid common errors in probabilistic thinking.}
+\hypertarget{Randomworld}{The world is random and probability is a tool to
+quantify the randomness. It's the mathematical basis for all statistical
+reasoning. It helps us to determine how likely it's that we'll win a lottery,
+or the chances that our town will be hit by an earthquake in the next month.
+However, probability theory can be confusing and even counter-intuitive in some
+cases. In this chapter we review basic concepts in probability, we show some
+examples in which our intuition may fail us (and even the best mathematician),
+and provide guidance how to avoid common errors in probabilistic thinking.}
 
 \hypertarget{probability}{%
 \section{Probability}\label{probability}}
@@ -15,16 +21,18 @@ We begin with some essential terminology and notation:
 \item Experiment: a situation in which the outcome occurs randomly, e.g.,
   flipping a coin, rolling a dice, and picking a card from a deck.
 \item Sample Space: the set of all possible outcomes in an experiment, e.g.,
-  \{head, tail\}, \{1, 2, ..., 6\}, and \{all card faces\}.
-\item Event: a subset of the sample space is called an event; an event
-  occurs if the outcome from an experiment belong to the subset of sample space. For example, if
-  you roll a die, and you are interested in the result of having an even number,
-  then the event is $E$=\{2, 4, 6\}.
+\{head, tail\}, \{1, 2, ..., 6\}, and \{all card faces\}.
+\item Event: a subset of the sample space is called an event; an event occurs
+if the outcome from an experiment belong to the subset of sample space. For
+example, if
+  you roll a die, and you are interested in the result of having an even
+number, then the event is $E$=\{2, 4, 6\}.
 \end{itemize}
 
 The relationship between a sample space and an event can be illustrated using a
 Venn diagram such as Figure~\ref{fig:probability-event} for rolling a die. The
-sample space labeled as $S$ is represented by the outer rectangle that contains all the
+sample space labeled as $S$ is represented by the outer rectangle that contains
+all the
 six possible outcomes. The event $E$ of rolling an even number is represented
 by the inner, rounded rectangle  that contains the numbers 2, 4, and 6.
 
@@ -37,23 +45,30 @@ by the inner, rounded rectangle  that contains the numbers 2, 4, and 6.
   \draw (-0.5, 0.5) node{2} (0.5, 0.5) node{4} (1.5, 0.5) node{6};
   \draw[text = blue] (0, 0.3) node{$E$};
 \end{tikzpicture}
-\caption{Sample space (the outcomes of a fair six-sided die) and event (rolling an even number) illustrated with Venn diagram}
-\label{fig:probability-event}
+\caption{Sample space (the outcomes of a fair six-sided die) and event (rolling
+an even number) illustrated with Venn diagram} \label{fig:probability-event}
 \end{figure}
 
-\emph{Probability} is a number between zero and one which tells us how likely an event to occur. If we assume (for now) that the sample space is finite and each possible outcome in an experiment  has an equal chance to occur, then the probability of event $E$ is
-  \begin{equation}
+\emph{Probability} is a number between zero and one which tells us how likely
+an event to occur. If we assume (for now) that the sample space is finite and
+each possible outcome in an experiment  has an equal chance to occur, then the
+probability of event $E$ is \begin{equation}
     P(E) =\frac{\text{size of } E}{\text{size of } S}.
   \end{equation}
-  In the example depicted in Figure~\ref{fig:probability-event} the probability that we roll an even number when we use a fair die, is $P(even)=3/6=0.5$.
+  In the example depicted in Figure~\ref{fig:probability-event} the probability
+that we roll an even number when we use a fair die, is $P(even)=3/6=0.5$.
   
-In the following chapters we will deal with infinite (even uncountable) sample spaces, and we will generalize the definition of $P(E)$ then.
+In the following chapters we will deal with infinite (even uncountable) sample
+spaces, and we will generalize the definition of $P(E)$ then.
   
  \begin{example}[Elevator waiting time]
-  Mr. Smith works on the 13th floor of a 15 floor building. The only elevator in his building  moves continuously through floors 1, 2, . . . 14, 15, 14, . . . 2, 1, 2,  . . . , except that it stops on a floor on which the button has been
-  pressed. Assume that time spent loading and unloading passengers is very small
+  Mr. Smith works on the 13th floor of a 15 floor building. The only elevator
+in his building  moves continuously through floors 1, 2, . . . 14, 15, 14, . .
+. 2, 1, 2,  . . . , except that it stops on a floor on which the button has
+been pressed. Assume that time spent loading and unloading passengers is very
+small
   compared to the traveling time.  Mr.~Smith complains that at 5pm, when he
-  wants to go home, the elevator almost always goes up when it stops on his
+wants to go home, the elevator almost always goes up when it stops on his
   floor. What is the explanation?
 \end{example}
 
@@ -79,10 +94,24 @@ value of $n$, and see if the value you get from the simulation is closer to
 \hypertarget{conditional}{%
 \subsection{Conditional Probability}\label{conditional}}
 
-When there are two events $A$ and $B$ under consideration, knowing that $A$ has occurred may change the probability for $B$ to occur. For example, suppose that someone rolls a die behind a curtain and tells us only that the number is less than or equal to 3. What is the probability that it's an even number? Given that we got 1, 2, or 3, the only possibility that it's even is if the number is 2. The \emph{unconditional} probability of getting an even number in a roll of a die is 1/2, but because of the information that provided to us, we conclude that the \emph{conditional} probability is 1/3. 
-Using mathematical notation, we write  $P(B\mid A)=1/3$ which stands for ``conditional on $A$=the number is less than or equal to 3, the probability of $B$=the number is even, is 1/3''. 
+When there are two events $A$ and $B$ under consideration, knowing that $A$ has
+occurred may change the probability for $B$ to occur. For example, suppose that
+someone rolls a die behind a curtain and tells us only that the number is less
+than or equal to 3. What is the probability that it's an even number? Given
+that we got 1, 2, or 3, the only possibility that it's even is if the number is
+2. The \emph{unconditional} probability of getting an even number in a roll of
+a die is 1/2, but because of the information that provided to us, we conclude
+that the \emph{conditional} probability is 1/3.  Using mathematical notation,
+we write  $P(B\mid A)=1/3$ which stands for ``conditional on $A$=the number is
+less than or equal to 3, the probability of $B$=the number is even, is 1/3''. 
 
-Once again, it's helpful to visualize such things using a Venn diagram. In Figure~\ref{fig:probability-conditional}, the sample space $S$ consists of the six possible outcomes and the two events are depicted as a circle (event $A$) and as a rounded rectangle ($B$). To say that we condition on $A$ means that we restrict our view and look only at outcomes that could occur if we are told that $A$ has occurred. In other words, our sample space becomes $A$, instead of the whole set, $S$.
+Once again, it's helpful to visualize such things using a Venn diagram. In
+Figure~\ref{fig:probability-conditional}, the sample space $S$ consists of the
+six possible outcomes and the two events are depicted as a circle (event $A$)
+and as a rounded rectangle ($B$). To say that we condition on $A$ means that we
+restrict our view and look only at outcomes that could occur if we are told
+that $A$ has occurred. In other words, our sample space becomes $A$, instead of
+the whole set, $S$.
 
 \begin{figure}[htbp]
 \begin{tikzpicture}[thick,fill opacity=0.5]
@@ -95,15 +124,21 @@ Once again, it's helpful to visualize such things using a Venn diagram. In Figur
   \draw[text = orange] (1.2, -0.1) node{$B$};
   \draw[text = MidnightBlue] (-1.2, 0.5) node{$A$};
 \end{tikzpicture}
-\caption{Conditional probability -- given that we are told that a die gave a number less than or equal to 3 (event $A$), what is the probability that we got an even number ($B$)?}
-\label{fig:probability-conditional}
+\caption{Conditional probability -- given that we are told that a die gave a
+number less than or equal to 3 (event $A$), what is the probability that we got
+an even number ($B$)?} \label{fig:probability-conditional}
 \end{figure}
 
 \bigskip
-Can it be that we are told that some event $A$ has occurred, but this information tells us nothing about the probability of another event, $B$? Yes -- in this case we say that the two events are \emph{independent}, and we have
+Can it be that we are told that some event $A$ has occurred, but this
+information tells us nothing about the probability of another event, $B$? Yes
+-- in this case we say that the two events are \emph{independent}, and we have
 $$P(B\mid A) = P(B)\,.$$
 
-For example, Abby rolls a fair die, while her roommate Amelia tosses a fair coin at the same time. If $A$ is the event `Abby got a 6' and $B$ is the event `Amelia got Heads', then $P(B\mid A) = 1/2$ because Abby's result has no impact on Amelia's. 
+For example, Abby rolls a fair die, while her roommate Amelia tosses a fair
+coin at the same time. If $A$ is the event `Abby got a 6' and $B$ is the event
+`Amelia got Heads', then $P(B\mid A) = 1/2$ because Abby's result has no impact
+on Amelia's. 
 
 Sometimes establishing that two events are independent is harder. For example,
 in general, the probability that Abby gets a text message within any given hour
@@ -136,12 +171,15 @@ when we take into consideration their ages: \{Boy, Boy\}, \{Boy, Girl\}, \{Girl,
 Boy\}, and \{Girl, Girl\}. Suppose that they all have the same probability to
 occur.
 
-For the first question: the sample space for the given situation consists of only two events -- \{Girl, Boy\}, \{Girl, Girl\}; and only one of them corresponds to the event of having two girls. Thus the
+For the first question: the sample space for the given situation consists of
+only two events -- \{Girl, Boy\}, \{Girl, Girl\}; and only one of them
+corresponds to the event of having two girls. Thus the
 probability of two girls is 1/2. This question can also be solved this
 way: since the older child is a girl, the probability of two girls is the
 probability that the younger child is a girl which is 1/2.
 
-For the second question, the sample space includes three possibilities: \{Boy, Girl\}, \{Girl, Boy\}, \{Girl, Girl\}. Thus the
+For the second question, the sample space includes three possibilities: \{Boy,
+Girl\}, \{Girl, Boy\}, \{Girl, Girl\}. Thus the
 probability of having two girls, given that at least one of them is a girl, is 1/3.
 
 If we simulate many families, we can find the numerical answer quite accurately.
@@ -160,8 +198,11 @@ close to the theoretical probabilities 1/2 and 1/3, respectively.
 
 
 \subsection{Bayes' Rule}\label{Bayes}
-One of the most important results in probability and statistics looks deceivingly simple, but has deep consequences, as we'll see in some of the subsequent examples. it's called Bayes' Rule, named after the reverend Thomas Bayes who discovered it in the 18th century. Consider two events, $A$ and $B$, such that $P(A)$ is greater than zero. Then
-\begin{equation}\label{eq:bayes}
+One of the most important results in probability and statistics looks
+deceivingly simple, but has deep consequences, as we'll see in some of the
+subsequent examples. it's called Bayes' Rule, named after the reverend Thomas
+Bayes who discovered it in the 18th century. Consider two events, $A$ and $B$,
+such that $P(A)$ is greater than zero. Then \begin{equation}\label{eq:bayes}
   P(B\mid A) = \frac{P(A\mid B)P(B)}{P(A)}.
 \end{equation}
 This formula is very useful when the conditional probability $P(B\mid A)$ is
@@ -193,7 +234,8 @@ ballet is $P(B \mid F)=0.5$. Using Bayes' rule, $P(F\mid B)
   \draw[fill = red!80, draw=red] (1, 0.5) rectangle ++(2,2) node[midway,white]{F};
   \draw[fill = blue!80, draw=blue] (0.5,0.5) rectangle ++(1,1)  node[midway,white]{B};
 \end{tikzpicture}
-\caption{Bayes' rule. $F$ is the event that Jane attends the weekly football game, and $B$ is the events that she attends the weekly ballet}
+\caption{Bayes' rule. $F$ is the event that Jane attends the weekly football
+game, and $B$ is the events that she attends the weekly ballet}
 \label{fig:bayes-rule}
 \end{figure}
 
@@ -292,11 +334,16 @@ coin in the box is also a gold coin as
 % \includeOutput{BertrandBox}
 
 \section{When Intuition May Fail}
-Probability-based logic may be confusing and even counter-intuitive in some cases. In this section, we show such cases, some of which have confused some of the brightest people. The purpose of introducing these examples is to show how they may occur in everyday situations, and how to deal with them correctly.
+Probability-based logic may be confusing and even counter-intuitive in some
+cases. In this section, we show such cases, some of which have confused some of
+the brightest people. The purpose of introducing these examples is to show how
+they may occur in everyday situations, and how to deal with them correctly.
 
 \hypertarget{Intransitive-Dice}{%
-  \subsection{Intransitivity -- when $A>B$ and $B>C$ does not imply $A>C$}\label{Intransitive-Dice}}
-Real numbers are transitive, meaning that if we know that $x>y$ and $y>z$ then $x>z$. However, probabilities of events are not always transitive. 
+  \subsection{Intransitivity -- when $A>B$ and $B>C$ does not imply
+$A>C$}\label{Intransitive-Dice}} Real numbers are transitive, meaning that if
+we know that $x>y$ and $y>z$ then $x>z$. However, probabilities of events are
+not always transitive. 
 \begin{example}[Intransitive Dice]
 We have three unusual dice:
 \begin{itemize}
@@ -306,10 +353,12 @@ We have three unusual dice:
 \end{itemize}
 \end{example}
 
-To play a game you and your opponent choose two of the dice, say, A and B, and you get to choose which die you roll (and your opponent will roll the other.) The one who tolls a larger number wins. Which die do you want to choose?
+To play a game you and your opponent choose two of the dice, say, A and B, and
+you get to choose which die you roll (and your opponent will roll the other.)
+The one who tolls a larger number wins. Which die do you want to choose?
 
-Let's tabulate the possible results if dice A and B were chosen, and see which  die is preferred.
-\begin{table}[H]
+Let's tabulate the possible results if dice A and B were chosen, and see which
+die is preferred.  \begin{table}[H]
   \begin{tabular}{cc|ccc}
     \toprule
     &   & \multicolumn{3}{c}{B} \\
@@ -370,8 +419,24 @@ Running this code should give the following:
 \includeOutput{IntransitiveDice}
 
 
-You are probably never going to encounter such dice, or play this game, but you may encounter a similar situation in real life when you have to choose among different people for a single position, or choose among similar products, based on preferences or ratings.
-For example, suppose you want to purchase a new phone which is offered by three manufacturers, and there are six reviews for each phone. Note that the average ratings of all three options in our made-up example is the same. You may prefer phone A because it got the highest rating (twice). However, it also got two very low ratings, so choosing based on the maximum is risky. Option C has less variability in its ratings, but it didn't get a very high score from any reviewer. Furthermore, it may be that you have 60,000 reviews for each phone, and not just six. So, going systematically over the reviews is impractical, and you may decide that the best way to choose your phone is to use a randomized algorithm like the one in the dice example. That is, choose two of the options, and  then choose one random rating for each one, and select the one that give the highest score. This is a reasonable algorithm, but you have to be aware of the fact that when choices are made based on a probabilistic approach, ordering of options may not have the transitive property.
+You are probably never going to encounter such dice, or play this game, but you
+may encounter a similar situation in real life when you have to choose among
+different people for a single position, or choose among similar products, based
+on preferences or ratings.  For example, suppose you want to purchase a new
+phone which is offered by three
+manufacturers, and there are six reviews for each phone. Note that the average
+ratings of all three options in our made-up example is the same. You may prefer
+phone A because it got the highest rating (twice). However, it also got two
+very low ratings, so choosing based on the maximum is risky. Option C has less
+variability in its ratings, but it didn't get a very high score from any
+reviewer. Furthermore, it may be that you have 60,000 reviews for each phone,
+and not just six. So, going systematically over the reviews is impractical, and
+you may decide that the best way to choose your phone is to use a randomized
+algorithm like the one in the dice example. That is, choose two of the options,
+and  then choose one random rating for each one, and select the one that give
+the highest score. This is a reasonable algorithm, but you have to be aware of
+the fact that when choices are made based on a probabilistic approach, ordering
+of options may not have the transitive property.
 
 
 
@@ -414,11 +479,13 @@ the plane, the two probabilities are \inlnR{```cat(prob.p253[1])```}[prob.p253.1
 \inlnR{```cat(prob.p253[2])```}[prob.p253.2], respectively.
 
 This example shows that some seemingly rare events are not rare, and they occur
-quite often, especially when we get mutiple samples. %The second event has a large probability to occur, because the
+quite often, especially when we get mutiple samples. %The second event has a
+large probability to occur, because the
 %number of possible pairs is much larger.
 When you want to see if any of the other 22
-people has the same birthday as yours, there are only 22 pairs to consider for the event to occur
-(comparing your birth date with each of the birth dates of the other people). When you want to see if
+people has the same birthday as yours, there are only 22 pairs to consider for
+the event to occur (comparing your birth date with each of the birth dates of
+the other people). When you want to see if
 any of the 23 people share the same birthday, there are $23\times22/2=253$ possible pairs
 (each two persons of the 23) to consider for the event to occur.
 
@@ -442,7 +509,9 @@ Adapt the previous code by changing $N$ and $n$, to check the
 \end{listhead}
 
 \subsection{Predictions}
-The following example is one of the earliest questions in probability, when the field was mostly of interest among gamblers (who were also prominent mathematicians).
+The following example is one of the earliest questions in probability, when the
+field was mostly of interest among gamblers (who were also prominent
+mathematicians).
 
 \begin{example}[Fair Division]
 Tom and Jerry each put 30 dollars in a jackpot to start a tennis match. They are
@@ -456,8 +525,9 @@ the current position (Tom leading 2-1)?
 It seems Tom has won twice and Jerry has won once so the 60 dollars should be
 split as $40:20$. However, this split is proportional to their current scores, but
 it's not proportional to their probabilities of
-winning. They need at most another two matches in order to know the final winner. Here are
-the four possible winners of the next two matches: \{Tom, Tom\}, \{Tom, Jerry\},
+winning. They need at most another two matches in order to know the final
+winner. Here are the four possible winners of the next two matches: \{Tom,
+Tom\}, \{Tom, Jerry\},
 \{Jerry, Tom\}, and \{Jerry, Jerry\}. In the first three possible outcome Tom
 ends up with 3 wins, and therefore would get the \$60, and only the fourth
 outcome leads to Jerry being the first to reach three wins.
