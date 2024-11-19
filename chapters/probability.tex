@@ -5,7 +5,7 @@
 \chapterartfile{images/static/Black_Dice_PNG_Clip_Art-2653.png}
 \hypertarget{Randomworld}{The world is random and probability is a tool to
 quantify the randomness. It's the mathematical basis for all statistical
-reasoning. It helps us to determine how likely it's that we'll win a lottery,
+reasoning. It helps us to determine how likely it is that we'll win a lottery,
 or the chances that our town will be hit by an earthquake in the next month.
 However, probability theory can be confusing and even counter-intuitive in some
 cases. In this chapter we review basic concepts in probability, we show some
@@ -154,7 +154,7 @@ $A$ = the Golden State Warriors will win the NBA championship next season, and
 $B$ = the Boston Celtics will win the NBA championship next season, then these
 events can't occur at the same time. Mutually exclusive events are not independent. In
 this example, if we somehow know that $A$ has happened, then we know for sure
-that $B$ will not. Moreover, if we assign a probability of 0.6 that the Golden
+that $B$ didn't. Moreover, if we assign a probability of 0.6 that the Golden
 State Warriors will win, then we know that $P(B) = 0.4$. 
 
 \begin{example}[Two Children]
@@ -200,14 +200,14 @@ close to the theoretical probabilities 1/2 and 1/3, respectively.
 \subsection{Bayes' Rule}\label{Bayes}
 One of the most important results in probability and statistics looks
 deceivingly simple, but has deep consequences, as we'll see in some of the
-subsequent examples. it's called Bayes' Rule, named after the reverend Thomas
+subsequent examples. It's called Bayes' Rule, named after the reverend Thomas
 Bayes who discovered it in the 18th century. Consider two events, $A$ and $B$,
 such that $P(A)$ is greater than zero. Then \begin{equation}\label{eq:bayes}
   P(B\mid A) = \frac{P(A\mid B)P(B)}{P(A)}.
 \end{equation}
 This formula is very useful when the conditional probability $P(B\mid A)$ is
 difficult to find but the conditional probability $P(A\mid B)$ as well as the
-unconditional probabilities are easy to find.
+unconditional probabilities, $P(A)$ and $P(B)$ are easy to find.
 
 \begin{example}[Football or ballet?]
 Jane has season tickets to the home games of her town's football team, which she
@@ -256,7 +256,7 @@ getting a gold coin if we know the box, as shown in
 Figure~\ref{fig:probability-flow}. However, it's non-trivial to find the
 probability of getting a certain box after we take out just one coin.
 %when we know the final coin.
-We see the six
+We see that the six
 possible outcomes in Figure~\ref{fig:probability-flow} are equally likely to
 occur. Two outcomes of a gold coin are through the path of the box with two gold
 coins and one outcome of a gold coin is through the path of the box with a gold
@@ -266,8 +266,8 @@ coin and a silver coin. Thus the answer to this problem is 2/3.
 \resizebox{0.6\columnwidth}{!}{%
 \begin{tikzpicture}[%scale=0.5,
   edge from parent/.style={draw,-latex},
-    boxes/.style={star, draw=none, fill=red, drop shadow, text centered, anchor=north},
-    state/.style={draw=none, fill=red, circle, drop shadow, text centered, anchor=north},
+    boxes/.style={star, draw=none, fill=red!70, drop shadow, text centered, anchor=north},
+    state/.style={draw=none, fill=red!70, circle, drop shadow, text centered, anchor=north},
     leaf/.style={draw=none, fill=orange, ellipse, text centered, anchor=north},
     leafs/.style={draw=none, fill=gray, ellipse, text centered, anchor=north},
     level distance=0.9cm, growth parent anchor=south
@@ -335,7 +335,7 @@ coin in the box is also a gold coin as
 
 \section{When Intuition May Fail}
 Probability-based logic may be confusing and even counter-intuitive in some
-cases. In this section, we show such cases, some of which have confused some of
+cases. In this section, we show some examples, some of which have confused some of
 the brightest people. The purpose of introducing these examples is to show how
 they may occur in everyday situations, and how to deal with them correctly.
 
@@ -355,7 +355,7 @@ We have three unusual dice:
 
 To play a game you and your opponent choose two of the dice, say, A and B, and
 you get to choose which die you roll (and your opponent will roll the other.)
-The one who tolls a larger number wins. Which die do you want to choose?
+The one who rolls a larger number wins. Which die do you want to choose?
 
 Let's tabulate the possible results if dice A and B were chosen, and see which
 die is preferred.  \begin{table}[H]
@@ -433,7 +433,7 @@ reviewer. Furthermore, it may be that you have 60,000 reviews for each phone,
 and not just six. So, going systematically over the reviews is impractical, and
 you may decide that the best way to choose your phone is to use a randomized
 algorithm like the one in the dice example. That is, choose two of the options,
-and  then choose one random rating for each one, and select the one that give
+and  then choose one random rating for each one, and select the one that gives
 the highest score. This is a reasonable algorithm, but you have to be aware of
 the fact that when choices are made based on a probabilistic approach, ordering
 of options may not have the transitive property.
@@ -457,7 +457,7 @@ $1/365\approx0.0027$, so this is a rare event.
 With 22 other people on the bus, the probability that someone shares your
 birthday is $1-(364/365)^{22}=0.0586$ which is quite small, so it's pretty unlikely. For
 the second question that two of the 23 people share a birthday, it seems that
-the answer is similar, but the actually probability is surprisingly much
+the answer is similar, but the actual probability is surprisingly much
 higher. The probability that at least two people share a birthday is about 0.5.
 
 If you took a plane with 253 passengers, the probability that someone shares
@@ -479,15 +479,14 @@ the plane, the two probabilities are \inlnR{```cat(prob.p253[1])```}[prob.p253.1
 \inlnR{```cat(prob.p253[2])```}[prob.p253.2], respectively.
 
 This example shows that some seemingly rare events are not rare, and they occur
-quite often, especially when we get mutiple samples. %The second event has a
-large probability to occur, because the
+quite often, especially when we get mutiple samples. %The second event has a large probability to occur, because the
 %number of possible pairs is much larger.
 When you want to see if any of the other 22
 people has the same birthday as yours, there are only 22 pairs to consider for
 the event to occur (comparing your birth date with each of the birth dates of
 the other people). When you want to see if
 any of the 23 people share the same birthday, there are $23\times22/2=253$ possible pairs
-(each two persons of the 23) to consider for the event to occur.
+(any two persons of the 23) to consider for the event to occur.
 
 This is particularly important in trials, where DNA match is often
 used as evidence that a defendant has committed a crime. The chance that a DNA
@@ -495,12 +494,6 @@ sample from a particular crime scene matches a random person is extremely low,
 but not zero. With nine billion people in the world and many crime scenes, the
 probability that some other person's DNA (other than the true offender) matches
 the DNA sample from a scene is not negligible.
-
-\begin{exercise}
-Adapt the previous code by changing $N$ and $n$, to check the
-  probability that someone will be selected multiple times if you pick a
-  name from a list of one million names for one thousand times.
-\end{exercise} 
 
 \begin{listhead}
 \item [Exercise] Adapt the previous code by changing $N$ and $n$, to check the
@@ -574,7 +567,7 @@ switch your choice?
 This famous example has confused many smart people. It's also about conditional
 probability and can be solved by using the Bayesian formula. However, setting up
 the conditional and unconditional probabilities for this problem is
-complicated. Some people did not believe the result answer until they were shown some
+complicated. Some people didn't believe the result answer until they were shown some
 simulations. The following code provide a simulation based on \code{n=1000}
 repetitions.   
 
@@ -859,7 +852,7 @@ while the smart strategy gives a survival probability close to 0.3.
 % football code
 
 \section{Summary}
-This chapter covered basic concepts of probability and provided examples on how
+This chapter covered basic concepts of probability and provided examples for how
 probability can help interpret real-life phenomena. Faced with counter-intuitive
 and challenging probability problems, we were able to leverage numerical
 simulation techniques to gain deeper insights and find solutions easily. Moving
