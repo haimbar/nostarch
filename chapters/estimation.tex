@@ -31,7 +31,7 @@ Specifically, here is a set up:
 \showCode{R}{Code/est-hide.R}[1][5]
 \runR{Code/est-hide.R}{hide}
 The returned summary about the observed sample is:
-\inlnR{```print(summary(x))```}[][vbox]
+\inlnR{```print(summary(x))```}[estsummx][vbox]
 
 
 An estimator of $\mu$ has to be computable from the observed data. It should not
@@ -71,8 +71,8 @@ its realization given a dataset.
 
 The three estimates based on the observed sample are obtained by:
 \showCode{R}{Code/est-hide.R}[8][8]
-Their values are \inlnR{```cat(estimates[1])```},
-\inlnR{```cat(estimates[2])```}, and \inlnR{```cat(estimates[3])```}, respectively.
+Their values are \inlnR{```cat(estimates[1])```}[est1],
+\inlnR{```cat(estimates[2])```}[est2], and \inlnR{```cat(estimates[3])```}[est3], respectively.
 
 
 Which estimator is the best? In this game, the Nature knows the true
@@ -80,8 +80,8 @@ value of $\mu$, so it can compare the estimation errors across the three
 estimates. Compared with the true $\mu$, the squared errors of the three
 estimates are obtained by:
 \showCode{R}{Code/est-hide.R}[13][13]
-Their values are \inlnR{```cat(err[1])```},
-\inlnR{```cat(err[2])```}, and \inlnR{```cat(err[3])```}, respectively.
+Their values are \inlnR{```cat(err[1])```}[esterr1],
+\inlnR{```cat(err[2])```}[esterr3], and \inlnR{```cat(err[3])```}[esterr3], respectively.
 
 
 Note that this comparison is for only the given sample. A good estimator may by
@@ -129,7 +129,7 @@ size \lstinline{n = 20} and see which estimator wins the
 race on average.
 \showCode{R}{Code/est-hide-norm.R}[11][14]
 The results are
-\inlnR{```print(rowMeans(sim))```}[][vbox]
+\inlnR{```print(rowMeans(sim))```}[estrowmeans1][vbox]
 The first estimator, the sample mean, is a clear winner! The estimator (sample
 median) follows and the third estimator (sample midrange) is the poorest among
 the three.
@@ -163,7 +163,7 @@ Then we run the race 1000 times again and check the MSE of three estimators from
 the 1000 replicates.
 \showCode{R}{Code/est-hide-cauchy.R}[13][15]
 The results are
-\inlnR{```print(rowMeans(sim.t))```}[][vbox]
+\inlnR{```print(rowMeans(sim.t))```}[estrowmeans2][vbox]
 So, for this experiment, the second estimator, sample median, is the best among
 the three.
 
@@ -185,7 +185,7 @@ estimators in any data generation scheme. This time we generate data from a
 uniform distribution centered at $\mu$ with a bandwidth of 20.
 \showCode{R}{Code/est-hide-unif.R}
 The results are
-\inlnR{```print(rowMeans(sim.u))```}[][vbox]
+\inlnR{```print(rowMeans(sim.u))```}[estrowmeans3][vbox]
 So, for this experiment, the third estimator, sample midrange, is the best among
 the three. It uses the least amount of information, but what it uses contains
 all the information about the location parameter $\mu$ in this setting.
@@ -312,7 +312,7 @@ distribution with mean~$\mu$. For simplicity, let's set the the scale parameter
 of the gamma distribution to be known as~$2$.
 \showCode{R}{Code/est-ci-clt.R}[9][12]
 The resulting 95\% confidence interval is
-$($\inlnR{```cat(ci[1])```}, \inlnR{```cat(ci[2])```}$)$.
+$($\inlnR{```cat(ci[1])```}[estci1], \inlnR{```cat(ci[2])```}[estci2]$)$.
 
 
 Does a 95\% confidence interval constructed this way really give 95\%
@@ -321,14 +321,14 @@ sample size is large. Is $n = 50$ large enough for this to be good?
 We can check the actual coverage rate in a simulation study.
 \showCode{R}{Code/est-ci-clt.R}[15][22]
 The empirical coverage rate from the 1000 replicates is
-\inlnR{```cat(mean(sim_50[1, ] < mu & sim_50[2,] > mu))```}.
+\inlnR{```cat(mean(sim_50[1, ] < mu & sim_50[2,] > mu))```}[estsim50].
 
 
 What if the sample size is smaller, say 20?
 \showCode{R}{Code/est-ci-clt.R}[26][27]
 The empirical coverage now is
 % the following causes a problem
-\inlnR{```cat(mean(sim_20[1, ] < mu & sim_20[2,] > mu))```}.
+\inlnR{```cat(mean(sim_20[1, ] < mu & sim_20[2,] > mu))```}[estsim20].
 
 
 The simulation shows that the confidence intervals constructed from
@@ -391,10 +391,10 @@ size~50.
 
 %% Tried putting cat(medBoot$t0) in math mode; not working
 For this sample, our point estimate is
-\inlnR{```cat(medBoot[["t0"]])```}, with 95\% confidence
+\inlnR{```cat(medBoot[["t0"]])```}[estmedboot], with 95\% confidence
 interval \lstinline{medCI}, which is
-$($\inlnR{```cat(medCI[1])```}, \inlnR{```cat(medCI[2])```}$)$.
-The true value \inlnR{```cat(target)```} is nicely captured by the interval
+$($\inlnR{```cat(medCI[1])```}[estmedci1], \inlnR{```cat(medCI[2])```}[estmedci2]$)$.
+The true value \inlnR{```cat(target)```}[esttarget] is nicely captured by the interval
 from this sample.
 
 
@@ -414,21 +414,21 @@ estimate and the empirical coverage rate of the 95\% confidence interval.
 
 
 The mean of the point estimate \lstinline{mean(sim\_50[1,])} from the
-\inlnR{```cat(nrep)```} replicates is
-\inlnR{```cat(mean(sim_50[1,]))```}, which is very close to the true target
-\inlnR{```cat(target)```}.
+\inlnR{```cat(nrep)```}[estnrep1] replicates is
+\inlnR{```cat(mean(sim_50[1,]))```}[estmeansim50], which is very close to the true target
+\inlnR{```cat(target)```}[esttarget2].
 
 
 The empirical coverate rate of the 95\% confidence interval from the
-\inlnR{```cat(nrep)```} replicates is
-\inlnR{```cat(mean(sim_50[2,] < target & target < sim_50[3,]))```},
+\inlnR{```cat(nrep)```}[estnrep2] replicates is
+\inlnR{```cat(mean(sim_50[2,] < target & target < sim_50[3,]))```}[estmeansim50ci],
 which is reasonably close to the nominal level 95\%.
 
 
 We repeat the process for a smaller sample size~20:
 \showCode{R}{Code/est-ci-boot.R}[39][40]
-The empirical coverate rate of the 95\% confidence interval from the
-\inlnR{```cat(nrep)```} replicates is
+The empirical coverage rate of the 95\% confidence interval from the
+\inlnR{```cat(nrep)```}[estnrep3]  replicates is
 %\inlnR{```cat(mean(sim_20[2,] < target & target < sim_20[3,]))```},
 which is still reasonably close to the nominal level 95\%.
 \end{example}
