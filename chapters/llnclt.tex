@@ -53,7 +53,7 @@ average day, between 8am and 8pm?
 \end{enumerate}
 
 The main paradigm in statistical inference and prediction in order to answer
-such question is to take a sample from the population we're interested in, and
+such questions is to take a sample from the population we're interested in, and
 choose a mathematical model which we believe represents the whole population.
 Then we check if our model appears to reasonable, in the sense that it fits the
 data well. If it does, we can use the mathematical properties of the model to
@@ -68,7 +68,8 @@ population, and we show the (arguably) two most important results in statistics
 -- the \emph{law of large numbers} (\emph{LLN}), and the \emph{central limit
 theorem} (\emph{CLT}). Together, these two very general theorems make it
 possible to draw conclusions about the whole population, from a single sample!
-(as long as the sample size is large enough).
+(as long as the sample represents the whole population and the sample
+size is large enough).
 
 
 \section{The Law of Large Numbers}
@@ -111,9 +112,9 @@ When it's assumed that the data come from a normal distribution, we can use the
 \lstinline{qqnorm()} function to check if the assumption is reasonable:
 \showCode{R}{Code/llnclt_IQ.R}[7][8]
 
-The points in the Q-Q plot in Figure \ref{qqplot1} shows the actual quantiles
+The points in the Q-Q plot in Figure \ref{qqplot1} show the actual quantiles
 (from the data, \lstinline{samp1}) vs. the theoretical quantiles (those that
-would be obtained if we drew from a normal distribution). The points in the
+would be obtained if we drew  a sample from a normal distribution). The points in the
 graph lie very close to a straight line, indicating that the sample  was
 likely drawn from a normal distribution (here, this is not surprising because
 we generated it this way. However, when we get a random sample and we do not
@@ -157,7 +158,7 @@ gets smaller and the sample size gets larger, but this is the result of the
 \emph{Central Limit Theorem}, which will be discussed later in this chapter.
 
 \subsection{Example \#2 -- the Roulette Wheel}
-Here, the outcome is binary -- we either win or lose. The probability of
+Here, the outcome is binary -- we either win or lose a bet. The probability of
 winning if we choose the red color, is $18/37$.  Let's simulate 40 bets at the
 roulette wheel, where, in each we put a dollar on red. Each bet is won with a
 Bernoulli distribution, $Ber(18/37)$ and we repeat it 40 times. Equivalently,
@@ -244,9 +245,9 @@ received text messages (\emph{Poisson distibution}), or if we measure IQ
 independent, and identically distributed, and that the true distribution
 actually has a mean. (We will see an example where this is not the case.)
 
-It's important to emphasize that the LLN does not imply that the results of
+It's important to emphasize that the LLN doesn't imply that the results of
 future experiments will balance out what already happened! If we bet 100 times
-at the roulette wheel and lost each time, this does not mean that we have a
+at the roulette wheel and lost each time, this doesn't mean that we have a
 better chance of winning the next bet. All the LLN is saying is that if we
 continue to play many times, the overall probability that we win in each round
 will converge to 18/37.
@@ -278,7 +279,7 @@ Figure \ref{LLNdemoCauchy}, which is what you should get after running the
 code,  shows the distributions of the difference between the average grades
 ($d_{AB}$) on the left, and of the ratio ($r_{AB}$) on the right.  What we see
 here is that the mean difference between the groups, $d_{AB}$, converges to the
-true difference between the groups (10), but the ratio, $r_{AB}$, does not
+true difference between the groups (10), but the ratio, $r_{AB}$, doesn't
 converge -- $n$ can be as large as we want, and we will still see ratios that
 are quite extreme. (Note that the mean of a ratio between two distributions is
 generally not equal to the ratio of the means of the distributions, so we don't
@@ -294,19 +295,19 @@ expect $r_{AB}$ to converge to exactly 70/60.)
 What is happening here? The answer is that while a difference between two
 normal random variables is still normal (and therefore, has a mean), the ratio
 between two normal distributions follows a \emph{Cauchy distribution} which
-doesn't have a theoretical mean, so the LLN does not apply to the ratios
+doesn't have a theoretical mean, so the LLN doesn't apply to the ratios
 between the grades of the two groups,  $r_{AB}$.
 
 Although the LLN applies to almost any distribution we will ever encounter, the
 lesson here is that taking the ratio between two perfectly well-behaved
-distributions may lead to a distribution to which the LLN does not apply. Other
+distributions may lead to a distribution to which the LLN doesn't apply. Other
 manipulations of random variables may lead to similar results.
 
 
 
 \section{The Central Limit Theorem}
 The LLN says that as we increase the sample size, the sample mean converges to
-a fixed value (the true population mean).  It does not say anything, however,
+a fixed value (the true population mean).  It doesn't say anything, however,
 about how close the sample estimate is to the true value. In other words, it
 says nothing about our level of (un)certainty. 
 
@@ -317,7 +318,8 @@ histogram will look like a normal distribution. This is true even if the
 original variables themselves are not normally distributed!
 
 The CLT requires very little about the actual distribution of the data: the
-sample has to be i.i.d., and the distribution must have a finite variance. 
+sample has to be independent and identically distributed (i.i.d.), and the
+distribution must have a finite variance. 
 
 \subsection{CLT -- Examples}
 We will draw a random sample of size n from the following distributions:
@@ -344,8 +346,8 @@ order to show that the sample is representative of the true distribution:
 %\runR{Code/llnclt_CLTexp.R}{cltsimexp}
 
 Notice that the distribution in Figure \ref{CLTexp} is very skewed, and doesn't
-look at all like a normal distribution. Try running \lstinline{mean(samp)}. you
-should get \inlnR{```cat(mean(samp))```}[llnmeansampexp], which is approximately
+look at all like a normal distribution. Try running \lstinline{mean(expsamp1)}. you
+should get \inlnR{```cat(mean(expsamp1))```}[llnmeansampexp], which is approximately
 1/5.5, the theoretical mean of the Exp(5.5) distribution.
 
 \begin{figure}[H]
@@ -429,7 +431,7 @@ Suppose we took a sample of 3,000, instead. Would is be surprising if we
 observed 1,480 boys?  How about if we took a sample of 30,000, instead. Would
 is be surprising if we observed 14,800 boys?
 
-The probability of a boy birth does not depend on the sample size, and we
+The probability of a boy birth doesn't depend on the sample size, and we
 calculated it to be 0.512, so the expected number of boys when the sample size
 is 300, 3,000, and 30,000 is 151, 1,510, and 15,100, respectively. So, it may
 appear that actually observing 148 instead of 151 is as likely as observing
@@ -443,7 +445,7 @@ The result is shown in Figure \ref{CLTboygirl}.
 The green vertical line represents the expected number of boys, and the red one
 represents the observed ones. Notice that as we increase the sample size, the
 likelihood of the observed number of boys (148, 1,480, 14,800) gets smaller.
-When $n=30000$ the red line is well outside the range of the simulated sample
+When $n=30,000$ the red line is well outside the range of the simulated sample
 means.
 
 \begin{figure}[H]
@@ -521,12 +523,12 @@ sample}, not 10,000 like we did in our simulations.  However, these theorems
 tell us that as long as this one sample is large enough, we can get a very good
 approximation for the distribution of the sample mean, \emph{as if we had
 multiple samples}.
-Not only that, but regardless of the distribution of the data, the sample mean
+Not only that, but (almost) regardless of the distribution of the data, the sample mean
 will have a normal distribution with mean which is equal to the true mean of
 the original distribution (even if it's skewed, or discrete), and the variance
 of the sample mean will shrink as we increase the sample size.  In the next
 chapter we will see how the CLT can be used to test hypotheses and construct
-confident intervals for estimates. For example, we will be able to answer
-questions such as: "You are given the IQ test results of 13 people and they
+confidence intervals for estimates. For example, we'll be able to answer
+questions such as: ``You are given the IQ test results of 13 people and they
 are: 139, 104, 115, 151, 116, 141, 117, 105, 134, 155, 130, 139, 121. Is this
-group different than the overall population?"
+group different than the overall population?''
