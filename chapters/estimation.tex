@@ -168,9 +168,9 @@ So, for this experiment, the second estimator, sample median, is the best among
 the three.
 
 The code has made it easy to compare the three estimators for data generated
-from $t$ distributions with other digrees of freedom. One can verify that as the
+from $t$ distributions with other degrees of freedom. One can verify that as the
 degrees of freedom increases (so the $t$ distribution gets closer to the normal
-distribuition), the mean estimator eventually outperforms the median estimator.
+distribution), the mean estimator eventually outperforms the median estimator.
 \end{example}
 
 
@@ -195,7 +195,7 @@ all the information about the location parameter $\mu$ in this setting.
 It would be nice if one estimator is always the best regardless of what the true
 data generating scheme is. Such estimator may not, however, exist.
 
-\subsection{Maximim Likelihood Estimator}
+\subsection{Maximum Likelihood Estimator}
 To play the hide-and-seek game better, we need to select a good strategy. From
 the examples in the last section, which strategy is better depends on the
 underlying truth, which is unknown. There is, however, an estimator which is the
@@ -208,7 +208,7 @@ Let's start with a simple example.
 There are 9 jars. The first jar has 9 red and 1 green balls; the second jar has
 8 red and 2 green balls; $\cdots\cdots$; the 9th jar has 1 red and 9 green
 balls. Now, one jar is randomly selected, from which one ball is randomly
-xselected, and the ball is red. Which jar was the one that was selected?
+selected, and the ball is red. Which jar was the one that was selected?
 
 
 There are nine possibilities. If the selected jar were the first one, the
@@ -321,14 +321,14 @@ sample size is large. Is $n = 50$ large enough for this to be good?
 We can check the actual coverage rate in a simulation study.
 \showCode{R}{Code/est-ci-clt.R}[15][22]
 The empirical coverage rate from the 1000 replicates is
-\inlnR{```cat(mean(sim_50[1, ] < mu & sim_50[2,] > mu))```}[estsim50].
+\inlnR{```cat(mean(sim50[1, ] < mu & sim50[2,] > mu))```}[estsim50].
 
 
 What if the sample size is smaller, say 20?
 \showCode{R}{Code/est-ci-clt.R}[26][27]
 The empirical coverage now is
 % the following causes a problem
-\inlnR{```cat(mean(sim_20[1, ] < mu & sim_20[2,] > mu))```}[estsim20].
+\inlnR{```cat(mean(sim20[1, ] < mu & sim20[2,] > mu))```}[estsim20].
 
 
 The simulation shows that the confidence intervals constructed from
@@ -343,7 +343,7 @@ estimator. Often times, a point estimator can be easily obtained, for example,
 through optimizing an objective function or solving some estimating
 equations. The variation of a point estimator, however, can be much more
 difficult to obtain. Asymptotic approximations of the variance of an estimator
-may be derived in some situations, but even in these situations, the asyptotic
+may be derived in some situations, but even in these situations, the asymptotic
 variance approximation may not work well with small to moderate sample sizes.
 
 
@@ -413,15 +413,15 @@ estimate and the empirical coverage rate of the 95\% confidence interval.
 \showCode{R}{Code/est-ci-boot.R}[30][35]
 
 
-The mean of the point estimate \lstinline{mean(sim\_50[1,])} from the
+The mean of the point estimate \lstinline{mean(sim50[1,])} from the
 \inlnR{```cat(nrep)```}[estnrep1] replicates is
-\inlnR{```cat(mean(sim_50[1,]))```}[estmeansim50], which is very close to the true target
+\inlnR{```cat(mean(sim50[1,]))```}[estmeansim50], which is very close to the true target
 \inlnR{```cat(target)```}[esttarget2].
 
 
-The empirical coverate rate of the 95\% confidence interval from the
+The empirical coverage rate of the 95\% confidence interval from the
 \inlnR{```cat(nrep)```}[estnrep2] replicates is
-\inlnR{```cat(mean(sim_50[2,] < target & target < sim_50[3,]))```}[estmeansim50ci],
+\inlnR{```cat(mean(sim50[2,] < target & target < sim50[3,]))```}[estmeansim50ci],
 which is reasonably close to the nominal level 95\%.
 
 
@@ -429,7 +429,7 @@ We repeat the process for a smaller sample size~20:
 \showCode{R}{Code/est-ci-boot.R}[39][40]
 The empirical coverage rate of the 95\% confidence interval from the
 \inlnR{```cat(nrep)```}[estnrep3]  replicates is
-%\inlnR{```cat(mean(sim_20[2,] < target & target < sim_20[3,]))```},
+%\inlnR{```cat(mean(sim20[2,] < target & target < sim20[3,]))```},
 which is still reasonably close to the nominal level 95\%.
 \end{example}
 
