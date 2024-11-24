@@ -18,10 +18,10 @@ do1rep <- function(n, mu, alpha = .05) {
 }
 
 nrep <- 1000
-sim_50 <- replicate(nrep, do1rep(50, mu))
-mean(sim_50[1, ] < mu & sim_50[2,] > mu)
+sim50 <- replicate(nrep, do1rep(50, mu))
+mean(sim50[1, ] < mu & sim50[2,] > mu)
 
 
 ## smaller sample size
-sim_20 <- replicate(nrep, do1rep(20, mu))
-mean(sim_20[1, ] < mu & sim_20[2,] > mu)
+sim20 <- replicate(nrep, do1rep(20, mu))
+mean(sim20[1, ] < mu & sim20[2,] > mu)

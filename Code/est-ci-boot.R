@@ -28,13 +28,13 @@ do1rep <- function(n) {
 
 
 nrep <- 1000
-sim_50 <- replicate(nrep, do1rep(50))
+sim50 <- replicate(nrep, do1rep(50))
 ## point estimator
-mean(sim_50[1,])
+mean(sim50[1,])
 ## empirical coverage of percentile BI
-mean(sim_50[2,] < target & target < sim_50[3,])
+mean(sim50[2,] < target & target < sim50[3,])
 
 
 ## let's try a smaller sample size
-sim_20 <- replicate(nrep, do1rep(20))
-mean(sim_20[2, ] < target & sim_20[3,] > target)
+sim20 <- replicate(nrep, do1rep(20))
+mean(sim20[2, ] < target & sim20[3,] > target)
