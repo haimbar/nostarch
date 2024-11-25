@@ -277,6 +277,118 @@ permutations, we efficiently approximate the sampling distribution when
 enumeration of all permutations is computationally infeasible.
 
 
+\section{Properties of Hypothesis Tests}
+
+
+\subsection{Properties of Hypothesis Tests}
+
+Hypothesis tests are evaluated using two critical 
+properties: their size, or significance level, and their 
+power. These properties help us understand the reliability 
+and sensitivity of a test in different scenarios.
+
+The \emph{size} of a hypothesis test, also referred to 
+as the \emph{significance level} and denoted by \(\alpha\), 
+is the probability of committing a \emph{Type I error}. A 
+Type I error occurs when the null hypothesis, \(H_0\), is 
+rejected even though it is true. For instance, if \(\alpha = 0.05\), 
+there is a 5\% chance of falsely rejecting \(H_0\) when it 
+is true. This level is usually chosen in advance to control 
+the risk of false positives, with typical values being 0.05 
+or 0.01. Importantly, the size of a test depends on the 
+sampling distribution of the test statistic under \(H_0\). 
+Tests that control their size consistently are said to 
+be valid.
+
+The \emph{power} of a test measures its ability to detect 
+a true effect when one exists. It is defined as the 
+probability of correctly rejecting \(H_0\) when the 
+alternative hypothesis, \(H_1\), is true. Mathematically, 
+the power is \(1 - \beta\), where \(\beta\) is the probability 
+of committing a \emph{Type II error}—failing to reject \(H_0\) 
+when \(H_1\) is true. Higher power indicates greater 
+sensitivity of the test to detect differences or effects, 
+which is desirable in most applications. The power of a 
+test depends on several factors, including the sample 
+size, the true effect size, the significance level \(\alpha\), 
+and the variability in the data. Larger sample sizes, 
+larger effect sizes, and smaller variability all contribute 
+to higher power.
+
+When two tests both maintain their size, the one with 
+higher power is preferred because it provides greater 
+evidence against \(H_0\) when \(H_1\) is true. However, 
+there is an inherent trade-off between size and power. 
+Reducing \(\alpha\) decreases the likelihood of Type I 
+errors but may increase the likelihood of Type II errors, 
+leading to lower power. Conversely, increasing power often 
+requires relaxing the significance level or increasing 
+sample size, which may not always be feasible.
+
+In the next example, we will illustrate these 
+concepts by comparing two common tests for comparing two 
+samples: the t-test and the Wilcoxon test. Using simulations, 
+we will examine their size and power under different 
+conditions and demonstrate how their performance varies.
+
+
+\begin{example}{Two-sample comparison}
+First, let’s see how we can perform the tests for one pair of datasets:
+\showCode{R}{Code/hypo-2samp.R}[2][9]
+
+
+Here, `x1` and `x2` represent two groups of data. The t-test assumes
+the data are normally distributed, while the Wilcoxon test is
+distribution-free, meaning it works for a wider range of data
+distributions.
+
+
+Next, we create a function \texttt{do1rep()} that simulates one
+experiment. This generates two groups of data, applies both tests, and
+records their p-values.
+\showCode{R}{Code/hypo-2samp.R}[13][22]
+
+
+Here, \texttt{delta} represents the true difference between the means
+of the two groups. When \texttt{delta = 0}, there’s no real difference
+(null hypothesis is true). For each test, we calculate the p-value to
+assess whether to reject the null hypothesis.
+
+To evaluate the size (false positive rate) of the tests, we simulate
+multiple experiments where `delta = 0` and calculate the proportion of
+times the tests reject $H_0$.
+\showCode{R}{Code/hypo-2samp.R}[26][28]
+
+The function \texttt{rowMeans(sim < 0.05)} calculates the fraction of
+times the p-value is below 0.05, representing the rejection rate for
+each test.
+
+
+We wrap the simulation into a function \texttt{empRejRate()} to
+compute rejection rates for different sample sizes, distributions, and
+effect sizes:
+\showCode{R}{Code/hypo-2samp.R}[32][35]
+
+Now, we compare the performance of the t-test and Wilcoxon test for
+data from different distributions (normal and Cauchy):
+\showCode{R}{Code/hypo-2samp.R}[38][44]
+
+For the Cauchy distribution, which has heavier tails than the normal
+distribution, the performance of the tests may differ significantly.
+
+
+Finally, we compute and plot the power of the tests as the effect size
+(\texttt{delta}) increases:
+\showCode{R}{Code/hypo-2samp.R}[47][62]
+
+These plots show the empirical rejection rates (power) as \texttt{delta}
+increases. For the t-test, performance depends on the assumption of
+normality, while the Wilcoxon test is more robust under non-normal
+distributions like the Cauchy.
+\end{example}
+
+
+
 %%% Local Variables:
 %%% mode: latex
 %%% TeX-command-extra-options: "-shell-escape"
