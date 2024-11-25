@@ -1,4 +1,16 @@
-### Conventions
+<<<<<<< HEAD
+## 01/10/2024
+
+### Estimation
++ MSE/Bias definition need to be explained in words
++ Use histogram to show the efficiency comparison of estimators
++ Use interval plots to show there coverages
++ Extra space in \inlR? Should be solved by runlatex
++ Coverage probability needs to be explained in words
++ Add a summary
+
+
+## Conventions
 
 - Code width - change font type so that we can show 80 characters per line
 - Use consistent code style
