@@ -1,27 +1,281 @@
 \chapter{Hypothesis Testing}
 \label{ch:hypothesis}
 
+Life is full of decisions where we don’t know the truth but still need
+to act. Is that coin you’re flipping really fair, or does your sneaky
+friend always seem to win the toss? Should you trust that online
+review saying pineapple pizza is amazing, or was it written by someone
+with questionable taste? In situations like these, we’re left making
+judgments without ever being 100\% sure of the answer. Hypothesis
+testing is the scientific version of this everyday decision-making
+process. It’s not about proving something beyond all doubt; it’s about
+weighing the evidence and making the best call with the information at
+hand---ike a courtroom verdict, but with fewer objections and more
+statistics.
 
 
-\section{Introduction}
-Hypothesis testing can be thought of as a stochastic analog of proof by
-contradiction.
+\section{Basic Concepts}
 
-``To understand the essence of statistical hypothesis testing properly, it is
-necessary to compare intentionally hypothesis testing with proof by
-contradiction and characterize the former as not the same as the latter.''
-\citep{otani2019comparing}.
-
-It should be relatively clear, then, why a failure to reject H , does not
-constitute a verification of its truth. It simply means that the researcher has
-failed to provide evidence suflcient to cast serious doubt on the truth of
-\(H_0\). \citep{reeves1980hypothesis}
-
-Misconception \citep{falk1995significance}.
+Hypothesis testing is the framework scientists and decision-makers use to 
+make sense of uncertainty. Let’s start with some examples to ground the 
+idea: Is a new drug effective in treating a disease, or is it no better 
+than the current standard? Is one commercial more effective than another 
+in driving sales on a website (a process often referred to as an A-B test)? 
+Can the observed increase in global mean temperature be attributed to human 
+activities? Or, is the 30-day hospital readmission rate higher among minority 
+patients compared to others?
 
 
+At the core of hypothesis testing lies a simple setup. There are two 
+competing explanations: the \emph{null hypothesis}, $H_0$, which represents 
+the default position or baseline assumption, and the \emph{alternative 
+hypothesis}, $H_1$, which is the claim we hope to support in a
+scientific investigation through evidence from data. For instance, 
+in the context of the new drug, $H_0$ might state that the drug has no 
+effect, while $H_1$ claims that it does.
 
-% \input{Rnw/hypo-twosample.tex}
+
+Think of hypothesis testing as a strategic game. Nature knows the truth— 
+whether $H_0$ or $H_1$ is correct—but keeps it hidden. Our job is to 
+examine the available evidence and decide which hypothesis to select. Of 
+course, this decision-making process isn’t foolproof; we might make errors. 
+We could reject $H_0$ when it is true (a \emph{Type I error}), or fail to 
+reject $H_0$ when $H_1$ is true (a \emph{Type II error}). Understanding 
+and managing these risks is part of what makes hypothesis testing both 
+a challenge and an art.
+
+
+\subsection{Stochastic Analog of Proof by Contradiction}
+
+Hypothesis testing can be viewed as a stochastic analog of proof by 
+contradiction. In mathematics, proof by contradiction starts by assuming 
+the negation of the statement to be proven. Through logical reasoning, 
+this assumption leads to a contradiction, thereby proving the original 
+statement to be true. Similarly, in hypothesis testing, we begin by 
+assuming the null hypothesis, $H_0$, is true. We then evaluate whether 
+the observed data are consistent with this assumption. If the data 
+contradict $H_0$ to a sufficient degree, we reject it in favor of the 
+alternative hypothesis, $H_1$.
+
+However, hypothesis testing differs from proof by contradiction in an 
+important way: it is inherently probabilistic. While proof by contradiction 
+offers absolute certainty, hypothesis testing relies on evidence and 
+probabilities. Rejecting $H_0$ does not definitively prove $H_1$; instead, 
+it means the evidence against $H_0$ is strong enough to favor $H_1$ within 
+a specified level of risk. Similarly, failing to reject $H_0$ does not 
+verify its truth but simply reflects insufficient evidence to challenge it 
+\citep{reeves1980hypothesis}.
+
+
+% Misconception \citep{falk1995significance}. 
+
+\subsection{Type I and Type II Errors}
+
+The probabilistic nature of hypothesis testing introduces two types of 
+errors. A \emph{Type I error} occurs when we reject the null hypothesis, 
+$H_0$, even though it is true. This false positive error reflects the risk 
+of mistakenly favoring $H_1$ and is controlled by the significance level, 
+$\alpha$. A \emph{Type II error} arises when we fail to reject $H_0$ even 
+though it is false. This false negative error reflects the risk of missing 
+a true effect, with its probability denoted by $\beta$. The complement of 
+$\beta$, $1 - \beta$, is called the \emph{power} of the test, representing 
+its ability to detect an effect when it exists.
+
+
+R. A. Fisher's ``Lady Tasting Tea'' experiment beautifully illustrates
+the concepts of hypothesis testing and its probabilistic nature
+\citep{salsburg2002lady}. In this experiment, 
+a lady claims she can distinguish whether milk or tea was poured first into 
+a cup based on taste alone. The null hypothesis, $H_0$, asserts that she 
+cannot distinguish the order and is guessing randomly. The alternative 
+hypothesis, $H_1$, posits that she genuinely has this ability.
+
+
+The test involves presenting the lady with a series of cups in randomized 
+order. Assuming $H_0$ is true, we calculate the probability of observing 
+her performance by chance. If her success rate is so high that it would be 
+extremely unlikely under $H_0$, we reject $H_0$ in favor of $H_1$, concluding 
+that she likely has the claimed ability. However, rejecting $H_0$ carries 
+the risk of a Type I error, mistakenly attributing skill to chance. 
+Conversely, failing to reject $H_0$ might reflect a Type II error, 
+overlooking her genuine ability due to insufficient evidence.
+
+
+This example highlights the delicate balance in hypothesis testing: 
+decisions are made in the face of uncertainty, with errors managed through 
+careful experimental design and appropriate interpretation of results.
+
+
+\subsubsection{The Test Statistic and the p-Value}
+
+In hypothesis testing, a \emph{test statistic} is a numerical summary of 
+the data used to evaluate the null hypothesis, \(H_0\). It captures the 
+relevant aspects of the observed data and allows us to quantify the 
+evidence against \(H_0\). The choice of test statistic depends on the 
+specific hypothesis being tested and the nature of the data.
+
+In the "Lady Tasting Tea" experiment, the test statistic is the number of 
+cups the lady correctly identifies as having been prepared with milk first. 
+Under the null hypothesis, \(H_0\), which assumes the lady is guessing 
+randomly, this test statistic follows a hypergeometric distribution. The 
+more cups she identifies correctly, the more extreme the observed test 
+statistic becomes under \(H_0\).
+
+The \emph{p-value} is then defined as the probability, under \(H_0\), of 
+observing a test statistic as extreme as or more extreme than the one 
+actually observed. It provides a measure of how surprising the data are, 
+given that \(H_0\) is true.
+
+\paragraph{Computing the p-Value for Perfect Success}
+
+Suppose the lady is presented with \(n\) cups, half of which are prepared 
+with milk first and half with tea first. If she correctly identifies \(n/2\) 
+milk-first cups and \(n/2\) tea-first cups, the observed test statistic is 
+her perfect success rate. The total number of ways to arrange \(n\) cups 
+such that \(n/2\) are correctly chosen is:
+\[
+\binom{n}{n/2} = \frac{n!}{(n/2)!(n/2)!}.
+\]
+
+Under \(H_0\), the probability of achieving this perfect result is:
+\[
+p = \frac{1}{\binom{n}{n/2}}.
+\]
+
+The p-value is the probability of observing this perfect result or any result 
+as extreme or more extreme, which for this case reduces to the probability of 
+the perfect result since it is the most extreme possible outcome.
+For \(n = 8\), the total number of combinations is:
+\[
+\binom{8}{4} = \frac{8!}{4! \cdot 4!} = 70.
+\]
+The p-value for perfect success is
+\[
+p = \frac{1}{70} \approx 0.0143.
+\]
+For \(n = 10\), the total number of combinations is:
+\[
+\binom{10}{5} = \frac{10!}{5! \cdot 5!} = 252.
+\]
+The p-value for perfect success is:
+\[
+p = \frac{1}{252} \approx 0.0040.
+\]
+
+Apparently, as the sample size $n$ increases, the p-value of observing
+perfect result decreases, and the evidence against $H_0$ gets stronger.
+
+The test statistic summarizes the observed data in a way that allows for 
+quantitative evaluation of \(H_0\). The p-value then expresses the probability, 
+assuming \(H_0\) is true, of observing a test statistic as extreme or more 
+extreme than the observed value. Smaller p-values, such as \(0.0143\) for 
+\(n = 8\) or \(0.0040\) for \(n = 10\), provide stronger evidence against 
+\(H_0\). However, the p-value does not prove \(H_1\); it only quantifies 
+the inconsistency of the observed data with \(H_0\).
+
+
+\section{Permutation Tests}
+
+
+Permutation tests rely on the assumption that under the null hypothesis, 
+\(H_0\), the group labels (e.g., \(x_1\) and \(x_2\)) are exchangeable. 
+This means that if \(H_0\) is true, the observed values in both groups 
+come from the same underlying distribution, and any difference between 
+groups is due to random variation.
+
+By pooling all the data and randomly reassigning it into new groups, we 
+simulate what the data might look like if \(H_0\) were true. Each 
+permutation represents a potential arrangement of the data under \(H_0\), 
+and the distribution of the test statistic across these permutations 
+forms the \emph{sampling distribution under \(H_0\)}. Comparing the 
+observed test statistic to this distribution allows us to calculate a 
+p-value, which quantifies how extreme the observed result is, assuming 
+\(H_0\).
+
+
+The validity of permutation testing hinges on the exchangeability of 
+the data under \(H_0\). If \(H_0\) is true, the data's group labels are 
+arbitrary, and shuffling them does not alter their joint distribution. 
+This ensures that the permutation-based sampling distribution accurately 
+represents the behavior of the test statistic under \(H_0\).
+
+
+For instance, in the "Lady Tasting Tea" experiment, the null hypothesis 
+\(H_0\) assumes that the lady is guessing randomly. Under this assumption, 
+all possible arrangements of the cups are equally likely, making the 
+permuted sampling distribution an exact representation of \(H_0\). Similarly, 
+in the example of testing for a difference in means between \(x_1\) and \(x_2\), 
+the permuted sampling distribution reflects the behavior of the test 
+statistic when there is no true difference between the groups.
+
+
+\paragraph{Defining the Test Statistic}
+To make this concrete, let us revisit the example. Suppose we have two 
+groups of data, \(x_1\) and \(x_2\), with sample sizes \(n_1 = n_2 = 30\). 
+If \(H_0\) is true, there is no real difference between the groups, so 
+the observed difference in means, \texttt{mean(\(x_2\)) - mean(\(x_1\))}, 
+is simply due to chance.
+\showCode{R}{Code/hypo-perm.R}[4][8]
+
+
+When we randomly shuffle the pooled data \texttt{\(x_1\) and \(x_2\)} 
+and split it into new groups of size \(n_1\) and \(n_2\), the resulting 
+groupings represent plausible outcomes under \(H_0\). Repeating this 
+permutation many times allows us to build the sampling distribution 
+of the test statistic under the assumption of no group differences.
+
+
+
+Here, \texttt{xd} is the observed difference in means between \(x_1\) and 
+\(x_2\). Under \(H_0\), which assumes no difference between the groups, 
+any observed difference is due to random variation.
+
+\paragraph{Generating the Sampling Distribution Under \(H_0\)}
+
+To compute a p-value, we need the \emph{sampling distribution} of the test 
+statistic under \(H_0\). Permutation testing constructs this distribution 
+by repeatedly shuffling the data to simulate the null hypothesis. For a 
+single permutation, we shuffle the combined data, split it into two groups, 
+and compute the test statistic:
+\showCode{R}{Code/hypo-perm.R}[12][14]
+
+
+Each permutation represents a possible arrangement of the data under \(H_0\). 
+If the total number of permutations is small, we can enumerate all possible 
+arrangements to compute an exact p-value:
+\showCode{R}{Code/hypo-perm.R}[19][19]
+
+
+\paragraph{Approximating the p-Value via Random Permutations}
+
+When the total number of permutations is large, as is often the case, we 
+approximate the sampling distribution using a subset of random permutations.
+This is implemented in the following function:
+\showCode{R}{Code/hypo-perm.R}[22][33]
+
+This function simulates \texttt{nperm} permutations, calculates the test 
+statistic for each, and compares them to the observed test statistic to 
+compute the p-value.
+
+\begin{example}[Two-sample test based on random permutation]
+Let us apply the permutation test to two samples drawn from gamma 
+distributions, with a true difference (\(\delta = 10\)):
+\showCode{R}{Code/hypo-perm.R}[35][38]
+
+
+This outputs the p-value, which quantifies the probability of observing a 
+test statistic as extreme as or more extreme than the observed statistic 
+under \(H_0\).
+\end{example}
+
+
+Permutation tests rely on minimal assumptions, making them robust to 
+non-standard data distributions. The resulting p-value provides evidence 
+against \(H_0\): a smaller p-value indicates stronger evidence that the 
+observed difference in means is not due to chance. By using random 
+permutations, we efficiently approximate the sampling distribution when 
+enumeration of all permutations is computationally infeasible.
+
 
 %%% Local Variables:
 %%% mode: latex
