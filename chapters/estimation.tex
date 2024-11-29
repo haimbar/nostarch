@@ -54,7 +54,8 @@ How do we assess the uncertainty of an estimator?
 
 The location parameter of a normal distribution coincides with its mean and
 median. The sample version of mean and median appear to be reasonably good
-estimators. The sample mid-range, the middle point of the sample range, also
+estimators. The sample mid-range, the average of the largest and smallest
+observations of the sample range, also
 seems a reasonable estimator for the population center. So, let us consider
 three candidate estimators, or strategies to seek the truth:
 \begin{itemize}
@@ -83,21 +84,30 @@ estimates are obtained by:
 Their values are \inlnR{```cat(err[1])```}[esterr1],
 \inlnR{```cat(err[2])```}[esterr3], and \inlnR{```cat(err[3])```}[esterr3], respectively.
 
-
-Note that this comparison is for only the given sample. A good estimator may by
-chance behaves worse than a bad estimator for a specific sample. To assess the
-quality of an estimator, one could in theory investigate its properties; after
-all, an estimator is a function of a random sample, so itself is a random
-quantity. If the expectation of an estimator $\hat\theta$ equals its target
-$\theta$, then $\hat\theta$ is \emph{unbiased}\index{estimator!unbiased}. The
-expectation of the squared distance between an estimator and its target,
-$E[(\hat\theta - \theta)^2]$, is the \emph{mean squared error (MSE)}\index{mean
-squared error}. An estimator with a smaller MSE than another estimator is
-more \emph{efficient}\index{estimator!efficient} than the other one.
-
+When we compare different methods of estimating the $\mu$, the comparison only
+applies to the specific data sample we're looking at. A method that is usually
+good might give worse results than a ``bad'' method just by chance for that
+specific sample.  To assess the quality of an estimator, we can investigate its
+properties; after all, an estimator is just a formula or rule that uses a random
+sample to estimate something. Because the estimator depends on random data, it's
+also random. Here are some properties about estimators:
+\begin{enumerate}
+\item If the average result of an estimator (over many random samples) is equal
+  to the true value we're trying to estimate, then this estimator is
+  \emph{unbiased}\index{estimator!unbiased}.  Mathematically, this is often
+  written as $E(\hat\mu) = \mu$, where $E$ is the average $\hat\mu$ over all
+  possible random samples.
+\item The \emph{mean squared error (MSE)}\index{mean squared error} measures how
+  far, on average, the estimator's result is from the true target. It combines
+  both the error (or bias) and how spread out the estimates are. The formula is
+  $E[(\hat\theta - \theta)^2]$.
+\item An estimator with a smaller MSE than another estimator is more
+  \emph{efficient}\index{estimator!efficient} than the other one, because it
+  generally gives better results.
+\end{enumerate}
 
 Most of the theoretical properties of an estimator are studied asymptotically,
-that is, as the sample size goes to infinity. For finite sample sizes, their
+that is, assuming that the sample size goes to infinity. For finite sample sizes, their
 properties are easily investigated via hide-and-seek games, or simulations. In
 each simulation setting, we set up the hide-and-seek game and play the game
 repeatedly for a large number of replicates. The bias and the MSE of an
