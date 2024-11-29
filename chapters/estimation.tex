@@ -260,9 +260,9 @@ inferences. This lead to interval estimators. The two endpoints of an interval
 estimator are statistics such that the random interval formed by them captures
 the unknown target parameter with certain probability. A
 \emph{confidence interval}\index{confidence interval} with
-\emph{confidence level}\index{confidence level} $\gamma$ means an interval
+\emph{confidence level}\index{confidence level} $1-\alpha$ means an interval
 estimator of the target parameter such that the probability that the interval
-covers the target is~$\gamma$.
+covers the target is~$1-\alpha$.
 
 
 \subsection{Large sample approximation}
@@ -272,29 +272,18 @@ estimating the population mean of a distribution, for example, we can use the
 sample mean and the central limit theorem to construct an interval centered at
 the sample mean. Suppose that we have a sample mean $\bar X_n$ based a sample of
 size~$n$ from a population with mean $\mu$ and variance $\sigma^2$. From the
-central limit theorem, we know that
+central limit theorem discussed in Chapter~\ref{ch:llnclt}, we know that $\bar
+X_n$'s behavior can be approximated by a normal distribution with mean $\mu$ and
+variance $\sigma^2/n$, if the sample size $n$ is large. Using this fact, we can
+construct the following interval
 \[
-\bar X_n - \mu \to N(0, \sigma^2 / n).
+\left(\bar X_n - z_{\alpha/2} \frac{\sigma}{\sqrt{n}}, \quad
+\bar X_n + z_{\alpha/2} \frac{\sigma}{\sqrt{n}}\right),
 \]
-Therefore, for any $\alpha \in (0, 0.5)$, 
-\[
-\Pr\left(\frac{|\bar X_n - \mu|}{\sigma/\sqrt{n}}\right) < z_{\alpha/2}
-= 1 - \alpha,
-\]
-where $z_{\alpha/2}$ is the upper $\alpha/2$-quantile of the standard normal
-distribution. This is the same as
-\[
-\Pr(\bar X_n - z_{\alpha/2} \sigma/\sqrt{n}  < \mu <
-\bar X_n + z_{\alpha/2} \sigma/\sqrt{n}) = 1 - \alpha.
-\]
-This means that the interval
-\[
-\left(\bar X_n - z_{\alpha/2} \sigma/\sqrt{n}, \quad
-\bar X_n + z_{\alpha/2} \sigma/\sqrt{n}\right)
-\]
-is a confidence interval for $\mu$ with confidence level $1 - \alpha$.
-A 95\% confidence interval means $\alpha = 0.05$.
-
+where $z_{\alpha/2}$ is the number so that the area between $-\alpha/2$ and
+$\alpha/2$ under the standard normal density curve is $100(1-\alpha)\%$. This
+is a confidence interval for $\mu$ with confidence level asymptotically $1 -
+\alpha$. A 95\% confidence interval means $\alpha = 0.05$.
 
 When the population variance $\sigma^2$ is unknown, we can use the sample
 variance $S_n^2$ to substitute it, and the resulting confidence interval is
@@ -303,8 +292,8 @@ still asymptotically valid.
 
 The \emph{coverage probability}\index{coverage probability} of a confidence
 interval is the probability that the target is covered by the confidence
-interval. Ideally, a confidence interval with confidence level~$\gamma$
-should have coverage probability~$\gamma$. In practice, this may not be the
+interval. Ideally, a confidence interval with confidence level~$1-\alpha$
+should have coverage probability~$1-\alpha$. In practice, this may not be the
 case, especially when the confidence intervals are constructed based on
 asymptotic results but applied to finite sample sizes.
 
@@ -359,7 +348,7 @@ variance approximation may not work well with small to moderate sample sizes.
 
 \emph{Bootstrap}\index{bootstrap}
 is a powerful tool to approximate the uncertainty of an estimator.
-A self-assisted approach, it approximates the variation of the sample by
+As a self-assisted approach, it approximates the variation of the sample by
 treating the sample as a population and resample repeatedly from it with
 replacement, each time forming a so-called bootstrap sample of the same size as
 the original sample. For each bootstrap sample, we can obtain the point
