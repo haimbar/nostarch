@@ -55,7 +55,7 @@ average day, between 8am and 8pm?
 The main paradigm in statistical inference and prediction in order to answer
 such questions is to take a sample from the population we're interested in, and
 choose a mathematical model which we believe represents the whole population.
-Then we check if our model appears to reasonable, in the sense that it fits the
+Then we check if our model appears to be reasonable, in the sense that it fits the
 data well. If it does, we can use the mathematical properties of the model to
 draw conclusions about the population. By representing the sample using a
 mathematical (probabilistic) formula, we essentially augment a finite sample to
@@ -65,7 +65,7 @@ the curve of the function, and so on.
 
 This chapter deals with inference which can be derived from the mean of a
 population, and we show the (arguably) two most important results in statistics
--- the \emph{law of large numbers} (\emph{LLN}), and the \emph{central limit
+-- the \emph{law of large numbers} (\emph{LLN}) and the \emph{central limit
 theorem} (\emph{CLT}). Together, these two very general theorems make it
 possible to draw conclusions about the whole population, from a single sample!
 (as long as the sample represents the whole population and the sample
@@ -79,9 +79,9 @@ size is large enough).
 
 Suppose that the IQ in the general population has a normal distribution with
 mean of 100 and  standard deviation of 15, and from this population we draw 200
-people, and calculate the sample mean and standard deviation, like so:
+people and calculate the sample mean and standard deviation, like so:
 
-\showCode{R}{Code/llnclt_IQ.R}[1][3]
+\showCode{R}{Code/llnclt_IQ.R}[1][4]
 %\runR{Code/llnclt_IQ.R}{llnclt_IQ}
 
 Run this code. You should get that the sample mean is
@@ -89,8 +89,8 @@ Run this code. You should get that the sample mean is
 \inlnR{```cat(sd(samp1))```}[llnssamp1]. Both are very close to the true values.
 
 Let's pretend that just like in real life, we don't know the true distribution.
-So, we propose a certain distribution and check if it fits. In the current
-example,  which we called \lstinline{samp1}, we want to check if the normal
+We propose a certain distribution and check if it fits. In the current
+example, which we called \lstinline{samp1}, we want to check if the normal
 distribution is a good model for our data.
 
 One way to check if a distribution fits our data is with a graphical tool
@@ -112,13 +112,13 @@ When it's assumed that the data come from a normal distribution, we can use the
 \lstinline{qqnorm()} function to check if the assumption is reasonable:
 \showCode{R}{Code/llnclt_IQ.R}[7][8]
 
-The points in the Q-Q plot in Figure \ref{qqplot1} show the actual quantiles
-(from the data, \lstinline{samp1}) vs. the theoretical quantiles (those that
-would be obtained if we drew  a sample from a normal distribution). The points in the
-graph lie very close to a straight line, indicating that the sample  was
-likely drawn from a normal distribution (here, this is not surprising because
-we generated it this way. However, when we get a random sample and we do not
-know the true distribution, this plot is useful to check whether our
+The points in the Q-Q plot in Figure~\ref{qqplot1} show the actual quantiles
+(from the data, \lstinline{samp1}) versus the theoretical quantiles (those that
+would be obtained if we drew a sample from a normal distribution). The points in
+the graph lie very close to a straight line, indicating that the sample was
+likely drawn from a normal distribution. (This is not surprising here because we
+generated the sample this way. However, when we get a random sample and do not
+know the true distribution, this plot is useful for checking whether our
 mathematical model is reasonable.)
 
 \begin{figure}[H]
@@ -153,8 +153,8 @@ shown as a horizontal line.
 \label{LLNdemo}
 \end{figure}
 
-We also see in Figure \ref{LLNdemo} that the dispersion of the sample means
-gets smaller and the sample size gets larger, but this is the result of the
+We also see in Figure~\ref{LLNdemo} that the dispersion of the sample means
+gets smaller as the sample size gets larger, but this is the result of the
 \emph{Central Limit Theorem}, which will be discussed later in this chapter.
 
 \subsection{Example \#2 -- the Roulette Wheel}
@@ -179,7 +179,7 @@ in this case we draw the random samples from a \emph{binomial} distribution (in
 \showCode{R}{Code/llnclt_roulette.R}[7][17]
 
 We see the results in Figure \ref{LLNdemoBinomial}. As before, the sample mean
-gets closer to the true mean of the distribution, which is $p=18/37$, which is
+gets closer to the true mean of the distribution, $p=18/37$, which is
 less than 0.5, so if we keep placing bets we will end up losing money. In fact,
 we can check how much we will lose if we bet \$1 each time, and do it 10,000
 times.
@@ -266,7 +266,7 @@ As before, we increase the sample size and see how it affects $d_{AB}$ and $r_{A
 \showCode{R}{Code/llnclt_Cauchy.R}[2][19]
 
 In \wingding{1} and \wingding{2} we generate the samples from the two groups
-(both follow a normal distribution), with the same sample size. In the for loop
+(both follow a normal distribution), with the same sample size. In the \lstinline{for} loop
 we vary the sample size to go from 50 to 5,000 in jumps of 10. In \wingding{3}
 and \wingding{4} we calculate the difference and the ratio between the mean
 scores in the two groups, respectively. In \wingding{5} and \wingding{6} we
@@ -532,3 +532,10 @@ confidence intervals for estimates. For example, we'll be able to answer
 questions such as: ``You are given the IQ test results of 13 people and they
 are: 139, 104, 115, 151, 116, 141, 117, 105, 134, 155, 130, 139, 121. Is this
 group different than the overall population?''
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-command-extra-options: "-shell-escape"
+%%% TeX-engine: xetex
+%%% TeX-master: "../sidsmain.tex"
+%%% End:
