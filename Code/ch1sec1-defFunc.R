@@ -1,3 +1,4 @@
+#label===funcdef
 mysum <- function(x) { # (@\wingding{1}@)
     s = 0
     for (i in x) {
@@ -5,6 +6,7 @@ mysum <- function(x) { # (@\wingding{1}@)
     }
     return (s) # (@\wingding{2}@)
 } # (@\wingding{3}@)
+===end
 
 set.seed(210313)
 n <- 10000
