@@ -333,10 +333,11 @@
   }{\textcolor{red}{\textbf{Source file $#1$ not found}}}
 }
 
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 % \showChunk prints a selected chunk from  source code, using minted or listings for a pretty layout.
 % The chunk is identified in the source code by two strings that define the beginning and end of the chunk.
-% The default beginning is label===<name> where <name> should be a unique user-defined chunk ID.
+% The default beginning is label===<name> where <name> should be a unique user-defined chunk ID. A label cannot include foreward slash (/)
 % The default end marker is ===end
 % In the code, these markers should appear after a comment character, so that the code will run. 
 % Arg #1 is the programming language,
@@ -346,8 +347,9 @@
 
 \NewDocumentCommand{\showChunk}{m m m O{label===} O{===end}}{
   \IfFileExists{#2}{
-    \writeChunk{#2}{#3}[#4][#5]
-    \IfFileExists{\generated/#2-#3.txt}{\showCode{#1}{\generated/#2-#3.txt}}
+    \StrBehind{#2}{\detokenize{/}}[\noslash]
+    \writeChunk{\noslash}{#3}[#4][#5]
+    \IfFileExists{\generated/\noslash-#3.txt}{\showCode{#1}{\generated/\noslash-#3.txt}}
     {\textcolor{red}{\textbf{Label $#3$ not found in #2}}}
   }{\textcolor{red}{\textbf{Source file $#2$ not found}}}
 }

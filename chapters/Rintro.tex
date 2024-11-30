@@ -361,7 +361,8 @@ we can simply run the function. For example, we can define a function for calcul
 the sum of numbers. Of course, such a function already exists in \R, but we'll
 recreate it to show how you can define your own, and we will check that it produces
 the same result as R's \lstinline{sum()} function.  Here's our version:
-\showCode{R}{Code/ch1sec1-defFunc.R}[1][7]
+\showChunk{R}{Code/ch1sec1-defFunc.R}{funcdef}
+%\showCode{R}{Code/ch1sec1-defFunc.R}[1][7]
 % AF: Wingdings aren't rendering correctly. Are they escaped using (@ and @)?
 % AF: Also, wingdings should be in front of the object they describe (unless it's a codewide environment, in which case it goes after).
 We named our function \lstinline{mysum} \wingding{1} and created it by using the
@@ -383,7 +384,8 @@ Note that not every function has to return a value. Some may just print somethin
 to the screen or to a file, for example. 
 
 Here's how we use the function:
-\showCode{R}{Code/ch1sec1-defFunc.R}[9][12]
+\showChunk{R}{Code/ch1sec1-defFunc.R}{funcdefex}
+%\showCode{R}{Code/ch1sec1-defFunc.R}[9][12]
 \runR{Code/ch1sec1-defFunc.R}{defFunc}
 
 % AF: Don't think we know what a distribution is yet, and it's an important idea for the chapter, so I'd give an introduction here. 
