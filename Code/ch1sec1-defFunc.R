@@ -6,9 +6,11 @@ mysum <- function(x) { # (@\wingding{1}@)
     }
     return (s) # (@\wingding{2}@)
 } # (@\wingding{3}@)
-===end
+#===end
 
+#label===funcdefex
 set.seed(210313)
 n <- 10000
 simData <- runif(n)
 cat('From sum: ', sum(simData), '. From mysum: ', mysum(simData), '\n', sep = '')
+#===end

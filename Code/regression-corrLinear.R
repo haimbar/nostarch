@@ -1,4 +1,5 @@
 pdf("images/chapter_8/corrLinear.pdf", width=9, height=2)
+#label===REGcorrlinear1
 set.seed(1)
 n <- 200
 x <- rnorm(n)        # generate observations on the variable x
@@ -15,3 +16,4 @@ plot(x, y3, main=paste("r=", round(cor(x, y3), digits=3)))
 plot(x, y4, main=paste("r=", round(cor(x, y4), digits=3)))
 plot(x, y5, main=paste("r=", round(cor(x, y5), digits=3)))
 dev.off()
+#===end

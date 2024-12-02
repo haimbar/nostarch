@@ -17,7 +17,7 @@ and age ($x$). The data below contain measurements of 30 individuals.
 Figure~\ref{fig:agesbp} plots the systolic blood pressure against age for
 thirty individuals. It's created with the following code:
 
-\showCode{R}{Code/regression-AgeSBP.R}[1][4] % 
+\showChunk{R}{Code/regression-AgeSBP.R}{REGagesbp1}
 
 The overall increasing pattern of systolic blood pressure as
 age increases is evident. How can we describe this relationship quantitatively? 
@@ -43,7 +43,7 @@ correlations as the titles of the figures. The correlation coefficient between
 two variable is calculated using the function \code{cor}, e.g., the correlation
 coefficient between $x$ and $y_1$ can be calculated with \code{cor(x,y1)}.
 
-\showCode{R}{Code/regression-corrLinear.R}[2][17] % 
+\showChunk{R}{Code/regression-corrLinear.R}{REGcorrlinear1} % 
 \runR{Code/regression-corrLinear.R}{regression-corrLinear} %
 
 Running the above code should produce Figure~\ref{fig:corrLinear}. We see how
@@ -68,7 +68,7 @@ there is no association. It is possible that two variables have a very strong
 non-linear association, but their Pearson's correlation efficient is very close
 to zero. We use the following code to generate an example. 
 
-\showCode{R}{Code/regression-nonLinear.R}[2][7] % 
+\showChunk{R}{Code/regression-nonLinear.R}{REGnonlinear1}
 \runR{Code/regression-nonLinear.R}{regression-nonLinear} %
 
 We see in the above code that $y$ is highly dependent on $x$, but their Person's
@@ -167,7 +167,7 @@ The least squares has a lot of disable properties besides minimizing the fitting
 error. For example, the distributions of $\hat{\beta}_0$ and $\hat{\beta}_1$ are
 (asymptotically) normal. The expression in~(\ref{eq:1}) is tedious to
 calculate manually, but it is very easy with \R.
-\showCode{R}{Code/regression-AgeSBP.R}[9][9] % 
+\showChunk{R}{Code/regression-AgeSBP.R}{REGagesbp2}
 The above code should give
 \includeOutput{regression-AgeSBP}
 We see that the least squares estimates with the blood pressure data are
@@ -184,7 +184,7 @@ illustration, we use the following variables to mode the body fat percentage:
 \code{Age}, \code{Weight}, \code{Chest}, \code{Wrist}, and \code{BMI}. Running
 the following code
 
-\showCode{R}{Code/regression-fitbodyfat.R}[1][3] % 
+\showChunk{R}{Code/regression-fitbodyfat.R}{REGfitbodyfat1}
 should gives the following output: %
 {\lstset{basicstyle=\scriptsize} %
 \runRIncOut{Code/regression-fitbodyfat.R}[][regression-fitbodyfat]} %
@@ -198,7 +198,7 @@ From this result, one can predicts his body fat percentage using
 Let's see how this model in~(\ref{eq:2}) performs. We use it to estimate the body
 fat percentages of the 252 adults and plot the predicted values again the actual
 body fat percentages using the following code. %
-\showCode{R}{Code/regression-fitbodyfat.R}[10][11] % 
+\showChunk{R}{Code/regression-fitbodyfat.R}{REGfitbodyfat2} % 
 The result from running the above code in in Figure~\ref{fig:fitbodyfat}.
 \begin{figure}[htp]
   \includegraphics[width=0.7\textwidth]{images/chapter_8/fitbodyfat.pdf}
