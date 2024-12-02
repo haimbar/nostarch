@@ -26,7 +26,7 @@ where the Error has a normal distribution with mean zero and standard deviation
 against heights using the following code. The result is given in
 Figure~\ref{fig:representativesample} (a).
 
-\showCode{R}{Code/datacollect-goodbadsample.R}[2][7]
+\showChunk{R}{Code/datacollect-goodbadsample.R}{BIASgbs1}
 
 Now we use the following code to uniformly and randomly select $n=50$ people as
 a sample from the population and marked the selected people in
@@ -34,7 +34,7 @@ Figure~\ref{fig:representativesample} (b). We see that the smaller sample of
 $n=50$ gives a similar relationship between weight and height as observed in the
 larger population of $N=500$. Here the sample is a representative sample. 
 
-\showCode{R}{Code/datacollect-goodbadsample.R}[11][15]
+\showChunk{R}{Code/datacollect-goodbadsample.R}{BIASgbs2}
 
 Now, let's assume that the way to take a sample depends on both the weights and
 heights in the population. We create a function of weight and height let it
@@ -42,7 +42,7 @@ decide the probability of including a person into the sample. The following code
 use this way to take a sample and plot it in
 Figure~\ref{fig:representativesample} (c). 
 
-\showCode{R}{Code/datacollect-goodbadsample.R}[19][25]
+\showChunk{R}{Code/datacollect-goodbadsample.R}{BIASgbs3}
 
 We see that the sample in Figure~\ref{fig:representativesample} (c) does not
 reflect the patterns in the population. The heights in the sample is more
@@ -206,9 +206,6 @@ where the returning aircraft were unscathed that need additional armor.
 This example shows that ignoring the bias may give a very wrong conclusion. If
 we take into account the source of the bias, then we can still obtain valid
 result from a biased sample.
-
-% the statistician Abraham Wald took survivorship bias into his calculations when considering how to minimize bomber losses to enemy fire.[11] The Statistical Research Group (SRG) at Columbia University, which Wald was a part of, examined the damage done to aircraft that had returned from missions and recommended adding armor to the areas that showed the least damage, based on his reasoning.
-% This contradicted the US military's conclusions that the most-hit areas of the plane needed additional armor.[12][13][14] Wald noted that the military only considered the aircraft that had survived their missions; any bombers that had been shot down or otherwise lost had logically also been rendered unavailable for assessment. The bullet holes in the returning aircraft, then, represented areas where a bomber could take damage and still fly well enough to return safely to base. Thus, Wald proposed that the Navy reinforce areas where the returning aircraft were unscathed,[11]:88 since those were the areas that, if hit, would cause the plane to be lost. His work is considered seminal in the then-nascent discipline of operational research.[15]
 
 \begin{figure}[H]
   \includegraphics[width=\textwidth]{images/static/Survivorship-bias.png}

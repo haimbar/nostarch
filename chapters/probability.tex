@@ -709,7 +709,7 @@ simulations.
 We use the following code to simulate data from four groups, each with 40
 samples.
 
-\showCode{R}{Code/probability-Simpson.R}[1][6]
+\showChunk{R}{Code/probability-Simpson.R}{PRsimpson1}
 \runR{Code/probability-Simpson.R}{Simpson}{}
 % Running the above code gives:
 % \includeOutput{Simpson}
@@ -718,12 +718,12 @@ Next, we plot the whole data and fit a trend equation. Clearly, we see in the
 left panels of Figure~\ref{fig:probability-simpson} that as $x$ increases $y$
 increases.
 
-\showCode{R}{Code/probability-Simpson.R}[8][9]
+\showChunk{R}{Code/probability-Simpson.R}{PRsimpson2}
 
 If we mark the points by the group to which they belong, and fit a trend line
 separately for each group, as $x$ increases $y$ decreases in each and every
 group!
-\showCode{R}{Code/probability-Simpson.R}[10][12]
+\showChunk{R}{Code/probability-Simpson.R}{PRsimpson3}
 In \wingding{1}, the \code{lm} function is used to fit a linear trend. Don’t
 worry about the details yet -- we will cover them in Chapter TBA.
 
@@ -835,10 +835,10 @@ The probability of survival with the better strategy is complicated to derive
 analytically.  In the following, we define two functions to simulate the method
 of randomly openning 50 drawers and the better strategy, respectively.
 
-\showCode{R}{Code/probability-100prisoners.R}[1][41]
+\showChunk{R}{Code/probability-100prisoners.R}{PR100prisoners1}
 \runR{Code/probability-100prisoners.R}{100prisoners}
 \noindent If we run the following code
-\showCode{R}{Code/probability-100prisoners.R}[43][46]
+\showChunk{R}{Code/probability-100prisoners.R}{PR100prisoners2}
 \noindent we should get the following the probability for randomly opening the
 drawers as \inlnR{```cat(prob.openrandom)```}[probability_prob.openrandom], and
 the probability of smartly opening the drawers as

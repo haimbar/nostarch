@@ -306,12 +306,13 @@
 
 \NewDocumentCommand{\writeChunk}{m m O{label===} O{===end}} {
   \IfFileExists{#1}{
+    \filename@parse{#1}
     \endlinechar=-1
     \def\printcode{0} % don't print until we see the begin-block string
     \newread\file
     \openin\file=#1
     \newwrite\outfile
-    \immediate\openout\outfile=\generated/#1-#2.txt
+    \immediate\openout\outfile=\generated/\filename@base-#2.txt
     \loop\unless\ifeof\file
       \immediate\readline\file to\fileline
       \ifnum\printcode=1
@@ -347,9 +348,9 @@
 
 \NewDocumentCommand{\showChunk}{m m m O{label===} O{===end}}{
   \IfFileExists{#2}{
-    \StrBehind{#2}{\detokenize{/}}[\noslash]
-    \writeChunk{\noslash}{#3}[#4][#5]
-    \IfFileExists{\generated/\noslash-#3.txt}{\showCode{#1}{\generated/\noslash-#3.txt}}
+    \writeChunk{#2}{#3}[#4][#5]
+    \filename@parse{#2}
+    \IfFileExists{\generated/\filename@base-#3.txt}{\showCode{#1}{\generated/\filename@base-#3.txt}}
     {\textcolor{red}{\textbf{Label $#3$ not found in #2}}}
   }{\textcolor{red}{\textbf{Source file $#2$ not found}}}
 }

@@ -1,3 +1,4 @@
+#label===PR100prisoners1
 set.seed(123)
 n <- 100 # number of prisoners
 prisoners <- 1:n # prisoners' numbers
@@ -39,8 +40,11 @@ open.smart <- function(prisoners, n=length(prisoners)) {
     }
     return (pardon)
 }
+#===end
 
+#label===PR100prisoners2
 ## survival probability of randomly open
 print(prob.openrandom <- mean(replicate(10000, open.random(prisoners))))
 ## survival probability of using the better strategy
 print(prob.opensmart <- mean(replicate(10000, open.smart(prisoners))))
+#===end
