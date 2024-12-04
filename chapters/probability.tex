@@ -83,6 +83,13 @@ We can simulate this situation:
 
 \showCode{R}{Code/probability-elevator.R}
 \runR{Code/probability-elevator.R}{probability_elevator}{}
+In the above code, \wingding{1} sets the random seed for reproducibility;
+\wingding{2} \code{n} is the number of days to simulate; \wingding{3} records
+the outcomes of experiments for which the sample space is the possible locations
+of the elevator between 1 and 15; \wingding{4} checks if the elevator is below
+the 13th floor so that it will go up when it stops on the 13th floor; and
+\wingding{5} calculates the proportion of days the elevator goes up when
+Mr. Smith wants to go home.
 Running the above code should give
 \inlnR{```cat(prob.up)```}[probability_prob.up], which is very close to what we
 expected from our theoretical calculations. Try the above code by increasing the
@@ -186,6 +193,14 @@ If we simulate many families, we can find the numerical answer quite accurately.
 
 \showCode{R}{Code/probability-TwoChildren.R}
 \runR{Code/probability-TwoChildren.R}{TwoChildren}{}
+In the above code, \wingding{1} defines the possible outcomes of a kid's gender; 
+\wingding{2} simulates \code{n} families; 
+\wingding{3} calculates the number of families with two girls;
+\wingding{4} calculates the number of families with the older child being a girl;
+\wingding{5} calculates the number of families with at least one girl;
+\wingding{6} approximates the probabilities of having two girls for families
+with the older child being a girl and for families with at least one girl.
+
 Running the above code should give:
 \inlnR{```cat(paste(prob.girls, collapse=" and "))```}[probability_prob.girls],
 respectively, for the probabilities of problems 1 and 2. These values are very
@@ -327,8 +342,13 @@ game and approximate the probability numerically.
 
 \showCode{R}{Code/probability-BertrandBox.R}
 \runR{Code/probability-BertrandBox.R}{BertrandBox}{}
-Running the above code should give the approximate probability that the other
-coin in the box is also a gold coin as
+In the above code, the function \code{boxcoin} in \wingding{1} defines a
+function that mimics one round of the game; the \code{gold.taken} in
+\wingding{2} records the games with a gold coin taken; \wingding{3} calculates
+the proportion of games with two gold coins among the games with a gold coin
+taken, which approximates the probability.  Running the above code should give
+the approximate probability that the other coin in the box is also a gold coin
+as
 \inlnR{```cat(prob.twogold)```}[probability_prob.twogold].
 
 % \includeOutput{BertrandBox}
@@ -469,7 +489,19 @@ share a birthday on that plane, because the probability is almost one.
 Let's use simulation to find answers to these questions.
 
 \showCode{R}{Code/probability-birthday.R}
-\runR{Code/probability-birthday.R}{birthday}{} Running the above code gives
+\runR{Code/probability-birthday.R}{birthday}{}
+
+The \code{birthday} in \wingding{1} defines a function to simulate the birthday
+problem. It has two arguments: \code{n}, the number of people on the bus; and
+\code{yours}, your birthday in the format \code{"year-mm-dd"}.  \wingding{2}
+specifies the number of days in a year.  \wingding{3} randomly chooses \code{n}
+people to simulate a bus you get on.  \wingding{4} converts your birthday to the
+day of the year.  Since you are on the bus, \wingding{5} removes one person from
+the bus and checks if any of the 22 people have the same birthday as yours.
+\wingding{6} checks if there are people among the 23 people on the bus who share
+a common birthday.  \wingding{7} simulates 1,000 buses with 23 people, and
+\wingding{8} simulates 1,000 planes with 253 people.
+Running the above code gives
 results which are very close to the number we stated above, as predicted by
 probability. That is, if there are 22 other people on the bus the probability
 that some person's birthday is the same as yours is
@@ -531,6 +563,13 @@ Let's use simulation to solve this problem.
 
 \showCode{R}{Code/probability-FairDivision.R}
 \runR{Code/probability-FairDivision.R}{FairDivision}{}
+
+In the above code, \code{TomFirst} in \wingding{1} records whether Tom won in
+each of the first three games in the \code{n=1000} simulated games.
+\code{TomTwice} in \wingding{2} checks whether Tom won twice in the first three
+rounds.  \code{TomFinal} in \wingding{3} checks whether Tom would be the final
+winner, i.e., Tom would win at least three out of the five games.  \wingding{4}
+approximates the probability that Tom would be the final winner.
 Running the above code should give the winning probabilities for Tom and Jerry
 as:
 \includeOutput{FairDivision}
@@ -573,6 +612,15 @@ repetitions.
 
 \showCode{R}{Code/probability-MontyHall.R}
 \runR{Code/probability-MontyHall.R}{MontyHall}%[run]
+
+In the above code, \code{prize} in \wingding{1} will store the locations of the
+car and \code{host} in \wingding{2} will store the doors that the host will
+open.  \wingding{3} randomly puts the car behind a door.  If the car is behind
+door 1 (\wingding{4}), the host will open door 2 or 3 (\wingding{5}); if the car
+is behind door 2 (\wingding{6}), the host will open door 3 (\wingding{7}); and
+if the car is behind door 3 (\wingding{8}), the host will open door 2
+(\wingding{9}).  In \wingding{10}, the \code{observed} takes the simulated games
+the host opened door 3.
 Running the above code should give the probability that the car being behind
 door 2 is \inlnR{```cat(prob.monty)```}[probability_prob.monty].
 % \includeOutput{MontyHall}
@@ -713,20 +761,32 @@ samples.
 \runR{Code/probability-Simpson.R}{Simpson}{}
 % Running the above code gives:
 % \includeOutput{Simpson}
+In the above code, the \code{g} in \wingding{1} is the number of groups; the
+\code{n} in \wingding{2} is the number of samples in each group; the \code{z} in
+\wingding{3} indicates which group each simulated data point belongs to; the
+variable \code{x} in depends on \code{z}; and the variable \code{z} in
+\wingding{5} depends on both \code{x} and \code{z}.
 
 Next, we plot the whole data and fit a trend equation. Clearly, we see in the
-left panels of Figure~\ref{fig:probability-simpson} that as $x$ increases $y$
-increases.
+left panels of Figure~\ref{fig:probability-simpson} that as \code{x} increases
+\code{y} increases.
 
 \showChunk{R}{Code/probability-Simpson.R}{PRsimpson2}
 
-If we mark the points by the group to which they belong, and fit a trend line
-separately for each group, as $x$ increases $y$ decreases in each and every
-group!
-\showChunk{R}{Code/probability-Simpson.R}{PRsimpson3}
-In \wingding{1}, the \code{lm} function is used to fit a linear trend. Don’t
-worry about the details yet -- we will cover them in Chapter TBA.
+In the above code, \wingding{6} plots the whole data; and \wingding{7} shows the
+overall linear trend, where the \code{lm} function fits a line and \code{abline}
+plots it. Don’t worry about the details about \code{lm} yet -- we will cover
+them in Chapter~\ref{ch:regression}.
 
+If we mark the points by the group to which they belong, and fit a trend line
+separately for each group, as \code{x} increases \code{y} decreases in each and
+every group!
+
+\showChunk{R}{Code/probability-Simpson.R}{PRsimpson3}
+
+In the above code, \wingding{8} plots the data with groups labeled; the
+\code{for} loop in \wingding{9} fits a line for each group; and the \code{lm}
+function in \wingding{10} is used to fit a linear trend for each group. 
 
 \begin{figure}[H]
 \includegraphics[width=0.49\textwidth]{images/chapter_3/probability-Simpson-plots.pdf}
@@ -776,16 +836,26 @@ Let's solve this problem using the following simulation.
 
 \showCode{R}{Code/probability-HenryChoice.R}
 \runR{Code/probability-HenryChoice.R}{HenryChoice}{}
+
+In the above code, we assume that the bullets are in chambers 1 and 2. \wingding{1} simulates \code{n} rounds of spin-and-shoot and
+stores the results in \code{spin.shot}. In \wingding{2}, we check if there was
+no bullet in first shot.   
+\wingding{3} approximates the probability of a bullet in a random second shot.
+We define a function \code{twoshots} in \wingding{4} to simulate the results
+from two continuous shots, where \code{first.shot} in \wingding{5} simulates the
+location of the first shot, \wingding{6} determines the location of the second
+shot based on the location of the first shot, and \wingding{7} returns the
+result for one round of the simulation. 
+\wingding{8} performs the simulation of continuous shots for \code{n} times, and
+we check if the first shot has no bullet in \wingding{9}. \wingding{10}
+approximates the probability of having a bullet when there was no bullet in the
+first shot for the continuous shooting approach. 
 Running the above code should give the approximate probability for spinning
 again pulling the trigger as
 \inlnR{```cat(prob.revolver[1])```}[probability_prob.revolver1], and the
 approximate probability for keep shooting as
 \inlnR{```cat(prob.revolver[2])```}[probability_prob.revolver2]. 
 respectively. 
-% \includeOutput{HenryChoice}
-
-% % \hypertarget{prisoners-problem}{%
-% \subsection{100 Prisoners Problem}\label{prisoners-problem}%}
 
 The technique of simulation is useful in finding answers in very complicated
 problems. Consider the following example modified from
@@ -837,7 +907,26 @@ of randomly openning 50 drawers and the better strategy, respectively.
 
 \showChunk{R}{Code/probability-100prisoners.R}{PR100prisoners1}
 \runR{Code/probability-100prisoners.R}{100prisoners}
-\noindent If we run the following code
+
+In the above code, \wingding{1} defines a function \code{open.random} to
+simulate the procedure of randomly open 50 ($n/2$) drawers. \wingding{2}
+randomly puts prisoners' numbers in the \code{drawers}. \wingding{3} initializes
+the variable \code{pardon} to be \code{TRUE}. The \code{for} loop in
+\wingding{4} goes over each prisoner. \wingding{5} simulates the randomly opened
+50 drawers. If any prisoner does not find his number (\wingding{6}),
+\code{pardon} becomes \code{FALSE} (\wingding{7}) and all prisoners die. In this
+case, there is no need to exam the rest of the prisoners so the \code{for} loop
+can be ended by the \code{break} in \wingding{8}. The function \code{open.smart}
+in \wingding{9} simulates the procedure of smartly opening 50 drawers. We uses
+\code{opens} in \wingding{10} to stores the drawers that a prison will open. The
+first draw to open by prisoner with number \code{i} is the drawer with number
+\code{i} (\wingding{11}). The \code{for} loop in \wingding{12} the following 49
+($n/2-1$) drawers to open. If the previously opened drawer contains the number
+for the prisoner (\wingding{13}), we don't need to open other drawers and can
+break the loop (\wingding{14}); otherwise, the prisoner needs to open the drawer
+with the number in the previously opened drawer \wingding{15}.
+
+If we run the following code
 \showChunk{R}{Code/probability-100prisoners.R}{PR100prisoners2}
 \noindent we should get the following the probability for randomly opening the
 drawers as \inlnR{```cat(prob.openrandom)```}[probability_prob.openrandom], and

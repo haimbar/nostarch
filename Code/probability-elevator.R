@@ -1,7 +1,5 @@
-set.seed(123)         # set the random seed for reproducibility
-n <- 10000            # number of days to simulate
-## the sample space is the possible locations of the elevator {1, ..., 15}.
-elevator <- runif(n, min=1, max=15) # outcomes of experiments
-up <- (elevator < 13) # the elevator is below the 13th floor,
-                      # so that it will goes up
-print(prob.up <- sum(up) / n)
+set.seed(123)                        # (@\wingding{1}@)
+n <- 10000                           # (@\wingding{2}@)
+elevator <- runif(n, min=1, max=15)  # (@\wingding{3}@)
+up <- (elevator < 13)                # (@\wingding{4}@)
+print(prob.up <- sum(up) / n)        # (@\wingding{5}@)

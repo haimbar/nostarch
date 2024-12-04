@@ -1,21 +1,13 @@
 set.seed(123)
-birthday <- function(n=23, yours="1980-05-01"){
-## Define a function to simlate the birthday problem:
-## n is the number of people on the bus;
-## yours is your birthday in format "year-mm-dd".
-    N <- 365 # number of days each year
-    bus <- sample(1:N, size=n, replace=TRUE) # randomly choose n people
-    ## convert your birthday to date of year
-    doy <- as.numeric(strftime(yours, format="%j"))
-    ## if someone's birthday is the same as yours
-    same <- doy %in% bus[-1]
-    ## if there are people sharing a common birthday
-    share <- length(unique(bus)) < n
+birthday <- function(n=23, yours="1980-05-01"){      # (@\wingding{1}@)
+    N <- 365                                         # (@\wingding{2}@)
+    bus <- sample(1:N, size=n, replace=TRUE)         # (@\wingding{3}@)
+    doy <- as.numeric(strftime(yours, format="%j"))  # (@\wingding{4}@)
+    same <- doy %in% bus[-1]                         # (@\wingding{5}@)
+    share <- length(unique(bus)) < n                 # (@\wingding{6}@)
     return (c(same, share))
 }
-## bus with 23 people
-res <- replicate(n=1000, birthday(23))
+res <- replicate(n=1000, birthday(23))               # (@\wingding{7}@)
 prob.p23 <- rowMeans(res)
-## plane with 253 people
-res <- replicate(n=1000, birthday(253))
+res <- replicate(n=1000, birthday(253))              # (@\wingding{8}@)
 prob.p253 <- rowMeans(res)
