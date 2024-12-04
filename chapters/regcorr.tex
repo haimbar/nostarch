@@ -46,6 +46,14 @@ coefficient between $x$ and $y_1$ can be calculated with \code{cor(x,y1)}.
 \showChunk{R}{Code/regression-corrLinear.R}{REGcorrlinear1} % 
 \runR{Code/regression-corrLinear.R}{regression-corrLinear} %
 
+In the above code, the variable \code{x} (\wingding{1}) and the random error
+\code{err} (\wingding{2}) are independent. The five variables \code{y1} --
+\code{y5} have different linear associations with \code{x}: \code{y1} in
+\wingding{3} has a very strong positive association with \code{x}; \code{y2} in
+\wingding{4} has a positive association with \code{x}; \code{y3} in \wingding{5}
+has no linear association with \code{x}; \code{y4} in \wingding{6} has a
+negative association with \code{x}; and \code{y5} in \wingding{7} has a very
+strong negative association with \code{x}.
 Running the above code should produce Figure~\ref{fig:corrLinear}. We see how
 the Pearson's correlation measures both the direction and strength of the linear
 association. For data shown in Figure~\ref{fig:agesbp}, the correlation between
@@ -71,8 +79,11 @@ to zero. We use the following code to generate an example.
 \showChunk{R}{Code/regression-nonLinear.R}{REGnonlinear1}
 \runR{Code/regression-nonLinear.R}{regression-nonLinear} %
 
-We see in the above code that $y$ is highly dependent on $x$, but their Person's
-correlation is only \inlnR{```cat(cor(x,y))```}[corr-quadratic]. Running the code should gives
+In the above code, the line in \wingding{1} double the length of \code{x} and
+makes it symmetric to zero. The large coefficient 10 in \wingding{2} ensures
+that \code{y} is mainly determined by \code{x}. Although $y$ is highly dependent
+on $x$ in this case, their Person's correlation is only
+\inlnR{```cat(round(cor(x,y),2))```}[corr-quadratic]. Running the code should gives
 Figure~\Ref{fig:nonLinear}, which shows that there is a very strong quadratic
 relationship between $x$ and $y$.
 
@@ -167,7 +178,10 @@ The least squares has a lot of disable properties besides minimizing the fitting
 error. For example, the distributions of $\hat{\beta}_0$ and $\hat{\beta}_1$ are
 (asymptotically) normal. The expression in~(\ref{eq:1}) is tedious to
 calculate manually, but it is very easy with \R.
-\showChunk{R}{Code/regression-AgeSBP.R}{REGagesbp2}
+% \showChunk{R}{Code/regression-AgeSBP.R}{REGagesbp2}
+\showCode{R}{Code/regression-AgeSBP.R}[12][12]
+The \code{lm} function in \wingding{1} fits a linear model to the data using
+\code{AGE} as the $x$ variable and \code{SBP} as the $y$ variable.
 The above code should give
 \includeOutput{regression-AgeSBP}
 We see that the least squares estimates with the blood pressure data are
@@ -183,8 +197,8 @@ contains other variables for these adults that are easy to measure. As an
 illustration, we use the following variables to mode the body fat percentage:
 \code{Age}, \code{Weight}, \code{Chest}, \code{Wrist}, and \code{BMI}. Running
 the following code
-
-\showChunk{R}{Code/regression-fitbodyfat.R}{REGfitbodyfat1}
+% \showChunk{R}{Code/regression-fitbodyfat.R}{REGfitbodyfat1}
+\showCode{R}{Code/regression-fitbodyfat.R}[2][4]
 should gives the following output: %
 {\lstset{basicstyle=\scriptsize} %
 \runRIncOut{Code/regression-fitbodyfat.R}[][regression-fitbodyfat]} %

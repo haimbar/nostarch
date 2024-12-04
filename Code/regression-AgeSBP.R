@@ -9,6 +9,6 @@ dev.off()
 ## print(xtable(t(sbp)), scalebox=0.7)
 
 #label===REGagesbp2
-print(fitsbp <- lm(SBP ~ AGE, data=sbp))
+print(fitsbp <- lm(SBP ~ AGE, data=sbp))  # (@\wingding{1}@)
 #===end
 b <- round(as.numeric(fitsbp$coefficients), digits=4)
