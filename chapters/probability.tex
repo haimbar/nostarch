@@ -757,7 +757,8 @@ simulations.
 We use the following code to simulate data from four groups, each with 40
 samples.
 
-\showChunk{R}{Code/probability-Simpson.R}{PRsimpson1}
+% \showChunk{R}{Code/probability-Simpson.R}{PRsimpson1}
+\showCode{R}{Code/probability-Simpson.R}[2][7]
 \runR{Code/probability-Simpson.R}{Simpson}{}
 % Running the above code gives:
 % \includeOutput{Simpson}
@@ -771,7 +772,8 @@ Next, we plot the whole data and fit a trend equation. Clearly, we see in the
 left panels of Figure~\ref{fig:probability-simpson} that as \code{x} increases
 \code{y} increases.
 
-\showChunk{R}{Code/probability-Simpson.R}{PRsimpson2}
+% \showChunk{R}{Code/probability-Simpson.R}{PRsimpson2}
+\showCode{R}{Code/probability-Simpson.R}[13][14]
 
 In the above code, \wingding{6} plots the whole data; and \wingding{7} shows the
 overall linear trend, where the \code{lm} function fits a line and \code{abline}
@@ -782,7 +784,8 @@ If we mark the points by the group to which they belong, and fit a trend line
 separately for each group, as \code{x} increases \code{y} decreases in each and
 every group!
 
-\showChunk{R}{Code/probability-Simpson.R}{PRsimpson3}
+% \showChunk{R}{Code/probability-Simpson.R}{PRsimpson3}
+\showCode{R}{Code/probability-Simpson.R}[18][20]
 
 In the above code, \wingding{8} plots the data with groups labeled; the
 \code{for} loop in \wingding{9} fits a line for each group; and the \code{lm}
@@ -905,7 +908,8 @@ The probability of survival with the better strategy is complicated to derive
 analytically.  In the following, we define two functions to simulate the method
 of randomly openning 50 drawers and the better strategy, respectively.
 
-\showChunk{R}{Code/probability-100prisoners.R}{PR100prisoners1}
+% \showChunk{R}{Code/probability-100prisoners.R}{PR100prisoners1}
+\showCode{R}{Code/probability-100prisoners.R}[2][37]
 \runR{Code/probability-100prisoners.R}{100prisoners}
 
 In the above code, \wingding{1} defines a function \code{open.random} to
@@ -927,7 +931,8 @@ break the loop (\wingding{14}); otherwise, the prisoner needs to open the drawer
 with the number in the previously opened drawer \wingding{15}.
 
 If we run the following code
-\showChunk{R}{Code/probability-100prisoners.R}{PR100prisoners2}
+% \showChunk{R}{Code/probability-100prisoners.R}{PR100prisoners2}
+\showCode{R}{Code/probability-100prisoners.R}[41][42]
 \noindent we should get the following the probability for randomly opening the
 drawers as \inlnR{```cat(prob.openrandom)```}[probability_prob.openrandom], and
 the probability of smartly opening the drawers as
