@@ -40,7 +40,12 @@ Now, let's assume that the way to take a sample depends on both the weights and
 heights in the population. We create a function of weight and height let it
 decide the probability of including a person into the sample. The following code
 use this way to take a sample and plot it in
-Figure~\ref{fig:representativesample} (c). 
+Figure~\ref{fig:representativesample} (c).
+In the code, \wingding{1} and \wingding{2} create a variable \code{w} that
+depends on the weight and height of the people in the population; and
+\wingding{3} uses the variable \code{w} to decide the probability of including a
+person into the sample. The larger the component of \code{w}, the higher the
+probability of including the person into the sample.
 
 \showChunk{R}{Code/datacollect-goodbadsample.R}{BIASgbs3}
 
@@ -143,6 +148,12 @@ Now let's simulate some data to further illustrate the problem.
 
 \showCode{R}{Code/datacollect-berkson.R} %
 \runR{Code/datacollect-berkson.R}{datacollect-berkson} %
+
+In the above code, the goodness of books and movies are independently from a the
+standard normal distribution (\wingding{1} and \wingding{2}). \wingding{3}
+checks if a book is good (better than 90\% of all books) and \wingding{4} checks
+if a movie is good (better than 90\% of all movies). A component of the variable
+\code{good} in \wingding{5} is \code{TRUE} if the book and/or the movie is good.
 Running the above code should give the two figures in Figure~\ref{fig:berkson}
 and the following output.
 \includeOutput{datacollect-berkson} %
