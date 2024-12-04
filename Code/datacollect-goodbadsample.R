@@ -23,9 +23,9 @@ pdf("images/chapter_6/biasedSample.pdf", width=3.5, height=3.5)
 #label===BIASgbs3
 plot(population)
 n <- 50
-f = lm(weight ~ height)
-w = abs(f$residuals) / abs(height-70)
-idx <- sample(N, n, prob=w)
+f = lm(weight ~ height)                       # (@\wingding{1}@)
+w = abs(f$residuals) / abs(height-70)         # (@\wingding{2}@)
+idx <- sample(N, n, prob=w)                   # (@\wingding{3}@)
 rsample <- population[idx,]
 points(rsample, col="red", pch=2, cex=1.2)
 #===end
