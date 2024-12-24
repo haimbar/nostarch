@@ -305,32 +305,32 @@
 % Args #3 and #4 are the beginning and end markings of a chunk (optional).
 
 \NewDocumentCommand{\writeChunk}{m m O{label===} O{===end}} {
-  \IfFileExists{#1}{
-    \filename@parse{#1}
-    \endlinechar=-1
-    \def\printcode{0} % don't print until we see the begin-block string
-    \newread\file
-    \openin\file=#1
-    \newwrite\outfile
-    \immediate\openout\outfile=\generated/\filename@base-#2.txt
-    \loop\unless\ifeof\file
-      \immediate\readline\file to\fileline
-      \ifnum\printcode=1
-        \IfSubStr{\fileline}{\detokenize{#4}}{
-          \renewcommand{\printcode}{-1}}{\immediate\write\outfile{\fileline}}
-      \fi
-      \IfSubStr{\fileline}{\detokenize{#3}}{
-          \StrBehind{\fileline}{\detokenize{#3}}[\chunkname]
-          \IfStrEq*{\detokenize{#2}}{\chunkname}{\renewcommand{\printcode}{1}}{}
-      }
-      {}
-    \repeat
-    \closein\file
-    \immediate\closeout\outfile
-    \endlinechar=13
-    \ifnum\printcode=0
-      \textcolor{red}{\textbf{Label $#2$ not found in #1}}
-    \fi
+  \IfFileExists{#1}{\immediate\write18{python3 -c 'exec(open("write_chunk.py").read()); write_chunk("#1","#2", start="#3", end="#4")'}
+%    \filename@parse{#1}
+%    \endlinechar=-1
+%    \def\printcode{0} % don't print until we see the begin-block string
+%    \newread\file
+%    \openin\file=#1
+%    \newwrite\outfile
+%    \immediate\openout\outfile=\generated/\filename@base-#2.txt
+%    \loop\unless\ifeof\file
+%      \immediate\readline\file to\fileline
+%      \ifnum\printcode=1
+%        \IfSubStr{\fileline}{\detokenize{#4}}{
+%          \renewcommand{\printcode}{-1}}{\immediate\write\outfile{\fileline}}
+%      \fi
+%      \IfSubStr{\fileline}{\detokenize{#3}}{
+%          \StrBehind{\fileline}{\detokenize{#3}}[\chunkname]
+%          \IfStrEq*{\detokenize{#2}}{\chunkname}{\renewcommand{\printcode}{1}}{}
+%      }
+%      {}
+%    \repeat
+%    \closein\file
+%    \immediate\closeout\outfile
+%    \endlinechar=13
+%    \ifnum\printcode=0
+%      \textcolor{red}{\textbf{Label $#2$ not found in #1}}
+%    \fi
   }{\textcolor{red}{\textbf{Source file $#1$ not found}}}
 }
 
