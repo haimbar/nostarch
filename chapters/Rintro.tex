@@ -6,6 +6,7 @@ development environment, and good documentation.
 In this chapter we'll provide a brief introduction to the \R language and the 
 RStudio integrated development environment (IDE). Here, and in the remainder 
 of the book we'll provide some essential ``recipes'' for data scientists.
+\jy{Need to explain IDE.}
 
 
 % for this book, and we hope that this book will be your basic guide into data science. In order to get started, you must first get the necessary software and get acquainted with it, and this is what this chapter is about.
@@ -16,20 +17,23 @@ then demonstrate some basic usage. We'll then introduce some fundamental
 concepts such as working directories, variables, and functions, and we'll show 
 how to generate random data. You will also learn how to write your own
 functions.  We'll conclude with a brief hands-on introduction to summary
-statistics.
+statistics. % no blank line here because of the hyptertarget defn
 \section{Installing \R and RStudio}\label{installing-r-and-RStudio}}
 To install \R go to the Comprehensive R Archive Network website: 
 \url{https://cran.r-project.org/}.  Download the latest version of \R for
  your operating system (Windows, macOS, or Linux), and then   
 follow the installation instructions.
 
-Next, go the posit website:
+
+Next, go the Posit website for RStudio.:
 \url{https://posit.co/download/rstudio-desktop/}. Download the Desktop version
 (open source license), and %As of \today, the version is 1.4.1106. 
 follow the installation instructions.  An icon that looks like an R in a
 blue circle will appear on your computer's desktop. Double-click this icon to
 start the \R session. The RStudio IDE should open, and it should look like
 Figure~\ref{fig:r_studio}.
+
+\jy{Why not the whole linewidth for figures? Is this their style?}
 
 \begin{figure}[H]
   \includegraphics[width=0.8\linewidth]{images/static/RStudioMain}
@@ -40,7 +44,7 @@ Figure~\ref{fig:r_studio}.
 The left-hand side of the screen contains the Console tab. Notice the
  \lstinline{>} sign; this is called the \emph{prompt}. When you see this
 character, it means that \R is ready for the next command. Put the cursor there,
-and then enter
+and then enter \jy{I didn't realize that the input and output are hard-coded.}
 
 \begin{lstlisting}
 > ***2 + 2***
@@ -52,16 +56,18 @@ You should get the following output:
 [1] 4
 \end{lstlisting}
 
+
 Notice the top right part of the RStudio window. You should see both an
 Environment and a History tab. Click on \textbf{History}. All your previous
 input appears there. Try entering another calculation or command in the console.
-For example, try entering the following
+For example, try entering the following:  
 
 \begin{lstlisting}
 > ***date()***
 \end{lstlisting}
 
 You should see that this command appears in the session's history.
+
 
 Now click on the \textbf{Environment} tab. It should be empty when you start \R
 for the first time. In the console, enter
@@ -70,7 +76,7 @@ for the first time. In the console, enter
 > ***myFirstVariable <- factorial(5)***
 \end{lstlisting}
 
-Notice that nothing was printed in the console, but the Environment tab
+Notice that nothing was printed in the Console, but the Environment tab
 now contains a table with one row, with \lstinline{myFirstVariable} appearing
 in the cell on the left and its value, \lstinline{120}, on the right. Any object
 appearing in the Environment tab is available to you throughout your 
@@ -108,13 +114,16 @@ click on \textbf{File}, then on \textbf{Save}, and in the Save As box enter
 \textbf{FirstProgram.R}; click the \textbf{Save} button. You should now have a file
 named \emph{FirstProgram.R}; notice that the tab name is now FirstProgram.R.
 
+
 In that part of the window, there should now be a small button called Source.
 Click on it. The program will execute and the output, \lstinline{Hello, World!},
 should be shown in the console. If you want to execute individual lines in the
 source code, put the cursor anywhere in that line, and click on the Run button
 (which is near the Source button) or click Ctrl+Enter (or Command+Enter on a Mac). 
 
-When you want to finish your \R session, just enter \lstinline{quit()} into the console.
+
+When you want to finish your \R session, just enter \lstinline{quit()}
+into the console, and confirm with Yes when prompted to confirm.
 Congratulations! You're now ready to start learning programming in R.
 
 
@@ -132,7 +141,7 @@ let's get started with some basic ones.
 The documentation for each function can be obtained by using 
 \lstinline{?___<function>___} or \lstinline{help(___<function>___)} where 
 \lstinline{___<function>___} is the function you're interested in. For example,
-to get the documentation for \lstinline{date()}, try the following:
+to get the documentation for \lstinline{date()}, try either line of the following:
 
 \showCode{R}{Code/ch1sec1.R}[1][2]
 % \showChunk{R}{Code/ch1sec1.R}{ch1sec1-1}
@@ -149,6 +158,7 @@ since it tells us how to get to a specific file, starting from the root
 directory (which is denoted by a ~\emph{\slash} on Mac and Linux, or  
 \emph{Drive:\textbackslash} on Windows). The path corresponds to the hierarchical
 organization of folders (or directories) on your computer.
+
 
 We can change the working directory by using
 \lstinline{setwd()}.  For example, we may create a folder \emph{work} in our home
@@ -175,6 +185,7 @@ Here we've created a variable called \lstinline{courseNames}, and it contains
 three values: \lstinline{Data Science}, \lstinline{Statistics}, and \lstinline{Probability}.
 We assigned the values into the variable by using the \lstinline{<-} operator. 
 
+
 We can now do things with this variable. For example, we check the variable type,
 using the \lstinline{class()} function:
 % \showChunk{R}{Code/ch1sec1.R}{ch1sec1-1}
@@ -193,12 +204,14 @@ its structure; to do this, we use the \lstinline{str()} function:
 \inlnR{```str(courseNames)```}[introstrcoursenames][vbox]
 % AF: Spacing here is off at the bottom. Too much space after the frame. Can we use \lstlisting instead?
 
+
 Our \lstinline{courseNames} is what's called a \emph{vector}, a one-dimensional
 array of objects of the same type (in this case, strings of characters).
 We can also get the number of elements in a vector by using the 
 \lstinline{length()} function:
 \showCode{R}{Code/ch1sec1.R}[12][12]
 % \showChunk{R}{Code/ch1sec1.R}{ch1sec1-1}
+
 
 Pick good variable names. They should describe the meaning of the value, yet be
 short enough to type. Variable names can only contain letters, numbers, the dot
@@ -225,6 +238,7 @@ For example, try:
 % \showChunk{R}{Code/ch1sec1.R}{ch1sec1-1}
 Note that the parentheses surrounding the whole line cause \R to print the content
 of the variable \lstinline{firstThirteen} in the console.
+
 
 Another useful function to generate data is \lstinline{rep()}, which replicates values.
 We often have to generate a vector consisting of a single value (for example, 
@@ -259,6 +273,7 @@ following: \inlnR{```cat(concatvar)```}[introcatvar].
 %%\inlnR{\replace{```cat(paste(courseNames, collapse=", "))```}{"}{x22}}
 %%\inlnR{```\replace{cat(paste(courseNames, collapse=", "))}{"}{x22}```}
 
+
 \subsection{Using Contributed Packages}
 The base distribution of \R is very comprehensive, but there are thousands of contributed
 packages written by \R users. We will use several such packages in the book, so let us
@@ -271,9 +286,11 @@ it using the \lstinline{library()} function:
 \showCode{R}{Code/ch1sec1.R}[45][46]
 % \showChunk{R}{Code/ch1sec1.R}{ch1sec1-1}
 
+
 Installing the package has to be done just once. Occasionally, you may be prompted
 to install updates, which can also be done by using the \lstinline{update.packages()}
 function. You have to reload the package each time you begin a new \R session.
+
 
 To see a package in action, let's use a built-in dataset of opera singers and plot their
 heights by their vocal range:
@@ -283,11 +300,14 @@ heights by their vocal range:
 
 The results should look like Figure~\ref{fig:ch1:operaheight}.
 
+\jy{Is it No-Starrch style to use H for positioning floats?}
+
 \begin{figure}[H]
 \includegraphics[width=0.9\textwidth]{images/chapter_1/operaheight.pdf}
 \caption{Using the lattice package to create boxplots}\label{fig:ch1:operaheight}
 \end{figure}
 \noindent We will learn a lot more about data visualization in subsequent chapters.
+
 
 \section{Creating a Deck of Cards}
 Let's combine what we've learned so far to create the 52 cards in a standard deck,
@@ -318,8 +338,10 @@ to do so, we can do it by using the \lstinline{dimnames} options, which is a \em
 consisting of two vectors -- the first one is used to create row names, and the second
 in used to name the columns.
 
+
 This is what the results look like with the seed:
 \inlnR{```print(pokerHand)```}[intropokerhand][vbox]
+
 
 Check the class and the structure of the variable \lstinline{pokerHand}, using the
 functions we've mentioned earlier.
@@ -329,9 +351,12 @@ We can save variables to a file in order to use them in a later session. Create 
 folder called \emph{tmp} in your working directory, and enter:
 \showCode{R}{Code/ch1sec1.R}[36][36]
 % \showChunk{R}{Code/ch1sec1.R}{ch1sec1-1}
+
+
 If we don't specify the path, the file will be stored in the current working directory.
 Recall that you can find out the working directory with the \lstinline{getwd()} function;
 you can set it to another directory with \lstinline{setwd()}.
+
 
 We can get the saved variables using the following:
 \showCode{R}{Code/ch1sec1.R}[37][37]
@@ -343,19 +368,24 @@ and want to save, it's better to save them explicitly. After you use the \lstinl
 function in the example above, the variable \lstinline{pokerHand} will be available
 to use, even if you quit the \R session in which the variable was created.
 
+
 We can also save and load data using other file formats that are easier to edit
 without \R. For
 example, the following code saves \lstinline{pokerHand} in a
- \emph{comma-separated value (CSV)} file; a CSV file is one where each line
- represents one observation, and  each observation consists of one or more
- fields (columns) that are separated by commas. In our example, the rows correspond
- to the four players, and the columns to the five cards each player was dealt.
+\emph{comma-separated value (CSV)} file; a CSV file is one where each line
+represents one observation, and  each observation consists of one or more
+fields (columns) that are separated by commas. In our example, the rows correspond
+to the four players, and the columns to the five cards each player was dealt.
 In the code below, we read it as another variable called \lstinline{pH}: 
 \showCode{R}{Code/ch1sec1-rwdata.R}
 \runR{Code/ch1sec1-rwdata.R}{rwdata}
 The output is:
 \includeOutput{rwdata}
-% AF: same here, want to avoid stacking. Add some explanation of the output.
+% AF: same here, want to avoid stacking. Add some explanation of the
+% output.
+\jy{What do X and the colnames come from? Need to control them.}
+
+
 In this example, player 3 got two aces (clubs and spades), the queen of hearts,
 4-diamond, and 7 of spades.
 Note that when we saved the file as CSV we chose the  \lstinline{row.names=TRUE}
@@ -387,9 +417,11 @@ The function consists of the lines of code between the opening \wingding{1} and
 closing braces \wingding{3}.
 % AF: We reference wingdings simply by describing and then putting the wingding at the end, like so. Please update throughout. 
 
+
 The function takes one argument as input from the user, called \lstinline{x}. In this
 case, the argument has to be a numeric vector, since we're going to perform
 arithmetic operations on it.
+
 
 In the \emph{body} of the function, we initialize a variable called $s$ by setting
  it to zero. 
@@ -407,6 +439,7 @@ Here's how we use the function:
 % AF: Don't think we know what a distribution is yet, and it's an important idea for the chapter, so I'd give an introduction here. 
 We created a sample of 10,000 number from a standard uniform distribution,
 meaning that in every segment of length $\ell$ between 0 and 1, we expect to
+\jy{Doesn't sound right. Let's avoid notation.}
 have the same number of random points (in this case, $10,000/\ell$).
 We store these 10,000 random numbers in a vector called \lstinline{simData}.
 We then use it as the argument in the function \lstinline{mysum}, as well as in
@@ -414,10 +447,12 @@ We then use it as the argument in the function \lstinline{mysum}, as well as in
 We should get the following when we run the code: 
 \inlnR{cat('From sum: ', sum(simData), '. From mysum: ', mysum(simData), sep='')}[introsumsimdat].
 
+
 Using arguments in function definitions is useful because you can use the
 same function to perform a similar operation on different objects. For example,
 the argument may be a sequence, like in the following two examples:
 \showCode{R}{Code/ch1sec1-defFuncUsage.R}
+
 
 Functions can take more than one argument, or they can take no arguments at all.
 The arguments can also be given a default value, so that if the user does not
@@ -430,6 +465,7 @@ We declared the default number of cards is 5 \wingding{1}, and the default numbe
 of players is 4. So, calling the function \lstinline{drawPokerHands()} without any
 arguments will give a 5-by-4 matrix of cards. Setting the second argument to 6 will
 give a 5-by-6 matrix of cards.
+
 
 Note that we also introduced some error-checking \wingding{2}: the function checks
 if the input is valid, since it's not possible to deal more cards than we have in one deck.
@@ -446,9 +482,11 @@ variable called \lstinline{simData}, and then plot a histogram to show the distr
 of the data we have generated. 
 \showChunk{R}{Code/ch1sec2.R}{ch1sec2-1}
 
+
 Note that the first line of code is a \emph{comment}:  anything following a \lstinline{#}
 character is considered a comment and is not executed by \R. We use comments to
 explain to others what our code is doing.
+
 
 The code should produce a \emph{histogram}, a graph in which all the observations
 are put in a number of bins, and the height of each bin corresponds to the number of
@@ -458,6 +496,7 @@ like Figure~\ref{fig:ch1:simunif1}.
 \includegraphics[width=0.9\textwidth]{images/chapter_1/simunif1.pdf}
 \caption{A histogram of a random sample from a standard uniform distribution}\label{fig:ch1:simunif1}
 \end{figure}
+
 
 From the range and the flatness of the histogram in Figure~\ref{fig:ch1:simunif1},
 we can see that the generated data is 
@@ -473,6 +512,7 @@ code without a fixed seed and observe that you get different data each time.
 Since the number of random draws is fairly large, the shape of the histogram
 will not change much.
 
+
 From a random draw of a uniform distribution we can generate random numbers from
 other distributions. For example, say we want to simulate (fair) coin flips, and
 count the number of heads that we get. Let's simulate 200 coin
@@ -483,10 +523,12 @@ Try the following code multiple times (do not use \lstinline{set.seed()}). What 
 observe? We will discuss it further in a different chapter.
 \showChunk{R}{Code/ch1sec2.R}{ch1sec2-3}
 
+
 We have used the \lstinline{cat()} function to print (concatenate) text to the console.
 Fixed text appears in double (or single) quotes, but the content of variables or
 output from \R functions should not be quoted. The \lstinline{\n} symbol tells \R
 to print a newline character. Try to see what happens if you remove it.
+
 
 The expression within the \lstinline{sum()} function produces \lstinline{TRUE} or
 \lstinline{FALSE} (\emph{Boolean}) values. First, we draw \lstinline{ntrials}
@@ -499,6 +541,7 @@ got 200 Boolean values which we have added together (TRUE counts as 1,
 and FALSE counts as 0.) Thus, the result in the sum is the number of heads
 in 200 tosses.
 
+
 The number of heads we get in this case (with this seed) is 
 \inlnR{```cat(sum(runif(ntrials) < 0.5))```}[introsumruinif]. Statistical inference is based
 on a mental exercise in which we ask, if we could repeat the same experiment
@@ -510,6 +553,7 @@ We've used a \lstinline{for} loop, with an index variable called \lstinline{i} t
 runs from 1 to 100. In each iteration we simulated \lstinline{ntrials=200} coin
 tosses, as before. The result from each iteration is stored in the $i$-th position
 in the vector we called \lstinline{Heads}. 
+
 
 Figure~\ref{fig:ch1:simunif2} shows the distribution of 100 simulations, where
 each simulation consists of 200 coin tosses; from each of the 100 simulations,
@@ -533,6 +577,7 @@ the following, which uses the \lstinline{rbinom()} function:
 \showChunk{R}{Code/ch1sec2.R}{ch1sec2-5}
 
 % AF: can do exercises like this. What do you think?
+\jy{Use auto numbering.}
 \begin{listhead}
 \item [Exercise~1.1] Change the number of simulated coin-toss simulations
 (\lstinline{nreps}) to 1,000 and rerun the code. Then change it to 10,000 and
@@ -572,10 +617,12 @@ except that the smallest and largest $p\cdot 100\%$  of the values are excluded
 from the computation. In our example, if we take $p=0.1$ with the simulated data,
 only 8,000 data points will be used in the calculation of the trimmed mean. 
 
+
 A third way to estimate the central tendency is the \emph{median}, which is a
 number (denoted here by $x_{0.5}$) such that half the data points are greater
 than $x_{0.5}$ and half are less than or equal to $x_{0.5}$. 
- 
+
+
 Let's compute this sample's mean, trimmed mean, and median. Notice that
 in this example the mean is greater than trimmed mean, which is greater than
 the median. In general, the mean is not a great estimate of the `center' of a
@@ -628,32 +675,34 @@ quartiles are the vertical edges of the box, also called the lower and upper
 between the first and third quartiles is called the \emph{Inter-Quartile Range (IQR)},
 which is sometimes used to estimate the dispersion or spread of the data.
 
+
 The \emph{whiskers}, which are the dashed grey lines, are the minimum
-  and maximum observations within 1.5$\cdot$IQR to each side of the box. If the
-  result is smaller than the minimum value (or greater than the maximum), then
-  the whisker only extends to the minimum (or the maximum). Points within the
-  range between the two whiskers are not plotted individually, since their distribution
-  is summarized succinctly by the box-and-whiskers plot. Points outside the range
-  between the two whiskers are considered ``outliers,'' or extreme values, and
-  are shown explicitly. 
+and maximum observations within 1.5$\cdot$IQR to each side of the box. If the
+result is smaller than the minimum value (or greater than the maximum), then
+the whisker only extends to the minimum (or the maximum). Points within the
+range between the two whiskers are not plotted individually, since their distribution
+is summarized succinctly by the box-and-whiskers plot. Points outside the range
+between the two whiskers are considered ``outliers,'' or extreme values, and
+are shown explicitly. 
 
 The plot in Figure~\ref{fig:ch1:simexp}  was generated with the following code:
 
 \showChunk{R}{Code/ch1sec3.R}{ch1sec3-3}
 
- Try the code above, and try changing some of the parameters to understand their role.
- We will cover the topic of visualization in Chapter~\ref{EDA}.
+Try the code above, and try changing some of the parameters to understand their role.
+We will cover the topic of visualization in Chapter~\ref{EDA}.
 
 
 A boxplot does not include the mean, or the trimmed mean, but we have added them
 here as a circle and diamond, respectively, in order to show that they
 are different than the median. The mean is larger than the median in this case,
 so we say that the distribution is \emph{skewed} to the right. 
-   The median does not depend on observations in the tails
-  of the data (small and large observations in the data). It simply represents
-  where the data can be split in half. Thus the median is a more robust measure of
-  the central tendency of the data than the mean, and it is more appropriate for
+The median does not depend on observations in the tails
+of the data (small and large observations in the data). It simply represents
+where the data can be split in half. Thus the median is a more robust measure of
+the central tendency of the data than the mean, and it is more appropriate for
 skewed data such as income.
+
 
 A more detailed summary of a sample can be obtained by calculating its
 quantiles (also called percentiles). The $q$-th quantile is a number $t$, such that
@@ -686,6 +735,7 @@ In words, the variance is the average of the squared deviations from the mean.
 Notice that the sample variance is computed with $n-1$ in the denominator
 because with $n-1$ we get an \emph{unbiased estimator} for the true variance.
 
+
 The corresponding functions in \R are \lstinline{var()} and \lstinline{sd()} for sample
 variance and standard deviation, respectively. In the following code we also
 demonstrate the \lstinline{IQR()} function, which is another common estimator for
@@ -703,6 +753,7 @@ $$\phi(x; \mu,\sigma^2)=\frac{1}{\sqrt{2\pi\sigma^2}}\exp\left[-\frac{(x-\mu)^2}
 It is symmetric, ``bell-shaped,'' and centered around the mean, $\mu$, as shown in
 Figure~\ref{fig:ch1:simnorm}. 
 
+
 \begin{figure}[H]
 \includegraphics[width=0.7\textwidth]{images/chapter_1/normdisthist.pdf}
 \caption{A histogram of a sample from a normal distribution, with mean=2.5
@@ -716,8 +767,10 @@ use $\mu=2.5$ and $\sigma^2=0.25$.
 The curve shows the function $\phi$, by using the \lstinline{dnorm()} function
 (to obtain the density function of $x$).
 
+
 Here's the code we used to create Figure~\ref{fig:ch1:simnorm}:
 \showChunk{R}{Code/ch1sec3.R}{ch1sec3-6}
+
 
 % AF: Want to avoid stacking, so comment on the code. Or tell them not to worry about the details.
 In the next chapter we'll go into more detail about how to generate plots, but notice
@@ -745,6 +798,7 @@ summarize discrete (categorical) data, where the mean, variance,
 quantiles, and so on are not applicable. We will revisit the topic
 of summarizing data in Chapter~\ref{EDA}.
 
+
 To simulate categorical data we can use the \lstinline{rmultinom()} function,
 which simulates putting $N$ objects in $K$ bins with given probabilities for
 each bin. Another possibility is to use the \lstinline{cut()} function,
@@ -757,6 +811,7 @@ following code we simulate the allocation of 100 visitors to hotels and cars.
 We use the \lstinline{table()} function to show the counts by hotel, by car,
 and by both.
 \showChunk{R}{Code/ch1sec3.R}{ch1sec3-8}
+
 
 % AF: Update wingdings, as mentioned above.
 Note that \lstinline{table()} can take one argument as in
