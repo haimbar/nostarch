@@ -6,7 +6,6 @@ development environment, and good documentation.
 In this chapter we'll provide a brief introduction to the \R language and the 
 RStudio integrated development environment (IDE). Here, and in the remainder 
 of the book we'll provide some essential ``recipes'' for data scientists.
-\jy{Need to explain IDE.}
 
 
 % for this book, and we hope that this book will be your basic guide into data science. In order to get started, you must first get the necessary software and get acquainted with it, and this is what this chapter is about.
@@ -25,7 +24,11 @@ To install \R go to the Comprehensive R Archive Network website:
 follow the installation instructions.
 
 
-Next, go the Posit website for RStudio.:
+Next, we will install RStudio, which is an integrated development environment (IDE).
+An IDE is a software tool which allows users to conveniently view and edit code and text,
+and to generate plots and reports. There are many IDEs, and we chose RStudio
+which is especially popular among R users.
+Go the Posit website for RStudio:
 \url{https://posit.co/download/rstudio-desktop/}. Download the Desktop version
 (open source license), and %As of \today, the version is 1.4.1106. 
 follow the installation instructions.  An icon that looks like an R in a
@@ -33,7 +36,12 @@ blue circle will appear on your computer's desktop. Double-click this icon to
 start the \R session. The RStudio IDE should open, and it should look like
 Figure~\ref{fig:r_studio}.
 
-\jy{Why not the whole linewidth for figures? Is this their style?}
+%\jy{Why not the whole linewidth for figures? Is this their style?}
+% Yes - they want figures aligned to the left. We can make them bigger,
+% but when the aspect ratio should be 1, it may be harder to do -- the figures
+% should not take too much of a page (they use book page size, so the
+% area is smaller than in papers.)
+% For example, with Fig. 2.1 it will not look to spread it across the page
 
 \begin{figure}[H]
   \includegraphics[width=0.8\linewidth]{images/static/RStudioMain}
@@ -44,7 +52,9 @@ Figure~\ref{fig:r_studio}.
 The left-hand side of the screen contains the Console tab. Notice the
  \lstinline{>} sign; this is called the \emph{prompt}. When you see this
 character, it means that \R is ready for the next command. Put the cursor there,
-and then enter \jy{I didn't realize that the input and output are hard-coded.}
+and then enter
+% \jy{I didn't realize that the input and output are hard-coded.}
+% Only here. Later they are not. 
 
 \begin{lstlisting}
 > ***2 + 2***
@@ -300,7 +310,8 @@ heights by their vocal range:
 
 The results should look like Figure~\ref{fig:ch1:operaheight}.
 
-\jy{Is it No-Starrch style to use H for positioning floats?}
+% \jy{Is it No-Starrch style to use H for positioning floats?}
+% Yes - all this formatting was done with Alex's help and guidance
 
 \begin{figure}[H]
 \includegraphics[width=0.9\textwidth]{images/chapter_1/operaheight.pdf}
@@ -323,7 +334,7 @@ Now that we have our cards, let's use them.
 \subsection{Getting Samples}
 Let's `deal' five cards to each player in a game of poker. We will use the
 \lstinline{sample()} function to do this:
-\showCode{R}{Code/ch1sec1.R}[32][33]
+\showCode{R}{Code/ch1sec1.R}[32][34]
 % \showChunk{R}{Code/ch1sec1.R}{ch1sec1-1}
 The \lstinline{sample()} function in this example is used to draw 20 cards at random
 from the deck; we don't put the cards back in the deck, so we say they were drawn
@@ -383,8 +394,11 @@ The output is:
 \includeOutput{rwdata}
 % AF: same here, want to avoid stacking. Add some explanation of the
 % output.
-\jy{What do X and the colnames come from? Need to control them.}
-
+%\jy{What do X and the colnames come from? Need to control them.}
+% The code now shows how the dimnames are created.
+% The X is added by read.csv, because we used row.names=TRUE, so it
+% shows the player numbers as the row names, but adds an X. It's silly, but that's 
+% how read.csv behaves.
 
 In this example, player 3 got two aces (clubs and spades), the queen of hearts,
 4-diamond, and 7 of spades.
@@ -438,9 +452,13 @@ Here's how we use the function:
 
 % AF: Don't think we know what a distribution is yet, and it's an important idea for the chapter, so I'd give an introduction here. 
 We created a sample of 10,000 number from a standard uniform distribution,
-meaning that in every segment of length $\ell$ between 0 and 1, we expect to
-\jy{Doesn't sound right. Let's avoid notation.}
-have the same number of random points (in this case, $10,000/\ell$).
+meaning that if we divide the range between 0 and 1 into
+segment of equal length, then we expect to 
+% in every segment of length $\ell$ between 0 and 1, we expect to
+%\jy{Doesn't sound right. Let's avoid notation.}
+% I removed the notation.
+have the same number of random points (in this case, $10,000$ divided by the length of
+a segment).
 We store these 10,000 random numbers in a vector called \lstinline{simData}.
 We then use it as the argument in the function \lstinline{mysum}, as well as in
 \lstinline{sum}, and we print both values.
@@ -577,7 +595,9 @@ the following, which uses the \lstinline{rbinom()} function:
 \showChunk{R}{Code/ch1sec2.R}{ch1sec2-5}
 
 % AF: can do exercises like this. What do you think?
-\jy{Use auto numbering.}
+%\jy{Use auto numbering.}
+% We'll do that - we just have to decide how to include the exercises - in place,
+% at the end of the chapter, or on github?
 \begin{listhead}
 \item [Exercise~1.1] Change the number of simulated coin-toss simulations
 (\lstinline{nreps}) to 1,000 and rerun the code. Then change it to 10,000 and

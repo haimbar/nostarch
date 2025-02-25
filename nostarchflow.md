@@ -38,6 +38,10 @@ make overleaf
 
 That way, the copy they will get will be the latest (because we build from scratch) but will allow them to compile it without the talk2stat server (because make overleaf forces the compilation to run in the cache mode).
 
+```
+rsync -crv --dry-run --exclude={'uconn-pcs','.git','tmp','proposal','styfiles','.DS_Store','fonts','.gitignore','ForceCache','Makefile*','R.config','Rdebug.txt','nohup.out','ToDo.md','talk2stat.log','serverPIDR.txt'} nostarch/ OverLeaf/
+```
+
 In principle, we will not have to change the main tex file unless we add a chapter. If all we did was to add a chapter, then we can copy the chapter's files to the OverLeaf repo, and then git add/commit/push the changes. At this point, the two repos should be synchronized.
 
 #### Phase 3: updating our repo with NoStarch edits
