@@ -10,7 +10,7 @@ judgments without ever being 100\% sure of the answer. Hypothesis
 testing is the scientific version of this everyday decision-making
 process. It’s not about proving something beyond all doubt; it’s about
 weighing the evidence and making the best call with the information at
-hand---ike a courtroom verdict, but with fewer objections and more
+hand---like a courtroom verdict, but with fewer objections and more
 statistics.
 
 
@@ -29,7 +29,7 @@ patients compared to others?
 At the core of hypothesis testing lies a simple setup. There are two 
 competing explanations: the \emph{null hypothesis}, $H_0$, which represents 
 the default position or baseline assumption, and the \emph{alternative 
-hypothesis}, $H_1$, which is the claim we hope to support in a
+hypothesis}, $H_1$, which is the claim we hope to support \hb{not always} in a
 scientific investigation through evidence from data. For instance, 
 in the context of the new drug, $H_0$ might state that the drug has no 
 effect, while $H_1$ claims that it does.
@@ -38,7 +38,7 @@ effect, while $H_1$ claims that it does.
 Think of hypothesis testing as a strategic game. Nature knows the truth— 
 whether $H_0$ or $H_1$ is correct—but keeps it hidden. Our job is to 
 examine the available evidence and decide which hypothesis to select. Of 
-course, this decision-making process isn’t foolproof; we might make errors. 
+course, this decision-making process isn’t foolproof \hb{fullproof?}; we might make errors. 
 We could reject $H_0$ when it is true (a \emph{Type I error}), or fail to 
 reject $H_0$ when $H_1$ is true (a \emph{Type II error}). Understanding 
 and managing these risks is part of what makes hypothesis testing both 
@@ -64,7 +64,7 @@ probabilities. Rejecting $H_0$ does not definitively prove $H_1$; instead,
 it means the evidence against $H_0$ is strong enough to favor $H_1$ within 
 a specified level of risk. Similarly, failing to reject $H_0$ does not 
 verify its truth but simply reflects insufficient evidence to challenge it 
-\citep{reeves1980hypothesis}.
+\citep{reeves1980hypothesis}. \hb{Citation needs fixing?}
 
 
 % Misconception \citep{falk1995significance}. 
@@ -75,11 +75,12 @@ The probabilistic nature of hypothesis testing introduces two types of
 errors. A \emph{Type I error} occurs when we reject the null hypothesis, 
 $H_0$, even though it is true. This false positive error reflects the risk 
 of mistakenly favoring $H_1$ and is controlled by the significance level, 
-$\alpha$. A \emph{Type II error} arises when we fail to reject $H_0$ even 
+$\alpha$ \hb{This is not explained in the previous text}.
+ A \emph{Type II error} arises when we fail to reject $H_0$ even 
 though it is false. This false negative error reflects the risk of missing 
 a true effect, with its probability denoted by $\beta$. The complement of 
 $\beta$, $1 - \beta$, is called the \emph{power} of the test, representing 
-its ability to detect an effect when it exists.
+its ability to detect an effect when it exists. \hb{Needs more detail, or to simplify}
 
 
 R. A. Fisher's ``Lady Tasting Tea'' experiment beautifully illustrates
