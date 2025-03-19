@@ -16,7 +16,7 @@ statistics.
 
 \section{Basic Concepts}
 
-Hypothesis testing is the framework scientists and decision-makers use to 
+Hypothesis testing is a framework scientists and decision-makers use to 
 make sense of uncertainty. Let’s start with some examples to ground the 
 idea: Is a new drug effective in treating a disease, or is it no better 
 than the current standard? Is one commercial more effective than another 
@@ -115,10 +115,10 @@ relevant aspects of the observed data and allows us to quantify the
 evidence against \(H_0\). The choice of test statistic depends on the 
 specific hypothesis being tested and the nature of the data.
 
-In the "Lady Tasting Tea" experiment, the test statistic is the number of 
+In the ``Lady Tasting Tea'' experiment, the test statistic is the number of 
 cups the lady correctly identifies as having been prepared with milk first. 
 Under the null hypothesis, \(H_0\), which assumes the lady is guessing 
-randomly, this test statistic follows a hypergeometric distribution. The 
+randomly, this test statistic follows a \why{readers may not know this} hypergeometric distribution. The 
 more cups she identifies correctly, the more extreme the observed test 
 statistic becomes under \(H_0\).
 
@@ -133,7 +133,7 @@ Suppose the lady is presented with \(n\) cups, half of which are prepared
 with milk first and half with tea first. If she correctly identifies \(n/2\) 
 milk-first cups and \(n/2\) tea-first cups, the observed test statistic is 
 her perfect success rate. The total number of ways to arrange \(n\) cups 
-such that \(n/2\) are correctly chosen is:
+such that \(n/2\) are \why{tea-first cups?} correctly chosen is:
 \[
 \binom{n}{n/2} = \frac{n!}{(n/2)!(n/2)!}.
 \]
@@ -201,7 +201,7 @@ This ensures that the permutation-based sampling distribution accurately
 represents the behavior of the test statistic under \(H_0\).
 
 
-For instance, in the "Lady Tasting Tea" experiment, the null hypothesis 
+For instance, in the ``Lady Tasting Tea'' experiment, the null hypothesis 
 \(H_0\) assumes that the lady is guessing randomly. Under this assumption, 
 all possible arrangements of the cups are equally likely, making the 
 permuted sampling distribution an exact representation of \(H_0\). Similarly, 
@@ -214,12 +214,12 @@ statistic when there is no true difference between the groups.
 To make this concrete, let us revisit the example. Suppose we have two 
 groups of data, \(x_1\) and \(x_2\), with sample sizes \(n_1 = n_2 = 30\). 
 If \(H_0\) is true, there is no real difference between the groups, so 
-the observed difference in means, \texttt{mean(\(x_2\)) - mean(\(x_1\))}, 
+the observed difference in means, \why{This should be code instead of latex, right?} \code{mean(\(x_2\)) - mean(\(x_1\))}, 
 is simply due to chance.
 \showCode{R}{Code/hypo-perm.R}[4][8]
 
 
-When we randomly shuffle the pooled data \texttt{\(x_1\) and \(x_2\)} 
+When we randomly shuffle the pooled data \code{\(x_1\) and \(x_2\)} 
 and split it into new groups of size \(n_1\) and \(n_2\), the resulting 
 groupings represent plausible outcomes under \(H_0\). Repeating this 
 permutation many times allows us to build the sampling distribution 
@@ -227,7 +227,7 @@ of the test statistic under the assumption of no group differences.
 
 
 
-Here, \texttt{xd} is the observed difference in means between \(x_1\) and 
+Here, \code{xd} is the observed difference in means between \(x_1\) and 
 \(x_2\). Under \(H_0\), which assumes no difference between the groups, 
 any observed difference is due to random variation.
 
@@ -254,7 +254,7 @@ approximate the sampling distribution using a subset of random permutations.
 This is implemented in the following function:
 \showCode{R}{Code/hypo-perm.R}[22][33]
 
-This function simulates \texttt{nperm} permutations, calculates the test 
+This function simulates \code{nperm} permutations, calculates the test 
 statistic for each, and compares them to the observed test statistic to 
 compute the p-value.
 
@@ -316,7 +316,7 @@ and the variability in the data. Larger sample sizes,
 larger effect sizes, and smaller variability all contribute 
 to higher power.
 
-When two tests both maintain their size, the one with 
+When two tests both maintain the same size, the one with 
 higher power is preferred because it provides greater 
 evidence against \(H_0\) when \(H_1\) is true. However, 
 there is an inherent trade-off between size and power. 
@@ -338,34 +338,34 @@ First, let’s see how we can perform the tests for one pair of datasets:
 \showCode{R}{Code/hypo-2samp.R}[2][9]
 
 
-Here, `x1` and `x2` represent two groups of data. The t-test assumes
+Here, \code{x1} and \code{x2} represent two groups of data. The t-test assumes
 the data are normally distributed, while the Wilcoxon test is
 distribution-free, meaning it works for a wider range of data
 distributions.
 
 
-Next, we create a function \texttt{do1rep()} that simulates one
+Next, we create a function \code{do1rep()} that simulates one
 experiment. This generates two groups of data, applies both tests, and
 records their p-values.
 \showCode{R}{Code/hypo-2samp.R}[13][22]
 
 
-Here, \texttt{delta} represents the true difference between the means
-of the two groups. When \texttt{delta = 0}, there’s no real difference
+Here, \code{delta} represents the true difference between the means
+of the two groups. When \code{delta = 0}, there’s no real difference
 (null hypothesis is true). For each test, we calculate the p-value to
 assess whether to reject the null hypothesis.
 
-To evaluate the size (false positive rate) of the tests, we simulate
-multiple experiments where `delta = 0` and calculate the proportion of
+To evaluate the sizes (false positive rates) of the tests, we simulate
+multiple experiments where \code{delta = 0} and calculate the proportions of
 times the tests reject $H_0$.
 \showCode{R}{Code/hypo-2samp.R}[26][28]
 
-The function \texttt{rowMeans(sim < 0.05)} calculates the fraction of
+The function \code{rowMeans(sim < 0.05)} calculates the fraction of
 times the p-value is below 0.05, representing the rejection rate for
 each test.
 
 
-We wrap the simulation into a function \texttt{empRejRate()} to
+We wrap the simulation into a function \code{empRejRate()} to
 compute rejection rates for different sample sizes, distributions, and
 effect sizes:
 \showCode{R}{Code/hypo-2samp.R}[32][35]
@@ -379,10 +379,10 @@ distribution, the performance of the tests may differ significantly.
 
 
 Finally, we compute and plot the power of the tests as the effect size
-(\texttt{delta}) increases:
+(\code{delta}) increases:
 \showCode{R}{Code/hypo-2samp.R}[47][62]
 
-These plots show the empirical rejection rates (power) as \texttt{delta}
+These plots show the empirical rejection rates (power) as \code{delta}
 increases. For the t-test, performance depends on the assumption of
 normality, while the Wilcoxon test is more robust under non-normal
 distributions like the Cauchy.
