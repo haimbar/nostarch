@@ -1,57 +1,95 @@
 \chapter{Data Collection and Selection Bias}\label{ch:data}
-  You can't make bricks without straw. Data is necessary to make inference, and
-it is important that the data is an unbiased or representative sample of the
-population in consideration in order to obtain valid conclusion. This chapter
-discusses common sources of biases in the process of data collection, and
-introduces some widely used sampling plans and approaches for data collection.
+You can't make bricks without straw. Data is necessary to make inference, and
+since it's usually only possible to get a sample from the entire population,
+it is important that the sample represents the population faithfully. This chapter 
+discusses the problems that may arise when a sample is not representative
+of the population, and how this may lead to entirely invalid conclusions.
 
 \hypertarget{ch:data}{%
 \section{Representative sample}\label{representative}}
+First, let's introduce some terminology. A \emph{population} is the set of 
+individuals (\emph{subjects}) which we're interested in studying. Subjects may be 
+people, mice, or devices produced in a factory. 
 
-In statistics, a population in statistics is the entire set of subjects that we
-are interested in studying, and a sample is a subset of a population.  A
-representative sample means it reflects the characteristics of the population.
+A \emph{sample} is a subset of the population. The sample is said to be
+\emph{representative} if it reflects the characteristics of the population.
+For example, if in the United States the proportion of females is approximately 50\%,
+then a sample taken from this population should also have approximately 50\% females.
 This is important because a main goal of statistical data science is to use the
-smaller sample to obtain conclusions on the population.
+smaller sample to draw conclusions on the population.
+We saw in chapter \ref{ch:llnclt} that the law of large numbers and the central limit
+theorem guarantee that if the sample is representative of the entire population,
+then our estimates can be trusted with a certain degree of confidence,
+and the largest the sample, the more confident we are about the estimate
+and the conclusions that we can draw from it.
 
-We use a simulated population to illustrate the concepts with figures. Assume
-for a group of people, the weight and height has a relationship
+However, if the sample doesn't faithfully represent the population, then no matter
+how large the sample is, the results can't be trusted. When the quantity we want
+to estimate and reason about is estimated based on a non-representative sample,
+we get a \emph{biased} estimator. By bias we mean that the obtained estimate
+is not a good approximation of the true value, and it doesn't improve when we
+take a larger sample.
+
+
+Let's illustrate the notions of population, sample, and bias through simulations.
+Assume that for a group of people,  weight and height have a linear relationship
+\begin{equation}
+  \label{eq:weightheight}
+  \text{weight} = -194.49 + 5.30\text{height}\,.
+\end{equation}
+
+However, because people have different levels of activity and different diets, each
+person's weight is a little different than the one predicted by Equation (\ref{eq:weightheight}).
+We write the weight using an equation that includes this random `noise', by adding
+a non-deterministic (\emph{stochastic}) term, denoted by $\text{Error}$:
 \begin{equation}
   \label{eq:weightheight}
   \text{weight} = -194.49 + 5.30\text{height} + \text{Error},
 \end{equation}
-where the Error has a normal distribution with mean zero and standard deviation
+where, in our simulation, the Error has a normal distribution with mean zero and standard deviation
 23.26. We simulate such a population with $N=500$ people and plot their weights
 against heights using the following code. The result is given in
-Figure~\ref{fig:representativesample} (a).
+Figure~\ref{fig:representativesample} (a), where, in addition to the 
+`noisy' data of the population we also show the true (linear)
+relationship between height and weight.
 
 \showChunk{R}{Code/datacollect-goodbadsample.R}{BIASgbs1}
 
 Now we use the following code to uniformly and randomly select $n=50$ people as
 a sample from the population and marked the selected people in
-Figure~\ref{fig:representativesample} (b). We see that the smaller sample of
-$n=50$ gives a similar relationship between weight and height as observed in the
-larger population of $N=500$. Here the sample is a representative sample. 
+Figure~\ref{fig:representativesample} (b). The \code{sample()} function
+is used to draw a \emph{simple random sample (SRS)} of size \code{n}
+from the population of size \code{N}. SRS means that every subject in
+the population has an equal probability of being selected into the sample.
+We see that the smaller sample of
+$n=50$ (depicted by dark triangles) gives a similar relationship between weight 
+and height as observed in the
+larger population of $N=500$. Here the sample is a representative one. 
 
 \showChunk{R}{Code/datacollect-goodbadsample.R}{BIASgbs2}
 
 Now, let's assume that the way to take a sample depends on both the weights and
 heights in the population. We create a function of weight and height let it
 decide the probability of including a person into the sample. The following code
-use this way to take a sample and plot it in
+uses this way to take a sample and plot it in
 Figure~\ref{fig:representativesample} (c).
 In the code, \wingding{1} and \wingding{2} create a variable \code{w} that
 depends on the weight and height of the people in the population; and
 \wingding{3} uses the variable \code{w} to decide the probability of including a
-person into the sample. The larger the component of \code{w}, the higher the
-probability of including the person into the sample.
-
+person into the sample. The larger the value of \code{w}, the higher the
+probability of including the person into the sample. The exact way we 
+obtain \code{w} in this example is not important. What's important is
+that the selection of an individual into the sample is \emph{not random}. 
+When the probability of drawing a subject into the sample depend on his/her
+height, weight, or both, then the sample is no longer representative and
+as such, it doesn't retain the properties of the population. 
 \showChunk{R}{Code/datacollect-goodbadsample.R}{BIASgbs3}
 
-We see that the sample in Figure~\ref{fig:representativesample} (c) does not
-reflect the patterns in the population. The heights in the sample is more
-clustered around 70, and the relationship between weights and heights in the
-sample is dramatically different from that in the population.
+In Figure~\ref{fig:representativesample} (c) you can see that the relationship
+between the height and the weight in the population is a long the line
+with slope 5.3, but in the sample (dark red dots) the relationship between 
+the two variables is more or less along a vertical line with mean height of
+about 70.
 
 \runR{Code/datacollect-goodbadsample.R}{datacollect-goodbadsample}
 % \showCode{R}{Code/datacollect-goodbadsample.R}
@@ -71,9 +109,20 @@ sample is dramatically different from that in the population.
       \includegraphics[width=\textwidth]{images/chapter_6/biasedSample.pdf}
       \caption{Biased sample}
   \end{subfigure}
-  \caption{An illustrative of representative sample}
+  \caption{An illustration of representative and non-representative samples}
   \label{fig:representativesample}
 \end{figure}
+
+To see the effect of a biased sample, let's look at the variance of height
+in the population, and in the two samples. We can use the following code:
+\showChunk{R}{Code/datacollect-goodbadsample.R}{BIASgbs4}
+
+The variance in the population is \code{var0} and it's equal to
+\inlnR{```cat(var0)```}[var0]. In the first (simple random) sample the
+variance is \inlnR{```cat(var1)```}[var1], which is very close to the
+actual variance in the population (the difference is \inlnR{```cat(var1-var0)```} [diff01]),
+but in the second (biased) sample, the variance of height is much smaller: 
+\inlnR{```cat(var2)```}[var2].
 
 \hypertarget{ch:data}{%
 \subsection{A representative sample is more important than a larger sample}\label{representative}}
