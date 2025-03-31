@@ -34,7 +34,7 @@ axis(1); axis(2)
 n <- 50
 f = lm(weight ~ height)                       # (@\wingding{1}@)
 w = abs(f$residuals) / abs(height-70)         # (@\wingding{2}@)
-idx2 <- sample(N, n, prob=w)                   # (@\wingding{3}@)
+idx2 <- sample(N, n, prob=w)                  # (@\wingding{3}@)
 rsample <- population[idx2,]
 points(rsample, col="red", pch=16, cex=1.2)
 #===end
