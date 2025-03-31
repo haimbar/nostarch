@@ -9,7 +9,7 @@ of the population, and how this may lead to entirely invalid conclusions.
 \section{Representative sample}\label{representative}}
 First, let's introduce some terminology. A \emph{population} is the set of 
 individuals (\emph{subjects}) which we're interested in studying. Subjects may be 
-people, mice, or devices produced in a factory. 
+people, mice, or devices produced in a factory, just to name a few examples. 
 
 A \emph{sample} is a subset of the population. The sample is said to be
 \emph{representative} if it reflects the characteristics of the population.
@@ -38,9 +38,10 @@ Assume that for a group of people,  weight and height have a linear relationship
   \text{weight} = -194.49 + 5.30\text{height}\,.
 \end{equation}
 
-However, because people have different levels of activity and different diets, each
+However, because people have different activity levels and different diets, each
 person's weight is a little different than the one predicted by Equation (\ref{eq:weightheight}).
-We write the weight using an equation that includes this random `noise', by adding
+We write the weight as a function of height using an equation that includes this 
+random `noise', by adding
 a non-deterministic (\emph{stochastic}) term, denoted by $\text{Error}$:
 \begin{equation}
   \label{eq:weightheight}
@@ -56,8 +57,8 @@ relationship between height and weight.
 \showChunk{R}{Code/datacollect-goodbadsample.R}{BIASgbs1}
 
 Now we use the following code to uniformly and randomly select $n=50$ people as
-a sample from the population and marked the selected people in
-Figure~\ref{fig:representativesample} (b). The \code{sample()} function
+a sample from the population and mark the selected people in
+Figure~\ref{fig:representativesample} (b) using the dark trinagles. The \code{sample()} function
 is used to draw a \emph{simple random sample (SRS)} of size \code{n}
 from the population of size \code{N}. SRS means that every subject in
 the population has an equal probability of being selected into the sample.
@@ -69,24 +70,25 @@ larger population of $N=500$. Here the sample is a representative one.
 \showChunk{R}{Code/datacollect-goodbadsample.R}{BIASgbs2}
 
 Now, let's assume that the way to take a sample depends on both the weights and
-heights in the population. We create a function of weight and height let it
-decide the probability of including a person into the sample. The following code
+heights in the population. We create a function of weight and height
+and use it to 
+determine the probability of including a person in the sample. The following code
 uses this way to take a sample and plot it in
 Figure~\ref{fig:representativesample} (c).
 In the code, \wingding{1} and \wingding{2} create a variable \code{w} that
 depends on the weight and height of the people in the population; and
 \wingding{3} uses the variable \code{w} to decide the probability of including a
 person into the sample. The larger the value of \code{w}, the higher the
-probability of including the person into the sample. The exact way we 
+probability of including the person in the sample. The exact way we 
 obtain \code{w} in this example is not important. What's important is
 that the selection of an individual into the sample is \emph{not random}. 
-When the probability of drawing a subject into the sample depend on his/her
+When the probability of drawing a subject into the sample depends on his/her
 height, weight, or both, then the sample is no longer representative and
 as such, it doesn't retain the properties of the population. 
 \showChunk{R}{Code/datacollect-goodbadsample.R}{BIASgbs3}
 
 In Figure~\ref{fig:representativesample} (c) you can see that the relationship
-between the height and the weight in the population is a long the line
+between the height and the weight in the population is along the line
 with slope 5.3, but in the sample (dark red dots) the relationship between 
 the two variables is more or less along a vertical line with mean height of
 about 70.
@@ -117,11 +119,12 @@ To see the effect of a biased sample, let's look at the variance of height
 in the population, and in the two samples. We can use the following code:
 \showChunk{R}{Code/datacollect-goodbadsample.R}{BIASgbs4}
 
-The variance in the population is \code{var0} and it's equal to
+The variance in the population is called \code{var0} in the code and it's equal to
 \inlnR{```cat(var0)```}[var0]. In the first (simple random) sample the
-variance is \inlnR{```cat(var1)```}[var1], which is very close to the
+variance is called \code{var1} and is equal to \inlnR{```cat(var1)```}[var1], which is very close to the
 actual variance in the population (the difference is \inlnR{```cat(var1-var0)```} [diff01]),
-but in the second (biased) sample, the variance of height is much smaller: 
+but in the second (biased) sample, the variance of height is much smaller: \code{var2} 
+is 
 \inlnR{```cat(var2)```}[var2].
 
 \hypertarget{ch:data}{%
