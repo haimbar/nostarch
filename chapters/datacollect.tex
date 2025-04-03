@@ -7,6 +7,8 @@ of the population, and how this may lead to entirely invalid conclusions.
 
 \hypertarget{ch:data}{%
 \section{Representative sample}\label{representative}}
+\hypertarget{ch:data}{%
+\subsection{Definitions of key terms}\label{keyterms}}
 First, let's introduce some terminology. A \emph{population} is the set of 
 individuals (\emph{subjects}) which we're interested in studying. Subjects may be 
 people, mice, or devices produced in a factory, just to name a few examples. 
@@ -14,7 +16,8 @@ people, mice, or devices produced in a factory, just to name a few examples.
 A \emph{sample} is a subset of the population. The sample is said to be
 \emph{representative} if it reflects the characteristics of the population.
 For example, if in the United States the proportion of females is approximately 50\%,
-then a sample taken from this population should also have approximately 50\% females.
+then a sample taken from this population should also have approximately 50\% females
+in order to be considered representative.
 This is important because a main goal of statistical data science is to use the
 smaller sample to draw conclusions on the population.
 We saw in chapter \ref{ch:llnclt} that the law of large numbers and the central limit
@@ -35,7 +38,7 @@ Let's illustrate the notions of population, sample, and bias through simulations
 Assume that for a group of people,  weight and height have a linear relationship
 \begin{equation}
   \label{eq:weightheight}
-  \text{weight} = -194.49 + 5.30\text{height}\,.
+  \text{weight} = -194.49 + 5.30*\text{height}\,.
 \end{equation}
 
 However, because people have different activity levels and different diets, each
@@ -45,7 +48,7 @@ random `noise', by adding
 a non-deterministic (\emph{stochastic}) term, denoted by $\text{Error}$:
 \begin{equation}
   \label{eq:weightheight}
-  \text{weight} = -194.49 + 5.30\text{height} + \text{Error},
+  \text{weight} = -194.49 + 5.30*\text{height} + \text{Error},
 \end{equation}
 where, in our simulation, the Error has a normal distribution with mean zero and standard deviation
 23.26. We simulate such a population with $N=500$ people and plot their weights
@@ -130,7 +133,7 @@ is
 \hypertarget{ch:data}{%
 \subsection{A representative sample is more important than a larger sample}\label{representative}}
 
-\begin{example}[The 1936 Literary Digest Poll]
+\begin{example}[The 1936 Literary Digest Poll, \citep{darkdata_ch2}]
  For the 1936 presidential election, the Literary Digest poll was one of the
 largest and most expensive polls with a sample size of around 2.4 million
 people. Based on every telephone directory in the United States, lists of
@@ -143,17 +146,28 @@ against 62\% for Roosevelt. At the same time, George Gallup was able to predict
 a victory for Roosevelt using a much smaller sample of about 50,000 people.
 
 There were two major flaws in the way Literary Digest collect the sample: 1) The
-mailing list only contain some subgroups of people in the US. For example,
-telephone service was not commonly available in the 1930s; most people might not
-belong to any club or other associations. 2) People on the list decided if they
+mailing list only contained some subgroups of people in the U.S. For example,
+telephone service was not commonly available in the 1930s. Similarly, most people might not
+belong to any club or other associations. So, the Literary Digest poll 
+reached only the relatively affluent part of the population. 
+2) People on the list decided if they
 would return the ballot to the magazine, so the resulting sample is a
-``volunteer'' sample. In summary, the data collection method of Literary Digest
-did not produce a representative sample and thus resulted in a biased estimate
-and a misleading conclusion.  
+``volunteer'' sample.
+
+As a result, the data collection method of Literary Digest
+did not produce a representative sample of the U.S. population and thus 
+resulted in a biased estimate and a misleading conclusion.  In the next section,
+we elaborate on different types and sources of bias. While preventing
+all sources of bias may be challenging, the only chance we have if we want
+to eliminate any bias from our sample (and we do!) is to be aware of the potential
+pitfalls.
 \end{example}
 
 \hypertarget{ch:data}{%
-\section{Berkson's bias}\label{berkson-bias}}
+\section{Types of biases}}
+In this section we introduce a few types of data collection problems that lead to
+biased samples. We begin with the so-called Berkson's bias.
+\subsection{Berkson's bias}\label{berkson-bias}
 
 The following impressions are common, but are they real facts?
 \begin{itemize}
