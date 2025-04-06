@@ -164,57 +164,66 @@ pitfalls.
 \end{example}
 
 \hypertarget{ch:data}{%
-\section{Types of biases}}
+\section{Types of data problems}}
 In this section we introduce a few types of data collection problems that lead to
-biased samples. We begin with the so-called Berkson's bias.
+biased samples. 
+David Hand, in his book \emph{Dark Data} \citep{darkdata_ch2} discusses 15 different
+types of `dark data' -- data that we don't observe, and by ignoring its existence we 
+are lead to wrong (potentially disastrous) conclusions. 
+We will demonstrate some of these data problems in this chapter.
+
 \subsection{Berkson's bias}\label{berkson-bias}
+In his book, \textit{How Not to Be Wrong: The Power of Mathematical Thinking}, 
+Jordan Ellenberg poses the question:
+ `\textit{Why are handsome men are such jerks?}' \citep{ellenberg2015not}.
+%https://medium.com/@penguinpress/why-are-handsome-men-such-jerks-f385a46d314f
 
-The following impressions are common, but are they real facts?
-\begin{itemize}
-\item Hollywood ruins good books. You can find a lot of good books made into
-  terrible movies
-  % (e.g., \href{https://www.yardbarker.com/entertainment/articles/popular_books_that_were_made_into_terrible_movies/s1__29971472}{here})
-  and a lot of great films made from bad books.
-  % (e.g.,
+Are they? Similarly, you may have seen articles which focus on ``popular books whose 
+movie adaptations were not-so-good'', and you may get the impression that 
+Hollywood ruins good books. But, is it true?
+ % (e.g., \href{https://www.yardbarker.com/entertainment/articles/popular_books_that_were_made_into_terrible_movies/s1__29971472}{here})
   % \href{https://www.cinelinx.com/movie-news/movie-stuff/bad-books-that-made-great-films/}{here}).
-\item Handsome men are such jerks.
-\item Pretty girls are meaner.
-\item More talented people are less attractive.
-\item Smarter students spend less time on studying.
-\item The list can go on forever ...
-\end{itemize}
 
-The impressions listed above are obtained based on biased data related to
-Berkson's bias. Let's start with an example to explain.
+You may have heard similar common impressions, such as
+that pretty girls are meaner, and more talented people are less attractive.
 
-\begin{example}[Stumps display]
-  Suppose you have 1000 postage stamps: 300 are pretty, 100 are rare, and 30 are
+What is the source of these (false) impressions? The answer is that 
+they usually result from a type of \emph{selection bias}, where the data
+are not collected at random and some items have a higher or lower probability
+of being included in the sample. The particular form of bias in this case has a name,
+and it's called \emph{Berkson's bias}. Let's start with an example to explain.
+
+\begin{example}[Stamps display]
+  Suppose you have 1,000 postage stamps: 300 are pretty, 100 are rare, and 30 are
   both pretty and rare. Is a rare stamp more likely to be pretty?  Now you want
   to show some of your stamps to your friends. You probably want to show them
-  the pretty ones and the rare ones. Lets say you only show the 370 stamps which
+  the pretty ones and the rare ones. Let's say you only show the 370 stamps which
   are either pretty or rare to your friends. Based on what your friends
-  observation, will they conclude that a rare stamp more likely to be pretty?
+  observe, will they conclude that a rare stamp more likely to be pretty?
 \end{example}
 
 Let's calculate some numbers to see the answer. For all the stamps, the
 probability that a stamp is pretty is 300/1000=0.3; for rare stamps, the
-probability that a stamp is pretty is 30/100=0.3. Thus, a rare stamp is not less
-likely to be pretty.
+probability that a stamp is pretty is 30/100=0.3. Thus, a rare stamp is as
+likely to be pretty as in the entire collection.
 
-For the stamps your friends saw, the probability that a stamp is pretty is
+For the stamps you showed your friends, the probability that a stamp is pretty is
 300/370=0.81; for rare stamps, the probability that a stamp is pretty is
 30/100=0.3. Your friends' conclusion would be: a rare stamp is much less likely
 to be pretty!
 
 The reason for their incorrect conclusion is that the 370 stumps are not a
-representative sample of all the stamps you have. The sample is biased.
+representative sample of all the stamps you have. They were picked
+specifically to impress, so the stamps that were neither rare, nor pretty
+are not represented in the sample. This means that this sample is biased.
 
-Now let's simulate some data to further illustrate the problem.
+Now let's simulate some data to further illustrate the problem. In this simulation,
+we use the ``popular books whose movie adaptations were not-so-good'' example.
 
 \showCode{R}{Code/datacollect-berkson.R} %
 \runR{Code/datacollect-berkson.R}{datacollect-berkson} %
 
-In the above code, the goodness of books and movies are independently from a the
+In the above code, the goodness of books and movies are drawn independently from a
 standard normal distribution (\wingding{1} and \wingding{2}). \wingding{3}
 checks if a book is good (better than 90\% of all books) and \wingding{4} checks
 if a movie is good (better than 90\% of all movies). A component of the variable
@@ -222,17 +231,15 @@ if a movie is good (better than 90\% of all movies). A component of the variable
 Running the above code should give the two figures in Figure~\ref{fig:berkson}
 and the following output.
 \includeOutput{datacollect-berkson} %
-We see from the output and Figure~\ref{fig:berkson} that the correlation between
-the goodness of books and the goodness of movies is very close to zero and there
-is no linear association between them. However, if we only see the good books or
-good movies (a biased sample), the negative linear relationship is very evident
-in Figure~\ref{fig:berkson} (b) and the correlation has a large
-magnitude. People typically only recommend good books or good movies to other
-people, so what we see are only these with some good characters. If a book is
-bad and the movie based on it is terrible, it is very likely that you never have
-a chance to know them. Thus, the impression that Hollywood ruins good books is
-not a real fact, but just an impression based on a biased sample. This explains
-other impressions on the previous list as well.
+
+We see from the output and Figure~\ref{fig:berkson} (a) that the correlation between
+the goodness of books and the goodness of movies is very close to zero---there
+is no linear association between them. However, if we limit our data to inoclude
+only movies such that either the book is good, or the movie is good, or both are good, 
+and we then look for a linear association between the quality of books and movies,
+then there is a clear negative linear relationship, as can be seen in 
+Figure~\ref{fig:berkson} (b).
+
 
 \begin{figure}[H]
   \begin{subfigure}{0.485\textwidth}
@@ -247,6 +254,26 @@ other impressions on the previous list as well.
   \caption{Goodness of movies v.s. goodness of books}
   \label{fig:berkson}
 \end{figure}
+
+People typically only recommend good books or good movies to other
+people, so what we see are only these with the best review. If a book is
+bad and the movie based on it is terrible, it's very likely that you ever have
+a chance to hear about them. Thus, the impression that Hollywood ruins good books is
+false. It's just an impression based on a biased sample. 
+
+The `blank square' in the bottom-left corner of Figure~\ref{fig:berkson} (b), where we see no
+points at all, is our \emph{dark data} in this example, and is the source of
+our biased result, and the false impression. There are, in fact, many data
+points in this region, but we never observe them. They include some very bad
+books that were turned into very good movies.
+
+This type of selection bias problem is related to the idea of \emph{conditional probability},
+which we discussed in Chapter \ref{ch:probability}. When we calculate probabilities, or
+obtain other statistics, our results depend on the  set of possible events. If we limit 
+the set of observable events, we should generally expect our selection to have
+an impact on our analysis. Only when the selection of the subset is \emph{independent}
+of the characteristics of subjects in the population, can we trust the results obtained
+from a sample.
 
 \hypertarget{ch:data}{%
 \section{Survival Bias}\label{survival-bias}}
@@ -284,7 +311,7 @@ we take into account the source of the bias, then we can still obtain valid
 result from a biased sample.
 
 \begin{figure}[H]
-  \includegraphics[width=\textwidth]{images/static/Survivorship-bias.png}
+  \includegraphics[width=.85\textwidth]{images/static/Survivorship-bias.png}
   \caption{Most-hit areas of the returned aircraft. Source: \url{https://en.wikipedia.org/wiki/Survivorship_bias}}
   \label{fig:survival-bias}
 \end{figure}
