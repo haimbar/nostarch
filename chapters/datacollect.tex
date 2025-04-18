@@ -1,4 +1,4 @@
-\chapter{Data Collection and Selection Bias}\label{ch:data}
+\chapter{Data Collection}\label{ch:data}
 You can't make bricks without straw. Data is necessary to make inference, and
 since it's usually only possible to get a sample from the entire population,
 it is important that the sample represents the population faithfully. This chapter 
@@ -162,6 +162,70 @@ all sources of bias may be challenging, the only chance we have if we want
 to eliminate any bias from our sample (and we do!) is to be aware of the potential
 pitfalls.
 \end{example}
+
+\subsection{Randomized control trials vs. observational studies}
+The gold standard in data collection is to perform a \emph{randomized control trial} (RCT).
+This can only be done if we can pre-plan our experiment, and we know in advance
+what data needs to be collected. The typical examples are in medical experiments,
+where the outcome that we intend to measure (e.g., blood pressure) is believed to
+be associated with a treatment (e.g., a new drug.)
+There may be multiple factors affecting the outcome (or at least, that could affect it).
+For example, we may have a reason to think that age, sex, body mass index (BMI),
+or other thinks are related to one's blood pressure.
+In a randomized control trial we can get a representative sample of the population,
+and randomly assign each individual to one of the treatments. With randomization
+we end up with comparable groups of individuals. For example, if we are testing
+two new drugs, and one old drug, then there are three treatment groups and in each one
+we have approximately the same age distribution, the same proportions of females,
+the same distribution of BMI, etc.
+
+Then, the comparison between the three types of treatments is meaningful,
+and we can use it to draw conclusions about the effect of the treatment (e.g.,
+drug) on the outcome (e.g., blood pressure). Because, if other than the treatment,
+the subpopulations in all groups are identical, then if there is a difference between
+the group in the outcome, then it must be due to the one thing that separates the
+groups.
+
+The \emph{control} part in RCT means that one of the treatment groups is our baseline,
+and we compare all the other types of treatments to it. In our example, the old drug's
+effect on blood pressure is known, and we want to know if the new drugs give better
+results in controlling blood pressure.
+
+Similarly, suppose that we have a number of workout regimes and we want to
+see which one gives the best results in, say, body weight, or endurance. Then
+we could randomize the subjects in our sample, and divide them into treatment
+groups, one of which is `no training'. This is then our baseline level---we can check
+which (if any) of the training regimes is better than the inactive group.
+
+Unfortunately, running an RCT is not always possible. First, it may be hard or expensive
+to gather the sample. Second, it may be impossible to randomize them into groups
+that only differ in the treatment that they receive. This can be, for example, due to
+ethical reasons, especially when human subjects are considered.
+For example, if we want to check the effect of smoking on the risk of getting lung cancer,
+we can't assign people to the smoking group, since we have reason to believe that
+this is harmful.
+Third, there may be many factors that \emph{could be} related to the outcome. If we want
+proper randomization, the groups have to have the same distribution for all these
+factors, which means that the sample size we must collect grows quickly when we
+add multiple factors. Finally, even if we have the time and budget to perform the RCT, 
+and we can randomize the subjects properly and ethically, there may still be factors
+that we haven't considered, but are important. Any missing variable (a factor that
+may affect the outcome) can make it impossible to draw conclusions about the
+treatment effect. After all, without the missing data, we can never tell for sure if
+the observed differences between the groups is due to the treatments, or to the
+missing factors!
+
+Most of the time, the data that's available for analysis is not from RCTs, but from
+\emph{observational studies}. These are typically much easier to collect, but they don't
+guarantee proper randomization, and that may lead to biased results. Whenever we
+analyze data, we must know how it was collected. Was it through a randomized 
+control trial, or is it just data that came from an observational study? Conclusions
+from the former can be much stronger, in the sense that they allow us to establish
+cause and effect relationship. But, as we said, most of the data that we encounter
+doesn't come from a RCT. In these case, we must be careful when we draw conclusions.
+Usually, we can only make statements about \emph{associations} between variables,
+but not much (if at all) about causality.
+
 
 \hypertarget{ch:data}{%
 \section{Types of data problems}}
