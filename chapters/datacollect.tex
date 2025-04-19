@@ -171,7 +171,7 @@ where the outcome that we intend to measure (e.g., blood pressure) is believed t
 be associated with a treatment (e.g., a new drug.)
 There may be multiple factors affecting the outcome (or at least, that could affect it).
 For example, we may have a reason to think that age, sex, body mass index (BMI),
-or other thinks are related to one's blood pressure.
+or other things are related to one's blood pressure.
 In a randomized control trial we can get a representative sample of the population,
 and randomly assign each individual to one of the treatments. With randomization
 we end up with comparable groups of individuals. For example, if we are testing
@@ -180,10 +180,10 @@ we have approximately the same age distribution, the same proportions of females
 the same distribution of BMI, etc.
 
 Then, the comparison between the three types of treatments is meaningful,
-and we can use it to draw conclusions about the effect of the treatment (e.g.,
-drug) on the outcome (e.g., blood pressure). Because, if other than the treatment,
-the subpopulations in all groups are identical, then if there is a difference between
-the group in the outcome, then it must be due to the one thing that separates the
+and we can use it to draw conclusions about the effect of the treatment (drug, in our example)
+on the outcome (blood pressure). Because, if other than the treatment,
+the subpopulations in all groups are identical, then if there is a difference in
+the outcome between the groups, then it must be due to the one thing that separates the
 groups.
 
 The \emph{control} part in RCT means that one of the treatment groups is our baseline,
@@ -198,7 +198,12 @@ groups, one of which is `no training'. This is then our baseline level---we can 
 which (if any) of the training regimes is better than the inactive group.
 
 Unfortunately, running an RCT is not always possible. First, it may be hard or expensive
-to gather the sample. Second, it may be impossible to randomize them into groups
+to gather the sample. For example, drug development is expensive, because
+it takes a long time and requires expensive materials and equipment,
+as well as many experts. It is also hard to collect the data because patients have
+to be recruited and monitored, and the whole process has to be vetted by the
+authorities, in order to ensure that it is done properly and fairly. 
+Second, it may be impossible to randomize participants into groups
 that only differ in the treatment that they receive. This can be, for example, due to
 ethical reasons, especially when human subjects are considered.
 For example, if we want to check the effect of smoking on the risk of getting lung cancer,
@@ -221,8 +226,8 @@ guarantee proper randomization, and that may lead to biased results.
 For example, we may want to look at the effect of education on future income.
 We can conduct a survey and ask people how many years of schooling they had
 and what's their current salary, and possibly ask them about other factors such as age,
-sex, what they majored in, if they went to college, and so on. The data collected 
-from this survey is observational in nature---no one was assigned randomly to 
+sex, what they majored in (if they went to college), and so on. The data collected 
+from this survey is observational in nature---none of the participants was assigned randomly to 
 any particular group. They were either lucky or unlucky enough to have a certain 
 socioeconomic background, or they chose where to go to school.
 So, in such surveys (which are much easier and cheaper to collect than RCTs),
@@ -230,12 +235,11 @@ individuals are not randomly assigned to groups by the people designing the expe
 but rather, they can \emph{select} their own group. 
 
 
-Whenever we
-analyze data, we must know how it was collected. Was it through a randomized 
+Whenever we analyze data, we must know how it was collected. Was it through a randomized 
 control trial, or is it just data that came from an observational study? Conclusions
 from the former can be much stronger, in the sense that they allow us to establish
 cause and effect relationship. But, as we said, most of the data that we encounter
-doesn't come from a RCT. In these case, we must be careful when we draw conclusions.
+doesn't come from a RCT. In these cases, we must be careful when we draw conclusions.
 Usually, we can only make statements about \emph{associations} between variables,
 but not much (if at all) about causality.
 
@@ -398,6 +402,70 @@ result from a biased sample.
   \caption{Most-hit areas of the returned aircraft. Source: \url{https://en.wikipedia.org/wiki/Survivorship_bias}}
   \label{fig:survival-bias}
 \end{figure}
+
+\hypertarget{ch:data}{%
+\section{Base-Rate Fallacy}\label{base-rate}}
+
+The \emph{base-rate fallacy} is a common source for many misconceptions
+and misinterpretations of data. 
+Consider the following example. A pet store owner finds that his store was broken into,
+and a parakeet was stolen. He calls that police, who find two things on the scene:
+they see Teddy walking nearby, looking rather suspicious in their mind (but no parakeet
+in his possession), and they find drops
+of human blood in the store. They detain Teddy, and send the blood to the lab, and find that 
+it's type $B-$. The they get a blood sample from Teddy, and find that
+he has that blood type, and they immediately arrest him for the burglary.
+
+What is the probability that Teddy is the burglar?
+
+To answer that, we need a bit more information. Let's say that the pet store is in London.
+In the U.K., 2\% of the population has a $B-$ blood type? The test for detecting
+blood types is 100\% accurate, so given that Teddy was determined to have
+a $B-$ type, we can assume that this is correct.
+The prosecutor claims that the probability is 98\%. Let's check if it's true, by simulating data.
+
+In the following code we simulate a population of 1,000 people, of which 2\% 
+have Teddy's blood type, $B-$.
+We use the \code{sample} function to draw 20 people out of the population
+to have blood type $B-$ \wingding{1}. 
+
+\runR{Code/datacollect-baserate.R}{datacollect-baserate}
+
+From these 20 people, we draw one person to be the real perpetrator \wingding{2}.
+Then, we check the probability that that person is Teddy \wingding{3}. We run a loop
+200 times, representing 200 identical (hypothetical) burglaries, and check
+whether the the person detained by the police (Teddy) is the real perpetrator.
+
+\showCode{R}{Code/datacollect-baserate.R} %
+
+The number of time that Teddy was, in fact, the perpetrator is 
+\inlnR{```cat(sum(teddy == perp))```}[teddyperpnum], and since we ran
+the simulation 200 times, it means that Teddy was \emph{not}
+the perpetrator \inlnR{```cat(100-100*sum(teddy == perp)/length(teddy))```}[teddyperppct]\% of the times!
+
+This so-called base-rate fallacy is also known as the \emph{prosecutor fallacy}.
+It is related to Bayes' theorem which we've encountered in Chapter \ref{ch:probability}. 
+It's called the base-rate fallacy because we must take into account the
+prevalence of the blood type in the entire population. If we don't, and we 
+only rely on how accurate the blood type test is, then we reach the
+wrong conclusion.
+
+In other words, we must consider not only the probability of getting a
+\emph{true positive} result, but we must also consider the probability
+of a \emph{false positive} result! 
+
+This scenario happens in different settings. For example, in diagnosing 
+a rare disease, getting a positive test result doesn't mean that the person
+has the disease. Similar calculations show that, because the disease is rare,
+even an accurate test procedure can lead to misleading conclusions (and
+in some case, with severe consequences.)
+
+In his book, David Hand mentions that when a problem like the one we've
+just discussed was presented to Harvard medical school students,
+over 56\% got the wrong answer because they only considered the
+accuracy of a test, and ignored the prevalence of the disease and the
+probability of a false positive \citep{darkdata_ch2}.
+
 
 \hypertarget{ch:data}{%
   \section{Common biases}\label{sources-bias}}
