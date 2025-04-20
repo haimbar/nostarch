@@ -280,6 +280,7 @@ TSWLatexianTemp*
 *.config
 *debug.txt
 serverPID*.txt
+serverslist.txt
 
 # specific folders and files
 tmp/
