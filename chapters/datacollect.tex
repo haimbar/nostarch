@@ -363,7 +363,7 @@ of the characteristics of subjects in the population, can we trust the results o
 from a sample.
 
 \hypertarget{ch:data}{%
-\section{Survival Bias}\label{survival-bias}}
+\subsection{Survival Bias}\label{survival-bias}}
 
 Survivor bias arises when observations are limited to subjects or objects that
 have ``survived'' or successfully completed a particular process, while those
@@ -404,7 +404,7 @@ result from a biased sample.
 \end{figure}
 
 \hypertarget{ch:data}{%
-\section{Base-Rate Fallacy}\label{base-rate}}
+\subsection{Base-Rate Fallacy}\label{base-rate}}
 
 The \emph{base-rate fallacy} is a common source for many misconceptions
 and misinterpretations of data. 
@@ -434,17 +434,18 @@ to have blood type $B-$ \wingding{1}.
 From these 20 people, we draw one person to be the real perpetrator \wingding{2}.
 Then, we check the probability that that person is Teddy \wingding{3}. We run a loop
 200 times, representing 200 identical (hypothetical) burglaries, and check
-whether the the person detained by the police (Teddy) is the real perpetrator.
+whether the person detained by the police (Teddy) is the real perpetrator.
 
 \showCode{R}{Code/datacollect-baserate.R} %
 
-The number of time that Teddy was, in fact, the perpetrator is 
+The number of time that Teddy was, in fact, the perpetrator in those
+200 hypothetical burglaries is 
 \inlnR{```cat(sum(teddy == perp))```}[teddyperpnum], and since we ran
 the simulation 200 times, it means that Teddy was \emph{not}
 the perpetrator \inlnR{```cat(100-100*sum(teddy == perp)/length(teddy))```}[teddyperppct]\% of the times!
 
 This so-called base-rate fallacy is also known as the \emph{prosecutor fallacy}.
-It is related to Bayes' theorem which we've encountered in Chapter \ref{ch:probability}. 
+It's related to Bayes' theorem which we've encountered in Chapter \ref{ch:probability}. 
 It's called the base-rate fallacy because we must take into account the
 prevalence of the blood type in the entire population. If we don't, and we 
 only rely on how accurate the blood type test is, then we reach the
@@ -458,7 +459,7 @@ This scenario happens in different settings. For example, in diagnosing
 a rare disease, getting a positive test result doesn't mean that the person
 has the disease. Similar calculations show that, because the disease is rare,
 even an accurate test procedure can lead to misleading conclusions (and
-in some case, with severe consequences.)
+in some cases, with severe consequences.)
 
 In his book, David Hand mentions that when a problem like the one we've
 just discussed was presented to Harvard medical school students,
@@ -466,6 +467,118 @@ over 56\% got the wrong answer because they only considered the
 accuracy of a test, and ignored the prevalence of the disease and the
 probability of a false positive \citep{darkdata_ch2}.
 
+\hypertarget{ch:data}{%
+\subsection{Omitted Variables}\label{omitted-vars}}
+Sometimes we just don't know that we're missing critical data. It can be
+in the form of base-rate fallacy, where the data we may be ignoring
+(unless we're careful) is the prevalence of something in the population,
+such as blood type or a disease. In other cases, we may be missing data
+because of \emph{selection bias}, where we inadvertently analyze only
+a non-random sample, as was the case with Berkson's bias or in the
+survival bias story.
+
+If we think of the data as a table in which the rows are subjects (cases) and
+the columns are variables---properties of each subject or case, then the previous
+examples were all about missing \emph{rows} in the table. When
+rows are missing completely at random, we can still get good estimates
+and predictions, but if they are missing in some systematic way, then
+the results we get can't be trusted. They may be biased and lead to wrong 
+conclusions.
+
+In this subsection we consider the case where what we're missing
+is \emph{columns} (variables) in the data table.
+We've already seen two such examples in previous chapters. The first one
+appeared in Chapter \ref{EDA}, Figures \ref{sidebysidebp} and 
+\ref{scatter}. There, the variables where \code{x} (e.g., time) and
+\code{g} (e.g., the A/C is working or not). We saw that only when we 
+considered both variables  \code{x}  and  \code{g}, were we able
+to see the real pattern of \code{y} (say, the temperature).
+
+The second example appeared in Chapter \ref{simpsons-paradox}, where we
+discussed Simpson's paradox. When we looked at the overall admission rate
+to UC  Berkeley, it looked like the rate for women is considerably lower, but when 
+we added a variable (the specific departments), the conclusion was quite different,
+and in fact, in most departments the admission rate was higher for women.
+
+The trouble with this kind of missing data is that we may never know what's missing!
+As we discussed in Chapter \ref{EDA}, we should always try to use plots and tables
+to visualize and understand the nature of the data. In the \textcolor{red}{regression} chapter,
+we'll see that in some cases we may get hints for missing variables from the so-called
+regression diagnostics plots.
+
+\runR{Code/datacollect-omitted.R}{datacollect-omitted}
+
+However, there's no guarantee that we'll be able to identify a missing variable, and
+which may lead us to misinterpretations of data. To see it, let's look at another example.
+Phil is a realtor who works in a small college town. The college has been around for
+a couple of centuries, and is very prestigious. His clients often wonder
+why the houses that are farther from the campus cost so much more than the 
+ones in walking distance.
+Phil collected data and plotted the graph in Figure \ref{fig:omitted},
+which shows the square of the distance in miles of houses from the 
+campus on the x-axis, and the price (in thousands of dollars) on the 
+y-axis. He also added a fitted line, which shows a positive trend.
+
+\begin{figure}[H]
+  \includegraphics[width=.6\textwidth]{images/chapter_6/omitted.pdf}
+  \caption{The relationship between the square of the distance from a house to the campus, and 
+  the house price, in thousands of dollars}
+  \label{fig:omitted}
+\end{figure}
+
+Phil concludes that, indeed, the farther the house from campus, the more
+expensive it is. But surely, many people who work at the university prefer to live 
+close by, and have the means to do so, so what could drives the prices of
+more remote houses up?
+
+With observational data, it's tempting for Phil (and most people) to find
+a way to explain a phenomenon that defies common sense.
+For example, Phil may come up with a theory that faculty want to
+live away from campus in order to avoid their students. Or, he may 
+hypothesize that close to the campus the crime rate may be higher than in the
+suburbs. You can probably come up with other plausible explanations.
+However, without additional information, they are just guesses. These guesses
+may seem reasonable, but they are almost certainly wrong because,
+after all, there are many more \emph{wrong} models than right ones (of 
+which there may be just one, or it could be that what we observe is just
+due to chance!)
+
+In this case, we simulate the data, so we know the real reason. You can see
+how we did it in the following code. In  \wingding{1} we create
+an inverse relationship between the square root of the house age and
+the distance from campus. (This is a simulation so we can do anything, 
+but the motivation for this is that in reality, college town often expand around the 
+campus.)
+
+In  \wingding{2} we generate a linear relationship between the house price and
+the distance to the campus. So, it seems like distance to campus is associated
+with the price, as we show by fitting a model in \wingding{3} with the \code{lm}
+function, but in fact, the distance is itself determined by age. So, in this
+story, old houses cost less than new ones, but they are also closer to the college
+for historical reasons. If we only consider distance, we'll miss the relationship
+between price and the age of a house.
+
+\showCode{R}{Code/datacollect-omitted.R}
+
+This story also demonstrates another common pitfall, called \emph{confirmation bias}.
+When we use observational data and see an interesting relationship, it's natural
+to come up with an explanation. Once we do that, we may say: `oh, yes, that makes sense!'
+even though before looking at the data we had a totally different idea in mind.
+The `it makes sense' argument is not a valid scientific method to prove or
+disproves theories!
+
+This is often a subconscious process. Once we see some phenomenon or
+relationship, we start seeking explanations and data that will support our
+perception, and often also ignore data not supporting it. Finding the right
+explanation or model may not be possible, but we must be aware of the 
+possibility that ours is wrong. Establishing causality is generally impossible
+with observational data, and we have to remember the risk of confirmation bias.
+
+
+\hypertarget{ch:data}{%
+\subsection{Extrapolations}\label{extrapolations}}
+
+To do...
 
 \hypertarget{ch:data}{%
   \section{Common biases}\label{sources-bias}}
