@@ -290,8 +290,6 @@ probability that a stamp is pretty is 300/1000=0.3; for rare stamps, the
 probability that a stamp is pretty is 30/100=0.3. Thus, a rare stamp is as
 likely to be pretty as in the entire collection.
 
-\why{I will add a Venn diagram here.}
-
 For the stamps you showed your friends, the probability that a stamp is pretty is
 300/370=0.81; for rare stamps, the probability that a stamp is pretty is
 30/100=0.3. Your friends' conclusion would be: a rare stamp is much less likely
@@ -301,6 +299,32 @@ The reason for their incorrect conclusion is that the 370 stumps are not a
 representative sample of all the stamps you have. They were picked
 specifically to impress, so the stamps that were neither rare, nor pretty
 are not represented in the sample. This means that this sample is biased.
+As showed in the Venn diagram in Figure~\ref{fig:stamps}, the area of the red
+circle is a small proportion (0.3) of the area of the rectangle, while it is a
+large proportion (0.81) of the area of the colored region (the biased sample). 
+
+\begin{figure}[H]
+\resizebox{0.6\columnwidth}{!}{%
+\begin{tikzpicture}
+  \begin{scope}[blend group = soft light]
+    \draw (-5, 3) rectangle (5, -3);
+    \fill[red!40]  (-1, -0.5) circle (2.39);
+    \fill[blue!40] (1.6, 0)   circle (1.38);
+  \end{scope}
+  \node       at (0, 2.5)    {\large All Stamps (1000)};
+  \node[red]  at (-1.5, 1)   {Pretty (300)};
+  \node[blue] at (1.8, 0.8)  {Rare (100)};
+  \node       at (-1, 0)     {270};
+  \node       at (2.5, 0)    {70};
+  \node       at (0.8, 0)    {30};
+\end{tikzpicture}
+}
+\caption{Venn diagram for the stamps example. The rectangle represents all the
+  stamps, the large red circle represents the pretty stamps, and the small blue
+  circle represents the rare stamps. The numbers indicate how many stamps are in
+  each region.}
+  \label{fig:stamps}
+\end{figure}
 
 Now let's simulate some data to further illustrate the problem. In this simulation,
 we use the ``popular books whose movie adaptations were not-so-good'' example.
