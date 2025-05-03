@@ -16,7 +16,7 @@ for (i in 1:nrep) {
   }
 }
 
-teddy_test_bneg = teddy[test_bneg ==TRUE]
+teddy_test_bneg = teddy[test_bneg == TRUE]
 n_test_bneg = length(teddy_test_bneg)
 
 p_bneg <- sum(teddy_test_bneg %in% blood_type_bneg) / n_test_bneg # (@\wingding{5}@)

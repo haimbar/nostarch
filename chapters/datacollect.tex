@@ -443,11 +443,11 @@ To answer that, we need a bit more information. Let's say that the test for
 detecting if Teddy's blood type is $B-$ is very accurate: if Teddy's blood type
 is really $B-$ the rest result always shows $B-$; if Teddy's blood type is not
 $B-$, it correctly shows another blood type 99\% of the times. Due to this
-test's high accurate, the data collected is of good quality, so the prosecutor
+test's high accuracy, the data collected is of good quality, so the prosecutor
 claims that Teddy is the burglar with a probability of 0.95 (95\%). This seems
-convening because the test is wrong only 5\% of the times, but the probability
+convincing because the test is wrong only 5\% of the times, but the probability
 that Teddy actually has type $B-$ blood is not 0.95 given a positive result. Let's say that the pet store is in London. In the
-U.K., 2\% of the population has a $B-$ blood type? Let's check if the
+U.K., 2\% of the population has a $B-$ blood type. Let's check if the
 prosecutor's claim true, by simulation.
 
 In the following code we simulate a population of 1,000 people, of which 2\% 
@@ -461,7 +461,7 @@ We run a loop \inlnR{```cat(nrep)```}[nrep] times. In each run, we generate a
 hypothetical Teddy detained by the police \wingding{2} and test his blood
 type. If he really has $B-$ blood type, the test result is positive
 \wingding{3}; otherwise, there is a 5\% chance that the test result is positive
-# \wingding{4}. Among all the positive results (the police test Teddy's
+\wingding{4}. Among all the positive results (the police test Teddy's
 blood type as $B-$), we count the frequency that the person really has $B-$
 blood type \wingding{5}. This approximates the probability that Teddy really has
 $B-$ blood, i.e., the probability that he is the burglar?
