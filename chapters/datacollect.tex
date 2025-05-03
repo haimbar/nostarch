@@ -373,10 +373,8 @@ false. It's just an impression based on a biased sample.
 The `blank square' in the bottom-left corner of Figure~\ref{fig:berkson} (b), where we see no
 points at all, is our \emph{dark data} in this example, and is the source of
 our biased result, and the false impression. There are, in fact, many data
-points in this region, but we never observe them.
-\why{remove this?}
-They include some very bad books that were turned into very good movies.
-\why{or change it to something like: They include the majority of bad books and bad movies.}
+points in this region, but we never observe them. They include the majority of
+bad books and bad movies.
 
 This type of selection bias problem is related to the idea of \emph{conditional probability},
 which we discussed in Chapter \ref{ch:probability}. When we calculate probabilities, or
@@ -433,20 +431,24 @@ result from a biased sample.
 The \emph{base-rate fallacy} is a common source for many misconceptions
 and misinterpretations of data. 
 Consider the following example. A pet store owner finds that his store was broken into,
-and a parakeet was stolen. He calls that police, who find two things on the scene:
+and a parakeet was stolen. He calls the police, who find two things on the scene:
 they see Teddy walking nearby, looking rather suspicious in their mind (but no parakeet
 in his possession), and they find drops
 of human blood in the store. They detain Teddy, and send the blood to the lab, and find that 
-it's type $B-$. The they get a blood sample from Teddy, and find that
-he has that blood type, and they immediately arrest him for the burglary.
-
+it's type $B-$. They test a blood sample from Teddy, and the test shows that
+he has that blood type. They immediately arrest Teddy for the burglary.
 What is the probability that Teddy is the burglar?
 
-To answer that, we need a bit more information. Let's say that the pet store is in London.
-In the U.K., 2\% of the population has a $B-$ blood type? The test for detecting
-blood types is 100\% accurate, so given that Teddy was determined to have
-a $B-$ type, we can assume that this is correct.
-The prosecutor claims that the probability is 98\%. Let's check if it's true, by simulating data.
+To answer that, we need a bit more information. Let's say that the test for
+detecting if Teddy's blood type is $B-$ is very accurate: if Teddy's blood type
+is really $B-$ the rest result always shows $B-$; if Teddy's blood type is not
+$B-$, it correctly shows another blood type 99\% of the times. Due to this
+test's high accurate, the data collected is of good quality, so the prosecutor
+claims that Teddy is the burglar with a probability of 0.95 (95\%). This seems
+convening because the test is wrong only 5\% of the times, but the probability
+that Teddy actually has type $B-$ blood is not 0.95 given a positive result. Let's say that the pet store is in London. In the
+U.K., 2\% of the population has a $B-$ blood type? Let's check if the
+prosecutor's claim true, by simulation.
 
 In the following code we simulate a population of 1,000 people, of which 2\% 
 have Teddy's blood type, $B-$.
@@ -455,18 +457,20 @@ to have blood type $B-$ \wingding{1}.
 
 \runR{Code/datacollect-baserate.R}{datacollect-baserate}
 
-From these 20 people, we draw one person to be the real perpetrator \wingding{2}.
-Then, we check the probability that that person is Teddy \wingding{3}. We run a loop
-200 times, representing 200 identical (hypothetical) burglaries, and check
-whether the person detained by the police (Teddy) is the real perpetrator.
+We run a loop \inlnR{```cat(nrep)```}[nrep] times. In each run, we generate a
+hypothetical Teddy detained by the police \wingding{2} and test his blood
+type. If he really has $B-$ blood type, the test result is positive
+\wingding{3}; otherwise, there is a 5\% chance that the test result is positive
+# \wingding{4}. Among all the positive results (the police test Teddy's
+blood type as $B-$), we count the frequency that the person really has $B-$
+blood type \wingding{5}. This approximates the probability that Teddy really has
+$B-$ blood, i.e., the probability that he is the burglar?
 
 \showCode{R}{Code/datacollect-baserate.R} %
 
-The number of time that Teddy was, in fact, the perpetrator in those
-200 hypothetical burglaries is 
-\inlnR{```cat(sum(teddy == perp))```}[teddyperpnum], and since we ran
-the simulation 200 times, it means that Teddy was \emph{not}
-the perpetrator \inlnR{```cat(100-100*sum(teddy == perp)/length(teddy))```}[teddyperppct]\% of the times!
+Running the above code shows that Teddy is the burglar with a probability of 
+\inlnR{```cat(p_bneg)```}[p_bneg], which means that Teddy was \emph{not}
+the perpetrator \inlnR{```cat(100-100*p_bneg)```}[teddyperppct]\% of the times!
 
 This so-called base-rate fallacy is also known as the \emph{prosecutor fallacy}.
 It's related to Bayes' theorem which we've encountered in Chapter \ref{ch:probability}. 
