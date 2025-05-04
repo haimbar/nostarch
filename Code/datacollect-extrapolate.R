@@ -15,6 +15,7 @@ y3 <- (x <= 1)*exp(sgn*x) +
 #===end
 
 pdf("../images/chapter_6/extra1.pdf", width=4, height=4)
+par(mar=c(4, 4, 0.5, 0.5))
 n1 <- 60
 plot(x[1:n1], y1[1:n1], pch=19, cex=0.3, col="navyblue",
      xlab="x", ylab="y", axes=FALSE)
@@ -23,6 +24,7 @@ abline(0,1, lwd=3, col="lightblue")
 dev.off()
 
 pdf("../images/chapter_6/extra2.pdf", width=4, height=4)
+par(mar=c(4, 4, 0.5, 0.5))
 #label===EXT2
 pts <- sample(1:n, 100)
 plot(x[pts], y1[pts], pch=19, cex=0.7, col="navyblue",
