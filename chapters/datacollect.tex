@@ -606,10 +606,88 @@ with observational data, and we have to remember the risk of confirmation bias.
 \hypertarget{ch:data}{%
 \subsection{Extrapolations}\label{extrapolations}}
 
-To do...
+One of the main reasons to collect data is so that we can make predictions.
+It allows us to use historical data to, for example, decide whether to take 
+an umbrella when we leave the house, or how long it would take us to
+get to our destination, given the traffic and our speed.
+
+\runR{Code/datacollect-extrapolate.R}{datacollect-extrapolate}
+
+Look at Figure \ref{fig:ext1}, which shows the relationship between \code{x}
+and \code{y}, for \code{x} between 0 and 0.25. We've also added the line
+\code{y=x} for reference. Can you guess the value of \code{y} when \code{x}=0.5? 
+How about  when \code{x}=2?
+
+\begin{figure}[H]
+  \includegraphics[width=.6\textwidth]{images/chapter_6/extra1.pdf}
+  \caption{The relationship between \code{x} and \code{y}}
+  \label{fig:ext1}
+\end{figure}
+
+Did you guess that when  \code{x}=0.5, \code{y} will be approximately 0.5, 
+and when  \code{x}=2, \code{y} will be approximately 2?
+This is a reasonable guess based on the data that we have, but is it true?
+
+Let's see how to answer it with the following simulation.
+In \wingding{1}, we generate 500 values for \code{x}, equally spaced 
+between 0 and 2. Then we generate random errors in \wingding{2}, which
+we call \code{e}.
+Next, we generate three functions: in \wingding{3} we create a linear
+function of \code{x}, in \wingding{4} we create the function \code{log(1+x)},
+and in \wingding{5} and \wingding{6} we generate an exponential function that
+increases between 0 and 1, and decreases after 1.
+The three functions are shown in Figure \ref{fig:ext2}.
+
+\showChunk{R}{Code/datacollect-extrapolate.R}{EXT1}
+
+In the range shown as a rectangle (for \code{x} between 0 and 0.4), the three functions are
+nearly identical.
+However, beyond 0.4, the three functions become very different. While \code{y1}
+continues along a straight line,  \code{y2} starts to `bend' and although it continues to
+increase, it does so at a slower rate. The function \code{y3} increases at an exponential
+rate at first, but then it has a change-point, where the trend changes and it starts to decrease.
+
+\begin{figure}[H]
+  \includegraphics[width=.6\textwidth]{images/chapter_6/extra2.pdf}
+  \caption{The relationship between \code{x} and \code{y} for three different function. Between
+  0 and 0.4, the three functions are similar, but after that they are different}
+  \label{fig:ext2}
+\end{figure}
+
+The code used to produce  Figure \ref{fig:ext2} is as follows. Note that we
+show a sample of 100 points out of the 500 (using the variable \code{pts}),
+only to make it easier to see individual points.
+
+\showChunk{R}{Code/datacollect-extrapolate.R}{EXT2}
+
+What this example shows is that it's not possible to get reliable predictions beyond the
+range of the data. In other words, if we try to extrapolate and extend our predictions
+to values that were not observed in our sample, we may be way off! There's no
+way to tell how the function we try to predict behaves outside the range
+of observed \code{x}.
+
+It is possible to perform a follow-up experiment, and check if our prediction is
+correct. For example, suppose that \code{y} in the data in Figure \ref{fig:ext1}
+represents the average monthly amount spent on online shopping in thousand of dollars,
+and \code{x} represents their annual income (in \$100,000). In our original sample
+which gave us Figure \ref{fig:ext1}, we only had people who spend between 0 and \$300
+in a month, and their annual salaries were between 0 and \$30,000, with an
+approximate linear relationship between \code{x} and \code{y}.
+
+If we want to know the spending habits of people with higher income, we could
+perform a second study and collect data for people who make \$50,000, \$100,000,
+\$150,000, and \$200,000, and see how much they spend each month on online shopping, 
+and see whether the linear trend continues, or whether a different function
+fits better when we look at an extended range of \code{x} values.
+
+\bigskip
+
+\textcolor{red}{more examples? 1. Sampling from a periodic function, 2. the x1*x2 function?}
 
 \hypertarget{ch:data}{%
   \section{Common biases}\label{sources-bias}}
+  \textcolor{red}{Update this section. More? Availability bias, for example?}
+  
 Here is a list of common biases and their sources.
 \begin{itemize}
 \item Observation time interval bias. it is caused by early termination of a
@@ -633,6 +711,8 @@ conclusion. This is closely related to the next confirmation bias.
 
 \hypertarget{ch:data}{%
   \section{Basic sampling designs}\label{sampling-designs}}
+\textcolor{red}{Update this section.}
+
 There are three basic sampling designs. Most of advanced and complicated
 sampling designs are developed by combing these basic designs in layers.
 \begin{itemize}
@@ -668,9 +748,16 @@ sampling designs are developed by combing these basic designs in layers.
 % \end{example}
 
 \section{Summary}
-This chapter introduced the basic concept of a representative sample and
-illustrated that understanding bias helps to interpret unusual phenomena. It
-also showed that valid conclusion could be made based on biased samples. 
+In this chapter we discussed the importance of proper sampling, and the risk of 
+reaching wrong conclusions when the data collection is not done
+right. We introduced the notion of a representative sample, and demonstrated
+what can happen when a sample is non-representative (biased).
+In general, when the data collection is done as a planned experiment,
+we can prevent biases (but it's still not always easy, and require careful planning!)
+But, when we use so-called observational data, there is not much we can do to
+prevent bias in data collection. We should, however, be aware of the possible
+biases, and be careful not to draw far-reaching or decisive conclusions when
+we can't be sure that there is no hidden bias.
 
 %%% Local Variables:
 %%% mode: latex
