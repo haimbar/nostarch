@@ -98,7 +98,7 @@ important) idea that a distribution is determined by its \emph{quantiles}
 (percentiles), 
 so if the quantiles of our sample match the quantiles of the assumed
 distribution, then the assumption is reasonable. Recall that we defined the
-quantiles in Chapter \ref{introdistributions}, so that the $q$-th quantile is a
+quantiles in Chapter~\ref{introdistributions}, so that the $q$-th quantile is a
 number $x_q$, such that $q\times 100\%$ of the data are less than or equal to
 $x_q$.  In our example the data has  \inlnR{```cat(n)```}[llnsampsize] data points, so we
 can get \inlnR{```cat(n)```}[llnsampsize2] quantiles from our sample. If we draw the same
@@ -142,7 +142,7 @@ but in each iteration we increase the sample size, which is the first argument
 of the function \lstinline{rnorm()}. The mean from the $i$-th sample is stored
 in the $i$-th position of the vector \lstinline{allMeans} (in \wingding{4}.)
 
-Figure \ref{LLNdemo} shows the results. We can see that as $n$ increases, the
+Figure~\ref{LLNdemo} shows the results. We can see that as $n$ increases, the
 sample mean gets closer to the true mean (100, in our simulation), which is
 shown as a horizontal line.
 
@@ -177,7 +177,7 @@ in this case we draw the random samples from a \emph{binomial} distribution (in
 
 \showCode{R}{Code/llnclt_roulette.R}[7][17]
 
-We see the results in Figure \ref{LLNdemoBinomial}. As before, the sample mean
+We see the results in Figure~\ref{LLNdemoBinomial}. As before, the sample mean
 gets closer to the true mean of the distribution, $p=18/37$, which is
 less than 0.5, so if we keep placing bets we will end up losing money. In fact,
 we can check how much we will lose if we bet \$1 each time, and do it 10,000
@@ -274,7 +274,7 @@ keep the calculated values $d_{AB}$ and $r_{AB}$ in vectors called
 \lstinline{plot()} function.
 
 
-Figure \ref{LLNdemoCauchy}, which is what you should get after running the
+Figure~\ref{LLNdemoCauchy}, which is what you should get after running the
 code,  shows the distributions of the difference between the average grades
 ($d_{AB}$) on the left, and of the ratio ($r_{AB}$) on the right.  What we see
 here is that the mean difference between the groups, $d_{AB}$, converges to the
@@ -344,7 +344,7 @@ order to show that the sample is representative of the true distribution:
 \showCode{R}{Code/llnclt_CLTexp.R}[2][7]
 %\runR{Code/llnclt_CLTexp.R}{cltsimexp}
 
-Notice that the distribution in Figure \ref{CLTexp} is very skewed, and doesn't
+Notice that the distribution in Figure~\ref{CLTexp} is very skewed, and doesn't
 look at all like a normal distribution. Try running \lstinline{mean(expsamp1)}. you
 should get \inlnR{```cat(mean(expsamp1))```}[llnmeansampexp], which is approximately
 1/5.5, the theoretical mean of the Exp(5.5) distribution.
@@ -397,7 +397,7 @@ to \lstinline{n <- 500}, and run it again.
 \showCode{R}{Code/llnclt_CLTbinom.R}[3][13]
 %\runR{Code/llnclt_CLTbinom.R}{cltsimbinom}
 
-You should get the plot in Figure \ref{CLTbinom}. Notice that because we've
+You should get the plot in Figure~\ref{CLTbinom}. Notice that because we've
 simulated data with a relatively small probability of getting a success
 ($p$=0.15), when $n$=50 the shape of the distribution of sample means is still
 a bit skewed, but when $n$ is large the bell shape appears!
@@ -440,7 +440,7 @@ means around the true mean gets smaller and smaller. This is demonstrated in
 the code below. 
 \showCode{R}{Code/llnclt_boygirl.R}[14][32]
 
-The result is shown in Figure \ref{CLTboygirl}.
+The result is shown in Figure~\ref{CLTboygirl}.
 The green vertical line represents the expected number of boys, and the red one
 represents the observed ones. Notice that as we increase the sample size, the
 likelihood of the observed number of boys (148, 1,480, 14,800) gets smaller.
@@ -466,7 +466,7 @@ sample mean and sample standard deviation:
 \showCode{R}{Code/llnclt_IQ2.R}[2][8]
 %\runR{Code/llnclt_IQ2.R}{cltiq2}
 
-Figure \ref{CLTIQfit} shows the result. The red curve shows the true density
+Figure~\ref{CLTIQfit} shows the result. The red curve shows the true density
 function, and the dashed green one shows the one estimated from the sample of
 200 people. They are very close. The LLN tells us that as we increase our
 sample size, the sample mean will be closer to the true mean.  The CLT tells us
@@ -505,7 +505,7 @@ In the following code we draw the density function of the normal distribution,
 and fill the 2\% right tail of it 
 \showCode{R}{Code/llnclt_IQ2.R}[18][23]
 
-Figure \ref{CLTIQMensa} shows the result. The shaded area covers exactly 2\% of
+Figure~\ref{CLTIQMensa} shows the result. The shaded area covers exactly 2\% of
 the area under the curve.
 
 \begin{figure}[H]
