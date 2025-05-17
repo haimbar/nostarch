@@ -742,22 +742,52 @@ This one is particularly hard to detect or to prevent.
 
 \hypertarget{ch:data}{%
   \section{Basic sampling designs}\label{sampling-designs}}
-\textcolor{red}{Update this section.}
 
-There are three basic sampling designs. Most of advanced and complicated
-sampling designs are developed by combing these basic designs in layers.
+Sampling can be conducted with or without replacement. Sampling with replacement
+may produce duplicate selections (e.g., the birthday problem in
+Chapter~\ref{ch:probability}) but is often simpler to implement. Sampling
+without replacement avoids duplicates and yields higher precision, especially
+when sampling a large proportion of the population.
+
+There are various sampling designs, and the best choice depends on the
+population, research objectives, and available resources. Below are some basic
+sampling designs. Most advanced sampling methods are built by combining these
+foundational designs in various ways.
 \begin{itemize}
-\item Simple Random Sampling: Every elements in the target population have equal
-  chances to be selection. Samples are selected strictly by chance. It is
-  probably the most effective method to prevent sampling bias. A disadvantage is
-  the uncertainty may be large.
-\item Stratified Sampling: Divide members of the population into homogeneous
-  subgroups and then use simple random sampling for each subgroups. It helps to
-  reduce the uncertainty. Need to be careful of potential biases.
-\item Weighted Sampling: Let more informative elements have higher chances to be
-  selected. It may increase the estimation efficiency, but the resulting sample
-  may be biased so need special way of estimation.
+  
+\item Simple Random Sampling: Every element in the population has an equal
+  chance of selection, typically using random numbers or a lottery. This method
+  is straightforward and minimizes sampling bias, but may be impractical for
+  large or hard-to-access populations and can result in high sampling
+  variability. It is best suited for small accessible populations.
+
+\item Stratified Sampling: Divide the population into homogeneous subgroups
+  (strata), then select a simple random sample from each stratum. This ensures
+  representation from all subgroups and increases precision, making it
+  especially useful for heterogeneous populations. However, it requires detailed
+  population information and careful definition of strata to avoid bias.
+
+\item Systematic Sampling: Select every \(k\)th element from a list after a
+  random starting point. This method is simpler and more efficient than random
+  sampling, and ensures samples are evenly spread through the
+  population. However, it may introduce bias if a pattern exists in the list.
+
+\item Cluster Sampling: Divide the population into clusters (e.g., geographic
+  areas), randomly select some clusters, and sample all or some items within
+  them. This method is cost-effective for large, geographically dispersed
+  populations, but typically results in higher sampling error compared to other
+  designs.
+
+\item Weighted Sampling: Assign higher selection probabilities to more
+  informative or important elements. This method can improve estimation
+  efficiency when elements vary in informativeness, but generally yields biased
+  samples that require specialized estimation techniques. It also relies on
+  population information and appropriate weights, which may not always be
+  available.
 \end{itemize}
+
+
+
 
 % \hypertarget{ch:data}{%
 %   \section{Different sampling approaches}\label{sampling-approaches}}
