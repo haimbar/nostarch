@@ -2,6 +2,9 @@
 overleaf:
 	touch ForceCache
 	xelatex -shell-escape sidsmain.tex
+	bibtex sidsmain
+	makeindex sidsmain
+	xelatex -shell-escape sidsmain.tex
 
 clean:
 	rm -f sidsmain.aux generated/*.txt
