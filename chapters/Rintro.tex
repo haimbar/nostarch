@@ -50,6 +50,7 @@ Figure~\ref{fig:r_studio}.
   \label{fig:r_studio}
 \end{figure}
 
+
 The left-hand side of the screen contains the Console tab. Notice the
  \lstinline{>} sign; this is called the \emph{prompt}. When you see this
 character, it means that \R is ready for the next command. Put the cursor there,
@@ -69,8 +70,9 @@ You should get the following output:
 
 
 Notice the top right part of the RStudio window. You should see both an
-Environment and a History tab. Click on \textbf{History}. All your previous
-input appears there. Try entering another calculation or command in the console.
+Environment and a History tab. Click on \textbf{History}. 
+\index{RStudio!Environment and History}
+All your previous input appears there. Try entering another calculation or command in the console.
 For example, try entering the following:  
 
 \begin{lstlisting}
@@ -100,6 +102,7 @@ enter the following in the console:
 
 The console should now display \lstinline{20}.
 
+\index{RStudio!File browser}
 The lower-right side of the IDE has a few tabs: Files provides a file browser,
 Packages provides information about installed packages (we'll discuss these
 more later), Plots will contain any plot generated during the \R session, and
@@ -153,12 +156,14 @@ The documentation for each function can be obtained by using
 \lstinline{?___<function>___} or \lstinline{help(___<function>___)} where 
 \lstinline{___<function>___} is the function you're interested in. For example,
 to get the documentation for \lstinline{date()}, try either line of the following:
+\index{R command!\code{help}}
 
 \showCode{R}{Code/ch1sec1.R}[1][2]
 % \showChunk{R}{Code/ch1sec1.R}{ch1sec1-1}
 
 \subsection{Changing Your Working Directory}
 When we start an \R session, it's important to determine the \emph{working directory}.
+\index{R command!\code{getwd}}
 This is the folder on our computer that \R will use to search for data or code files, 
 and it's where \R will save results (unless we explicitly specify another directory).
 To find out what our working directory is, we can use the following:
@@ -171,7 +176,7 @@ directory (which is denoted by a ~\emph{\slash} on Mac and Linux, or
 organization of folders (or directories) on your computer.
 
 
-We can change the working directory by using
+We can change the working directory by using \index{R command!\code{setwd}}
 \lstinline{setwd()}.  For example, we may create a folder \emph{work} in our home
 directory and then use the following line to set the working directory to it:
 \begin{lstlisting}
@@ -189,6 +194,7 @@ Data is stored in \textit{variables}.
 % AF:  We do data as singular, per the style guide.
 Let's start by generating some data.
 The simplest function to create data is  \lstinline{c()}, which stands for ``combine.'' 
+\index{R command!\code{c}, combine}
 We can use it like so:
 % \showChunk{R}{Code/ch1sec1.R}{ch1sec1-1}
 \showCode{R}{Code/ch1sec1.R}[9][9]
@@ -201,13 +207,13 @@ We can now do things with this variable. For example, we check the variable type
 using the \lstinline{class()} function:
 % \showChunk{R}{Code/ch1sec1.R}{ch1sec1-1}
 \showCode{R}{Code/ch1sec1.R}[10][10]
-\noindent In this case the output should be
+\noindent In this case the output should be \index{R command!\code{class}} \index{R command!\code{cat}}
  \inlnR{```cat(class(courseNames))```}[introcoursenames], which means that this variable is
  used to store text. % (\lstinline{character} class):
 %\inlnR{```print(class(courseNames))```}[vbox]
 %\includeOutput{ch1ex1class}
 We can also get a bit more detailed information about a variable by checking
-its structure; to do this, we use the \lstinline{str()} function:
+its structure; to do this, we use the \lstinline{str()} function:\index{R command!\code{str}}
 \showCode{R}{Code/ch1sec1.R}[11][11]
 % \showChunk{R}{Code/ch1sec1.R}{ch1sec1-1}
 \noindent As you should see in the output, this shows that the variable is of class 
@@ -218,7 +224,7 @@ its structure; to do this, we use the \lstinline{str()} function:
 
 Our \lstinline{courseNames} is what's called a \emph{vector}, a one-dimensional
 array of objects of the same type (in this case, strings of characters).
-We can also get the number of elements in a vector by using the 
+We can also get the number of elements in a vector by using the \index{R command!\code{length}}
 \lstinline{length()} function:
 \showCode{R}{Code/ch1sec1.R}[12][12]
 % \showChunk{R}{Code/ch1sec1.R}{ch1sec1-1}
@@ -235,6 +241,7 @@ be different from an existing function name or other reserved words in the langu
 \subsection{Generating Data}
 We often have to generate variables that contain sequences of numbers. To do that,
 we use the \lstinline{seq()} function. For example, we can create a variable that
+\index{R command!\code{seq}}
 contains all the odd numbers between 1 and 20:
 \showCode{R}{Code/ch1sec1.R}[14][14]
 % \showChunk{R}{Code/ch1sec1.R}{ch1sec1-1}
@@ -270,6 +277,8 @@ will be, and then give it a try.
 
 \subsection{Working with Text}
 There are many functions to handle text. The \lstinline{paste()} function attaches two 
+\index{R command!\code{paste}}
+\index{R command!\code{cat}}
 \emph{strings} of characters together. The default is to combine, or \emph{concatenate},
  strings with a space as a separator, but we can use the \lstinline{collapse} option 
  (also called an \emph{argument} of the function) to use a different separator. For example,
@@ -286,6 +295,7 @@ following: \inlnR{```cat(concatvar)```}[introcatvar].
 
 
 \subsection{Using Contributed Packages}
+\index{R Packages}
 The base distribution of \R is very comprehensive, but there are thousands of contributed
 packages written by \R users. We will use several such packages in the book, so let us
 demonstrate their basic usage.
@@ -296,6 +306,7 @@ emphasis on multivariate data.'' To install the package, we use the
 it using the \lstinline{library()} function:
 \showCode{R}{Code/ch1sec1.R}[45][46]
 % \showChunk{R}{Code/ch1sec1.R}{ch1sec1-1}
+\index{R command!\code{install.packages}}
 
 
 Installing the package has to be done just once. Occasionally, you may be prompted
@@ -334,7 +345,7 @@ Now that we have our cards, let's use them.
 
 \subsection{Getting Samples}
 Let's `deal' five cards to each player in a game of poker. We will use the
-\lstinline{sample()} function to do this:
+\lstinline{sample()} function to do this: \index{R command!\code{sample}}
 \showCode{R}{Code/ch1sec1.R}[32][34]
 % \showChunk{R}{Code/ch1sec1.R}{ch1sec1-1}
 The \lstinline{sample()} function in this example is used to draw 20 cards at random
@@ -343,6 +354,7 @@ from the deck; we don't put the cards back in the deck, so we say they were draw
 \lstinline{matrix()} function and specify the number of rows and the number of columns.
 The \lstinline{sample()} function draws a different random sample each time unless we
 set the random \emph{seed} to a fixed value. The \lstinline{set.seed()} function is
+\index{R command!\code{set.seed}}
 used to ensure the reproducibility of the results.  Try running the code without the
 \lstinline{set.seed()} line, and you should see that you get different results each time.
 When we create a matrix, we may want to name the rows and columns. If we choose
@@ -373,6 +385,8 @@ you can set it to another directory with \lstinline{setwd()}.
 We can get the saved variables using the following:
 \showCode{R}{Code/ch1sec1.R}[37][37]
 % \showChunk{R}{Code/ch1sec1.R}{ch1sec1-1}
+\index{R command!\code{save}}
+\index{R command!\code{load}}
 Variables that we don't save will not be available once we terminate the current
 \R session. When we quit an \R session, we have an option to save the entire session's
 information. However, if there are variables, datasets, or functions that we have created
@@ -403,9 +417,12 @@ The output is:
 
 In this example, player 3 got two aces (clubs and spades), the queen of hearts,
 4-diamond, and 7 of spades.
+\index{Comma-separated values (CSV)}
 Note that when we saved the file as CSV we chose the  \lstinline{row.names=TRUE}
 option, in order to preserve the row names. Also, note that when a column name has a 
 space, \R replaces it with a period, since spaces are not allowed in variable names.
+\index{R command!\code{read.csv}}
+\index{R command!\code{write.csv}}
 
 %There are a few constants in \R, including the letters of the alphabet (upper- and lower-case), the month names, and the number $\pi$. Try running the following:
 %\showCode{R}{Code/ch1sec1.R}[38][42]
@@ -416,7 +433,8 @@ space, \R replaces it with a period, since spaces are not allowed in variable na
 A nice feature of computers is that they can do the same thing many times and
 not get tired. When we have to compute something many times, it's useful to
 create a sequence of commands and give it a name---we'll call that named
-sequence of commands a \emph{function}. Once we have a function, we don't
+sequence of commands a \emph{function}. \index{Functions in \R}
+Once we have a function, we don't
 have to type the whole sequence of commands each time we want to run them;
 we can simply run the function. For example, we can define a function for calculating
 the sum of numbers. Of course, such a function already exists in \R, but we'll
@@ -498,16 +516,19 @@ basic function to generate random data is \lstinline{runif()}, and it's used to 
 random numbers uniformly between 0 and 1. In the following example we create
 10,000 random draws from a uniform distribution, we keep these numbers in a
 variable called \lstinline{simData}, and then plot a histogram to show the distribution
-of the data we have generated. 
+of the data we have generated. \index{R command!\code{runif}}
+\index{Random number generation}
+\index{Distribution!Uniform}
 \showChunk{R}{Code/ch1sec2.R}{ch1sec2-1}
 
 
 Note that the first line of code is a \emph{comment}:  anything following a \lstinline{#}
+\index{Comments in R code}
 character is considered a comment and is not executed by \R. We use comments to
 explain to others what our code is doing.
 
 
-The code should produce a \emph{histogram}, a graph in which all the observations
+The code should produce a \emph{histogram}, \index{Histogram} a graph in which all the observations
 are put in a number of bins, and the height of each bin corresponds to the number of
 observations in that bin. The histogram from the previous code segment should look
 like Figure~\ref{fig:ch1:simunif1}.
@@ -550,11 +571,12 @@ to print a newline character. Try to see what happens if you remove it.
 
 
 The expression within the \lstinline{sum()} function produces \lstinline{TRUE} or
-\lstinline{FALSE} (\emph{Boolean}) values. First, we draw \lstinline{ntrials}
+\lstinline{FALSE} (\emph{Boolean})\index{Boolean} values. First, we draw \lstinline{ntrials}
 random numbers from a uniform distribution. Then, each one is compared with
 \lstinline{0.5}. If the value is less than 0.5, the returned value is \lstinline{TRUE}.
 Otherwise, it's \lstinline{FALSE}. This demonstrates one of \R's greatest features:
-it allows us to run \emph{vectorized code}. In one line, we generated 200 random
+it allows us to run \emph{vectorized code}\index{Vectorized code}. 
+In one line, we generated 200 random
 numbers and for each one we checked if it is less than 0.5, and as a result, we
 got 200 Boolean values which we have added together (TRUE counts as 1,
 and FALSE counts as 0.) Thus, the result in the sum is the number of heads
@@ -566,7 +588,7 @@ The number of heads we get in this case (with this seed) is
 on a mental exercise in which we ask, if we could repeat the same experiment
 infinitely many times, what would we see? With simulations, we can get a good
 approximation. For example, the 200 coin-tosses experiment can be repeated,
-say, 100 times. One way is to use \emph{loops}, like in the following example:
+say, 100 times. One way is to use \emph{loops}, \index{Loop} like in the following example:
 \showChunk{R}{Code/ch1sec2.R}{ch1sec2-4}
 We've used a \lstinline{for} loop, with an index variable called \lstinline{i} that
 runs from 1 to 100. In each iteration we simulated \lstinline{ntrials=200} coin
@@ -585,14 +607,15 @@ calculate the proportion of times we get heads out of 200}\label{fig:ch1:simunif
 \end{figure}
 
 Using the uniform distribution, we have created a random draw from a different
-distribution, called the \emph{binomial distribution}. The mathematical notation
+distribution, called the \emph{binomial distribution}. \index{Distribution!Binomial}
+The mathematical notation
 is $Bin(N, p)$ where $N$ is the number of trials such that in each trial there can
 be exactly two outcomes (for example, heads or tails in coin tosses), and $p$ is
 the probability of the first possible outcome (for example, head), and $1-p$ is
 the probability of the second possible outcome (for example, tail).
 \R has a built-in function to generate random numbers from many different
 distributions, including the binomial so the code above can be replaced by
-the following, which uses the \lstinline{rbinom()} function:
+the following, which uses the \lstinline{rbinom()} function:\index{R command!\code{rbinom}}
 \showChunk{R}{Code/ch1sec2.R}{ch1sec2-5}
 
 % AF: can do exercises like this. What do you think?
@@ -609,7 +632,7 @@ again. Then, change it to 0.8. What do you observe?
 of Heads.
 \end{listhead}
 
-\section{Summary Statistics}
+\section{Summary Statistics}\index{Summary Statistics}
 
 To wrap up this introduction to \R, let's introduce some statistical functions to
 summarize data. 
@@ -626,14 +649,16 @@ use base 10 or base 2, use \lstinline{log10} and \lstinline{log2}, respectively.
 To specify another base, use the \lstinline{base} argument. For example, try
 \lstinline{log(16, base=4)}.
 
-\subsection{Finding the Central Tendency}
+\subsection{Finding the Central Tendency}\index{Central Tendency}
 The most commonly used statistical summary is the \emph{mean} (also known
+\index{Mean}
 as the average), $\overline{x}$:\\
 $$\overline{x}=\frac{x_1+\ldots+x_n}{n}\,.$$
 The mean is one way to characterize the \emph{central tendency} of a distribution.
 % AF: Say what a central tendency is?
 But the \emph{center} of a distribution can be defined in more than one way.
 Another way is to calculate the \emph{trimmed mean}, which is similar to the mean,
+\index{Trimmed mean}
 except that the smallest and largest $p\cdot 100\%$  of the values are excluded
 from the computation. In our example, if we take $p=0.1$ with the simulated data,
 only 8,000 data points will be used in the calculation of the trimmed mean. 
@@ -641,7 +666,7 @@ only 8,000 data points will be used in the calculation of the trimmed mean.
 
 A third way to estimate the central tendency is the \emph{median}, which is a
 number (denoted here by $x_{0.5}$) such that half the data points are greater
-than $x_{0.5}$ and half are less than or equal to $x_{0.5}$. 
+than $x_{0.5}$ and half are less than or equal to $x_{0.5}$. \index{Median}
 
 
 Let's compute this sample's mean, trimmed mean, and median. Notice that
@@ -660,6 +685,7 @@ is \inlnR{```cat(mean(x))```}[intromeanx], the trimmed mean is
 \subsection{Looking at Distributions}\label{introdistributions}
 The formula we used above, \lstinline{x <- - log(runif(n)) / lambda}, generates
 random number from the so-called \emph{exponential distribution} with rate
+\index{Distribution!Exponential}
 parameter $\lambda=10$. (Don't worry about the meaning of the rate parameter.)
 % AF: What does the rate parameter do? If we don't need to worry about that right now, say so.
 We denote the fact that the random variable $X$ follows an exponential
@@ -675,7 +701,9 @@ a later chapter.
 
 
 The distribution of \lstinline{x} is shown in Figure~\ref{fig:ch1:simexp} as a
-\textit{box-and-whisker plot} (or simply, boxplot). This is a very simple representation
+\textit{box-and-whisker plot} (or simply, boxplot). \index{box-and-whisker plot}
+\index{Boxplot}
+This is a very simple representation
 of numeric data, which is constructed by summarizing the data using a few
 numeric characteristics. 
  
@@ -687,13 +715,14 @@ $\lambda=10$}\label{fig:ch1:simexp}
 
 In Figure~\ref{fig:ch1:simexp} the boxplot  is drawn horizontally, and the vertical grey
 line inside the box is the median. Similar to the median, we find the
-\emph{first quartile}, a point, $x_{0.25}$, such that 25 percent of the values are less
+\emph{first quartile}, \index{Quartile} a point, $x_{0.25}$, such that 25 percent of the values are less
 than $x_{0.25}$ and 75 percent are greater than $x_{25}$; we also find the
 \emph{third quartile}, a point, $x_{0.75}$, such that 75 percent of the values are
 less than $x_{0.75}$ and 25 percent are greater than $x_{0.75}$. The first and third
 quartiles are the vertical edges of the box, also called the lower and upper
 \emph{hinges}. The box represents the middle 50 percent of the data. The range
 between the first and third quartiles is called the \emph{Inter-Quartile Range (IQR)},
+\index{Inter-Quartile Range (IQR)}
 which is sometimes used to estimate the dispersion or spread of the data.
 
 
@@ -704,7 +733,7 @@ the whisker only extends to the minimum (or the maximum). Points within the
 range between the two whiskers are not plotted individually, since their distribution
 is summarized succinctly by the box-and-whiskers plot. Points outside the range
 between the two whiskers are considered ``outliers,'' or extreme values, and
-are shown explicitly. 
+are shown explicitly. \index{Outliers}
 
 The plot in Figure~\ref{fig:ch1:simexp}  was generated with the following code:
 
@@ -717,7 +746,7 @@ We will cover the topic of visualization in Chapter~\ref{EDA}.
 A boxplot does not include the mean, or the trimmed mean, but we have added them
 here as a circle and diamond, respectively, in order to show that they
 are different than the median. The mean is larger than the median in this case,
-so we say that the distribution is \emph{skewed} to the right. 
+so we say that the distribution is \emph{skewed} to the right. \index{Distribution!skewed}
 The median does not depend on observations in the tails
 of the data (small and large observations in the data). It simply represents
 where the data can be split in half. Thus the median is a more robust measure of
@@ -726,7 +755,8 @@ skewed data such as income.
 
 
 A more detailed summary of a sample can be obtained by calculating its
-quantiles (also called percentiles). The $q$-th quantile is a number $t$, such that
+quantiles (also called percentiles). \index{Quantiles}
+The $q$-th quantile is a number $t$, such that
 $q\times 100\%$ of the data are less than or equal to $t$.
 The code below will calculate the deciles (the 10, 20,.\,.\,., 90 percentiles):
 
@@ -746,8 +776,9 @@ in a histogram.
 
 In addition to sample statistics that summarize some notion of the center of
 the distribution, we are often interested in estimating the \emph{dispersion} of the
+\index{Dispersion}
 data, which tells us about how the data is spread out around the center of the distribution.
-The most commonly used measures of dispersion are the \emph{variance}, and its
+The most commonly used measures of dispersion are the \emph{variance}, and its\index{Variance}
 square root, the \emph{standard deviation}. The sample variance is defined as:
 $$Var(x)=\frac{(x_1-\overline{x})^2+\ldots+(x_n-\overline{x})^2}{n-1}$$
 where $\overline{x}$ is the sample mean $\mu$.
@@ -755,21 +786,26 @@ where $\overline{x}$ is the sample mean $\mu$.
 In words, the variance is the average of the squared deviations from the mean.
 Notice that the sample variance is computed with $n-1$ in the denominator
 because with $n-1$ we get an \emph{unbiased estimator} for the true variance.
+\index{Estimator!unbiased}
 
 
 The corresponding functions in \R are \lstinline{var()} and \lstinline{sd()} for sample
+\index{R command!var}\index{R command!sd}
 variance and standard deviation, respectively. In the following code we also
 demonstrate the \lstinline{IQR()} function, which is another common estimator for
 the dispersion of a distribution. It is calculating as the difference between the third
 and the first quartiles (the 75th and 25th percentiles, respectively).
+\index{R command!IQR}
 
 \showChunk{R}{Code/ch1sec3.R}{ch1sec3-5}
 
 The most important results in statistical theory involve the \emph{normal distribution},
+\index{Distribution!Normal}
 so here we'll introduce it briefly.
 In subsequent chapters we will elaborate on the importance of this distribution in
 many applications. The normal distribution is defined by a probability density
 function $\phi(x)$, with two parameters, $\mu$ and $\sigma^2$, where:
+\index{Probability density function, p.d.f.}
 $$\phi(x; \mu,\sigma^2)=\frac{1}{\sqrt{2\pi\sigma^2}}\exp\left[-\frac{(x-\mu)^2}{2\sigma^2}\right]\,.$$
 It is symmetric, ``bell-shaped,'' and centered around the mean, $\mu$, as shown in
 Figure~\ref{fig:ch1:simnorm}. 
@@ -783,7 +819,9 @@ and variance=0.25}
 \end{figure}
 
 This histogram was generated by drawing random
-numbers from a normal distribution, using the \lstinline{rnorm()} function. Here, we
+numbers from a normal distribution, using the \lstinline{rnorm()} function. 
+\index{R command!\code{rnorm}}
+Here, we
 use $\mu=2.5$ and $\sigma^2=0.25$.
 The curve shows the function $\phi$, by using the \lstinline{dnorm()} function
 (to obtain the density function of $x$).
@@ -800,7 +838,8 @@ in order to change the colors and the width of the shapes in the plot.
 
 \subsection{Using Summary Functions}
 We can obtain more detailed summaries about the sample by using the
-\lstinline{summary()} function. It gives the minimum, maximum, the 25th, 50th,
+\lstinline{summary()} function. \index{R command!\code{summary}}
+It gives the minimum, maximum, the 25th, 50th,
 and 75th percentiles, as well as the mean of the sample. If we use the random
 numbers from the normal distribution in the previous code:
 \showChunk{R}{Code/ch1sec3.R}{ch1sec3-7}
@@ -818,19 +857,21 @@ Let's conclude this chapter with some functions that can be used to
 summarize discrete (categorical) data, where the mean, variance,
 quantiles, and so on are not applicable. We will revisit the topic
 of summarizing data in Chapter~\ref{EDA}.
+\index{Categorical data}
 
 
 To simulate categorical data we can use the \lstinline{rmultinom()} function,
 which simulates putting $N$ objects in $K$ bins with given probabilities for
-each bin. Another possibility is to use the \lstinline{cut()} function,
+each bin. \index{R command!\code{rmultinom}}
+Another possibility is to use the \lstinline{cut()} function, \index{R command!\code{cut}}
 which divides a range of numbers into discrete ranges and creates categories
-in a \emph{factor} variable.
+in a \emph{factor} variable.\index{Factor variable}
 For example, suppose there is a town with three hotels (Motel 6, Best Western,
 and Hilton) with 400, 300, and 300 rooms, respectively, and one auto rental
 company with only two makes of cars (700 Honda, and 300 Teslas). In the
 following code we simulate the allocation of 100 visitors to hotels and cars.
 We use the \lstinline{table()} function to show the counts by hotel, by car,
-and by both.
+and by both.\index{R command!\code{table}}
 \showChunk{R}{Code/ch1sec3.R}{ch1sec3-8}
 
 
@@ -840,18 +881,21 @@ Note that \lstinline{table()} can take one argument as in
 each value in its input; or it can take two arguments as in \wingding{3},
 in which case it will \emph{cross-tabulate} the data, meaning that it
 shows the counts for each combination of the two categorical variables.
+\index{Cross tabulation}
 This code produces the following output:
 \inlnR{```print(table(hotelrooms));print(autotbl <- table(autorental));print(table(hotelrooms, autorental))```}[introhotel][vbox]
 
 
 We can use the \lstinline{max()} and \lstinline{which.max()} functions
-to find the \emph{mode} of the data (the most frequent value):
+to find the \emph{mode} of the data (the most frequent value):\index{Mode}
 \showCode{R}{Code/ch1sec3b.R}
 The hotel with the largest number of guests is
 \inlnR{```cat(levels(hotelrooms)[which.max(hoteltbl)])```}[introhotellevel] with
 \inlnR{```cat(max(hoteltbl))```}[introhotelguests] guests, and
 \inlnR{```cat(levels(autorental)[which.max(autotbl)])```}[introauto]
 is rented to \inlnR{```cat(max(autotbl))```}[introautorentals] people.
+\index{R command!\code{max}}
+\index{R command!\code{which.max}}
 
 \section{Summary}
 % AF: End chapters with a summary section that briefly summarizes what we've covered, and previews the next chapter.
