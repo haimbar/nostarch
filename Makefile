@@ -7,10 +7,10 @@ overleaf:
 	xelatex -shell-escape sidsmain.tex
 
 clean:
-	rm -f sidsmain.aux generated/*.txt
+	rm -f sidsmain.aux generated/*.txt  sidsmain.ind
 
 deepclean:
-	rm -f sidsmain.aux sidsmain.mw generated/*
+	rm -f sidsmain.aux sidsmain.mw sidsmain.ind generated/*
 
 # stop the talk2stat server, but don't compile the book:
 stopserver: deepclean
