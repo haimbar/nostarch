@@ -16,9 +16,9 @@ statistics.
 
 \section{Basic Concepts}
 
-Hypothesis testing is a framework scientists and decision-makers use to 
-make sense of uncertainty. Let’s start with some examples to ground the 
-idea: Is a new drug effective in treating a disease, or is it no better 
+Hypothesis testing formalizes how we handle uncertainty in data-driven
+decisions. In practice, we ask questions like: Is a new drug effective
+in treating a disease, or is it no better
 than the current standard? Is one commercial more effective than another 
 in driving sales on a website (a process often referred to as an A-B test)? 
 Can the observed increase in global mean temperature be attributed to human 
@@ -27,153 +27,189 @@ patients compared to others?
 
 
 At the core of hypothesis testing lies a simple setup. There are two 
-competing explanations: the \emph{null hypothesis}, $H_0$, which represents 
-the default position or baseline assumption, and the \emph{alternative 
-hypothesis}, $H_1$, which is the claim we hope to support \hb{not always} in a
-scientific investigation through evidence from data. For instance, 
-in the context of the new drug, $H_0$ might state that the drug has no 
-effect, while $H_1$ claims that it does.
+competing explanations: the
+\emph{null hypothesis}\index{null hypothesis},
+$H_0$, which represents
+the default position or baseline assumption, and the
+\emph{alternative hypothesis}\index{alternative hypothesis},
+$H_1$, which reflects a meaningful difference or effect.
+In the new drug example, $H_0$ states that the drug has no effect, 
+while $H_1$ claims it does. Depending on context, $H_1$ may represent
+the investigator's belief, but not necessarily what they hope to 
+support---sometimes the goal is to rule out harm or demonstrate
+equivalence.
+\hb{not always} \jy{rephrased.}
 
 
-Think of hypothesis testing as a strategic game. Nature knows the truth— 
-whether $H_0$ or $H_1$ is correct—but keeps it hidden. Our job is to 
-examine the available evidence and decide which hypothesis to select. Of 
-course, this decision-making process isn’t foolproof \hb{fullproof?}; we might make errors. 
-We could reject $H_0$ when it is true (a \emph{Type I error}), or fail to 
-reject $H_0$ when $H_1$ is true (a \emph{Type II error}). Understanding 
-and managing these risks is part of what makes hypothesis testing both 
-a challenge and an art.
+Think of hypothesis testing as a strategic game. Nature knows the
+truth---whether $H_0$ or $H_1$ is correct---but keeps it hidden. Our
+job is to examine the available evidence from the observed data and
+decide which hypothesis to accept. This process is not
+foolproof; we might reject $H_0$ when it is true
+(a \emph{Type~I  error}\index{Type~I error}), or fail to 
+reject $H_0$ when $H_1$ is true (a \emph{Type~II error}\index{Type~II
+  error}). Understanding and managing these risks is fundamental part
+of hypothesis testing and highlights both its challenge and nuance.
 
 
 \subsection{Stochastic Analog of Proof by Contradiction}
 
 Hypothesis testing can be viewed as a stochastic analog of proof by 
-contradiction. In mathematics, proof by contradiction starts by assuming 
-the negation of the statement to be proven. Through logical reasoning, 
-this assumption leads to a contradiction, thereby proving the original 
-statement to be true. Similarly, in hypothesis testing, we begin by 
-assuming the null hypothesis, $H_0$, is true. We then evaluate whether 
-the observed data are consistent with this assumption. If the data 
-contradict $H_0$ to a sufficient degree, we reject it in favor of the 
-alternative hypothesis, $H_1$.
+contradiction \citep{reeves1980hypothesis}. In mathematics, proof by
+contradiction starts by assuming
+the negation of the statement we wish to prove. Logical reasoning then
+leads to a contradiction, thereby establishing the original 
+statement to be true. Similarly, in hypothesis testing, we start by 
+assuming the null hypothesis, $H_0$, is true and assess
+whether the observed data align with this assumption. If the data 
+deviate from what we would expect under $H_0$ to a sufficient degree,
+we reject it in favor of the alternative hypothesis, $H_1$.
 
-However, hypothesis testing differs from proof by contradiction in an 
-important way: it is inherently probabilistic. While proof by contradiction 
-offers absolute certainty, hypothesis testing relies on evidence and 
-probabilities. Rejecting $H_0$ does not definitively prove $H_1$; instead, 
-it means the evidence against $H_0$ is strong enough to favor $H_1$ within 
-a specified level of risk. Similarly, failing to reject $H_0$ does not 
-verify its truth but simply reflects insufficient evidence to challenge it 
-\citep{reeves1980hypothesis}. \hb{Citation needs fixing?}
+
+Despite the shared structure--- both approaches begin with an
+assumption and seek evidence that undermines it---there is a
+fundamental difference. Proof by contradiction yields logical
+certainty, while hypothesis testing is inherently probabilistic.
+Rejecting $H_0$ does not definitively prove $H_1$; instead, 
+it means the evidence against $H_0$ exceeds a pre-specified threshold
+to favor $H_1$. Similarly, failing to reject $H_0$ does not confirm
+its validity, only that the data do not provide sufficient grounds for 
+rejection.
 
 
 % Misconception \citep{falk1995significance}. 
 
-\subsection{Type I and Type II Errors}
+\subsection{Type~I and Type~II Errors}
 
 The probabilistic nature of hypothesis testing introduces two types of 
-errors. A \emph{Type I error} occurs when we reject the null hypothesis, 
-$H_0$, even though it is true. This false positive error reflects the risk 
-of mistakenly favoring $H_1$ and is controlled by the significance level, 
-$\alpha$ \hb{This is not explained in the previous text}.
- A \emph{Type II error} arises when we fail to reject $H_0$ even 
-though it is false. This false negative error reflects the risk of missing 
-a true effect, with its probability denoted by $\beta$. The complement of 
-$\beta$, $1 - \beta$, is called the \emph{power} of the test, representing 
-its ability to detect an effect when it exists. \hb{Needs more detail, or to simplify}
+decision errors. A \emph{Type~I error}\index{type I error}
+occurs when we reject the null hypothesis, $H_0$, even though it is
+true. This is often referred to as false positive, the incorrect
+conclusion that an effect exists when it actually does not.
+The probability of making this error is called the \emph{significance
+  level}\index{significance}, denoted by $\alpha$. A smaller $\alpha$ 
+reduces this risk but may make it harder to detect real effects.
+A \emph{Type~II error}\index{type II error} arises when we fail to
+reject $H_0$ even though it is false. This is often referred to as
+false negative error, reflecting the risk of missing a true effect,
+with its probability denoted by $\beta$. The quantity $1 - \beta$,
+called the \emph{power}\index{power} of the test, masures the test's
+ability to detect an effect when one truly exists.
 
 
-R. A. Fisher's ``Lady Tasting Tea'' experiment beautifully illustrates
-the concepts of hypothesis testing and its probabilistic nature
-\citep{salsburg2002lady}. In this experiment, 
-a lady claims she can distinguish whether milk or tea was poured first into 
-a cup based on taste alone. The null hypothesis, $H_0$, asserts that she 
-cannot distinguish the order and is guessing randomly. The alternative 
-hypothesis, $H_1$, posits that she genuinely has this ability.
+\begin{example}[Lady testing tea]
+R. A. Fisher's ``Lady Tasting Tea'' experiment, described in his 1935 
+book \emph{The Design of Experiments}, became one of the earliest and 
+most elegant demonstrations of formal hypothesis testing 
+\citep{salsburg2002lady}. Fisher recounted an event at Rothamsted 
+Experimental Station, where a colleague claimed she could tell by 
+taste whether milk or tea had been poured first into a cup. To test 
+this claim, Fisher designed an experiment involving eight cups of tea: 
+four prepared with milk poured first, and four with tea poured first. 
+The cups were presented in random order, and the lady was told that 
+there were four of each kind. Her task was to identify the four cups 
+with milk poured first. Assuming the null hypothesis, $H_0$, that she 
+was guessing, Fisher calculated the probability of her achieving a 
+result as good as the observed one purely by chance.
 
 
-The test involves presenting the lady with a series of cups in randomized 
-order. Assuming $H_0$ is true, we calculate the probability of observing 
-her performance by chance. If her success rate is so high that it would be 
-extremely unlikely under $H_0$, we reject $H_0$ in favor of $H_1$, concluding 
-that she likely has the claimed ability. However, rejecting $H_0$ carries 
-the risk of a Type I error, mistakenly attributing skill to chance. 
-Conversely, failing to reject $H_0$ might reflect a Type II error, 
-overlooking her genuine ability due to insufficient evidence.
-
-
-This example highlights the delicate balance in hypothesis testing: 
-decisions are made in the face of uncertainty, with errors managed through 
-careful experimental design and appropriate interpretation of results.
-
+If her performance was highly unlikely under $H_0$, the null hypothesis 
+would be rejected in favor of the alternative, $H_1$, suggesting she 
+may truly have the claimed ability. This decision, however, carried the 
+risk of a Type~I error---concluding she had the ability when she did 
+not. Conversely, failing to reject $H_0$ could result in a Type~II 
+error---overlooking a genuine ability due to insufficient evidence. The 
+experiment highlighted how statistical decisions are made under 
+uncertainty and how error probabilities---Type~I and Type~II---must be 
+considered in the design and interpretation of hypothesis tests.
+\end{example}
 
 \subsubsection{The Test Statistic and the p-Value}
 
-In hypothesis testing, a \emph{test statistic} is a numerical summary of 
-the data used to evaluate the null hypothesis, \(H_0\). It captures the 
-relevant aspects of the observed data and allows us to quantify the 
-evidence against \(H_0\). The choice of test statistic depends on the 
-specific hypothesis being tested and the nature of the data.
 
-In the ``Lady Tasting Tea'' experiment, the test statistic is the number of 
-cups the lady correctly identifies as having been prepared with milk first. 
-Under the null hypothesis, \(H_0\), which assumes the lady is guessing 
-randomly, this test statistic follows a \why{readers may not know this} hypergeometric distribution. The 
-more cups she identifies correctly, the more extreme the observed test 
-statistic becomes under \(H_0\).
+In hypothesis testing, a \emph{test statistic}\index{test statistic} 
+is a numerical summary of the data used to evaluate the null hypothesis, 
+$H_0$. It captures the relevant aspects of the observed data under 
+$H_0$ and quantifies the evidence against it. The choice of test 
+statistic depends on the specific hypothesis and the structure of the 
+data. A test rejects $H_0$ if its test statistic, denoted by $T$, 
+falls into a designated \emph{rejection region}\index{rejection region}. 
+The probability that $T$ falls in this region when $H_0$ is true is 
+called the \emph{significance level}, typically denoted by $\alpha$. 
+This threshold is usually chosen to be small, such as 0.05 or 0.01, 
+to limit the chance of making a Type~I error.
 
-The \emph{p-value} is then defined as the probability, under \(H_0\), of 
-observing a test statistic as extreme as or more extreme than the one 
-actually observed. It provides a measure of how surprising the data are, 
-given that \(H_0\) is true.
 
-\paragraph{Computing the p-Value for Perfect Success}
+The \emph{p-value} provides an alternative way to summarize results. 
+It is defined as the probability, under $H_0$, of obtaining a test 
+statistic as extreme as or more extreme than the observed one. A small 
+p-value indicates that the observed result would be rare under $H_0$, 
+thus providing evidence against it. The decision rule is simple: 
+if the p-value is less than $\alpha$, we reject $H_0$; otherwise, we 
+fail to reject it. This offers flexibility, as the same p-value can 
+be compared against different significance levels depending on
+context.
 
-Suppose the lady is presented with \(n\) cups, half of which are prepared 
-with milk first and half with tea first. If she correctly identifies \(n/2\) 
-milk-first cups and \(n/2\) tea-first cups, the observed test statistic is 
-her perfect success rate. The total number of ways to arrange \(n\) cups 
-such that \(n/2\) are \why{tea-first cups?} correctly chosen is:
+
+The p-value is often misunderstood as the probability that $H_0$ is 
+true given the data. This is incorrect. The p-value assumes that 
+$H_0$ is true and measures how surprising the observed data are under 
+that assumption. As shown in empirical studies, this misinterpretation 
+is widespread, even among statistically trained researchers 
+\citep{falk1995significance}. Understanding that the p-value reflects 
+compatibility between the data and the null model---not the truth of 
+the hypothesis---is essential for proper statistical reasoning.
+
+
+\begin{example}[Lady tasting tea (continued)]
+
+In the Lady Tasting Tea experiment, the test statistic $T$ is the 
+number of cups the lady correctly identifies as having been prepared 
+with milk poured first. The total number of cups is an even number $n$, 
+with exactly $n/2$ prepared milk-first and $n/2$ tea-first. Importantly, 
+the lady is told in advance that there are exactly $n/2$ of each type, 
+and she is required to label exactly $n/2$ cups as milk-first. Under the 
+null hypothesis $H_0$, she is assumed to be guessing. In this setup, 
+it can be shown that the distribution of $T$ under $H_0$ follows a 
+\emph{hypergeometric distribution}\index{distribution!hypergeometric}, 
+and large values of $T$ provide stronger evidence against $H_0$.
+
+
+To carry out the test, we fix a significance level $\alpha$, such as
+$0.05$, representing the maximum tolerable probability of a Type~I
+error. We then define the \emph{rejection region}, consisting of
+values of $T$ that are considered too extreme to plausibly occur under
+$H_0$. Suppose we choose $\{n/2\}$ as the rejection region—that is, we
+only reject $H_0$ if the lady achieves a perfect classification. The
+probability of this outcome under $H_0$ is
+$\Pr(T = n/2) = 1 / \binom{n}{n/2}$.
+
+
+For example, suppose $n = 8$ and the lady correctly identifies all 
+$4$ milk-first cups. The observed test statistic is 
+$T_{\text{obs}} = 4$, and the p-value is 
 \[
-\binom{n}{n/2} = \frac{n!}{(n/2)!(n/2)!}.
+  \Pr(T \ge T_{\text{obs}} \mid H_0) = 1 / \binom{8}{4}
+  = 1/70 \approx  0.0143.
 \]
 
-Under \(H_0\), the probability of achieving this perfect result is:
-\[
-p = \frac{1}{\binom{n}{n/2}}.
-\]
+Since this p-value is smaller than the commonly used significance
+level $\alpha = 0.05$, we would reject $H_0$ and conclude that her
+performance is unlikely to be due to guessing.
 
-The p-value is the probability of observing this perfect result or any result 
-as extreme or more extreme, which for this case reduces to the probability of 
-the perfect result since it is the most extreme possible outcome.
-For \(n = 8\), the total number of combinations is:
-\[
-\binom{8}{4} = \frac{8!}{4! \cdot 4!} = 70.
-\]
-The p-value for perfect success is
-\[
-p = \frac{1}{70} \approx 0.0143.
-\]
-For \(n = 10\), the total number of combinations is:
-\[
-\binom{10}{5} = \frac{10!}{5! \cdot 5!} = 252.
-\]
-The p-value for perfect success is:
-\[
-p = \frac{1}{252} \approx 0.0040.
-\]
 
-Apparently, as the sample size $n$ increases, the p-value of observing
-perfect result decreases, and the evidence against $H_0$ gets stronger.
-
-The test statistic summarizes the observed data in a way that allows for 
-quantitative evaluation of \(H_0\). The p-value then expresses the probability, 
-assuming \(H_0\) is true, of observing a test statistic as extreme or more 
-extreme than the observed value. Smaller p-values, such as \(0.0143\) for 
-\(n = 8\) or \(0.0040\) for \(n = 10\), provide stronger evidence against 
-\(H_0\). However, the p-value does not prove \(H_1\); it only quantifies 
-the inconsistency of the observed data with \(H_0\).
-
+Now increase the number of cups to $n = 10$, with the lady again 
+achieving a perfect identification of the $5$ milk-first cups. The 
+p-value is
+\[
+  \Pr(T \ge 5 \mid H_0) = 1 / \binom{10}{5}
+  = 1 / 252 \approx 0.0040.
+\]
+This smaller p-value gives even stronger evidence
+against~$H_0$---suggesting that her performance is highly unlikely to
+be the result of chance guessing and that she may indeed have the 
+ability to tell the difference.
+\end{example}
 
 \section{Permutation Tests}
 
@@ -290,8 +326,8 @@ and sensitivity of a test in different scenarios.
 
 The \emph{size} of a hypothesis test, also referred to 
 as the \emph{significance level} and denoted by \(\alpha\), 
-is the probability of committing a \emph{Type I error}. A 
-Type I error occurs when the null hypothesis, \(H_0\), is 
+is the probability of committing a \emph{Type~I error}. A 
+Type~I error occurs when the null hypothesis, \(H_0\), is 
 rejected even though it is true. For instance, if \(\alpha = 0.05\), 
 there is a 5\% chance of falsely rejecting \(H_0\) when it 
 is true. This level is usually chosen in advance to control 
@@ -306,7 +342,7 @@ a true effect when one exists. It is defined as the
 probability of correctly rejecting \(H_0\) when the 
 alternative hypothesis, \(H_1\), is true. Mathematically, 
 the power is \(1 - \beta\), where \(\beta\) is the probability 
-of committing a \emph{Type II error}—failing to reject \(H_0\) 
+of committing a \emph{Type~II error}—failing to reject \(H_0\) 
 when \(H_1\) is true. Higher power indicates greater 
 sensitivity of the test to detect differences or effects, 
 which is desirable in most applications. The power of a 
@@ -320,8 +356,8 @@ When two tests both maintain the same size, the one with
 higher power is preferred because it provides greater 
 evidence against \(H_0\) when \(H_1\) is true. However, 
 there is an inherent trade-off between size and power. 
-Reducing \(\alpha\) decreases the likelihood of Type I 
-errors but may increase the likelihood of Type II errors, 
+Reducing \(\alpha\) decreases the likelihood of Type~I 
+errors but may increase the likelihood of Type~II errors, 
 leading to lower power. Conversely, increasing power often 
 requires relaxing the significance level or increasing 
 sample size, which may not always be feasible.
