@@ -1,8 +1,5 @@
 set.seed(3527)
 
-pars <- par()$mar
-par(mar=c(4, 4, 0.5, 0.5))
-
 #label===EXT1
 n <- 500
 x <- seq(0, 2, length=n)           # (@\wingding{1}@)
@@ -39,5 +36,3 @@ abline(0,1, lwd=3, col="lightblue")
 rect(0, 0, 0.4, 0.4, lty = 2, border="grey66")
 #===end
 dev.off()
-
-par(mar = pars)
