@@ -613,7 +613,7 @@ get to our destination, given the traffic and our speed.
 
 \runR{Code/datacollect-extrapolate.R}{datacollect-extrapolate}
 
-Look at Figure \ref{fig:ext1}, which shows the relationship between \code{x}
+Look at Figure~\ref{fig:ext1}, which shows the relationship between \code{x}
 and \code{y}, for \code{x} between 0 and 0.25. We've also added the line
 \code{y=x} for reference. Can you guess the value of \code{y} when \code{x}=0.5? 
 How about  when \code{x}=2?
@@ -636,7 +636,7 @@ Next, we generate three functions: in \wingding{3} we create a linear
 function of \code{x}, in \wingding{4} we create the function \code{log(1+x)},
 and in \wingding{5} and \wingding{6} we generate an exponential function that
 increases between 0 and 1, and decreases after 1.
-The three functions are shown in Figure \ref{fig:ext2}.
+The three functions are shown in Figure~\ref{fig:ext2}.
 
 \showChunk{R}{Code/datacollect-extrapolate.R}{EXT1}
 
@@ -654,7 +654,7 @@ rate at first, but then it has a change-point, where the trend changes and it st
   \label{fig:ext2}
 \end{figure}
 
-The code used to produce  Figure \ref{fig:ext2} is as follows. Note that we
+The code used to produce  Figure~\ref{fig:ext2} is as follows. Note that we
 show a sample of 100 points out of the 500 (using the variable \code{pts}),
 only to make it easier to see individual points.
 
@@ -667,10 +667,10 @@ way to tell how the function we try to predict behaves outside the range
 of observed \code{x}.
 
 It is possible to perform a follow-up experiment, and check if our prediction is
-correct. For example, suppose that \code{y} in the data in Figure \ref{fig:ext1}
+correct. For example, suppose that \code{y} in the data in Figure~\ref{fig:ext1}
 represents the average monthly amount spent on online shopping in thousand of dollars,
 and \code{x} represents their annual income (in \$100,000). In our original sample
-which gave us Figure \ref{fig:ext1}, we only had people who spend between 0 and \$300
+which gave us Figure~\ref{fig:ext1}, we only had people who spend between 0 and \$300
 in a month, and their annual salaries were between 0 and \$30,000, with an
 approximate linear relationship between \code{x} and \code{y}.
 
@@ -700,7 +700,7 @@ divide the interval $[0, 3]$ into equal parts in  \wingding{3}.
 In  \wingding{4}, we get the sample (e.g., by measuring the temperature,
 or the frequency of some sound).
 We show a  plot of the data in the left panel
-of Figure \ref{fig:aliasing1}. 
+of Figure~\ref{fig:aliasing1}. 
 
 \showChunk{R}{Code/datacollect-aliasing.R}{aliasing1}
 
@@ -710,7 +710,7 @@ for some unknown frequency $f$. So, we use the  code in
  \wingding{5} and \wingding{5}  to interpolate the data at more dense,
 and equally spaced points. For the interpolation, or fitting the data, 
 we use the function \code{interp1} from the \code{pracma} package.
-We can see  in the right panel of  Figure \ref{fig:aliasing1} that the 
+We can see  in the right panel of  Figure~\ref{fig:aliasing1} that the 
 interpolated function fits the data perfectly.
 
 But, is it really a perfect fit?
@@ -733,7 +733,7 @@ As you can see in \wingding{1}-\wingding{4}, we now collect data for
 our sample at a rate that is 10 times higher than before (it's the same code
 as before, except that the time intervals are 0.01, instead of 0.1). In \wingding{5} 
 we plot the data that we got from the first (low sampling rate) data.
-The new function is shown in Figure \ref{fig:aliasing2}, and it also fits perfectly.
+The new function is shown in Figure~\ref{fig:aliasing2}, and it also fits perfectly.
 
 \begin{figure}[H]
   \includegraphics[width=0.5\textwidth]{images/chapter_6/aliasing2.pdf}
@@ -757,8 +757,8 @@ Let's revisit the parameter \code{f} which we saw in \wingding{1}. This is
 the true frequency that we used. What it means is, that we know the
 function has to oscillate 8 times per time unit. Now, look at Figures  
 \ref{fig:aliasing1} and \ref{fig:aliasing2}. Can you tell which one is the correct 
-function? The function in Figure \ref{fig:aliasing1} completes only two
-cycles between 0 and 1, while the one in Figure \ref{fig:aliasing2}
+function? The function in Figure~\ref{fig:aliasing1} completes only two
+cycles between 0 and 1, while the one in Figure~\ref{fig:aliasing2}
 shows 8 cycles in one time unit. The higher sampling rate gave us the
 true function. The lower sampling rate, although fits the given data perfectly, 
 gives us the wrong function.
