@@ -57,7 +57,8 @@ print(summary(y))
 print(pastecs::stat.desc(y))
 
 #label===ch1sec3-8
-hotelrooms <- cut(runif(100), breaks=c(0, 0.4, 0.7, 1), include.lowest=TRUE)
+hotelrooms <- cut(runif(100), breaks=c(0, 0.4, 0.7, 1),
+                  include.lowest=TRUE)
 levels(hotelrooms) <- c("Motel 6", "Best Western", "Hilton")
 autorental <- cut(runif(100), breaks=c(0, 0.7, 1), include.lowest=TRUE)
 levels(autorental) <- c("Honda", "Tesla")
