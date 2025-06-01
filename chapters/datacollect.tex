@@ -633,12 +633,14 @@ or the frequency of some sound).
 We show a  plot of the data in the left panel
 of Figure~\ref{fig:aliasing1}. 
 
+\why{Some variables such as dt1, \code{dt1_est}, and dt2 are used only one
+time. Maybe remove them to shorten the code?}
 \showChunk{R}{Code/datacollect-aliasing.R}{aliasing1}
 
 We know that the data is supposed to be of the form
 $$y(t)=\cos(2\pi ft)\,,$$
 for some unknown frequency $f$. So, we use the  code in
- \wingding{5} and \wingding{5}  to interpolate the data at more dense,
+\why{\wingding{5}-\wingding{7}?} \wingding{5} and \wingding{5}  to interpolate the data at more dense,
 and equally spaced points. For the interpolation, or fitting the data, 
 we use the function \code{interp1} from the \code{pracma} package.
 We can see  in the right panel of  Figure~\ref{fig:aliasing1} that the 
