@@ -17,11 +17,11 @@ and provide guidance how to avoid common errors in probabilistic thinking.}
 %We will go through examples to see how probability helps interpret phenomena in real life and how probability may counter intuition. We begin by introducing some concepts:
 We begin with some essential terminology and notation: 
 \begin{itemize}
-\item \index{Experiment} Experiment: a situation in which the outcome occurs randomly, e.g.,
+\item Experiment\index{Experiment}: a situation in which the outcome occurs randomly, e.g.,
   flipping a coin, rolling a dice, and picking a card from a deck.
-\item \index{Sample Space} Sample Space: the set of all possible outcomes in an experiment, e.g.,
+\item Sample Space\index{Sample Space}: the set of all possible outcomes in an experiment, e.g.,
 \{head, tail\}, \{1, 2, ..., 6\}, and \{all card faces\}.
-\item \index{Event} Event: a subset of the sample space is called an event; an event occurs
+\item Event\index{Event}: a subset of the sample space is called an event; an event occurs
 if the outcome from an experiment belong to the subset of sample space. For
 example, if
   you roll a die, and you are interested in the result of having an even
@@ -48,11 +48,10 @@ by the inner, rounded rectangle  that contains the numbers 2, 4, and 6.
 an even number) illustrated with Venn diagram} \label{fig:probability-event}
 \end{figure}
 
-\emph{Probability} is a number between zero and one which tells us how likely
+\emph{Probability}\index{\emph{Probability}} is a number between zero and one which tells us how likely
 an event to occur. If we assume (for now) that the sample space is finite and
 each possible outcome in an experiment  has an equal chance to occur, then the
 probability of event $E$ is
-\index{Probability}
 \begin{equation}
   P(E) =\frac{\text{size of } E}{\text{size of } S}.
 \end{equation}
@@ -107,9 +106,9 @@ occurred may change the probability for $B$ to occur. For example, suppose that
 someone rolls a die behind a curtain and tells us only that the number is less
 than or equal to 3. What is the probability that it's an even number? Given
 that we got 1, 2, or 3, the only possibility that it's even is if the number is
-2. The \index{Probability!unconditional} \emph{unconditional} probability of getting an even number in a roll of
+2. The \emph{unconditional}\index{Probability!unconditional} probability of getting an even number in a roll of
 a die is 1/2, but because of the information that provided to us, we conclude
-that the \index{Probability!conditional} \emph{conditional} probability is 1/3.  Using mathematical notation,
+that the \emph{conditional}\index{Probability!conditional} probability is 1/3.  Using mathematical notation,
 we write  $P(B\mid A)=1/3$ which stands for ``conditional on $A$=the number is
 less than or equal to 3, the probability of $B$=the number is even, is 1/3''. 
 
@@ -140,8 +139,8 @@ an even number ($B$)?} \label{fig:probability-conditional}
 \bigskip
 Can it be that we are told that some event $A$ has occurred, but this
 information tells us nothing about the probability of another event, $B$? Yes
--- in this case we say that the two events are \emph{independent}, and we have
-$$P(B\mid A) = P(B)\,.$$ \index{Event!independence}
+-- in this case we say that the two events are \emph{independent}\index{Event!independence}, and we have
+$$P(B\mid A) = P(B)\,.$$ 
 
 For example, Abby rolls a fair die, while her roommate Amelia tosses a fair
 coin at the same time. If $A$ is the event `Abby got a 6' and $B$ is the event
@@ -156,8 +155,7 @@ depend on other (latent) events. For example, if they are late paying the rent,
 then it's quite reasonable that Amelia will get a text from their landlord at
 approximately the same time as Abby. 
 
-\index{Event!mutually exclusive}
-Another related notion is that of `mutually exclusive' events. For example, suppose that
+Another related notion is that of `mutually exclusive\index{Event!mutually exclusive}' events. For example, suppose that
 the Golden State Warriors and the Boston Celtics make it to the NBA finals. If
 $A$ = the Golden State Warriors will win the NBA championship next season, and
 $B$ = the Boston Celtics will win the NBA championship next season, then these
@@ -166,7 +164,7 @@ this example, if we somehow know that $A$ has happened, then we know for sure
 that $B$ didn't. Moreover, if we assign a probability of 0.6 that the Golden
 State Warriors will win, then we know that $P(B) = 0.4$. 
 
-\begin{example}[Two Children]\index{Two children problem}
+\begin{example}[Two Children Problems\index{Two Children Problems}]
 Consider the following two problems:
 \begin{enumerate}
 \item Mr. Jones has two children. The older child is a girl. What is the
@@ -215,10 +213,9 @@ close to the theoretical probabilities 1/2 and 1/3, respectively.
 
 
 \subsection{Bayes' Rule}\label{Bayes}
-\index{Bayes' Rule}
 One of the most important results in probability and statistics looks
 deceivingly simple, but has deep consequences, as we'll see in some of the
-subsequent examples. It's called Bayes' Rule, named after the reverend Thomas
+subsequent examples. It's called Bayes' Rule\index{Bayes' Rule}, named after the reverend Thomas
 Bayes who discovered it in the 18th century. Consider two events, $A$ and $B$,
 such that $P(A)$ is greater than zero. Then
 \begin{equation}\label{eq:bayes}
@@ -258,8 +255,7 @@ game, and $B$ is the events that she attends the weekly ballet}
 \label{fig:bayes-rule}
 \end{figure}
 
-\begin{example}[Bertrand's Box]
-\index{Bertrand's Box} 
+\begin{example}[Bertrand's Box\index{Bertrand's Box}]
 Bertrand's box paradox was first posed by Joseph Bertrand in 1889. Here's the
 question: there are three boxes, one contains two gold coins, one contains two
 silver coins, and one contains a gold coin and a silver coin.
@@ -365,11 +361,10 @@ they may occur in everyday situations, and how to deal with them correctly.
 \hypertarget{Intransitive-Dice}{%
   \subsection{Intransitivity -- when $A>B$ and $B>C$ does not imply
     $A>C$}\label{Intransitive-Dice}}
-\index{Intransitive}
 Real numbers are transitive, meaning that if
 we know that $x>y$ and $y>z$ then $x>z$. However, probabilities of events are
 not always transitive. 
-\begin{example}[Intransitive Dice]
+\begin{example}[Intransitive Dice\index{Intransitive Dice}]
 We have three unusual dice:
 \begin{itemize}
 \item Die A has sides 2, 2, 4, 4, 9, 9.
@@ -468,8 +463,7 @@ of options may not have the transitive property.
 \hypertarget{birthday-problem}{%
   \subsection{Seemingly Rare Events}\label{birthday-problem}}
 
-\begin{example}[Birthday Problem]\label{exam:birthday}
-\index{Birthday Problem}
+\begin{example}[Birthday Problem\index{Birthday Problem}]\label{exam:birthday}
 You go on a long trip on your birthday and take a bus. There are 23 people (including you) on
 the bus, and to make the ride more fun you ask all the other passengers for
 their birth date (month and day, not year) and see if you can celebrate
@@ -600,8 +594,7 @@ past in making such decisions.
 \hypertarget{Monty-Hall-problem}{%
 \subsection{Jumping Probabilities}\label{Monty-Hall-problem}}
 
-\begin{example}[Monty Hall Problem]
-\index{Monty Hall Problem}
+\begin{example}[Monty Hall Problem\index{Monty Hall Problem}]
 Suppose you're on a game show, and you're given the choice of three doors:
 Behind one door is a car; behind the others, goats. Whichever door you pick, you
 get what's behind it.  You pick a door, say No. 1, and the host, who knows
@@ -665,8 +658,7 @@ that overall in the country the average flight takes off on time? If the average
 admission rate in a university is greater for women than for men, can it be that
 in many (or even most) departments in that university the admission rate for men
 is greater than for women? The answer to both these questions, and many similar
-scenarios in life, is yes. This phenomenon is called Simpson's paradox.
-\index{Simpson's paradox}
+scenarios in life, is yes. This phenomenon is called Simpson's paradox\index{Simpson's paradox} .
 
 \begin{example}[Combined percentages]
 Tanya and Sonya are two freshmen players in college. In the first three games of the
@@ -692,8 +684,7 @@ Tonya's percentage from the free throw line is 55\%, while Sonya's is 57.1\%, so
 based on the cumulative information Sonya should be the coach's pick!
 \end{example}
 
-\begin{example}[UC Berkeley alleged gender bias]
-\index{Simpson's paradox!UC Berkeley admissions} 
+\begin{example}[UC Berkeley alleged gender bias\index{Simpson's paradox!UC Berkeley alleged gender bias}]
 A famous example of Simpson's paradox is a study of gender bias among graduate
 school admissions to University of California, Berkeley. In 1973 UC Berkeley was
 sued for sex-discrimination. Here are the overall numbers \textit{combined} from
@@ -815,8 +806,7 @@ population may be very different when we break down the data into groups.
 
 \hypertarget{ch:data}{%
 \subsection{Base-Rate Fallacy}\label{base-rate}}
-\index{Base-rate fallacy}
-The \emph{base-rate fallacy} is a common source of misconceptions due to
+The \emph{base-rate fallacy}\index{\emph{base-rate fallacy}} is a common source of misconceptions due to
 counter-intuitive probabilities when one ignores the base rate. Consider the
 following example:
 
@@ -891,8 +881,7 @@ the prevalence of the disease and the probability of a false positive
 \hypertarget{further}{%
 \section{Further Examples}\label{further}}
 
-\begin{example}[Henry's Choice\footnote{\url{https://www.braingle.com/brainteasers/20227/loaded-revolver.html}}]
-\index{Henry's Choice}
+\begin{example}[Henry's Choice\index{Henry's Choice}\footnote{\url{https://www.braingle.com/brainteasers/20227/loaded-revolver.html}}]
 Henry has been caught stealing cattle, and is brought into town for justice. The
 judge is his ex-wife Gretchen, who wants to show him some sympathy, but the law
 clearly calls for two shots to be taken at Henry from close range. To make
@@ -948,8 +937,7 @@ The technique of simulation is useful in finding answers in very complicated
 problems. Consider the following example modified from
 \cite{flajolet2009analytic}.
 
-\begin{example}[100 Prisoners]
-\index{100 Prisoners}
+\begin{example}[100 Prisoners\index{100 Prisoners}]
 In a prison, there are 100 death row prisoners who are numbered from 1
 to 100, and there is a room with 100 drawers labeled from 1 to
 100. The director randomly puts one prisoner's number in each closed
