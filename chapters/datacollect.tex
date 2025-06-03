@@ -9,18 +9,18 @@ of the population, and how this may lead to entirely invalid conclusions.
 \section{Representative sample}\label{representative}}
 \hypertarget{ch:data}{%
 \subsection{Definitions of key terms}\label{keyterms}}
-First, let's introduce some terminology. A \emph{population} is the set of 
-individuals (\emph{subjects}) which we're interested in studying. Subjects may be 
+First, let's introduce some terminology. A \emph{population}\index{\emph{population}} is the set of 
+individuals (\emph{subjects}\index{\emph{population}}) which we're interested in studying. Subjects may be 
 people, mice, or devices produced in a factory, just to name a few examples. 
 
-A \emph{sample} is a subset of the population. The sample is said to be
-\emph{representative} if it reflects the characteristics of the population.
+A \emph{sample}\index{\emph{sample}} is a subset of the population. The sample is said to be
+\emph{representative}\index{\emph{sample}!\emph{representative}} if it reflects the characteristics of the population.
 For example, if in the United States the proportion of females is approximately 50\%,
 then a sample taken from this population should also have approximately 50\% females
 in order to be considered representative.
 This is important because a main goal of statistical data science is to use the
 smaller sample to draw conclusions on the population.
-We saw in chapter \ref{ch:llnclt} that the law of large numbers and the central limit
+We saw in Chapter~\ref{ch:llnclt} that the law of large numbers and the central limit
 theorem guarantee that if the sample is representative of the entire population,
 then our estimates can be trusted with a certain degree of confidence,
 and the largest the sample, the more confident we are about the estimate
@@ -29,7 +29,7 @@ and the conclusions that we can draw from it.
 However, if the sample doesn't faithfully represent the population, then no matter
 how large the sample is, the results can't be trusted. When the quantity we want
 to estimate and reason about is estimated based on a non-representative sample,
-we get a \emph{biased} estimator. By bias we mean that the obtained estimate
+we get a \emph{biased}\index{estimator!\emph{biased}} estimator. By bias\index{estimator!bias} we mean that the obtained estimate
 is not a good approximation of the true value, and it doesn't improve when we
 take a larger sample.
 
@@ -62,7 +62,7 @@ relationship between height and weight.
 Now we use the following code to uniformly and randomly select $n=50$ people as
 a sample from the population and mark the selected people in
 Figure~\ref{fig:representativesample} (b) using the dark trinagles. The \code{sample()} function
-is used to draw a \emph{simple random sample (SRS)} of size \code{n}
+is used to draw a \emph{simple random sample (SRS)}\index{\emph{simple random sample}} of size \code{n}
 from the population of size \code{N}. SRS means that every subject in
 the population has an equal probability of being selected into the sample.
 We see that the smaller sample of
@@ -163,12 +163,22 @@ to eliminate any bias from our sample (and we do!) is to be aware of the potenti
 pitfalls.
 \end{example}
 
-\subsection{Randomized control trials vs. observational studies}
-The gold standard in data collection is to perform a \emph{randomized control trial} (RCT).
-This can only be done if we can pre-plan our experiment, and we know in advance
-what data needs to be collected. The typical examples are in medical experiments,
-where the outcome that we intend to measure (e.g., blood pressure) is believed to
-be associated with a treatment (e.g., a new drug.)
+\subsection{Controlled Experiments vs. Observational Studies}
+
+Understanding how data is collected is crucial for interpreting the resulting
+analyses and for drawing valid conclusions. The two primary approach in data
+collection are controlled experiments and observational studies. Each of these
+has strengths and weaknesses, and choosing between them often depends on the
+feasibility and ethics of the research question.
+
+\subsubsection{Randomized Controlled Trials (RCTs)}
+
+A typical example of a controlled experiment is a \emph{randomized controlled
+  trial} (RCT), which is considered the gold standard in data collection. 
+RCTs are possible when we can pre-plan an experiment and determine in advance
+what data needs to be collected. This approach is frequently used in medical
+research, where we wish to evaluate the effectiveness of a new treatment (e.g.,
+a new drug) on an outcome (e.g., blood pressure).
 There may be multiple factors affecting the outcome (or at least, that could affect it).
 For example, we may have a reason to think that age, sex, body mass index (BMI),
 or other things are related to one's blood pressure.
@@ -220,6 +230,8 @@ treatment effect. After all, without the missing data, we can never tell for sur
 the observed differences between the groups is due to the treatments, or to the
 missing factors!
 
+\subsubsection{Observational Studies}
+
 Most of the time, the data that's available for analysis is not from RCTs, but from
 \emph{observational studies}. These are typically much easier to collect, but they don't
 guarantee proper randomization, and that may lead to biased results. 
@@ -234,17 +246,16 @@ So, in such surveys (which are much easier and cheaper to collect than RCTs),
 individuals are not randomly assigned to groups by the people designing the experiment,
 but rather, they can \emph{select} their own group. 
 
+\subsubsection{Implications for Analysis}
 
-Whenever we analyze data, we must know how it was collected. Was it through a randomized 
-control trial, or is it just data that came from an observational study? Conclusions
-from the former can be much stronger, in the sense that they allow us to establish
-cause and effect relationship. But, as we said, most of the data that we encounter
-doesn't come from a RCT. In these cases, we must be careful when we draw conclusions.
-Usually, we can only make statements about \emph{associations} between variables,
-but not much (if at all) about causality.
-
-
-
+Whenever we analyze data, we must know how it was collected. Was it through a
+controlled experiment, or is it just data that came from an observational study?
+Conclusions from the former can be much stronger, in the sense that they allow
+us to establish cause and effect relationship. But, as we said, most of the data
+that we encounter doesn't come from a controlled experiment. In these cases, we
+must be careful when we draw conclusions.  Usually, we can only make statements
+about \emph{associations} between variables, but not much (if at all) about
+causality.
 
 \hypertarget{ch:data}{%
 \section{Types of data problems}}
@@ -377,7 +388,7 @@ points in this region, but we never observe them. They include the majority of
 bad books and bad movies.
 
 This type of selection bias problem is related to the idea of \emph{conditional probability},
-which we discussed in Chapter \ref{ch:probability}. When we calculate probabilities, or
+which we discussed in Chapter~\ref{ch:probability}. When we calculate probabilities, or
 obtain other statistics, our results depend on the  set of possible events. If we limit 
 the set of observable events, we should generally expect our selection to have
 an impact on our analysis. Only when the selection of the subset is \emph{independent}
