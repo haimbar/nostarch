@@ -158,8 +158,8 @@ The documentation for each function can be obtained by using
 to get the documentation for \lstinline{date()}, try either line of the following:
 \index{R command!\code{help}}
 
-\showCode{R}{Code/ch1sec1.R}[1][2]
-% \showChunk{R}{Code/ch1sec1.R}{ch1sec1-1}
+%\showCode{R}{Code/ch1sec1.R}[1][2]
+\showChunk{R}{Code/ch1sec1.R}{ch1sec1-1}
 
 \subsection{Changing Your Working Directory}
 When we start an \R session, it's important to determine the \emph{working directory}.
@@ -167,8 +167,8 @@ When we start an \R session, it's important to determine the \emph{working direc
 This is the folder on our computer that \R will use to search for data or code files, 
 and it's where \R will save results (unless we explicitly specify another directory).
 To find out what our working directory is, we can use the following:
-% \showChunk{R}{Code/ch1sec1.R}{ch1sec1-1}
-\showCode{R}{Code/ch1sec1.R}[5][5]
+\showChunk{R}{Code/ch1sec1.R}{ch1sec1-getwd}
+%\showCode{R}{Code/ch1sec1.R}[5][5]
 We sometimes refer to the complete directory information as the \emph{path},
 since it tells us how to get to a specific file, starting from the root
 directory (which is denoted by a ~\emph{\slash} on Mac and Linux, or  
@@ -196,8 +196,8 @@ Let's start by generating some data.
 The simplest function to create data is  \lstinline{c()}, which stands for ``combine.'' 
 \index{R command!\code{c}, combine}
 We can use it like so:
-% \showChunk{R}{Code/ch1sec1.R}{ch1sec1-1}
-\showCode{R}{Code/ch1sec1.R}[9][9]
+\showChunk{R}{Code/ch1sec1.R}{ch1sec1-2}
+%\showCode{R}{Code/ch1sec1.R}[9][9]
 Here we've created a variable called \lstinline{courseNames}, and it contains 
 three values: \lstinline{Data Science}, \lstinline{Statistics}, and \lstinline{Probability}.
 We assigned the values into the variable by using the \lstinline{<-} operator. 
@@ -205,8 +205,8 @@ We assigned the values into the variable by using the \lstinline{<-} operator.
 
 We can now do things with this variable. For example, we check the variable type,
 using the \lstinline{class()} function:
-% \showChunk{R}{Code/ch1sec1.R}{ch1sec1-1}
-\showCode{R}{Code/ch1sec1.R}[10][10]
+\showChunk{R}{Code/ch1sec1.R}{ch1sec1-3}
+%\showCode{R}{Code/ch1sec1.R}[10][10]
 \noindent In this case the output should be \index{R command!\code{class}} \index{R command!\code{cat}}
  \inlnR{```cat(class(courseNames))```}[introcoursenames], which means that this variable is
  used to store text. % (\lstinline{character} class):
@@ -214,8 +214,8 @@ using the \lstinline{class()} function:
 %\includeOutput{ch1ex1class}
 We can also get a bit more detailed information about a variable by checking
 its structure; to do this, we use the \lstinline{str()} function:\index{R command!\code{str}}
-\showCode{R}{Code/ch1sec1.R}[11][11]
-% \showChunk{R}{Code/ch1sec1.R}{ch1sec1-1}
+%\showCode{R}{Code/ch1sec1.R}[11][11]
+\showChunk{R}{Code/ch1sec1.R}{ch1sec1-4}
 \noindent As you should see in the output, this shows that the variable is of class 
 \lstinline{chr} (which stands for character), and it has three values:
 \inlnR{```str(courseNames)```}[introstrcoursenames][vbox]
@@ -226,8 +226,8 @@ Our \lstinline{courseNames} is what's called a \emph{vector}, a one-dimensional
 array of objects of the same type (in this case, strings of characters).
 We can also get the number of elements in a vector by using the \index{R command!\code{length}}
 \lstinline{length()} function:
-\showCode{R}{Code/ch1sec1.R}[12][12]
-% \showChunk{R}{Code/ch1sec1.R}{ch1sec1-1}
+%\showCode{R}{Code/ch1sec1.R}[12][12]
+\showChunk{R}{Code/ch1sec1.R}{ch1sec1-5}
 
 
 Pick good variable names. They should describe the meaning of the value, yet be
@@ -243,8 +243,8 @@ We often have to generate variables that contain sequences of numbers. To do tha
 we use the \lstinline{seq()} function. For example, we can create a variable that
 \index{R command!\code{seq}}
 contains all the odd numbers between 1 and 20:
-\showCode{R}{Code/ch1sec1.R}[14][14]
-% \showChunk{R}{Code/ch1sec1.R}{ch1sec1-1}
+%\showCode{R}{Code/ch1sec1.R}[14][14]
+\showChunk{R}{Code/ch1sec1.R}{ch1sec1-6}
 The variable \lstinline{oddLT20} should contain the following values: 
 \inlnR{```cat(paste(oddLT20))```}[introoddlt20].
 % AF: This command was changing the font size of the rest of the PDF. I've gone into your commands and updated it so it no longer does this.
@@ -252,8 +252,8 @@ The variable \lstinline{oddLT20} should contain the following values:
 %\includeOutput{ch1ex2}
 To generate consecutive values, we can also use the colon operator (\lstinline{:}). 
 For example, try:
-\showCode{R}{Code/ch1sec1.R}[18][18]
-% \showChunk{R}{Code/ch1sec1.R}{ch1sec1-1}
+%\showCode{R}{Code/ch1sec1.R}[18][18]
+\showChunk{R}{Code/ch1sec1.R}{ch1sec1-7}
 Note that the parentheses surrounding the whole line cause \R to print the content
 of the variable \lstinline{firstThirteen} in the console.
 
@@ -261,8 +261,8 @@ of the variable \lstinline{firstThirteen} in the console.
 Another useful function to generate data is \lstinline{rep()}, which replicates values.
 We often have to generate a vector consisting of a single value (for example, 
 a vector of ones or zeros). We can do it like so:
-\showCode{R}{Code/ch1sec1.R}[20][22]
-% \showChunk{R}{Code/ch1sec1.R}{ch1sec1-1}
+%\showCode{R}{Code/ch1sec1.R}[20][22]
+\showChunk{R}{Code/ch1sec1.R}{ch1sec1-8}
 Note we've introduced two new functions: the sum (\lstinline{sum()}) and cumulative
 sum (\lstinline{cumsum()}) functions.
 The variable \lstinline{ones} contains the values: \inlnR{```cat(paste(ones))```}[introones],
@@ -282,8 +282,8 @@ There are many functions to handle text. The \lstinline{paste()} function attach
 \emph{strings} of characters together. The default is to combine, or \emph{concatenate},
  strings with a space as a separator, but we can use the \lstinline{collapse} option 
  (also called an \emph{argument} of the function) to use a different separator. For example,
-\showCode{R}{Code/ch1sec1.R}[24][25]
-% \showChunk{R}{Code/ch1sec1.R}{ch1sec1-1}
+%\showCode{R}{Code/ch1sec1.R}[24][25]
+\showChunk{R}{Code/ch1sec1.R}{ch1sec1-9}
 %\inlnR{```cat(paste(courseNames))```}
 \noindent Here we've used \lstinline{collapse} to specify that the strings should be 
 separated by a comma followed by a space.  The second line generates the 
@@ -304,8 +304,8 @@ The package lattice provides ``elegant high-level data visualization system with
 emphasis on multivariate data.'' To install the package, we use the
 \lstinline{install.packages()} function. In order to use the package, you have to load
 it using the \lstinline{library()} function:
-\showCode{R}{Code/ch1sec1.R}[45][46]
-% \showChunk{R}{Code/ch1sec1.R}{ch1sec1-1}
+%\showCode{R}{Code/ch1sec1.R}[45][46]
+\showChunk{R}{Code/ch1sec1.R}{ch1sec1-10}
 \index{R command!\code{install.packages}}
 
 
@@ -317,8 +317,8 @@ function. You have to reload the package each time you begin a new \R session.
 To see a package in action, let's use a built-in dataset of opera singers and plot their
 heights by their vocal range:
 
-\showCode{R}{Code/ch1sec1.R}[49][50]
-% \showChunk{R}{Code/ch1sec1.R}{ch1sec1-1}
+%\showCode{R}{Code/ch1sec1.R}[49][50]
+\showChunk{R}{Code/ch1sec1.R}{ch1sec1-vocal}
 
 The results should look like Figure~\ref{fig:ch1:operaheight}.
 
@@ -335,8 +335,8 @@ The results should look like Figure~\ref{fig:ch1:operaheight}.
 \section{Creating a Deck of Cards}
 Let's combine what we've learned so far to create the 52 cards in a standard deck,
 including four suits: clubs, diamonds, hearts, and spades. Here's our initial code:
-\showCode{R}{Code/ch1sec1.R}[28][29]
-% \showChunk{R}{Code/ch1sec1.R}{ch1sec1-1}
+%\showCode{R}{Code/ch1sec1.R}[28][29]
+\showChunk{R}{Code/ch1sec1.R}{ch1sec1-deck}
 Run each line separately and check the content of \lstinline{suits} and what
 \lstinline{rep(1:13, 4)} generates. Note that the function \lstinline{paste0()} is the
 same as \lstinline{paste(..., collapse="")}. The content of the cards variable should be:
@@ -346,8 +346,8 @@ Now that we have our cards, let's use them.
 \subsection{Getting Samples}
 Let's `deal' five cards to each player in a game of poker. We will use the
 \lstinline{sample()} function to do this: \index{R command!\code{sample}}
-\showCode{R}{Code/ch1sec1.R}[32][34]
-% \showChunk{R}{Code/ch1sec1.R}{ch1sec1-1}
+%\showCode{R}{Code/ch1sec1.R}[32][36]
+\showChunk{R}{Code/ch1sec1.R}{ch1sec1-deal}
 The \lstinline{sample()} function in this example is used to draw 20 cards at random
 from the deck; we don't put the cards back in the deck, so we say they were drawn
 \emph{without replacement}. Then, to divide it into four hands, we use the
@@ -373,8 +373,8 @@ functions we've mentioned earlier.
 \subsection{Saving to a File}
 We can save variables to a file in order to use them in a later session. Create a
 folder called \emph{tmp} in your working directory, and enter:
-\showCode{R}{Code/ch1sec1.R}[36][36]
-% \showChunk{R}{Code/ch1sec1.R}{ch1sec1-1}
+%\showCode{R}{Code/ch1sec1.R}[36][36]
+\showChunk{R}{Code/ch1sec1.R}{ch1sec1-save}
 
 
 If we don't specify the path, the file will be stored in the current working directory.
@@ -383,8 +383,8 @@ you can set it to another directory with \lstinline{setwd()}.
 
 
 We can get the saved variables using the following:
-\showCode{R}{Code/ch1sec1.R}[37][37]
-% \showChunk{R}{Code/ch1sec1.R}{ch1sec1-1}
+%\showCode{R}{Code/ch1sec1.R}[37][37]
+\showChunk{R}{Code/ch1sec1.R}{ch1sec1-load}
 \index{R command!\code{save}}
 \index{R command!\code{load}}
 Variables that we don't save will not be available once we terminate the current
