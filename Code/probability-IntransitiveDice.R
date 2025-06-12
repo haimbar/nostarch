@@ -9,6 +9,9 @@ rollC <- sample(C, n, replace=TRUE)
 ab = mean(rollA > rollB)
 bc = mean(rollB > rollC)
 ca = mean(rollC > rollA)
-cat("The proportion that Die A gave a value greater than Die B:", ab, "\n")
-cat("The proportion that Die B gave a value greater than Die C:", bc, "\n")
-cat("The proportion that Die C gave a value greater than Die A:", ca, "\n")
+cat("The proportion that Die A gave a value greater than Die B:", ab,
+    "\n")
+cat("The proportion that Die B gave a value greater than Die C:", bc,
+    "\n")
+cat("The proportion that Die C gave a value greater than Die A:", ca,
+    "\n")
