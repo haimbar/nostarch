@@ -174,7 +174,8 @@ feasibility and ethics of the research question.
 \subsubsection{Randomized Controlled Trials (RCTs)}
 
 A typical example of a controlled experiment is a \emph{randomized controlled
-  trial} (RCT), which is considered the gold standard in data collection. 
+  trial} \index{\emph{randomized controlled
+  trial}} (RCT), which is considered the gold standard in data collection. 
 RCTs are possible when we can pre-plan an experiment and determine in advance
 what data needs to be collected. This approach is frequently used in medical
 research, where we wish to evaluate the effectiveness of a new treatment (e.g.,
@@ -196,7 +197,8 @@ the subpopulations in all groups are identical, then if there is a difference in
 the outcome between the groups, then it must be due to the one thing that separates the
 groups.
 
-The \emph{control} part in RCT means that one of the treatment groups is our baseline,
+The \emph{control} \index{\emph{randomized controlled
+  trial!control}} part in RCT means that one of the treatment groups is our baseline,
 and we compare all the other types of treatments to it. In our example, the old drug's
 effect on blood pressure is known, and we want to know if the new drugs give better
 results in controlling blood pressure.
@@ -233,7 +235,7 @@ missing factors!
 \subsubsection{Observational Studies}
 
 Most of the time, the data that's available for analysis is not from RCTs, but from
-\emph{observational studies}. These are typically much easier to collect, but they don't
+\emph{observational studies} \index{\emph{observational studies}}. These are typically much easier to collect, but they don't
 guarantee proper randomization, and that may lead to biased results. 
 For example, we may want to look at the effect of education on future income.
 We can conduct a survey and ask people how many years of schooling they had
@@ -266,7 +268,7 @@ types of `dark data' -- data that we don't observe, and by ignoring its existenc
 are lead to wrong (potentially disastrous) conclusions. 
 We will demonstrate some of these data problems in this chapter.
 
-\subsection{Berkson's bias}\label{berkson-bias}
+\subsection{Berkson's bias\index{bias!Berkson's bias}}\label{berkson-bias}
 In his book, \textit{How Not to Be Wrong: The Power of Mathematical Thinking}, 
 Jordan Ellenberg poses the question:
  `\textit{Why are handsome men such jerks?}' \citep{ellenberg2015not}.
@@ -287,7 +289,7 @@ are not collected at random and some items have a higher or lower probability
 of being included in the sample. The particular form of bias in this case has a name,
 and it's called \emph{Berkson's bias}. Let's start with an example to explain.
 
-\begin{example}[Stamps display]
+\begin{example}[Stamps display\index{bias!Berkson's bias!Stamps display}]
   Suppose you have 1,000 postage stamps: 300 are pretty, 100 are rare, and 30 are
   both pretty and rare. Is a rare stamp more likely to be pretty?  Now you want
   to show some of your stamps to your friends. You probably want to show them
@@ -382,12 +384,12 @@ a chance to hear about them. Thus, the impression that Hollywood ruins good book
 false. It's just an impression based on a biased sample. 
 
 The `blank square' in the bottom-left corner of Figure~\ref{fig:berkson} (b), where we see no
-points at all, is our \emph{dark data} in this example, and is the source of
+points at all, is our \emph{dark data}\index{bias!Berkson's bias!dark data} in this example, and is the source of
 our biased result, and the false impression. There are, in fact, many data
 points in this region, but we never observe them. They include the majority of
 bad books and bad movies.
 
-This type of selection bias problem is related to the idea of \emph{conditional probability},
+This type of selection bias problem is related to the idea of \emph{conditional probability}\index{\emph{conditional probability}},
 which we discussed in Chapter~\ref{ch:probability}. When we calculate probabilities, or
 obtain other statistics, our results depend on the  set of possible events. If we limit 
 the set of observable events, we should generally expect our selection to have
@@ -396,7 +398,7 @@ of the characteristics of subjects in the population, can we trust the results o
 from a sample.
 
 \hypertarget{ch:data}{%
-\subsection{Survival Bias}\label{survival-bias}}
+\subsection{Survival Bias\index{bias!Survival Bias}}\label{survival-bias}}
 
 Survivor bias arises when observations are limited to subjects or objects that
 have ``survived'' or successfully completed a particular process, while those
@@ -407,7 +409,7 @@ the vast majority of failures. Ignoring survivor bias can result in misleading
 or even entirely incorrect conclusions, as it fails to account for the unseen
 data that play a critical role in understanding the complete picture.
 
-\begin{example}[hit aircraft]
+\begin{example}[hit aircraft\index{bias!Survival Bias!hit aircraft}]
 During World War II, aircraft that had returned from missions were examined and
 the most-hit areas of the plane are given in
 Figure~\ref{fig:survival-bias}. Which areas should the army add armor to
@@ -442,7 +444,7 @@ Sometimes we just don't know that we're missing critical data. It can be
 in the form of base-rate fallacy, where the data we may be ignoring
 (unless we're careful) is the prevalence of something in the population,
 such as blood type or a disease. In other cases, we may be missing data
-because of \emph{selection bias}, where we inadvertently analyze only
+because of \emph{selection bias}\index{bias!selection bias}, where we inadvertently analyze only
 a non-random sample, as was the case with Berkson's bias or in the
 survival bias story.
 
