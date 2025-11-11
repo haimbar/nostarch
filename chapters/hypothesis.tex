@@ -77,8 +77,6 @@ its validity, only that the data do not provide sufficient grounds for
 rejection.
 
 
-% Misconception \citep{falk1995significance}. 
-
 \subsection{Type~I and Type~II Errors}
 
 The probabilistic nature of hypothesis testing introduces two types of 
@@ -124,8 +122,8 @@ uncertainty and how error probabilities---Type~I and Type~II---must be
 considered in the design and interpretation of hypothesis tests.
 \end{example}
 
-\subsubsection{The Test Statistic and the p-Value}
 
+\subsubsection{Test Statistic and P-Value}
 
 In hypothesis testing, a \emph{test statistic}\index{\emph{test statistic}} 
 is a numerical summary of the data used to evaluate the null hypothesis, 
@@ -192,7 +190,6 @@ $T_{\text{obs}} = 4$, and the p-value is
   \Pr(T \ge T_{\text{obs}} \mid H_0) = 1 / \binom{8}{4}
   = 1/70 \approx  0.0143.
 \]
-
 Since this p-value is smaller than the commonly used significance
 level $\alpha = 0.05$, we would reject $H_0$ and conclude that her
 performance is unlikely to be due to guessing.
@@ -213,102 +210,120 @@ ability to tell the difference.
 
 \section{Permutation Tests}
 
+The test we performed in the example of lady tasting tea belong to a
+general family of tests known as the
+\emph{permutation test}\index{test!permutation}.
 
-Permutation tests rely on the assumption that under the null hypothesis, 
-\(H_0\), the group labels (e.g., \(x_1\) and \(x_2\)) are exchangeable. 
-This means that if \(H_0\) is true, the observed values in both groups 
-come from the same underlying distribution, and any difference between 
-groups is due to random variation.
+\subsection{Permutation under Exchangeability}
 
-By pooling all the data and randomly reassigning it into new groups, we 
-simulate what the data might look like if \(H_0\) were true. Each 
-permutation represents a potential arrangement of the data under \(H_0\), 
-and the distribution of the test statistic across these permutations 
-forms the \emph{sampling distribution under \(H_0\)}. Comparing the 
-observed test statistic to this distribution allows us to calculate a 
-p-value, which quantifies how extreme the observed result is, assuming 
-\(H_0\).
+A permutation test relies on the assumption that under the null
+hypothesis~$H_0$, certain labels indicating the groups of the data are
+exchangeable. This means that if $H_0$ is true, the observed values in
+different groups come from the same underlying distribution, and any
+difference across groups is due to random variation.
+As such, the extremeness of the observed test statistic
+can be assessed with the same testing statistics calculated on all
+randomly permuted versions of the observed data.
 
 
-The validity of permutation testing hinges on the exchangeability of 
-the data under \(H_0\). If \(H_0\) is true, the data's group labels are 
-arbitrary, and shuffling them does not alter their joint distribution. 
-This ensures that the permutation-based sampling distribution accurately 
-represents the behavior of the test statistic under \(H_0\).
+By pooling all the data and randomly reassigning the group labels, we 
+simulate what the data might look like if $H_0$ were true. Each 
+permutation represents a potential arrangement of the data
+under~$H_0$, and the distribution of the test statistic across these
+permutations forms the \emph{sampling distribution under
+  $H_0$}\index{sampling distribution!under $H_0$}. Comparing the
+observed test statistic to this distribution allows us to calculate its
+p-value, which quantifies how extreme the observed result is
+under~$H_0$.
 
 
 For instance, in the ``Lady Tasting Tea'' experiment, the null hypothesis 
-\(H_0\) assumes that the lady is guessing randomly. Under this assumption, 
+$H_0$ assumes that the lady is guessing randomly. Under this assumption, 
 all possible arrangements of the cups are equally likely, making the 
-permuted sampling distribution an exact representation of \(H_0\). Similarly, 
-in the example of testing for a difference in means between \(x_1\) and \(x_2\), 
-the permuted sampling distribution reflects the behavior of the test 
-statistic when there is no true difference between the groups.
+permuted sampling distribution an exact representation of $H_0$.
+Similarly, when testing for a difference in means between two groups,
+which could, for example, be a treatment group and placebo group in a
+clinical trial setting. The distribution of the difference in two
+group means when the groups are randomly permuted reflects the
+behavior of the test statistic when there is no true difference
+between the groups.
 
 
-\paragraph{Defining the Test Statistic}
-To make this concrete, let us revisit the example. Suppose we have two 
-groups of data, \(x_1\) and \(x_2\), with sample sizes \(n_1 = n_2 = 30\). 
-If \(H_0\) is true, there is no real difference between the groups, so 
-the observed difference in means, \why{This should be code instead of latex, right?} \code{mean(\(x_2\)) - mean(\(x_1\))}, 
-is simply due to chance.
-\showCode{R}{Code/hypo-perm.R}[4][8]
+In some scenarios, the total number of possible permutations can be
+too large, making it prohibitive to exhaust all permutations to form
+exact sampling distribution. 
 
 
-When we randomly shuffle the pooled data \code{\(x_1\) and \(x_2\)} 
-and split it into new groups of size \(n_1\) and \(n_2\), the resulting 
-groupings represent plausible outcomes under \(H_0\). Repeating this 
+\subsection{Monte Carlo Approximation}
+
+When it is infeasible to exhaust all possible permutations, we can use
+Monte Carlo approximation to draw a large number of possible
+permutations, and approximate the sampling distribution based on
+empirical distribution of the test statistic computed from this large
+number of random permutations.
+
+
+\begin{example}[Permutation test for two-group comparison]
+To make this concrete, let us consider a two-group comparison
+example. Suppose we have two
+groups of data, $x_1$ and $x_2$, with sample sizes $n_1 = n_2 = 30$. 
+If $H_0$ is true, there is no real difference between the groups, so 
+the observed difference in the sample means, $\bar x_1 - \bar x_2$,
+where $\bar x_1$ and $\bar x_2$ are, respectively, the sample mean of
+the 1st and 2nd groups, is simply due to chance.
+
+\showChunk{R}{Code/hypo-perm.R}{HypoPermSetup}
+
+Here, \code{xd} is the observed difference in means between $x_1$ and 
+$x_2$. Under $H_0$, which assumes no difference between the groups, 
+any observed difference is due to random variation.
+
+
+When we randomly shuffle the pooled data \code{$x_1$ and $x_2$} 
+and split it into new groups of size $n_1$ and $n_2$, the resulting 
+groupings represent plausible outcomes under $H_0$. Repeating this 
 permutation many times allows us to build the sampling distribution 
 of the test statistic under the assumption of no group differences.
 
 
-
-Here, \code{xd} is the observed difference in means between \(x_1\) and 
-\(x_2\). Under \(H_0\), which assumes no difference between the groups, 
-any observed difference is due to random variation.
-
-\paragraph{Generating the Sampling Distribution Under \(H_0\)}
-
-To compute a p-value, we need the \emph{sampling distribution} of the test 
-statistic under \(H_0\). Permutation testing constructs this distribution 
+To compute the p-value of the observed test statistic \code{xd},
+we need the \emph{sampling distribution} of the test 
+statistic under $H_0$. Permutation testing constructs this distribution 
 by repeatedly shuffling the data to simulate the null hypothesis. For a 
 single permutation, we shuffle the combined data, split it into two groups, 
 and compute the test statistic:
-\showCode{R}{Code/hypo-perm.R}[12][14]
+\showChunk{R}{Code/hypo-perm.R}[HypoPermOnePerm]
 
 
-Each permutation represents a possible arrangement of the data under \(H_0\). 
-If the total number of permutations is small, we can enumerate all possible 
-arrangements to compute an exact p-value:
-\showCode{R}{Code/hypo-perm.R}[19][19]
+Each permutation represents a possible arrangement of the data
+under~$H_0$. The totle number of permutations is:
+\showChunk{R}{Code/hypo-perm.R}[HypoPermFullCount]
 
-
-\paragraph{Approximating the p-Value via Random Permutations}
-
-When the total number of permutations is large, as is often the case, we 
-approximate the sampling distribution using a subset of random permutations.
+This total number of permutations is about $1.18 \times 10^{17}$,
+which is too large to exhaust. So we approximate the sampling
+distribution using a subset of random permutations.
 This is implemented in the following function:
-\showCode{R}{Code/hypo-perm.R}[22][33]
+\showChunk{R}{Code/hypo-perm.R}[HypoPermMyPermTest]
 
 This function simulates \code{nperm} permutations, calculates the test 
 statistic for each, and compares them to the observed test statistic to 
 compute the p-value.
 
-\begin{example}[Two-sample test based on random permutation]
+
 Let us apply the permutation test to two samples drawn from gamma 
-distributions, with a true difference (\(\delta = 10\)):
-\showCode{R}{Code/hypo-perm.R}[35][38]
+distributions, with a true difference ($\delta = 10$):
+\showChunk{R}{Code/hypo-perm.R}[HypoPermDemo]
 
 
 This outputs the p-value, which quantifies the probability of observing a 
 test statistic as extreme as or more extreme than the observed statistic 
-under \(H_0\).
+under $H_0$. 
 \end{example}
 
 
 Permutation tests rely on minimal assumptions, making them robust to 
 non-standard data distributions. The resulting p-value provides evidence 
-against \(H_0\): a smaller p-value indicates stronger evidence that the 
+against $H_0$: a smaller p-value indicates stronger evidence that the 
 observed difference in means is not due to chance. By using random 
 permutations, we efficiently approximate the sampling distribution when 
 enumeration of all permutations is computationally infeasible.
@@ -325,38 +340,38 @@ power. These properties help us understand the reliability
 and sensitivity of a test in different scenarios.
 
 The \emph{size} of a hypothesis test, also referred to 
-as the \emph{significance level} and denoted by \(\alpha\), 
+as the \emph{significance level} and denoted by $\alpha$, 
 is the probability of committing a \emph{Type~I error}. A 
-Type~I error occurs when the null hypothesis, \(H_0\), is 
-rejected even though it is true. For instance, if \(\alpha = 0.05\), 
-there is a 5\% chance of falsely rejecting \(H_0\) when it 
+Type~I error occurs when the null hypothesis, $H_0$, is 
+rejected even though it is true. For instance, if $\alpha = 0.05$, 
+there is a 5\% chance of falsely rejecting $H_0$ when it 
 is true. This level is usually chosen in advance to control 
 the risk of false positives, with typical values being 0.05 
 or 0.01. Importantly, the size of a test depends on the 
-sampling distribution of the test statistic under \(H_0\). 
+sampling distribution of the test statistic under $H_0$. 
 Tests that control their size consistently are said to 
 be valid.
 
 The \emph{power} of a test measures its ability to detect 
 a true effect when one exists. It is defined as the 
-probability of correctly rejecting \(H_0\) when the 
-alternative hypothesis, \(H_1\), is true. Mathematically, 
-the power is \(1 - \beta\), where \(\beta\) is the probability 
-of committing a \emph{Type~II error}—failing to reject \(H_0\) 
-when \(H_1\) is true. Higher power indicates greater 
+probability of correctly rejecting $H_0$ when the 
+alternative hypothesis, $H_1$, is true. Mathematically, 
+the power is $1 - \beta$, where $\beta$ is the probability 
+of committing a \emph{Type~II error}—failing to reject $H_0$ 
+when $H_1$ is true. Higher power indicates greater 
 sensitivity of the test to detect differences or effects, 
 which is desirable in most applications. The power of a 
 test depends on several factors, including the sample 
-size, the true effect size, the significance level \(\alpha\), 
+size, the true effect size, the significance level $\alpha$, 
 and the variability in the data. Larger sample sizes, 
 larger effect sizes, and smaller variability all contribute 
 to higher power.
 
 When two tests both maintain the same size, the one with 
 higher power is preferred because it provides greater 
-evidence against \(H_0\) when \(H_1\) is true. However, 
+evidence against $H_0$ when $H_1$ is true. However, 
 there is an inherent trade-off between size and power. 
-Reducing \(\alpha\) decreases the likelihood of Type~I 
+Reducing $\alpha$ decreases the likelihood of Type~I 
 errors but may increase the likelihood of Type~II errors, 
 leading to lower power. Conversely, increasing power often 
 requires relaxing the significance level or increasing 
@@ -423,6 +438,9 @@ increases. For the t-test, performance depends on the assumption of
 normality, while the Wilcoxon test is more robust under non-normal
 distributions like the Cauchy.
 \end{example}
+
+\section{Multiple Testing}
+
 
 
 
