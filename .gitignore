@@ -303,7 +303,7 @@ cclt/syllabus-23.pdf
 uconn-pcs/projects.pdf
 
 .RData
-.Rhistory
+**/.Rhistory
 others/
 *.Rproj
 uconn-pcs/slides/Probability/.hide.sh
@@ -315,3 +315,5 @@ uconn-pcs/slides/Probability/homework/hw.pdf
 __pycache__/
 
 ForceCache
+
+uconn-pcs/
