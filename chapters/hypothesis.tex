@@ -38,7 +38,6 @@ while $H_1$ claims it does. Depending on context, $H_1$ may represent
 the investigator's belief, but not necessarily what they hope to 
 support---sometimes the goal is to rule out harm or demonstrate
 equivalence.
-\hb{not always} \jy{rephrased.}
 
 
 Think of hypothesis testing as a strategic game. Nature knows the
@@ -85,7 +84,8 @@ occurs when we reject the null hypothesis, $H_0$, even though it is
 true. This is often referred to as false positive, the incorrect
 conclusion that an effect exists when it actually does not.
 The probability of making this error is called the \emph{significance
-  level}\index{\emph{significance level}}, denoted by $\alpha$. A smaller $\alpha$ 
+  level}\index{\emph{significance level}}, denoted by $\alpha$. A
+smaller~$\alpha$
 reduces this risk but may make it harder to detect real effects.
 A \emph{Type~II error}\index{\emph{Type~II error}} arises when we fail to
 reject $H_0$ even though it is false. This is often referred to as
@@ -97,7 +97,8 @@ ability to detect an effect when one truly exists.
 
 \begin{example}[Lady testing tea]
 R. A. Fisher's ``Lady Tasting Tea'' experiment, described in his 1935 
-book \emph{The Design of Experiments}, became one of the earliest and 
+book \emph{The Design of Experiments} \citep{fisher1935design},
+became one of the earliest and 
 most elegant demonstrations of formal hypothesis testing 
 \citep{salsburg2002lady}. Fisher recounted an event at Rothamsted 
 Experimental Station, where a colleague claimed she could tell by 
@@ -262,6 +263,41 @@ permutations, and approximate the sampling distribution based on
 empirical distribution of the test statistic computed from this large
 number of random permutations.
 
+\begin{example}[Familial clustering of certain diseases]
+\runR{Code/hypo-familial.R}{hypo-familial}
+
+Consider a study of 10 families, each with 4 relatives participating.
+Each person either shows a certain symptom (coded 1) or not (coded 0).
+We want to test whether the symptom tends to appear in clusters within
+families. In other words, do relatives share the symptom more often
+than would occur by chance?
+
+Here is what the data looks like:
+\showChunk{R}{Code/hypo-familial.R}{dataHead}
+
+Consider a testing statistics $T$ which is defined as the total number
+of within-family concordant pairs. Here a concordance pairs mean 1-1
+pairs.
+
+\showChunk{R}{Code/hypo-familial.R}{familyStat}
+
+Under the nyull hypothesis that there is no familial clusterin
+of this symptom, we can randomly permute the symtom lalel across all
+individuals across the families. For each permutation we can compute
+the total number of within-family concordant pairs. The empirical
+distribution of this count gives us the basis to assess whether the
+observed $T$ is overly extreme or not. The p-value is approximated by
+the proportion of such $T$ that are as extreme or more extreme thatn
+the observed version.
+
+\showChunk{R}{Code/hypo-familial.R}{familyPvalue}
+
+
+We apply the functions to the example dataset and get the observed
+testing statistic and its p-value.
+
+\showChunk{R}{Code/hypo-familial.R}{application}
+\end{example}
 
 \begin{example}[Permutation test for two-group comparison]
 To make this concrete, let us consider a two-group comparison
