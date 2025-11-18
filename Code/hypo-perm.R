@@ -1,5 +1,5 @@
 ### setting up data
-#lable===HypoPermSetup
+#label===HypoPermSetup
 set.seed(20210628)
 delta <- 0
 n1 <- n2 <- n <- 30
@@ -9,7 +9,7 @@ x2 <- rnorm(n2) + delta
 xd <- mean(x2) - mean(x1)               
 #===end
 
-#lable===HypoPermOnePerm
+#label===HypoPermOnePerm
 xpooled <- c(x1, x2)
 xperm <- sample(xpooled, size = length(xpooled), replace = FALSE)
 xdp <-  mean(xperm[n1 + 1:n2]) - mean(xperm[1:n1])
@@ -17,7 +17,7 @@ xdp <-  mean(xperm[n1 + 1:n2]) - mean(xperm[1:n1])
 
 ## How many possible permutations are there?
 ## If small, we can do exact test (like for the lady tasting tea)
-#lable===HypoPermFullCount
+#label===HypoPermFullCount
 choose(n1 + n2, n1)
 #===end
 
