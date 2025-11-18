@@ -232,17 +232,17 @@ which she attends 20\% of the time. If she attends the ballet in a week, she
 will flip a fair coin to decide if she will attend the football game.
 % In 10\% of the weeks she attends both the weekly football game and the ballet. 
 This is depicted in Figure~\ref{fig:bayes-rule}, which shows that $P(F)=0.8$ and
-$P(B)=0.2$. If we see Jane in the ballet, what is the probability that we'll see
-her in the game in the same week?
+$P(B)=0.2$. If we see Jane in the football game, what is the probability that
+we'll see her in the ballet in the same week?
 
 % If we see her in the ballet, what is the probability that we will see her in the football game, as well?
 % With Bayes' rule we get $P(A\mid B) =0.125\times0.8/0.2=0.5$.
 % So, although Jane goes to  80\% of the football games, if she ends up going to the ballet then she is less likely to go to the game in the same week (50\%). 
 \end{example}
 
-We know that if we see her in a game, then the probability of seeing her in the
-ballet is $P(B \mid F)=0.5$. Using Bayes' rule, $P(F\mid B)
-=0.5\times0.2/0.8=0.125$.
+We know that if we see her in a ballet, then the probability of seeing her in
+the football game is $P(F \mid B)=0.5$. Using Bayes' rule,
+$P(B\mid F) = P(F\mid B)P(B)/P(F) =0.5\times0.2/0.8=0.125$.
 
 \begin{figure}[H]
 \begin{tikzpicture}[fill opacity=0.7]
