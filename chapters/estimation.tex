@@ -1,52 +1,62 @@
 \chapter{Estimation: A Hide-and-Seek Game with the Nature}
 \label{ch:estimation}
 
-When data are collected from some population, it contains information about the
-population that we want make inference about. The target quantities that we are
-interested in could be any characterizations of the population. Examples include
-summaries such as mean, median, selected quantiles, or standard deviations of
-some variables; the dependence properties characterizing how one variable
-affects the distribution of another variable. Estimation is the process of
-using the observed data to estimate the unknown target population
-quantities. This process is like a hide-and-seek game that we play with the
-Mother Nature. The true features of the data-generating process are unknown. We
-estimate them using clues contained in the observed data. It is important to
-keep in mind that a point estimate of an unknown quantity is not sufficient;
-every estimate should be associated with some measure of uncertainty.
+When data are collected from a population, the sample carries clues
+about the broader population features that we want to
+understand. These target quantities may be of characteristics of
+interest, such as mean, median, selected quantiles, or standard
+deviations of a variable, or measures describing how one variable
+relates to another. Estimation is the process of using observed data
+to infer these unknown population quantities. It is a hide-and-seek
+game that we play with Mother Nature: the true features of the
+data-generating process are unknown, and we attempt to uncover them
+using the information available in our sample. It is essential to
+remember that a single point estimate is never the whole story;
+every estimate should be accompanied by a measure of uncertainty.
 
 
 \section{Introduction}
 \label{sec:est:intro}
 
-Let us set up a simple hide-and-seek game. Suppose that the true location
-parameter $\mu$ of a normal distribution was set by the Nature. For example, it
-could be the true mean of the hight of all the boys of age 12 in the US. For
-simplicity, let us assume that the variance parameter is known, and without loss
-of generality, let us set it at $\sigma^2 = 1$. Suppose that we observe a random
-sample of size $n$ from the population. Our goal is to estimate the unknown
-location $\mu$ using what we see from the random sample.
 
 
-Specifically, here is a set up:
+Let us set up a simple hide-and-seek game in a concrete setting. 
+Suppose a population is modeled by a normal distribution with an 
+unknown location parameter $\mu$, which we may think of as the true 
+average height of all 12-year-old boys in the United States. To keep the 
+focus on the core ideas of estimation rather than algebraic details, we 
+work with a simplified version of this model and assume the population 
+variance is known; without loss of generality, we set $\sigma^2 = 1$. We 
+observe a random sample of size $n$ and use it to learn about the hidden 
+value of $\mu$.
+
+
+The following code generates such a sample:
+
 \showCode{R}{Code/est-hide.R}[1][5]
+
 \runR{Code/est-hide.R}{hide}
-The returned summary about the observed sample is:
+
+The summary statistics for the observed sample are:
 \inlnR{```print(summary(x))```}[estsummx][vbox]
 
 
-An estimator of $\mu$ has to be computable from the observed data. It should not
-depend on anything unknown. In fact, any quantity that is computable from
-observed data is called a \emph{statistic}. \index{statistic}
-When a statistic is used to estimate some target, it is called
-an \emph{estimator}. \index{estimator} A few questions are to be answered.
+
+An estimator of $\mu$ is required to be computable from the observed data and 
+should not depend on any unknown quantities. Any number that can be computed 
+solely from the sample is called a \emph{statistic}. \index{statistic} 
+When a statistic is used to estimate a population quantity, it is called an 
+\emph{estimator}. \index{estimator} Common examples include the 
+\emph{mean} (the average of the sample values), the \emph{median} 
+(the middle value when the data are sorted), the \emph{range} 
+(the difference between the largest and smallest observations), and the 
+\emph{midrange} (the midpoint between the minimum and maximum).  
+With these tools in place, several natural questions arise:
 \begin{enumerate}
-\item
-What properties are desirable to have for an estimator?
-\item
-When multiple estimators are available for the same target, how do we assess
-which one is better than another?
-\item
-How do we assess the uncertainty of an estimator?
+\item What properties are desirable for an estimator?
+\item When multiple estimators are available for the same target, how do we 
+      assess which one is better?
+\item How do we assess the uncertainty of an estimator?
 \end{enumerate}
 
 
@@ -82,7 +92,9 @@ estimates. Compared with the true $\mu$, the squared errors of the three
 estimates are obtained by:
 \showCode{R}{Code/est-hide.R}[13][13]
 Their values are \inlnR{```cat(err[1])```}[esterr1],
-\inlnR{```cat(err[2])```}[esterr3], and \inlnR{```cat(err[3])```}[esterr3], respectively.
+\inlnR{```cat(err[2])```}[esterr3], and
+\inlnR{```cat(err[3])```}[esterr3], respectively.
+
 
 When we compare different methods of estimating the $\mu$, the comparison only
 applies to the specific data sample we're looking at. A method that is usually
@@ -430,9 +442,6 @@ The empirical coverage rate of the 95\% confidence interval from the
 %\inlnR{```cat(mean(sim20[2,] < target & target < sim20[3,]))```},
 which is still reasonably close to the nominal level 95\%.
 \end{example}
-
-
-
 
 
 
