@@ -328,18 +328,18 @@ statistic under $H_0$. Permutation testing constructs this distribution
 by repeatedly shuffling the data to simulate the null hypothesis. For a 
 single permutation, we shuffle the combined data, split it into two groups, 
 and compute the test statistic:
-\showChunk{R}{Code/hypo-perm.R}[HypoPermOnePerm]
+\showChunk{R}{Code/hypo-perm.R}{HypoPermOnePerm}
 
 
 Each permutation represents a possible arrangement of the data
 under~$H_0$. The totle number of permutations is:
-\showChunk{R}{Code/hypo-perm.R}[HypoPermFullCount]
+\showChunk{R}{Code/hypo-perm.R}{HypoPermFullCount}
 
 This total number of permutations is about $1.18 \times 10^{17}$,
 which is too large to exhaust. So we approximate the sampling
 distribution using a subset of random permutations.
 This is implemented in the following function:
-\showChunk{R}{Code/hypo-perm.R}[HypoPermMyPermTest]
+\showChunk{R}{Code/hypo-perm.R}{HypoPermMyPermTest}
 
 This function simulates \code{nperm} permutations, calculates the test 
 statistic for each, and compares them to the observed test statistic to 
@@ -348,7 +348,7 @@ compute the p-value.
 
 Let us apply the permutation test to two samples drawn from gamma 
 distributions, with a true difference ($\delta = 10$):
-\showChunk{R}{Code/hypo-perm.R}[HypoPermDemo]
+\showChunk{R}{Code/hypo-perm.R}{HypoPermDemo}
 
 
 This outputs the p-value, which quantifies the probability of observing a 
