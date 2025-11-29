@@ -92,6 +92,7 @@ We propose a certain distribution and check if it fits. In the current
 example, which we called \lstinline{samp1}, we want to check if the normal
 distribution is a good model for our data.
 
+\jy{QQ plot seems distracting here}
 One way to check if a distribution fits our data is with a graphical tool
 called the \emph{Q-Q plot}. A Q-Q plot is based on the simple (and very
 important) idea that a distribution is determined by its \emph{quantiles}
@@ -133,6 +134,9 @@ simulation but vary the sample size ($n$) and see what happens to the
 \emph{sample mean} as we increase $n$.
 
 \showCode{R}{Code/llnclt_IQ.R}[12][22]
+
+\jy{how about putting sample size on log scale:
+   \lstinline{ns <- rep(10 * 2^(0:11), each = 10)}'}
 
 In \wingding{1} we create a vector of sample sizes. We will generate a random
 sample for each of these \lstinline{ns}. In \wingding{2} we initialize a vector
@@ -290,7 +294,8 @@ expect $r_{AB}$ to converge to exactly 70/60.)
 \label{LLNdemoCauchy}
 \end{figure}
 
-
+\jy{If the normals do not have mean zero, the ratio is not exactly
+  Cauchy but Cauchy like in tails.}
 What is happening here? The answer is that while a difference between two
 normal random variables is still normal (and therefore, has a mean), the ratio
 between two normal distributions follows a \emph{Cauchy distribution} which
@@ -319,6 +324,7 @@ original variables themselves are not normally distributed!
 The CLT requires very little about the actual distribution of the data: the
 sample has to be independent and identically distributed (i.i.d.), and the
 distribution must have a finite variance. 
+\jy{We only defined sample variance but not population variance so far.}
 
 \subsection{CLT -- Examples}
 We will draw a random sample of size $n$ from the following distributions:
@@ -349,6 +355,7 @@ look at all like a normal distribution. Try running \lstinline{mean(expsamp1)}. 
 should get \inlnR{```cat(mean(expsamp1))```}[llnmeansampexp], which is approximately
 1/5.5, the theoretical mean of the Exp(5.5) distribution.
 
+\jy{Add sample size and exponential paraemters to caption.}
 \begin{figure}[H]
 \includegraphics[width=0.6\textwidth]{images/chapter_4/CLTexp.pdf}
 \caption{Simulated data from an exponential distribution}
