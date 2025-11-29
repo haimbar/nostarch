@@ -1,0 +1,164 @@
+\chapter{A Case Study: NYC Crashes}
+
+Cities never sleep, and neither does their traffic. Every day thousands
+of people move through the streets by car, bus, bike, and on foot, and
+occasionally things go wrong. When a crash happens in New York City, the
+details are recorded by the police and stored in a large public
+database. These records give us a chance to see how data describe real
+events in a busy city, but they also come with quirks, gaps, and
+surprises. In this chapter we use crash data around Labor Day to see how
+open data can help us understand the world, as long as we look carefully
+and check our assumptions.
+
+
+The crash dataset we use contains 29 variables, including the date and
+time of the crash, location information, borough, types of vehicles
+involved, and numbers of injuries and fatalities. We begin by reading
+the data, cleaning the variable names, and checking whether the entries
+actually fall within the week we intend to study. Then we examine
+missing values, create new variables such as the hour of the crash and
+whether the day is a business day, and explore temporal and spatial
+patterns. Finally, we study severity, contributing factors, and vehicle
+types. The goal is to follow the full analysis workflow in a transparent
+and reprosducible way.
+
+\section{Importing and Inspecting the Data}
+
+We first load the dataset and take a quick look at its structure.
+
+\showChunk{R}{Code/nyc_crashes.R}{read}
+
+The variable names are all upper case with spaces or periods. To make
+them easier to work with, we convert them to lower case and replace
+spaces and periods with underscores.
+
+\showChunk{R}{Code/nyc_crashes.R}{rename}
+
+With cleaner variable names, we can begin to investigate the range of
+dates in the dataset.
+
+\showChunk{R}{Code/nyc_crashes.R}{time_window}
+
+The raw data span eight consecutive days. This is longer than a typical
+seven-day week, and it is a good reminder that we should not take
+anything for granted. Sometimes a “week” begins on Monday, other times
+on Sunday. The raw file includes the Sunday before Labor Day as well as
+the following Sunday. We now filter the dataset so that it covers the
+Sunday--Saturday interval that we intend to study.
+
+\showChunk{R}{Code/nyc_crashes.R}{filter_week}
+
+The \texttt{location} variable in the raw data stores a text version of
+the coordinates. Because latitude and longitude are already available,
+the \texttt{location} field is redundant and sometimes inconsistent with
+the numeric values. The following code inspects this variable.
+
+\showChunk{R}{Code/nyc_crashes.R}{location_check}
+
+\section{Missing Values and Data Quality}
+
+Several fields have missing entries. We begin with the borough and zip
+code variables. Some borough fields are empty strings rather than
+missing values, so we convert them to \texttt{NA}. We also check cases
+where both borough and zip code are missing.
+
+\showChunk{R}{Code/nyc_crashes.R}{missing_borough_zip}
+
+Location information has its own set of issues. A small number of
+crashes report coordinates at \texttt{(0,0)}, which is not a location in
+New York City. These should be treated as missing values.
+
+\showChunk{R}{Code/nyc_crashes.R}{missing_geo}
+
+When a crash has valid latitude and longitude but is missing a zip code,
+it is in principle possible to fill in the missing zip based on its
+location. We define a logical variable \texttt{fillable\_zip} that
+indicates such cases. We then compare the proportion of fillable zip
+codes across days of the week.
+
+\showChunk{R}{Code/nyc_crashes.R}{fillable_zip}
+
+\section{Exploring Temporal Patterns}
+
+Next we create a \texttt{datetime} variable and extract the hour and
+minute of each crash. This allows us to examine how crashes vary across
+the day and across boroughs.
+
+\showChunk{R}{Code/nyc_crashes.R}{hour}
+
+There is also a striking number of crashes recorded exactly at midnight
+or exactly on the hour. This pattern may reflect reporting conventions
+rather than the actual times of the crashes.
+
+To compare business days and non-business days, we define a
+\texttt{business\_day} variable and inspect the number of crashes in each
+borough for each type of day.
+
+\showChunk{R}{Code/nyc_crashes.R}{business_day}
+
+\section{Crash Severity}
+
+A crash is considered severe if at least one person is injured or
+killed. We construct a logical variable \texttt{severe} for this purpose.
+
+\showChunk{R}{Code/nyc_crashes.R}{severity}
+
+Crashes can involve different numbers of motor vehicles. We count the
+number of non-missing vehicle type fields to form the variable
+\texttt{n\_vehicles}, and examine how severity relates to the number of
+vehicles involved.
+
+\showChunk{R}{Code/nyc_crashes.R}{vehcount}
+
+Severity also varies across the hours of the day. The following
+contingency table examines this relationship.
+
+\showChunk{R}{Code/nyc_crashes.R}{severe_by_hour}
+
+The most severe crashes, as measured by injuries and fatalities, can
+also be identified and inspected individually. Several of them occur in
+clusters within particular neighborhoods.
+
+\showChunk{R}{Code/nyc_crashes.R}{top_severe}
+
+\section{Contributing Factors and Vehicle Types}
+
+Each crash record contains up to five contributing factors. We begin by
+studying the factor listed for vehicle~1. Because the entries differ
+only in capitalization or include vague values such as ``unspecified,''
+we standardize them and treat certain values as missing.
+
+\showChunk{R}{Code/nyc_crashes.R}{contrib_factors}
+
+Finally, we look at the types of vehicles involved in the crashes. The
+most common categories reflect everyday traffic in New York City, such
+as sedans and sport utility vehicles.
+
+\showChunk{R}{Code/nyc_crashes.R}{veh_types}
+
+\section{Summary}
+
+This case study showed how the ideas introduced throughout the book
+naturally lead to practical investigation. By loading the data, checking
+its structure, cleaning fields, creating new variables, and exploring
+patterns, we followed the same steps you can use on almost any dataset.
+Nothing here required new tools—only the habits of curiosity,
+skepticism, and careful reasoning that you have been building. New York
+City’s Open Data portal is only one place to find material for your own
+projects; many cities, federal agencies, and scientific groups share
+their data freely as well. Transportation records, environmental
+measurements, public health reports, sports statistics, and countless
+other datasets are available to explore. With the tools you have
+stumbled into, you can now begin asking your own questions and making
+your own discoveries. This chapter is one example of what is possible.
+The next ones are yours to find.
+
+
+
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-command-extra-options: "-shell-escape"
+%%% TeX-engine: xetex
+%%% TeX-master: "../sidsmain.tex"
+%%% End:
