@@ -477,6 +477,131 @@ distributions like the Cauchy.
 
 \section{Multiple Testing}
 
+When we test one idea, we usually know what a ``significant result''
+means. But what happens if we test many ideas at once? Does a small
+p-value still carry the same meaning? Let us find out by running our own
+simulations.
+
+\begin{example}[20 Ineffective Drugs]
+We begin with a simple story: a laboratory screens 20 new drugs to
+see whether any of them improves a health score compared with a
+placebo. Unknown to us, none of the drugs actually works. By
+simulating this world, we can watch what happens when we run many
+independent tests in parallel.
+
+
+We first write a function that performs one full screening round,
+returning 20 p-values from 20 two-sample t-tests.
+\showChunk{R}{Code/hypo-multiple.R}{do1screen}
+
+
+Even though all drugs are useless, some p-values will be surprisingly
+small. To understand this more systematically, let us repeat the entire
+screening many times.
+\showChunk{R}{Code/hypo-multiple.R}{pvalues}
+
+
+A histogram provides a clear view of the behavior of p-values under pure
+noise:
+\showChunk{R}{Code/hypo-multiple.R}{hist}
+
+The shape is roughly flat, as expected when every null hypothesis is
+true. But the more interesting question is: How many ignificant
+drugs appear in each experiment?
+
+Let us count how many of the 20 p-values fall below 0.05 in each
+experiment.
+\showChunk{R}{Code/hypo-multiple.R}{sigcount}
+
+Although all 20 drugs are useless, most experiments still produce one or
+two “significant” hits. In fact, the chance of seeing at least one
+false discovery is high:
+\showChunk{R}{Code/hypo-multiple.R}{meansig}
+
+
+This number is typically around 0.64. In fact, when testing 20 useless
+drugs at the 0.05 level, there is a $1 - 0.95^{20} \approx  64\%$
+chance that at least one appears significant by accident.
+
+
+This is one of the core issues of multiple testing.
+\end{example}
+
+% The Smallest P-Value Always Looks Exciting
+
+
+Every experiment has a ``best'' drug, the one with the smallest p-value.
+Let us look at that distribution.
+
+
+Tiny p-values (like 0.01 or 0.005) appear quite often---even though
+nothing is real. This does not mean the minimum p-value is useless;
+indeed, there is a long history of using extreme values such as the
+smallest p-value as a valid test statistic, provided we take into
+account how many tests were performed.
+
+
+The problem arises when we look at many tests, take the smallest
+p-value, and then interpret it as if it came from a single test. In
+that naive view, we are ignoring the fact that we gave ourselves many
+chances to see something ``exciting.''
+
+
+% What if some drugs actually work?
+
+Now let us simulate a world where 4 out of 20 drugs truly have an
+effect.
+
+
+We compare two strategies:
+
+1. Uncorrected testing: $p < 0.05$
+2. Bonferroni correction: $p < 0.05/20$
+
+We simulate many experiments and count true positives (TP) and false
+positives (FP).
+
+
+Uncorrected tests find many real effects but also many fake ones.
+Bonferroni greatly reduces false positives, but also misses some real
+drugs. The simulation reveals a simple trade-off:
+
+Reducing false discoveries often reduces real discoveries too.
+
+
+
+From these experiments, we discovered:
+\begin{itemize}
+\item A p-value only behaves as expected when we test one idea.
+\item When we test many ideas, small p-values appear even if nothing is
+  true.
+\item The question ``What is the chance that at least one test shows
+  significance?'' becomes central.
+\item Adjustments like Bonferroni reduce false discoveries but make true
+  effects harder to detect.
+\item Simulation shows all of this clearly---no formulas required.
+\end{itemize}
+
+\section{Exercises}
+
+1. Repeat the pure-noise experiment with $m = 100$
+  independent t-tests per experiment. What is the probability that at
+  least one test is significant at the 0.05 level? Compare with
+  $m = 20$. What do you notice?
+
+1. Modify the simulation with four true effects by changing
+  the effect size to 0.2, 0.5, and 1.0. How do these affect true and
+  false discoveries under the uncorrected and Bonferroni approaches?
+
+1. In the pure-noise setting, record the largest
+  t-statistic (in absolute value) from each experiment. Plot its
+  distribution. Why does the largest value tend to be quite large even
+  when nothing is happening?
+
+1. Create your own ``multiple testing world.'' You may use
+  many regressions, many correlations, or many group comparisons.
+  Simulate data, run all tests, and study the distribution of the
+  discovered ``findings.'' What is the biggest surprise you observe?
 
 
 
