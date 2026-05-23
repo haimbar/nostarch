@@ -22,13 +22,14 @@ every estimate should be accompanied by a measure of uncertainty.
 
 Let us set up a simple hide-and-seek game in a concrete setting. 
 Suppose a population is modeled by a normal distribution with an 
-unknown location parameter $\mu$, which we may think of as the true 
+unknown location parameter~$\mu$, which we may think of as the true 
 average height of all 12-year-old boys in the United States. To keep the 
 focus on the core ideas of estimation rather than algebraic details, we 
 work with a simplified version of this model and assume the population 
-variance is known; without loss of generality, we set $\sigma^2 = 1$. We 
+variance~$\sigma^2$
+is known; without loss of generality, we set $\sigma^2 = 1$. We 
 observe a random sample of size $n$ and use it to learn about the hidden 
-value of $\mu$.
+value of~$\mu$.
 
 
 The following code generates such a sample:
@@ -47,10 +48,10 @@ should not depend on any unknown quantities. Any number that can be computed
 solely from the sample is called a \emph{statistic}. \index{statistic} 
 When a statistic is used to estimate a population quantity, it is called an 
 \emph{estimator}. \index{estimator} Common examples include the 
-\emph{mean} (the average of the sample values), the \emph{median} 
-(the middle value when the data are sorted), the \emph{range} 
+\emph{mean} (the average of the observed values), the \emph{median} 
+(the middle value when the observed data are sorted), the \emph{range} 
 (the difference between the largest and smallest observations), and the 
-\emph{midrange} (the midpoint between the minimum and maximum).  
+\emph{midrange} (the midpoint between the sample minimum and sample maximum).  
 With these tools in place, several natural questions arise:
 \begin{enumerate}
 \item What properties are desirable for an estimator?
@@ -62,12 +63,12 @@ With these tools in place, several natural questions arise:
 
 \section{Point Estimation: Seeking Strategies}
 
-The location parameter of a normal distribution coincides with its mean and
+The location parameter $\mu$ of a normal distribution coincides with its mean and
 median. The sample version of mean and median appear to be reasonably good
 estimators. The sample mid-range, the average of the largest and smallest
 observations of the sample range, also
 seems a reasonable estimator for the population center. So, let us consider
-three candidate estimators, or strategies to seek the truth:
+three candidate estimators, or strategies to seek the true~$\mu$:
 \begin{itemize}
 \item Sample mean
 \item Sample median
@@ -86,7 +87,7 @@ Their values are \inlnR{```cat(estimates[1])```}[est1],
 \inlnR{```cat(estimates[2])```}[est2], and \inlnR{```cat(estimates[3])```}[est3], respectively.
 
 
-Which estimator is the best? In this game, the Nature knows the true
+Which of the three estimator is the best? In this game, the Nature knows the truexs
 value of $\mu$, so it can compare the estimation errors across the three
 estimates. Compared with the true $\mu$, the squared errors of the three
 estimates are obtained by:
@@ -107,15 +108,18 @@ also random. Here are some properties about estimators:
 \item If the average result of an estimator (over many random samples) is equal
   to the true value we're trying to estimate, then this estimator is
   \emph{unbiased}\index{estimator!unbiased}.  Mathematically, this is often
-  written as $E(\hat\mu) = \mu$, where $E$ is the average $\hat\mu$ over all
+  written as $E(\hat\mu) = \mu$, where $E(\cdot)$ is the mean
+  operator, which returns the mean of the random quantities in the
+  parentheses. Here $E(\hat\mu)$ gives the mean of $\hat\mu$ over all
   possible random samples.
 \item The \emph{mean squared error (MSE)}\index{mean squared error} measures how
-  far, on average, the estimator's result is from the true target. It combines
+  far, on average, the estimator's result is from the true target in
+  squared distance. It combines
   both the error (or bias) and how spread out the estimates are. The formula is
   $E[(\hat\mu - \mu)^2]$.
 \item An estimator with a smaller MSE than another estimator is more
   \emph{efficient}\index{estimator!efficient} than the other one, because it
-  generally gives better results.
+  is closer to the truth in squared distance on average.
 \end{enumerate}
 
 Most of the theoretical properties of an estimator are studied asymptotically,
@@ -123,7 +127,8 @@ that is, assuming that the sample size goes to infinity. For finite sample sizes
 properties are easily investigated via hide-and-seek games, or simulations. In
 each simulation setting, we set up the hide-and-seek game and play the game
 repeatedly for a large number of replicates. The bias and the MSE of an
-estimator can be approximated by the sample averages from the simulations.
+estimator can be approximated by the sample averages from the
+simulated replicates.
 
 
 \subsection{Evaluating Estimators}
@@ -142,7 +147,8 @@ normal distribution with location $\mu$ and variance~1.
 The function \lstinline{do1rep} generates one sample of size \lstinline{n} from
 the normal distribution with location parameter~$\mu$, collects three estimates
 of $\mu$, and returns the squared errors of the three estimates in a vector.
-Try it a few times to see what it does.
+Try it a few times, for example, with sample size \lstinline{n = 50},
+to see what it does.
 \showCode{R}{Code/est-hide-norm.R}[8][8]
 
 
@@ -158,18 +164,20 @@ the three.
 \end{example}
 
 
-Would the ordering be like this? Recall that the race here had data generated
+Would the ordering be always like this? Recall that the race here had data generated
 from a normal distribution. One would guess that the true data generating scheme
 may affect which estimator is the best or most efficient.
 
 
 \begin{example}[Hide-and-seek: Cauchy population]
 \runR{Code/est-hide-cauchy.R}{hide-cauchy}
-Now let us generate data from a distribution, which has heavier tails than the
+Now let us generate data from the Cauchy distribution, which has heavier tails than the
 normal distribution. For a heavier-tailed distribution, we are more likely to
-observe extreme-valued observations. Now it seems we can recycle
-the \lstinline{do1rep} function and make it more general by taking a data
-generation scheme as an input. 
+observe extreme-valued observations.
+
+
+It is desirable to adapt the \lstinline{do1rep} function to make it
+capable of taking an arbitary distribution as input to generate data.
 \showCode{R}{Code/est-hide-cauchy.R}[1][5]
 The argument \lstinline{datagen} is assumed to be a function with two inputs:
 \lstinline{n} for sample size and \lstinline{mu} for a location parameter. When
@@ -215,12 +223,12 @@ all the information about the location parameter $\mu$ in this setting.
 
 
 It would be nice if one estimator is always the best regardless of what the true
-data generating scheme is. Such estimator may not, however, exist.
+data generating scheme is. Such estimator may not, however, always exist.
 
 \subsection{Maximum Likelihood Estimator}
 To play the hide-and-seek game better, we need to select a good strategy. From
 the examples in the last section, which strategy is better depends on the
-underlying truth, which is unknown. There is, however, an estimator which is the
+underlying data generation model, which is unknown. There is, however, an estimator which is the
 most efficient under quite general assumptions.
 
 
@@ -229,8 +237,9 @@ Let's start with a simple example.
 \label{ex:has-jars}
 There are 9 jars. The first jar has 9 red and 1 green balls; the second jar has
 8 red and 2 green balls; $\cdots\cdots$; the 9th jar has 1 red and 9 green
-balls. Now, one jar is randomly selected, from which one ball is randomly
-selected, and the ball is red. Which jar was the one that was selected?
+balls. A jar is selected uniformly at random, and then one ball
+is drawn uniformly at random from that jar. Suppose the ball drawn is red.
+Which jar is the most likely to have been selected?
 
 
 There are nine possibilities. If the selected jar were the first one, the
@@ -292,10 +301,11 @@ construct the following interval
 \left(\bar X_n - z_{\alpha/2} \frac{\sigma}{\sqrt{n}}, \quad
 \bar X_n + z_{\alpha/2} \frac{\sigma}{\sqrt{n}}\right),
 \]
-where $z_{\alpha/2}$ is the number so that the area between $-\alpha/2$ and
-$\alpha/2$ under the standard normal density curve is $100(1-\alpha)\%$. This
-is a confidence interval for $\mu$ with confidence level asymptotically $1 -
-\alpha$. A 95\% confidence interval means $\alpha = 0.05$.
+where $z_{\alpha/2}$ is the number so that the area between $-z_{\alpha/2}$ and
+$z_{\alpha/2}$ under the standard normal density curve is $100(1-\alpha)\%$. This
+is a confidence interval for $\mu$ with confidence level
+asymptotically $1 - \alpha$. A 95\% confidence interval means $\alpha = 0.05$.
+
 
 When the population variance $\sigma^2$ is unknown, we can use the sample
 variance $S_n^2$ to substitute it, and the resulting confidence interval is
