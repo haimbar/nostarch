@@ -1,5 +1,6 @@
-<<<<<<< HEAD
-## 01/10/2024
+### Environment
+
++ Example: needs an QED to indicate the end.
 
 ### Estimation
 + MSE/Bias definition need to be explained in words
