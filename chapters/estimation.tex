@@ -18,8 +18,6 @@ every estimate should be accompanied by a measure of uncertainty.
 \section{Introduction}
 \label{sec:est:intro}
 
-
-
 Let us set up a simple hide-and-seek game in a concrete setting. 
 Suppose a population is modeled by a normal distribution with an 
 unknown location parameter~$\mu$, which we may think of as the true 
@@ -40,7 +38,6 @@ The following code generates such a sample:
 
 The summary statistics for the observed sample are:
 \inlnR{```print(summary(x))```}[estsummx][vbox]
-
 
 
 An estimator of $\mu$ is required to be computable from the observed data and 
@@ -228,8 +225,8 @@ data generating scheme is. Such estimator may not, however, always exist.
 \subsection{Maximum Likelihood Estimator}
 To play the hide-and-seek game better, we need to select a good strategy. From
 the examples in the last section, which strategy is better depends on the
-underlying data generation model, which is unknown. There is, however, an estimator which is the
-most efficient under quite general assumptions.
+underlying data generation model, which is unknown. There is, however,
+an estimator which is the most efficient under quite general assumptions.
 
 
 Let's start with a simple example.
@@ -271,9 +268,43 @@ distributions is \lstinline{fitdistr} in package \lstinline{MASS}.
 
 \begin{example}[Maximum likelihood estimator]
 \label{ex:mle}
-Use \lstinline{MASS}
+\runR{Code/est-mle-binom.R}{mle-binom}
+Suppose a basketball player takes $20$ free throws during practice and
+makes $16$ of them. We would like to estimate the player's true free-throw
+success probability $p$.
+
+One possible guess is $p = 0.50$, meaning that the player makes about half
+of all free throws. Another possibility is $p = 0.80$. Which value is more
+believable given the observed data?
+
+The idea of maximum likelihood estimation is simple: choose the parameter
+value that makes the observed data most likely. For a binomial model, the
+likelihood of observing $16$ successful shots out of $20$ attempts is
+\[
+  L(p) = \binom{20}{16} p^{16}(1-p)^4 .
+\]
+
+We can evaluate this expression for many possible values of $p$ between
+$0$ and $1$ and see which one gives the largest likelihood. Because
+the log transformation is monotonely increasing, the solution is the
+same when we maximize the loglikelihood.
+\showCode{R}{Code/est-mle-binom.R}[1][6]
+
+The largest likelihood occurs when $p$ is near
+\inlnR{```cat(phat[1])```}[phat]. In fact, for this problem, the
+MLE is exactly $\hat p = 16/20 = 0.80$.
+
+
+This result matches our intuition. A player who made $16$ out of $20$ shots
+is much more likely to have a true success probability near $80\%$ than near
+$50\%$. This example illustrates a central idea in estimation: good parameter
+estimates are values that make the observed data look plausible.
 \end{example}
 
+In more advanced texts, you will learn that the MLE is often the most
+efficient estimator under fairly general regularity conditions. However,
+this also means that when these regularity conditions are violated, the
+MLE may no longer be the most efficient estimator.
 
 \section{Uncertainty}
 Point estimation is not enough! We need some measure of uncertainty to make
@@ -453,7 +484,23 @@ The empirical coverage rate of the 95\% confidence interval from the
 which is still reasonably close to the nominal level 95\%.
 \end{example}
 
+\section{Summary}
 
+In this chapter we studied how data can be used to estimate unknown
+features of a population and how uncertainty affects these estimates.
+Through repeated sampling and simulation, we saw that different
+estimators may behave very differently across samples, leading to
+different levels of bias, variability, and mean squared error. We
+learned that a good estimator should not only be close to the truth on
+average, but should also remain reasonably stable from sample to sample.
+We also introduced maximum likelihood estimation, which selects
+parameter values that make the observed data most plausible. Because a
+point estimate alone does not describe uncertainty, we studied
+confidence intervals and examined their coverage probabilities through
+simulation. Finally, we introduced the bootstrap, a computational method
+that approximates the variability of an estimator by resampling from
+the observed data. Throughout the chapter, simulation played a central
+role in understanding estimation and uncertainty.
 
 %%% Local Variables:
 %%% mode: latex
