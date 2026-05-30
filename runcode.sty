@@ -4,7 +4,7 @@
 %
 %  This package is based on an ongoing work by Haim Bar and HaiYing Wang, and comments and questions are welcome!
 
-\ProvidesPackage{runcode}[2024/01/12 runcode v2.3]
+\ProvidesPackage{runcode}[2025/01/17 runcode v2.4]
 
 \def \langs {}
 
@@ -153,6 +153,10 @@
 
 \newcommand{\generated}{generated}
 \immediate\write18{mkdir -p \generated}
+% Pre-allocated streams for writeChunk — declared once to avoid exhausting
+% TeX's 16-stream limit when writeChunk/showChunk are called many times.
+\newread\runcodeReadStream
+\newwrite\runcodeWriteStream
 
 \definecolor{bg}{rgb}{0.95,0.95,0.95} % code block background color
 
@@ -305,40 +309,38 @@
 % Args #3 and #4 are the beginning and end markings of a chunk (optional).
 
 \NewDocumentCommand{\writeChunk}{m m O{label===} O{===end}} {
-  \IfFileExists{#1}{\immediate\write18{python3 -c 'exec(open("write_chunk.py").read()); write_chunk("#1","#2", start="#3", end="#4")'}
-%    \filename@parse{#1}
-%    \endlinechar=-1
-%    \def\printcode{0} % don't print until we see the begin-block string
-%    \newread\file
-%    \openin\file=#1
-%    \newwrite\outfile
-%    \immediate\openout\outfile=\generated/\filename@base-#2.txt
-%    \loop\unless\ifeof\file
-%      \immediate\readline\file to\fileline
-%      \ifnum\printcode=1
-%        \IfSubStr{\fileline}{\detokenize{#4}}{
-%          \renewcommand{\printcode}{-1}}{\immediate\write\outfile{\fileline}}
-%      \fi
-%      \IfSubStr{\fileline}{\detokenize{#3}}{
-%          \StrBehind{\fileline}{\detokenize{#3}}[\chunkname]
-%          \IfStrEq*{\detokenize{#2}}{\chunkname}{\renewcommand{\printcode}{1}}{}
-%      }
-%      {}
-%    \repeat
-%    \closein\file
-%    \immediate\closeout\outfile
-%    \endlinechar=13
-%    \ifnum\printcode=0
-%      \textcolor{red}{\textbf{Label $#2$ not found in #1}}
-%    \fi
+  \IfFileExists{#1}{
+    \filename@parse{#1}%
+    \immediate\write18{mkdir -p "\generated/\filename@area"}%
+    \endlinechar=-1
+    \def\printcode{0} % don't print until we see the begin-block string
+    \openin\runcodeReadStream=#1
+    \immediate\openout\runcodeWriteStream=\generated/#1-#2.txt
+    \loop\unless\ifeof\runcodeReadStream
+      \immediate\readline\runcodeReadStream to\fileline
+      \ifnum\printcode=1
+        \IfSubStr{\fileline}{\detokenize{#4}}{
+          \renewcommand{\printcode}{-1}}{\immediate\write\runcodeWriteStream{\fileline}}
+      \fi
+      \IfSubStr{\fileline}{\detokenize{#3}}{
+          \StrBehind{\fileline}{\detokenize{#3}}[\chunkname]
+          \IfStrEq*{\detokenize{#2}}{\chunkname}{\renewcommand{\printcode}{1}}{}
+      }
+      {}
+    \repeat
+    \closein\runcodeReadStream
+    \immediate\closeout\runcodeWriteStream
+    \endlinechar=13
+    \ifnum\printcode=0
+      \textcolor{red}{\textbf{Label $#2$ not found in #1}}
+    \fi
   }{\textcolor{red}{\textbf{Source file $#1$ not found}}}
 }
-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 % \showChunk prints a selected chunk from  source code, using minted or listings for a pretty layout.
 % The chunk is identified in the source code by two strings that define the beginning and end of the chunk.
-% The default beginning is label===<name> where <name> should be a unique user-defined chunk ID. A label cannot include foreward slash (/)
+% The default beginning is label===<name> where <name> should be a unique user-defined chunk ID. A label cannot include forward slash (/)
 % The default end marker is ===end
 % In the code, these markers should appear after a comment character, so that the code will run. 
 % Arg #1 is the programming language,
@@ -349,8 +351,7 @@
 \NewDocumentCommand{\showChunk}{m m m O{label===} O{===end}}{
   \IfFileExists{#2}{
     \writeChunk{#2}{#3}[#4][#5]
-    \filename@parse{#2}
-    \IfFileExists{\generated/\filename@base-#3.txt}{\showCode{#1}{\generated/\filename@base-#3.txt}}
+    \IfFileExists{\generated/#2-#3.txt}{\showCode{#1}{\generated/#2-#3.txt}}
     {\textcolor{red}{\textbf{Label $#3$ not found in #2}}}
   }{\textcolor{red}{\textbf{Source file $#2$ not found}}}
 }
