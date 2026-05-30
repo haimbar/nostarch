@@ -37,3 +37,7 @@
 ### Compilation Errors
 - Check/fix for any Latex Compilation errors, and warnings
 - Check for any errors resulting from failure to execute R code via runcode
+
+## Overall Assessment of the Book (run on request only)
+-  Check for consistency in language, style, level of detail, and clarity, and see if the flow between chapters is good.
+- Check chapter and section titles to make sure that they are clear, informative, and in a logical order.
