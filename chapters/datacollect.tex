@@ -47,7 +47,7 @@ We write the weight as a function of height using an equation that includes this
 random `noise', by adding
 a non-deterministic (\emph{stochastic}) term, denoted by $\text{Error}$:
 \begin{equation}
-  \label{eq:weightheight}
+  \label{eq:weightheight-stochastic}
   \text{weight} = -194.49 + 5.30*\text{height} + \text{Error},
 \end{equation}
 where, in our simulation, the Error has a normal distribution with mean zero and standard deviation
@@ -131,7 +131,7 @@ is
 \inlnR{```cat(var2)```}[var2].
 
 \hypertarget{ch:data}{%
-\subsection{A representative sample is more important than a larger sample}\label{representative}}
+\subsection{A representative sample is more important than a larger sample}\label{representative-size}}
 
 \begin{example}[The 1936 Literary Digest Poll, \citep{darkdata_ch2}]
  For the 1936 presidential election, the Literary Digest poll was one of the
