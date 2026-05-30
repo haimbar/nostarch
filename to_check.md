@@ -39,5 +39,12 @@
 - Check for any errors resulting from failure to execute R code via runcode
 
 ## Overall Assessment of the Book (run on request only)
--  Check for consistency in language, style, level of detail, and clarity, and see if the flow between chapters is good.
+- Check for consistency in language, style, level of detail, and clarity, and see if the flow between chapters is good.
 - Check chapter and section titles to make sure that they are clear, informative, and in a logical order.
+- Prerequisite flow — no concept used before it is introduced; chapters build on each other without gaps.
+- Pedagogical balance — comparable depth, length, and example count across chapters; no chapter feels rushed or padded.
+- Problems difficulty gradient — Problems sections collectively span easy to challenging; later chapters may build on earlier material.
+- Notation and terminology consistency — same symbols (hat notation, Greek letters, variable names) and terms used the same way in every chapter.
+- Figure and code style uniformity — consistent R coding conventions (assignment operator, style), plot aesthetics, and figure caption format book-wide.
+- Index completeness — key terms introduced in each chapter are indexed; no orphan index entries pointing to removed text.
+- Forward/backward reference coherence — cross-chapter \ref{} pointers form a sensible reading path; no circular or misleading references.
