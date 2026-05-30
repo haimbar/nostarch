@@ -33,3 +33,7 @@
 ### Open Issues (resolve before submission)
 - Resolve all inline comments: \jy{}, \why{}, \hb{}, \hyw{}, \hyb{} markers
   (14 open as of 2026-05-30: 5 in llnclt, 4 in Rintro, 1 in regcorr, 1 in datacollect, 3 commented-out in Rintro)
+
+### Compilation Errors
+- Check/fix for any Latex Compilation errors, and warnings
+- Check for any errors resulting from failure to execute R code via runcode

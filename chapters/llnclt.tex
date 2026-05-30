@@ -10,6 +10,10 @@
 \hypertarget{ch:llnclt}{%
 %  \chapter{The Law of Large Numbers and the Central Limit Theorem}\label{ch:llnclt}}
 \chapter{Laws of Large Samples: Where Chaos Becomes Order}\label{ch:llnclt}}
+The previous chapter gave us probability as a language for describing
+uncertainty. Now we ask a practical question: when we collect data from a
+random process, what can we expect to see, and how does our confidence grow as
+we collect more observations?
 Benjamin Franklin once said `In this world nothing can be said to be certain,
 except death and taxes'. Still, for all the uncertain things in life, and
 especially in science where most theories cannot be proven correct, we would
@@ -73,7 +77,7 @@ size is large enough).
 
 \section{The Law of Large Numbers\index{Law of Large Numbers}}
 
-\subsection{Example \#1 -- the IQ score}
+\subsection{Example \#1 -- The IQ Score}
 %We get a random sample of 200 people and give them an IQ test. From this sample, we want to infer the true distribution in the entire population.
 
 Suppose that the IQ in the general population has a normal distribution with
@@ -98,7 +102,7 @@ important) idea that a distribution is determined by its \emph{quantiles}
 (percentiles), 
 so if the quantiles of our sample match the quantiles of the assumed
 distribution, then the assumption is reasonable. Recall that we defined the
-quantiles in Chapter~\ref{introdistributions}, so that the $q$-th quantile is a
+quantiles in Chapter~\ref{rintro}, so that the $q$-th quantile is a
 number $x_q$, such that $q\times 100\%$ of the data are less than or equal to
 $x_q$.  In our example the data has  \inlnR{```cat(n)```}[llnsampsize] data points, so we
 can get \inlnR{```cat(n)```}[llnsampsize2] quantiles from our sample. If we draw the same
@@ -157,7 +161,7 @@ We also see in Figure~\ref{LLNdemo} that the dispersion of the sample means
 gets smaller as the sample size gets larger, but this is the result of the
 \emph{Central Limit Theorem}, which will be discussed later in this chapter.
 
-\subsection{Example \#2 -- the Roulette Wheel}
+\subsection{Example \#2 -- The Roulette Wheel}
 Here, the outcome is binary -- we either win or lose a bet. The probability of
 winning if we choose the red color, is $18/37$.  Let's simulate 40 bets at the
 roulette wheel, where, in each we put a dollar on red. Each bet is won with a
@@ -232,7 +236,7 @@ the average converges to 12*10=120 messages per day.
 
 
 
-\subsection{The LLN\index{LLN} -- an Intuitive Statement of the Theorem}
+\subsection{The LLN\index{LLN} -- An Intuitive Statement of the Theorem}
 Informally, the law of large numbers states that the results of an experiment
 tend to settle down to a fixed average when the experiment is repeated many
 times. In other words, as the sample size increases, the sample mean will get

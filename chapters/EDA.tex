@@ -3,7 +3,10 @@
 People are born with a fantastic ability to detect patterns. However, sometimes the
 information is hidden and the only way to observe a pattern is to change
 the viewpoint or rearrange the input. In this chapter we'll introduce some tools
-to summarize data in order to reveal hidden features. We'll also discuss principles of
+to summarize data in order to reveal hidden features. These tools include
+histograms and boxplots for numerical data, bar charts for categorical data,
+scatterplots for relationships between variables, and summary statistics such as
+the mean and median. We'll also discuss principles of
 graphical excellence. In the words of Edward Tufte, the guru of data visualization,
 `\textit{Graphical excellence consists of complex ideas communicated with clarity, precision,
 and efficiency.}'
@@ -514,7 +517,7 @@ darkest rectangles become taller).
 
 
 \hypertarget{beyond}{
-\section{Going further}}
+\section{Going Further}}
 There is \textit{much} more to learn about effective visualization. There are
 many plotting tools and packages which greatly enhance the number of
 possibilities for data visualization. In \R, one can use the very popular and
@@ -614,6 +617,23 @@ following changes:
 \item Change the coefficients. Include negative values in your attempts.
 \item Use a different marker in the plot (using the \lstinline{pch} option).
 \end{enumerate}
+\end{exercise}
+
+\begin{exercise}
+R includes many built-in datasets. Load the \lstinline{airquality} dataset
+(\lstinline{data(airquality)}) and create a histogram of the \lstinline{Ozone}
+variable. Experiment with several different bin widths (using the \lstinline{breaks}
+argument). How does the choice of bin width change what you see in the data?
+Which bin width do you find most informative, and why?
+\end{exercise}
+
+\begin{exercise}
+Using R's built-in \lstinline{rivers} dataset (lengths of North American rivers),
+compute the mean and median. Then create a version of the dataset with five
+additional extreme values appended (for example, add five copies of 10{,}000) and
+recompute the mean and median. Which measure is more resistant to outliers?
+Create boxplots of both the original and modified datasets side by side
+to visualize the difference.
 \end{exercise}
 
 %%% Local Variables:
