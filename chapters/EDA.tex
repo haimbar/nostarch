@@ -5,7 +5,7 @@ information is hidden and the only way to observe a pattern is to change
 the viewpoint or rearrange the input. In this chapter we'll introduce some tools
 to summarize data in order to reveal hidden features. We'll also discuss principles of
 graphical excellence. In the words of Edward Tufte, the guru of data visualization,
-`\textit{Graphical excellence consists of complex idea communicated with clarity, precision,
+`\textit{Graphical excellence consists of complex ideas communicated with clarity, precision,
 and efficiency.}'
 }
 
@@ -71,7 +71,7 @@ cases of these three type of variables. Here are some important examples:
   data.
 
 \item \textit{Vectors, matrices, and data frames}: Multiple values of the
-  \textit{same type of variable} (e.g., numeric, factor, etc.) can be combined
+  \textit{same type of variable} (for example, numeric or factor) can be combined
   into a vector via the \lstinline{c()} function or generated via the \lstinline{rep()},
   \lstinline{seq()}, or random generating functions such as
   \lstinline{rnorm()}. Similarly, vectors of the \textit{same type} can be combined
@@ -167,7 +167,7 @@ more about how \lstinline{y} is distributed.
 \subsection{Histogram}
 Another way to look at the distribution of a single numeric variables is to draw
 a histogram, as we did in Chapter~\ref{rintro}. A histogram is constructed by
-\R by dividing the range of a variable into \emph{bins}, and simply count the number
+dividing the range of a variable into \emph{bins}, and simply counting the number
 of observations in each bin. These counts are depicted as vertical bars. This
 is done with the \lstinline{hist()} function, like so:
 \showCode{R}{Code/ch2-03hist.R}[2][2]
@@ -232,7 +232,7 @@ and 1, which are
 the actual levels of the factor \lstinline{g}? This is because, within \R
 levels of factors are stored numerically from 1 to the number of levels of the
 factor. The
-ordered is determined alphabetically by default, so 0 is represented as 1, and
+order is determined alphabetically by default, so 0 is represented as 1, and
 1 as 2.
 
 The second argument of the \lstinline{text()} function contains the
@@ -301,7 +301,7 @@ the blue is 128 out of 255 (which is 90 in hexadecimal notation). We then run
 \lstinline{rgb(t(col2rgb("navyblue"))/255)} and get
 \#000080. Each pair of digits corresponds to the three base colors. Then, to add
 transparency we can do \lstinline{rgb(t(col2rgb("navyblue"))/255, alpha = 0.5)}.
-Using the  \lstinline{alpha} argument adds adds to hexadecimal digits to
+Using the  \lstinline{alpha} argument adds two hexadecimal digits to
 the representation of the chosen color. In our example, with
 \lstinline{alpha=0.5} we get \#00008080. For complete transparency
 we use \lstinline{alpha=0}, and for no transparency we use \lstinline{alpha=1}.
@@ -326,7 +326,7 @@ relationship
 between them with a \emph{scatterplot}. In the following code we use the
 \lstinline{plot()} function, which \R infers to mean a scatterplot of the first
 argument \lstinline{x}
-vs. the second, \lstinline{y}, because both are continuous. The other arguments
+versus the second, \lstinline{y}, because both are continuous. The other arguments
 to the function should be familiar by now.
 \showCode{R}{Code/ch2-06scatter.R}[2][4]
 \runR{Code/ch2-06scatter.R}{ch2-06scatter}
@@ -401,19 +401,6 @@ threshold of 30.
 %y <- 3*(x>2*pi)*x + 4*sin(3*x) + 10*(as.numeric(g)-1) + rnorm(length(x), mean = 0, sd = 3)
 
 
-\begin{listhead}
-\item [Exercise~2.1] Try running the simulation code, but with the following
-changes: \begin{enumerate}
-\item Without the \lstinline{y} term: \lstinline{y <- 10 * (as.numeric(g) - 1) + rnorm(length(x), mean=0, sd=3)}
-\item Without the cyclical term: \lstinline{y <- 3 * (x > 2 * pi) * x +  10 * (as.numeric(g) - 1) + rnorm(length(x), mean=0, sd=3)} 
-\item Without the group term: \lstinline{y <- 3 * (x > 2 * pi) * x +  rnorm(length(x), mean=0, sd=3)} 
-\item Without the random noise: \lstinline{y <- 3 * (x > 2 * pi) * x + 4 * sin(3 * x) + 10 * (as.numeric(g) - 1)} 
-\item With less noise: \lstinline{y <- 3 * (x > 2 * pi) * x + 4 * sin(3 * x) + 10 * (as.numeric(g) - 1) + rnorm(length(x), mean=0, sd=1)} 
-\item With more noise: \lstinline{y <- 3 * (x > 2 * pi) * x + 4 * sin(3 * x) + 10 *(as.numeric(g) - 1) + rnorm(length(x), mean=0, sd=5)} 
-\item Change the coefficients. Include negative values in your attempts.
-\item Use a different marker in the plot (using the \lstinline{pch} option).
-\end{enumerate}
-\end{listhead}
 
 \hypertarget{tables}{%
 \section{Tabulating and Cross-Tabulating Data}}
@@ -424,9 +411,8 @@ graphical representation.
 
 Let's simulate some categorical data. In the following code we use the
 \lstinline{rpois()} function to draw random numbers which are all non-negative
-integers (from the Poisson distribution). We then create categories by using
-the
-\lstinline{cut()} function is used to create \emph{bins} based on ranges of the
+integers (from the Poisson distribution). We then create categories using
+the \lstinline{cut()} function, which creates \emph{bins} based on ranges of the
 original values.  In this example we have 5 cut-points, which define 4
 non-overlapping ranges -- \lstinline{[0, 9]}, 
 \lstinline{(9, 12]}, \lstinline{(12, 16]}, and \lstinline{(16, 25]}. Recall
@@ -533,7 +519,7 @@ There is \textit{much} more to learn about effective visualization. There are
 many plotting tools and packages which greatly enhance the number of
 possibilities for data visualization. In \R, one can use the very popular and
 feature-rich ggplot2 package \citep{ggplot2}, and other ones such as plotrix
-\citep{plotrix}, gplots \citep{warnes2016package}, plotly \citep{plotly}, etc. 
+\citep{plotrix}, gplots \citep{warnes2016package}, and plotly \citep{plotly}.
 You should also explore graphical tools in other languages can be used. For
 example, Matlab and Python use the very comprehensive and aesthetic matplotlib
 package, and for interactive plots you may find JavaScript to be very
@@ -567,7 +553,7 @@ important takeaways.
 \item Choose the right tool for the job, and make the data the center of
   attention -- not the bells and whistles that some software allows you to
   produce. Edward Tufte \citep{Tufte:VisuDispQuanInfo2001} advocated for the
-principal of maximizing the `information to ink ratio', and Albert Einstein
+principle of maximizing the `information to ink ratio', and Albert Einstein
 said
   `everything should be made as simple as possible, but not simpler.'
 
@@ -608,11 +594,27 @@ lot of
 
 \section{Summary}
 In this chapter we described how to visualize data by using plots, tables, or
-summary statistics.  The process of exploratory data analysis is critical to
-understanding the data, and to communicating 
-results.
+summary statistics. The process of exploratory data analysis is critical to
+understanding the data, and to communicating results.
 In the next chapter we will introduce probability --- the mathematical basis
 for all statistical reasoning.
+
+\section{Problems}
+
+\begin{exercise}
+Try running the simulation code from the scatterplot section, but with the
+following changes:
+\begin{enumerate}
+\item Without the \lstinline{y} term: \lstinline{y <- 10 * (as.numeric(g) - 1) + rnorm(length(x), mean=0, sd=3)}
+\item Without the cyclical term: \lstinline{y <- 3 * (x > 2 * pi) * x + 10 * (as.numeric(g) - 1) + rnorm(length(x), mean=0, sd=3)}
+\item Without the group term: \lstinline{y <- 3 * (x > 2 * pi) * x + rnorm(length(x), mean=0, sd=3)}
+\item Without the random noise: \lstinline{y <- 3 * (x > 2 * pi) * x + 4 * sin(3 * x) + 10 * (as.numeric(g) - 1)}
+\item With less noise: \lstinline{y <- 3 * (x > 2 * pi) * x + 4 * sin(3 * x) + 10 * (as.numeric(g) - 1) + rnorm(length(x), mean=0, sd=1)}
+\item With more noise: \lstinline{y <- 3 * (x > 2 * pi) * x + 4 * sin(3 * x) + 10 * (as.numeric(g) - 1) + rnorm(length(x), mean=0, sd=5)}
+\item Change the coefficients. Include negative values in your attempts.
+\item Use a different marker in the plot (using the \lstinline{pch} option).
+\end{enumerate}
+\end{exercise}
 
 %%% Local Variables:
 %%% mode: latex
