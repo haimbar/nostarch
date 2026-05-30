@@ -41,7 +41,7 @@ red. There is a green pocket numbered 0 (zero). Suppose you want to bet on a
 color, say, red, and if the ball lands in a red pocket your payoff is twice
 your bet, and otherwise you lose your bet. What is the probability you win?
 What is your expected payoff? Suppose you have \$10,000, and you bet one dollar
-each time. How much money will you win or lose?.
+each time. How much money will you win or lose?
 \item Suppose that you get a text message every 6 minutes (a rate of 10 per
 hour), and suppose that they arrive independently of one another, according to
 some presumed distribution. How many messages do you expect to get on an
@@ -92,7 +92,6 @@ We propose a certain distribution and check if it fits. In the current
 example, which we called \lstinline{samp1}, we want to check if the normal
 distribution is a good model for our data.
 
-\jy{QQ plot seems distracting here}
 One way to check if a distribution fits our data is with a graphical tool
 called the \emph{Q-Q plot}. A Q-Q plot is based on the simple (and very
 important) idea that a distribution is determined by its \emph{quantiles}
@@ -108,7 +107,7 @@ will match the quantiles we got from our data (they will only match
 approximately, because when we draw finite, random samples, there is always
 some `noise'.)
 
-When it's assumed that the data come from a normal distribution, we can use the
+When it's assumed that the data comes from a normal distribution, we can use the
 \lstinline{qqnorm()} function to check if the assumption is reasonable:
 \showCode{R}{Code/llnclt_IQ.R}[7][8]
 
@@ -135,11 +134,9 @@ simulation but vary the sample size ($n$) and see what happens to the
 
 \showCode{R}{Code/llnclt_IQ.R}[12][22]
 
-\jy{how about putting sample size on log scale:
-   \lstinline{ns <- rep(10 * 2^(0:11), each = 10)}'}
-
-In \wingding{1} we create a vector of sample sizes. We will generate a random
-sample for each of these \lstinline{ns}. In \wingding{2} we initialize a vector
+In \wingding{1} we create a vector of sample sizes on a log scale, covering
+several orders of magnitude so the convergence is easy to see. We will generate
+a random sample for each of these \lstinline{ns}. In \wingding{2} we initialize a vector
 which will hold all the sample means (at first, they are set to zero). The
 \lstinline{for} loop in \wingding{3} is the same as the previous demonstration,
 but in each iteration we increase the sample size, which is the first argument
@@ -231,7 +228,7 @@ In each day we count messages over 12 hours, so in \wingding{1} we multiply the
 
 If we continue to get text messages at this fixed rate over a long period of
 time, and we calculate the average daily messages (from 8am to 8pm) we see that
-that average converges to 12*10=120 messages per day.
+the average converges to 12*10=120 messages per day.
 
 
 
@@ -243,7 +240,7 @@ closer to the true population mean.
 
 The LLN is very general -- it doesn't matter if the question is about how many
 boy-births we expect to see (\emph{binomial distribution}), the number of
-received text messages (\emph{Poisson distibution}), or if we measure IQ
+received text messages (\emph{Poisson distribution}), or if we measure IQ
 (\emph{normal distribution}). The only requirements are that the samples are
 independent, and identically distributed, and that the true distribution
 actually has a mean. (We will see an example where this is not the case.)
@@ -294,11 +291,10 @@ expect $r_{AB}$ to converge to exactly 70/60.)
 \label{LLNdemoCauchy}
 \end{figure}
 
-\jy{If the normals do not have mean zero, the ratio is not exactly
-  Cauchy but Cauchy like in tails.}
 What is happening here? The answer is that while a difference between two
 normal random variables is still normal (and therefore, has a mean), the ratio
-between two normal distributions follows a \emph{Cauchy distribution} which
+between two normal distributions follows a distribution that is \emph{Cauchy-like}
+in its tails (exactly Cauchy when both means are zero), which
 doesn't have a theoretical mean, so the LLN doesn't apply to the ratios
 between the grades of the two groups,  $r_{AB}$.
 
@@ -323,8 +319,10 @@ original variables themselves are not normally distributed!
 
 The CLT requires very little about the actual distribution of the data: the
 sample has to be independent and identically distributed (i.i.d.), and the
-distribution must have a finite variance. 
-\jy{We only defined sample variance but not population variance so far.}
+distribution must have a finite variance. Here, variance refers to the
+\emph{population variance} --- the true spread of the underlying distribution,
+as opposed to the sample variance we compute from data (which we introduced
+in Chapter~\ref{rintro}).
 
 \subsection{CLT -- Examples}
 We will draw a random sample of size $n$ from the following distributions:
@@ -355,10 +353,10 @@ look at all like a normal distribution. Try running \lstinline{mean(expsamp1)}. 
 should get \inlnR{```cat(mean(expsamp1))```}[llnmeansampexp], which is approximately
 1/5.5, the theoretical mean of the Exp(5.5) distribution.
 
-\jy{Add sample size and exponential paraemters to caption.}
 \begin{figure}[H]
 \includegraphics[width=0.6\textwidth]{images/chapter_4/CLTexp.pdf}
-\caption{Simulated data from an exponential distribution}
+\caption{One sample of $n=100$ observations from an exponential distribution
+with rate 5.5}
 \label{CLTexp}
 \end{figure}
 
@@ -394,7 +392,7 @@ getting smaller.
 
 \subsubsection{Binomial Distribution}
 In order to see the generality of the CLT, we demonstrate it again with
-another, very different distribution. This time our data come from a discrete
+another, very different distribution. This time our data comes from a discrete
 and skewed distribution (the binomial).
 
 The following code is very similar to the previous one, except that we use
@@ -433,9 +431,9 @@ This should give the following:
 \includeOutput{boygirl}%[inline]
 
 Would it be very surprising if we actually saw 148 in the random sample?
-Suppose we took a sample of 3,000, instead. Would is be surprising if we
+Suppose we took a sample of 3,000, instead. Would it be surprising if we
 observed 1,480 boys?  How about if we took a sample of 30,000, instead. Would
-is be surprising if we observed 14,800 boys?
+it be surprising if we observed 14,800 boys?
 
 The probability of a boy birth doesn't depend on the sample size, and we
 calculated it to be 0.512, so the expected number of boys when the sample size
@@ -517,7 +515,7 @@ the area under the curve.
 
 \begin{figure}[H]
 \includegraphics[width=0.6\textwidth]{images/chapter_4/IQtail.pdf}
-\caption{The distribution of IQ's and the acceptance range to the Mensa club}
+\caption{The distribution of IQs and the acceptance range to the Mensa club}
 \label{CLTIQMensa}
 \end{figure}
 
@@ -538,6 +536,28 @@ confidence intervals for estimates. For example, we'll be able to answer
 questions such as: ``You are given the IQ test results of 13 people and they
 are: 139, 104, 115, 151, 116, 141, 117, 105, 134, 155, 130, 139, 121. Is this
 group different than the overall population?''
+
+\section{Problems}
+
+\begin{exercise}
+The LLN was demonstrated for normal, binomial, and Poisson data. Choose an
+exponential distribution with rate 2 and demonstrate the LLN by simulating
+samples of increasing size and plotting the sample mean against the sample
+size. Verify that the sample mean converges to the theoretical mean, $1/2$.
+\end{exercise}
+
+\begin{exercise}
+Simulate 10,000 samples of size $n=30$ from a Poisson distribution with rate
+$\lambda=3$, compute the sample mean of each, and plot a histogram. Repeat
+with $n=300$. Does the shape of the histogram change as expected from the CLT?
+\end{exercise}
+
+\begin{exercise}
+Using the IQ distribution (normal with mean 100 and standard deviation 15),
+use the \lstinline{pnorm()} function to find the probability that a randomly
+selected person has an IQ above 130 (two standard deviations above the mean).
+Then verify with a simulation of 100,000 random draws.
+\end{exercise}
 
 %%% Local Variables:
 %%% mode: latex
