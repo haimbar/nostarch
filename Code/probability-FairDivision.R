@@ -1,0 +1,8 @@
+set.seed(123)
+players <- c("Tom", "Jerry")
+res <- replicate(n=1000, sample(players, 5, replace=TRUE))
+TomFirst = (res[1:3,] == "Tom")                             # (@\wingding{1}@)
+TomTwice = colSums(TomFirst) == 2                           # (@\wingding{2}@)
+TomFinal = (colSums(res == "Tom") >=3) & TomTwice           # (@\wingding{3}@)
+TomP = sum(TomFinal) / sum(TomTwice)                        # (@\wingding{4}@)
+print(c(Tom=TomP, Jerry=1-TomP))
