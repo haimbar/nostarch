@@ -1,57 +1,78 @@
 # Compilation Issues Log
-Generated: 2026-05-30 after `xelatex -shell-escape -interaction=nonstopmode sidsmain.tex`
+Last updated: 2026-05-30 after `make build` (full rebuild with R server).
 Book compiled successfully (165 pages, no fatal errors).
 
 ---
 
-## FIXED (applied this session)
+## FIXED
 
 | File | Issue |
 |------|-------|
-| `chapters/datacollect.tex:50` | Duplicate label `eq:weightheight` — renamed second equation label to `eq:weightheight-stochastic` |
-| `chapters/datacollect.tex:134` | Duplicate label `representative` — renamed subsection label to `representative-size` |
+| `chapters/datacollect.tex:50` | Duplicate label `eq:weightheight` — renamed to `eq:weightheight-stochastic` |
+| `chapters/datacollect.tex:134` | Duplicate label `representative` — renamed to `representative-size` |
 
 ---
 
-## R RUNTIME ERRORS — Requires full rebuild with R server
+## OPEN: Estimation chapter — empty generated output files
 
-The following generated output files contain R error text because the cached results are
-stale or the R code failed during a previous build. These errors appear inline in the PDF.
-Run `make build` (with the R server) to regenerate.
+After `make build`, 12 generated files in the estimation chapter are **zero bytes** (blank
+output in PDF). Two distinct root causes:
 
-| Generated file | R error | Source R file | Chapter |
-|---------------|---------|--------------|---------|
-| `generated/estci1.tex` | `Error: object 'ci' not found` | `Code/est-ci-clt.R` | estimation |
-| `generated/estci2.tex` | `Error: object 'ci' not found` | `Code/est-ci-clt.R` | estimation |
-| `generated/estmeansim50.tex` | `Error: object 'sim50' not found` | `Code/est-ci-clt.R` | estimation |
-| `generated/estmeansim50ci.tex` | `Error: object 'sim50' not found` | `Code/est-ci-boot.R` | estimation |
-| `generated/estsim20.tex` | `Error: object 'sim20' not found` | `Code/est-ci-boot.R` | estimation |
-| `generated/estsim50.tex` | `Error: object 'sim50' not found` | `Code/est-ci-boot.R` | estimation |
-| `generated/esttarget.tex` | `Error: object 'target' not found` | `Code/est-ci-boot.R` | estimation |
-| `generated/esttarget2.tex` | `Error: object 'target' not found` | `Code/est-ci-boot.R` | estimation |
-| `generated/estmedboot.tex` | `Error: object 'medBoot' not found` | `Code/est-ci-boot.R` | estimation |
-| `generated/estmedci1.tex` | `Error: object 'medCI' not found` | `Code/est-ci-boot.R` | estimation |
-| `generated/estmedci2.tex` | `Error: object 'medCI' not found` | `Code/est-ci-boot.R` | estimation |
-| `generated/phat.tex` | `Error: object 'phat' not found` | (estimation chapter) | estimation |
+### Cause 1 — Missing R file: `Code/est-mle-binom.R` does not exist
 
-Root cause: `\runR{Code/est-ci-clt.R}{ci-clt}[cache]` and `\runR{Code/est-ci-boot.R}{ci-boot}[cache]`
-in `chapters/estimation.tex` (lines ~358, ~435) ran with `[cache]` flag but objects were
-not available in the R session. Run `make build` to regenerate.
+`chapters/estimation.tex:271` calls `\runR{Code/est-mle-binom.R}{mle-binom}`, but the
+file is absent from the repository. The object `phat` (used on line 294 via
+`\inlnR{```cat(phat[1])```}[phat]`) is never defined, so `generated/phat.tex` is always
+empty.
 
----
+**Fix:** Create `Code/est-mle-binom.R` with code that computes `phat` (the MLE for a
+binomial proportion — context: basketball player, 16/20 free throws, so `phat <- 16/20`).
 
-## MULTIPLY-DEFINED LABELS (now fixed — listed for reference)
+### Cause 2 — R timeout: `Code/est-ci-boot.R` times out during build
 
-Both were in `chapters/datacollect.tex`. See FIXED section above.
+`\runR{Code/est-ci-boot.R}{ci-boot}[cache]` (estimation.tex:435) times out because the
+`nrep=1000` bootstrap loops are too slow for the R server's timeout threshold. The objects
+`medBoot`, `medCI`, `sim50`, `sim20`, `target` are not available when the subsequent
+`\inlnR` commands execute. Confirmed in `Rdebug.txt`:
+```
+source("Code/est-ci-boot.R")
+  TIMED OUT 2026/30/05/25/26 09:30:00 ------
+```
+
+**Fix options:**
+- Reduce `nrep` in `est-ci-boot.R` (e.g., 500 instead of 1000) to stay within the timeout
+- Or increase the talk2stat server timeout in `R.config`
+
+Affected generated files (all zero bytes after build):
+
+| Generated file | `\inlnR` expression | estimation.tex line |
+|---------------|---------------------|---------------------|
+| `generated/phat.tex` | `cat(phat[1])` | 294 |
+| `generated/estci1.tex` | `cat(ci[1])` | 367 |
+| `generated/estci2.tex` | `cat(ci[2])` | 367 |
+| `generated/estsim50.tex` | `cat(mean(sim50[...]))` | 376 |
+| `generated/estsim20.tex` | `cat(mean(sim20[...]))` | 383 |
+| `generated/estmedboot.tex` | `cat(medBoot[["t0"]])` | 445 |
+| `generated/estmedci1.tex` | `cat(medCI[1])` | 447 |
+| `generated/estmedci2.tex` | `cat(medCI[2])` | 447 |
+| `generated/esttarget.tex` | `cat(target)` | 448 |
+| `generated/esttarget2.tex` | `cat(target)` | 470 |
+| `generated/estmeansim50.tex` | `cat(mean(sim50[1,]))` | 469 |
+| `generated/estmeansim50ci.tex` | `cat(mean(sim50[2,]...))` | 475 |
+
+**Note:** `estci1.tex` and `estci2.tex` (from `est-ci-clt.R`, which did not time out) are
+also zero bytes. This is likely a session-ordering issue: `est-ci-clt.R` succeeds and
+produces `ci`, but a timeout in a later script may cause the R session to reset, losing
+the earlier variables before the `\inlnR` commands run.
 
 ---
 
 ## OVERFULL HBOXES — Very wide (>50pt)
 
-These are almost certainly from `\showChunk` code-listing boxes being wider than the text
-column. They are likely cosmetic (code blocks render correctly in their own verbatim frame)
-but should be verified in the PDF. No easy LaTeX fix without reconfiguring the runcode
-package listing width.
+All 21 of these come from `\showChunk` code-listing blocks sitting inside a paragraph
+(no blank line separating the preceding text from the command). They are almost certainly
+cosmetic — code blocks render in their own verbatim frame and do not visually overflow.
+Verify in the PDF; no easy fix without reconfiguring the runcode listing width.
 
 | File | Lines | Width |
 |------|-------|-------|
@@ -81,29 +102,30 @@ package listing width.
 
 ## OVERFULL HBOXES — Narrow (<50pt, text reflow candidates)
 
-Minor overflows that may be fixed by rephrasing or hyphenation hints. Values under ~5pt
-are usually invisible in print; values above ~20pt are worth examining in the PDF.
+Values under ~5pt are usually invisible in print. Values above ~20pt are worth
+checking in the PDF.
 
 | File | Lines | Width | Priority |
 |------|-------|-------|----------|
-| `chapters/front_matter.tex` | 106 | 34pt | Medium |
 | `chapters/regcorr.tex` | 212–216 | 40pt | Medium |
+| `chapters/front_matter.tex` | 107 | 34pt | Medium |
 | `chapters/Rintro.tex` | 27–39 | 27pt | Medium |
-| `chapters/regcorr.tex` | 134–141 | 11pt | Low |
-| `chapters/regcorr.tex` | 10–11 | 13pt | Low |
-| `chapters/probability.tex` | 1013–1018 | 11pt | Low |
 | `chapters/Rintro.tex` | 586–593 | 18pt | Low |
+| `chapters/llnclt.tex` | 13–31 | 16pt | Low |
+| `chapters/regcorr.tex` | 10–11 | 13pt | Low |
+| `chapters/regcorr.tex` | 134–141 | 11pt | Low |
+| `chapters/probability.tex` | 1013–1018 | 11pt | Low |
 | `chapters/EDA.tex` | 521–530 | 10pt | Low |
 | `chapters/Rintro.tex` | 106–110 | 9pt | Low |
 | `chapters/datacollect.tex` | 29–35 | 9pt | Low |
-| `chapters/datacollect.tex` | 206–211 | 7pt | Low |
-| `chapters/datacollect.tex` | 253–261 | 7pt | Low |
+| `chapters/llnclt.tex` | 13–31 | 9pt | Low |
 | `chapters/datacollect.tex` | 380–385 | 7pt | Low |
 | `chapters/estimation.tex` | 4–16 | 7pt | Low |
+| `chapters/datacollect.tex` | 206–211 | 7pt | Low |
+| `chapters/datacollect.tex` | 253–261 | 7pt | Low |
 | `chapters/estimation.tex` | 280–283 | 6pt | Low |
-| `chapters/EDA.tex` | 479–489 | 5pt | Low |
-| `chapters/Rintro.tex` | 507–512 | 3pt | Low |
-| *(and ~20 more under 5pt — negligible)* | | | Negligible |
+| `chapters/front_matter.tex` | 137–150 | 7pt | Low |
+| *(~20 more under 5pt — negligible)* | | | Negligible |
 
 ---
 
@@ -111,6 +133,6 @@ are usually invisible in print; values above ~20pt are worth examining in the PD
 
 | Warning | Details |
 |---------|---------|
-| `Package soulutf8 Warning: This package is obsolete` | Minor — loaded by some dependency; harmless |
-| `LaTeX Font Warning: Some font shapes were not available, defaults substituted` | Font fallback — check if special characters render correctly in PDF |
-| `Package hyperref Warning: Token not allowed in a PDF string` | In `chapters/nyccrashes.tex` line 1 — the chapter title contains `\kernel@ifnextchar` (likely from a macro). Affects PDF bookmark string only, not body text. |
+| `Package soulutf8 Warning: This package is obsolete` | Minor — loaded by a dependency; harmless |
+| `LaTeX Font Warning: Some font shapes were not available` | Font fallback — check special characters render correctly in PDF |
+| `Package hyperref Warning: Token not allowed in a PDF string` | `chapters/nyccrashes.tex` line 1 — chapter title contains a macro. Affects PDF bookmark string only, not body text |
