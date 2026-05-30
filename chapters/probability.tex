@@ -17,9 +17,9 @@ and provide guidance how to avoid common errors in probabilistic thinking.}
 %We will go through examples to see how probability helps interpret phenomena in real life and how probability may counter intuition. We begin by introducing some concepts:
 We begin with some essential terminology and notation: 
 \begin{itemize}
-\item Experiment\index{Experiment}: a situation in which the outcome occurs randomly, e.g.,
-  flipping a coin, rolling a dice, and picking a card from a deck.
-\item Sample Space\index{Sample Space}: the set of all possible outcomes in an experiment, e.g.,
+\item Experiment\index{Experiment}: a situation in which the outcome occurs randomly, for example,
+  flipping a coin, rolling a die, and picking a card from a deck.
+\item Sample Space\index{Sample Space}: the set of all possible outcomes in an experiment, for example,
 \{head, tail\}, \{1, 2, ..., 6\}, and \{all card faces\}.
 \item Event\index{Event}: a subset of the sample space is called an event; an event occurs
 if the outcome from an experiment belong to the subset of sample space. For
@@ -49,7 +49,7 @@ an even number) illustrated with Venn diagram} \label{fig:probability-event}
 \end{figure}
 
 \emph{Probability}\index{\emph{Probability}} is a number between zero and one which tells us how likely
-an event to occur. If we assume (for now) that the sample space is finite and
+an event is to occur. If we assume (for now) that the sample space is finite and
 each possible outcome in an experiment  has an equal chance to occur, then the
 probability of event $E$ is
 \begin{equation}
@@ -107,7 +107,7 @@ someone rolls a die behind a curtain and tells us only that the number is less
 than or equal to 3. What is the probability that it's an even number? Given
 that we got 1, 2, or 3, the only possibility that it's even is if the number is
 2. The \emph{unconditional}\index{Probability!unconditional} probability of getting an even number in a roll of
-a die is 1/2, but because of the information that provided to us, we conclude
+a die is 1/2, but because of the information provided to us, we conclude
 that the \emph{conditional}\index{Probability!conditional} probability is 1/3.  Using mathematical notation,
 we write  $P(B\mid A)=1/3$ which stands for ``conditional on $A$=the number is
 less than or equal to 3, the probability of $B$=the number is even, is 1/3''. 
@@ -251,7 +251,7 @@ $P(B\mid F) = P(F\mid B)P(B)/P(F) =0.5\times0.2/0.8=0.125$.
   \draw[fill = blue!80, draw=blue] (0.5,0.5) rectangle ++(1,1)  node[midway,white]{B};
 \end{tikzpicture}
 \caption{Bayes' rule. $F$ is the event that Jane attends the weekly football
-game, and $B$ is the events that she attends the weekly ballet}
+game, and $B$ is the event that she attends the weekly ballet}
 \label{fig:bayes-rule}
 \end{figure}
 
@@ -511,7 +511,7 @@ the plane, the two probabilities are \inlnR{```cat(prob.p253[1])```}[prob.p253.1
 \inlnR{```cat(prob.p253[2])```}[prob.p253.2], respectively.
 
 This example shows that some seemingly rare events are not rare, and they occur
-quite often, especially when we get mutiple samples. %The second event has a large probability to occur, because the
+quite often, especially when we get multiple samples. %The second event has a large probability to occur, because the
 %number of possible pairs is much larger.
 When you want to see if any of the other 22
 people has the same birthday as yours, there are only 22 pairs to consider for
@@ -526,12 +526,6 @@ sample from a particular crime scene matches a random person is extremely low,
 but not zero. With nine billion people in the world and many crime scenes, the
 probability that some other person's DNA (other than the true offender) matches
 the DNA sample from a scene is not negligible.
-
-\begin{exercise}
-  Adapt the previous code by changing $N$ and $n$, to check the
-  probability that someone will be selected multiple times if you pick a
-  name from a list of one million names for one thousand times.
-\end{exercise}
 
 \subsection{Predictions}
 The following example is one of the earliest questions in probability, when the
@@ -568,7 +562,7 @@ In the above code, \code{TomFirst} in \wingding{1} records whether Tom won in
 each of the first three games in the \code{n=1000} simulated games.
 \code{TomTwice} in \wingding{2} checks whether Tom won twice in the first three
 rounds.  \code{TomFinal} in \wingding{3} checks whether Tom would be the final
-winner, i.e., Tom would win at least three out of the five games.  \wingding{4}
+winner, that is, Tom would win at least three out of the five games.  \wingding{4}
 approximates the probability that Tom would be the final winner.
 Running the above code should give the winning probabilities for Tom and Jerry
 as:
@@ -582,7 +576,7 @@ not equal, and when the horizon is farther (more matches are needed in order to
 declare the winner.)
 
 This can be applied in financial disputes over inheritance. Suppose that Tom and
-Jerry are heirs to a big fortune and the go to court, each one hoping to get the
+Jerry are heirs to a big fortune and they go to court, each one hoping to get the
 full amount. It may be a lengthy procedure, and maybe at some point they feel
 that Tom is leading in the eyes of the judge, but they know that the process may
 continue for a long time and they might even die before a decision is made. So,
@@ -606,8 +600,8 @@ switch your choice?
 This famous example has confused many smart people. It's also about conditional
 probability and can be solved by using the Bayesian formula. However, setting up
 the conditional and unconditional probabilities for this problem is
-complicated. Some people didn't believe the result answer until they were shown some
-simulations. The following code provide a simulation based on \code{n=1000}
+complicated. Some people didn't believe the answer until they were shown some
+simulations. The following code provides a simulation based on \code{n=1000}
 repetitions.   
 
 \showCode{R}{Code/probability-MontyHall.R}
@@ -663,7 +657,7 @@ scenarios in life, is yes. This phenomenon is called Simpson's paradox\index{Sim
 \begin{example}[Combined percentages]
 Tanya and Sonya are two freshmen players in college. In the first three games of the
 season, Tanya had 11 free throws of which she made 5, and Sonya went 7 times and
-made 3 of the free throws. If at the end of game three the coach want to pick
+made 3 of the free throws. If at the end of game three the coach wants to pick
 the player with the best chance of making free throws, who should she choose?
 
 Tanya's probability based on the first three games is $5/11 = .455$, while
@@ -675,12 +669,12 @@ During the next three games, Tanya got 9 free throws and made 6, and Sonya got
 choose the better free-throw shooter. Based on the last three games, Tanya's chances
 are $6/9 = .667$, while Sonya's are $9/14 = .643$. So once again, the coach
 picks the player with the better chances, and based on the last three games, it
-is Tonya once again.
+is Tanya once again.
 
 However, if we combine the results from all six games we see that Tanya went to
 the line 11+9=20 times and made 11 of the free throws, and Sonya got 7+14=21
 free throws and made 3+9=12. So, if we combine the results from all six games
-Tonya's percentage from the free throw line is 55\%, while Sonya's is 57.1\%, so
+Tanya's percentage from the free throw line is 55\%, while Sonya's is 57.1\%, so
 based on the cumulative information Sonya should be the coach's pick!
 \end{example}
 
@@ -725,7 +719,7 @@ F & 373 & 22 & (6\%) & 341 & 24 &(\textbf{7\%})  \\
 \end{tabular*}
 \end{table}
 
-Things get strange after we divide the data according different departments. In
+Things get strange after we divide the data according to different departments. In
 four of the departments (A, B, D, and F) women were more likely to be admitted
 than men.  In departments C and E, men were more likely to be admitted (by
 3-4\%). In contrast, the acceptance rate for women in department A was 20\% more
@@ -794,7 +788,7 @@ function in \wingding{10} is used to fit a linear trend for each group.
 \begin{figure}[H]
 \includegraphics[width=0.49\textwidth]{images/chapter_3/probability-Simpson-plots.pdf}
 \includegraphics[width=0.49\textwidth,page=2]{images/chapter_3/probability-Simpson-plots.pdf}
-\caption{Scatter plot of the whole data without (left) and with (right) group labeled}
+\caption{Scatterplot of the full data without (left) and with (right) group labels}
 \label{fig:probability-simpson}
 \end{figure}
 
@@ -848,7 +842,7 @@ type. If he really has $B-$ blood type, the test result is positive
 \wingding{4}. Among all the positive results (the police test Teddy's blood type
 as $B-$), we count the frequency that the person really has $B-$ blood type
 \wingding{5}. This approximates the probability that Teddy really has $B-$
-blood, i.e., the probability that he is the burglar?
+blood, that is, the probability that he is the burglar?
 
 \showCode{R}{Code/datacollect-baserate.R} %
 
@@ -927,11 +921,10 @@ we check if the first shot has no bullet in \wingding{9}. \wingding{10}
 approximates the probability of having a bullet when there was no bullet in the
 first shot for the continuous shooting approach. 
 Running the above code should give the approximate probability for spinning
-again pulling the trigger as
+before pulling the trigger as
 \inlnR{```cat(prob.revolver[1])```}[probability_prob.revolver1], and the
-approximate probability for keep shooting as
-\inlnR{```cat(prob.revolver[2])```}[probability_prob.revolver2]. 
-respectively. 
+approximate probability for keeping shooting as
+\inlnR{```cat(prob.revolver[2])```}[probability_prob.revolver2], respectively.
 
 The technique of simulation is useful in finding answers in very complicated
 problems. Consider the following example modified from
@@ -971,15 +964,9 @@ information from other prisoners. For example, different prisoners all start
 from opening different drawers, while it's almost certain that some prisoners
 start from opening the same drawer if they start with a draw at random.
 
-\begin{exercise}
-Use simulation to find the probability that some prisoners
-start from opening the same drawer if they all start with a draw at random.\\
-\emph{Hint:} Consider the birthday problem in Example~\ref{exam:birthday}.
-\end{exercise}
-
 The probability of survival with the better strategy is complicated to derive
 analytically.  In the following, we define two functions to simulate the method
-of randomly openning 50 drawers and the better strategy, respectively.
+of randomly opening 50 drawers and the better strategy, respectively.
 
 \showChunk{R}{Code/probability-100prisoners.R}{PR100prisoners1}
 %\showCode{R}{Code/probability-100prisoners.R}[2][37]
@@ -994,10 +981,10 @@ the variable \code{pardon} to be \code{TRUE}. The \code{for} loop in
 \code{pardon} becomes \code{FALSE} (\wingding{7}) and all prisoners die. In this
 case, there is no need to exam the rest of the prisoners so the \code{for} loop
 can be ended by the \code{break} in \wingding{8}. The function \code{open.smart}
-in \wingding{9} simulates the procedure of smartly opening 50 drawers. We uses
+in \wingding{9} simulates the procedure of smartly opening 50 drawers. We use
 \code{opens} in \wingding{10} to stores the drawers that a prison will open. The
 first draw to open by prisoner with number \code{i} is the drawer with number
-\code{i} (\wingding{11}). The \code{for} loop in \wingding{12} the following 49
+\code{i} (\wingding{11}). The \code{for} loop in \wingding{12} opens the following 49
 ($n/2-1$) drawers to open. If the previously opened drawer contains the number
 for the prisoner (\wingding{13}), we don't need to open other drawers and can
 break the loop (\wingding{14}); otherwise, the prisoner needs to open the drawer
@@ -1024,6 +1011,20 @@ probability can help interpret real-life phenomena. Faced with counter-intuitive
 and challenging probability problems, we were able to leverage numerical
 simulation techniques to gain deeper insights and find solutions easily. Moving
 forward, the next chapter will focus on two important probability theorems.
+
+\section{Problems}
+
+\begin{exercise}
+Adapt the birthday problem code by changing $N$ and $n$ to check the
+probability that someone will be selected multiple times if you pick a name
+from a list of one million names one thousand times.
+\end{exercise}
+
+\begin{exercise}
+Use simulation to find the probability that some prisoners start from opening
+the same drawer if they all start with a draw at random.
+\emph{Hint:} Consider the birthday problem in Example~\ref{exam:birthday}.
+\end{exercise}
 
 %%% Local Variables:
 %%% mode: latex
