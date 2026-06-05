@@ -656,19 +656,27 @@ is \inlnR{```cat(mean(x))```}[intromeanx], the trimmed mean is
 \subsection{Looking at Distributions}\label{sec:introdistributions}
 The formula we used above, \lstinline{x <- - log(runif(n)) / lambda}, generates
 random number from the so-called \emph{exponential distribution} with rate
-\index{Distribution!Exponential}
-parameter $\lambda=10$. (Don't worry about the meaning of the rate parameter.)
-% AF: What does the rate parameter do? If we don't need to worry about that right now, say so.
+\index{Distribution!Exponential} parameter $\lambda=10$.
+Many time-to-event situations are modeled as coming from this distribution.
+For example, the time between two consecutive text messages that you get
+from different (unrelated) friends. The rate is the number of events
+that occur in some time unit (e.g., per hour, day, etc.)
+The \emph{expected value} of this distribution is the (weighted) average time
+between text messages.
+For example, suppose that you are receiving messages
+at a rate of 12 per day. Then, the expected time between two consecutive
+messages is 1/12 of a day, or two hours.
+(A general definition of the expected value of any distribution will be covered 
+in subsequent chapters).
 We denote the fact that the random variable $X$ follows an exponential
-distribution with rate $\lambda$  by $X\sim \exp(\lambda)$. The exponential
-distribution is often used to model random waiting times, like the time between
-incoming text messages. We would usually generate it by using the
+distribution with rate $\lambda$  by $X\sim \exp(\lambda)$.
+We would usually generate it by using the
 \lstinline{rexp()} function in \R, like this: \lstinline{x <- rexp(n, lambda)} .
 Mathematical analysis of the distribution leads to the fact that the expected value
 of an exponential random variable with rate $\lambda$, is $1/\lambda$.
-We see that the theoretical expected value of our example is 0.1, and the
+We see that the theoretical expected value of our example is 1/10 = 0.1, and the
 sample mean is very close to 0.1. This is no coincidence---we'll discuss it in
-a later chapter.
+a Chapter \ref{ch:llnclt}.
 
 
 The distribution of \lstinline{x} is shown in Figure~\ref{fig:ch1:simexp} as a
@@ -758,6 +766,15 @@ In words, the variance is the average of the squared deviations from the mean.
 Notice that the sample variance is computed with $n-1$ in the denominator
 because with $n-1$ we get an \emph{unbiased estimator} for the true variance.
 \index{Estimator!unbiased}
+(We'll define what an unbiased estimator is in Chapter \ref{ch:llnclt},
+but for now, think about it simply as a number, say, $b$, that we calculate from 
+a finite sample to estimate an unknown parameter, say, $beta$. Although we have
+just one sample of $n$ data points and just one estimate, \emph{if we could
+repeat the experiment many times} and take the average of all the estimates,
+$b_1, b_2,\ldots$, then this average will be equal to the true value, $\beta$.
+If this seems magical to you, then you are right! We have one experiment,
+but with a clever \emph{thought experiment} we can say that our one and only
+estimate is a good one).
 
 
 The corresponding functions in \R are \lstinline{var()} and \lstinline{sd()} for sample
