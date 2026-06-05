@@ -1,7 +1,7 @@
 \runR{Code/llnclt_IQ.R}{llnclt_IQ}
 \runR{Code/llnclt_roulette.R}{roulette}
 \runR{Code/llnclt_texts.R}{texts}
-\runR{Code/llnclt_Cauchy.R}{texts}
+\runR{Code/llnclt_Cauchy.R}{cauchy-ratio}
 \runR{Code/llnclt_CLTexp.R}{cltsimexp}
 \runR{Code/llnclt_CLTbinom.R}{cltsimbinom}
 \runR{Code/llnclt_boygirl.R}{boygirl}
@@ -102,7 +102,7 @@ important) idea that a distribution is determined by its \emph{quantiles}
 (percentiles), 
 so if the quantiles of our sample match the quantiles of the assumed
 distribution, then the assumption is reasonable. Recall that we defined the
-quantiles in Chapter~\ref{rintro}, so that the $q$-th quantile is a
+quantiles in Chapter~\ref{ch:rintro}, so that the $q$-th quantile is a
 number $x_q$, such that $q\times 100\%$ of the data are less than or equal to
 $x_q$.  In our example the data has  \inlnR{```cat(n)```}[llnsampsize] data points, so we
 can get \inlnR{```cat(n)```}[llnsampsize2] quantiles from our sample. If we draw the same
@@ -326,7 +326,7 @@ sample has to be independent and identically distributed (i.i.d.), and the
 distribution must have a finite variance. Here, variance refers to the
 \emph{population variance} --- the true spread of the underlying distribution,
 as opposed to the sample variance we compute from data (which we introduced
-in Chapter~\ref{rintro}).
+in Chapter~\ref{ch:rintro}).
 
 \subsection{CLT -- Examples}
 We will draw a random sample of size $n$ from the following distributions:

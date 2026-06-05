@@ -1,4 +1,4 @@
-\chapter{Introduction to R: First Steps in the Kitchen}\label{rintro}
+\chapter{Introduction to R: First Steps in the Kitchen}\label{ch:rintro}
 Just as a chef needs a set of tools, a kitchen surface, and a detailed cookbook,
 a data scientist needs a powerful programming language, a convenient 
 development environment, and good documentation.
@@ -671,7 +671,7 @@ is \inlnR{```cat(mean(x))```}[intromeanx], the trimmed mean is
 \inlnR{```cat(median(x))```}[intromedianx].
 
 
-\subsection{Looking at Distributions}\label{introdistributions}
+\subsection{Looking at Distributions}\label{sec:introdistributions}
 The formula we used above, \lstinline{x <- - log(runif(n)) / lambda}, generates
 random number from the so-called \emph{exponential distribution} with rate
 \index{Distribution!Exponential}
@@ -729,7 +729,7 @@ The plot in Figure~\ref{fig:ch1:simexp}  was generated with the following code:
 \showChunk{R}{Code/ch1sec3.R}{ch1sec3-3}
 
 Try the code above, and try changing some of the parameters to understand their role.
-We will cover the topic of visualization in Chapter~\ref{EDA}.
+We will cover the topic of visualization in Chapter~\ref{ch:EDA}.
 
 
 A boxplot does not include the mean, or the trimmed mean, but we have added them
@@ -845,7 +845,7 @@ standard deviation, and so forth.
 Let's conclude this chapter with some functions that can be used to
 summarize discrete (categorical) data, where the mean, variance,
 quantiles, and so on are not applicable. We will revisit the topic
-of summarizing data in Chapter~\ref{EDA}.
+of summarizing data in Chapter~\ref{ch:EDA}.
 \index{Categorical data}
 
 

@@ -16,7 +16,7 @@ examples in which our intuition may fail us (and even the best mathematician),
 and provide guidance how to avoid common errors in probabilistic thinking.}
 
 \hypertarget{probability}{%
-\section{Probability}\label{probability}}
+\section{Probability}\label{sec:probability}}
 \subsection{Basic Definitions}
 %We will go through examples to see how probability helps interpret phenomena in real life and how probability may counter intuition. We begin by introducing some concepts:
 We begin with some essential terminology and notation: 
@@ -52,7 +52,7 @@ by the inner, rounded rectangle  that contains the numbers 2, 4, and 6.
 an even number) illustrated with Venn diagram} \label{fig:probability-event}
 \end{figure}
 
-\emph{Probability}\index{\emph{Probability}} is a number between zero and one which tells us how likely
+\emph{Probability}\index{Probability} is a number between zero and one which tells us how likely
 an event is to occur. If we assume (for now) that the sample space is finite and
 each possible outcome in an experiment  has an equal chance to occur, then the
 probability of event $E$ is
@@ -103,7 +103,7 @@ value of $n$, and see if the value you get from the simulation is closer to
 
   
 \hypertarget{conditional}{%
-\subsection{Conditional Probability}\label{conditional}}
+\subsection{Conditional Probability}\label{sec:conditional}}
 
 When there are two events $A$ and $B$ under consideration, knowing that $A$ has
 occurred may change the probability for $B$ to occur. For example, suppose that
@@ -216,7 +216,7 @@ close to the theoretical probabilities 1/2 and 1/3, respectively.
 
 
 
-\subsection{Bayes' Rule}\label{Bayes}
+\subsection{Bayes' Rule}\label{sec:Bayes}
 One of the most important results in probability and statistics looks
 deceivingly simple, but has deep consequences, as we'll see in some of the
 subsequent examples. It's called Bayes' Rule\index{Bayes' Rule}, named after the reverend Thomas
@@ -255,7 +255,7 @@ $P(B\mid F) = P(F\mid B)P(B)/P(F) =0.5\times0.2/0.8=0.125$.
   \draw[fill = blue!80, draw=blue] (0.5,0.5) rectangle ++(1,1)  node[midway,white]{B};
 \end{tikzpicture}
 \caption{Bayes' rule. $F$ is the event that Jane attends the weekly football
-game, and $B$ is the event that she attends the weekly ballet}
+game, and $B$ is the event that she attends the weekly ballet.}
 \label{fig:bayes-rule}
 \end{figure}
 
@@ -364,7 +364,7 @@ they may occur in everyday situations, and how to deal with them correctly.
 
 \hypertarget{Intransitive-Dice}{%
   \subsection{Intransitivity -- when $A>B$ and $B>C$ does not imply
-    $A>C$}\label{Intransitive-Dice}}
+    $A>C$}\label{sec:Intransitive-Dice}}
 Real numbers are transitive, meaning that if
 we know that $x>y$ and $y>z$ then $x>z$. However, probabilities of events are
 not always transitive. 
@@ -465,7 +465,7 @@ of options may not have the transitive property.
 
 
 \hypertarget{birthday-problem}{%
-  \subsection{Seemingly Rare Events}\label{birthday-problem}}
+  \subsection{Seemingly Rare Events}\label{sec:birthday-problem}}
 
 \begin{example}[Birthday Problem\index{Birthday Problem}]\label{exam:birthday}
 You go on a long trip on your birthday and take a bus. There are 23 people (including you) on
@@ -590,7 +590,7 @@ score as in a game, but the main idea is that the horizon is as important as the
 past in making such decisions.
 
 \hypertarget{Monty-Hall-problem}{%
-\subsection{Jumping Probabilities}\label{Monty-Hall-problem}}
+\subsection{Jumping Probabilities}\label{sec:Monty-Hall-problem}}
 
 \begin{example}[Monty Hall Problem\index{Monty Hall Problem}]
 Suppose you're on a game show, and you're given the choice of three doors:
@@ -650,7 +650,7 @@ thinks. It's purely a consequence of conditioning on what has already happened
 and the information it revealed about the possible future outcome.
 
 \hypertarget{simpsons-paradox}{%
-\subsection{Beware of Generalizations}\label{simpsons-paradox}}
+\subsection{Beware of Generalizations}\label{sec:simpsons-paradox}}
 If we observe a delay in flight take-offs in 8 out of 10 airports, can it be
 that overall in the country the average flight takes off on time? If the average
 admission rate in a university is greater for women than for men, can it be that
@@ -803,7 +803,7 @@ and remember that proportions or trends which are observed in the entire
 population may be very different when we break down the data into groups.
 
 \hypertarget{ch:data}{%
-\subsection{Base-Rate Fallacy}\label{base-rate}}
+\subsection{Base-Rate Fallacy}\label{sec:base-rate}}
 The \emph{base-rate fallacy}\index{\emph{base-rate fallacy}} is a common source of misconceptions due to
 counter-intuitive probabilities when one ignores the base rate. Consider the
 following example:
@@ -877,7 +877,7 @@ the prevalence of the disease and the probability of a false positive
 \citep{darkdata_ch2}.
 
 \hypertarget{further}{%
-\section{Further Examples}\label{further}}
+\section{Further Examples}\label{sec:further}}
 
 \begin{example}[Henry's Choice\index{Henry's Choice}\footnote{\url{https://www.braingle.com/brainteasers/20227/loaded-revolver.html}}]
 Henry has been caught stealing cattle, and is brought into town for justice. The

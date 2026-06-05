@@ -4,7 +4,7 @@
 - Good introduction and summary (does opener state what the reader will learn?)
 - Good flow, section organization
 - Chapter learning objectives — clear statement of what reader will learn in opener
-- Add problems (range from straightforward to challenging; all solvable with chapter content)
+- Add problems (range from straightforward to challenging; all solvable with chapter content); use consistent exercise environment, placed within sections
 
 ### Language and Style
 - Grammar, typos
@@ -19,15 +19,19 @@
 - Every figure/table/listing referenced in text *before* it appears
 - Figure captions — period only if full sentence; no period for noun phrases
 - Code line length — standard 78 chars; wide listings 95 chars max
+- LaTeX source lines — wrap at 80 chars
+- Inline code: use `\inlnR{}` consistently; avoid line breaks inside function or variable names
 
 ### Code and Plots
-- R snippets — clean, consistent style
-- Plots — resolution, aesthetics, work in B&W as well as in color
+- R snippets — clean, consistent style: space before/after `=` and after commas; full-line comments use `##`, inline use `#`
+- Chunk labels — use descriptive names, not line numbers
+- Plots — resolution, aesthetics, work in B&W as well as in color; span full text width; golden ratio for `asp` unless symmetry required (e.g., Q-Q plots); label and point sizes legible after rescaling; minimize white space margins
 - Code line length (see NoStarch Compliance above)
 
 ### Math and References
 - Math notation consistency — hat notation for estimates, Greek letters, subscripts consistent across chapters
-- Cross-references — each \ref{} resolves; no dangling labels
+- Cross-references — each \ref{} resolves; no dangling labels; use consistent label prefixes (ch:, eqn:, tab:, fig:)
+- Index terms — key terms introduced in the chapter are indexed; capitalization consistent (avoid duplicates from mixed case)
 - Bibliography — each \cite{} has a matching entry in book.bib; no orphan references
 
 ### Open Issues (resolve before submission)

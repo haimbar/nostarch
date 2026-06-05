@@ -1,4 +1,4 @@
-\chapter{Exploring Data: Making Data Speak}\label{EDA}
+\chapter{Exploring Data: Making Data Speak}\label{ch:EDA}
 \hypertarget{EDA}{%
 People are born with a fantastic ability to detect patterns. However, sometimes the
 information is hidden and the only way to observe a pattern is to change
@@ -210,7 +210,7 @@ factor \lstinline{g}, which, in this case means two side-by-side boxplots. The
 syntax to do this is as follows:
 
 \showCode{R}{Code/ch2-04sidebox.R}[2][6]
-\runR{Code/ch2-04sidebox.R}{04sidebox}
+\runR{Code/ch2-04sidebox.R}{side-by-side-boxplot}
 
 The notation \lstinline{y ~ g} 
 means `show how \lstinline{y} varies by \lstinline{g}'. Again, we suppress the
@@ -268,7 +268,7 @@ We can also plot a histogram for each group. We can do it in two plots, or in
 one, which makes the comparison between the groups easier. To do that we use
 the following code. The result is depicted in Figure~\ref{histoverlay}.
 \showCode{R}{Code/ch2-05histoverlay.R}[2][5]
-\runR{Code/ch2-05histoverlay.R}{05histoverlay}
+\runR{Code/ch2-05histoverlay.R}{hist-overlay}
 
 The bracket syntax, as in \lstinline{y[g==0]}, is used to define a
 \emph{subset} of the data. For example, in the first line we draw a histogram
@@ -585,7 +585,7 @@ lot of
   format, the simple scatterplot takes 44MB, while the smooth version is more
   than 2000 times smaller and takes only 18kB. In real life you will come across
   much larger datasets, and then the size of the plot (in bytes) will make a big
-  difference. It may take a long time to download a plot on the Internet, and
+  difference. It may take a long time to download a plot on the internet, and
   for the viewer (like Adobe's Acrobat) to show it on the screen, or to print it.
 \end{itemize}
 \begin{figure}[H]
