@@ -24,7 +24,7 @@
 
 ### Code and Plots
 - R snippets — clean, consistent style: space before/after `=` and after commas; full-line comments use `##`, inline use `#`
-- Chunk labels — use descriptive names, not line numbers
+- Chunk labels — use descriptive names, not line numbers; always use `\showChunk{R}{file}{chunk-name}` rather than `\showCode{R}{file}[start][end]`; add `#label===name` / `#===end` markers in the R file to define the chunk
 - Plots — resolution, aesthetics, work in B&W as well as in color; span full text width; golden ratio for `asp` unless symmetry required (e.g., Q-Q plots); label and point sizes legible after rescaling; minimize white space margins
 - Code line length (see NoStarch Compliance above)
 

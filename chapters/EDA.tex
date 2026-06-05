@@ -143,7 +143,7 @@ Using the data we generated in the previous section, we start by plotting
 variables is the boxplot which was introduced in Chapter~\ref{ch:rintro}, and is
 constructed from the \emph{five-number
 summary}. Enter the following code:
-\showCode{R}{Code/ch2-02boxplot.R}[2][3]
+\showChunk{R}{Code/ch2-02boxplot.R}{boxplot-y}
 \runR{Code/ch2-02boxplot.R}{ch2-02boxplot}
 
 We can see the boxplot in Figure~\ref{fig:ch2:boxploty}.
@@ -173,7 +173,7 @@ a histogram, as we did in Chapter~\ref{ch:rintro}. A histogram is constructed by
 dividing the range of a variable into \emph{bins}\index{histogram!bin}, and simply counting the number
 of observations in each bin. These counts are depicted as vertical bars. This
 is done with the \lstinline{hist()} function, like so:
-\showCode{R}{Code/ch2-03hist.R}[2][2]
+\showChunk{R}{Code/ch2-03hist.R}{hist-y}
 \runR{Code/ch2-03hist.R}{ch2-03hist}
 
 Again, notice the usage of the function's arguments. For example,
@@ -209,7 +209,7 @@ for each level of the
 factor \lstinline{g}, which, in this case means two side-by-side boxplots. The
 syntax to do this is as follows:
 
-\showCode{R}{Code/ch2-04sidebox.R}[2][6]
+\showChunk{R}{Code/ch2-04sidebox.R}{sidebyside-boxplot}
 \runR{Code/ch2-04sidebox.R}{side-by-side-boxplot}
 
 The notation \lstinline{y ~ g} 
@@ -267,7 +267,7 @@ are available to us in order to understand the properties of  \lstinline{y}.
 We can also plot a histogram for each group. We can do it in two plots, or in
 one, which makes the comparison between the groups easier. To do that we use
 the following code. The result is depicted in Figure~\ref{fig:ch2:histoverlay}.
-\showCode{R}{Code/ch2-05histoverlay.R}[2][5]
+\showChunk{R}{Code/ch2-05histoverlay.R}{hist-overlay-plot}
 \runR{Code/ch2-05histoverlay.R}{hist-overlay}
 
 The bracket syntax, as in \lstinline{y[g==0]}, is used to define a
@@ -317,7 +317,7 @@ between them with a \emph{scatterplot}. In the following code we use the
 argument \lstinline{x}
 versus the second, \lstinline{y}, because both are continuous. The other arguments
 to the function should be familiar by now.
-\showCode{R}{Code/ch2-06scatter.R}[2][4]
+\showChunk{R}{Code/ch2-06scatter.R}{scatter-plot}
 \runR{Code/ch2-06scatter.R}{ch2-06scatter}
 
 In the left panel of Figure~\ref{fig:ch2:scatter} we can see an interesting pattern
@@ -343,7 +343,7 @@ So far we saw that there is a complicated relationship between \lstinline{x} and
 more complex patterns? Yes!
 We can use different colors, shapes, or sizes for each point. For example, we
 can use different colors for each group, like so:
-\showCode{R}{Code/ch2-07scatter2.R}[2][6]
+\showChunk{R}{Code/ch2-07scatter2.R}{scatter-by-group}
 \runR{Code/ch2-07scatter2.R}{ch2-07scatter2}
 
 First, we use the \lstinline{ifelse()} function to set the color for each group. The
@@ -428,7 +428,7 @@ numbers between 0 and 9, and  \inlnR{```cat(table(xcat)[[4]])```}[edacatcount2]
 This can be shown graphically by using the \lstinline{barplot()} function\index{bar chart} as
 shown in Figure~\ref{fig:ch2:barplot} (or as a pie chart by using the \lstinline{pie()}
 function.)
-\showCode{R}{Code/ch2-09barplot.R}[2][3]
+\showChunk{R}{Code/ch2-09barplot.R}{barplot-xcat}
 \runR{Code/ch2-09barplot.R}{ch2-09barplot}
 
 This should give the following graph. Try the \lstinline{barplot()} function,
@@ -472,7 +472,7 @@ to 1), and the dimensions of boxes within each bar represent the proportion of
 the corresponding cell in the table relative to the total in the row/column of
 that cell.  Equivalently, we can also summarize this data in the form of a
 table by using the function \lstinline{prop.table()}.
-\showCode{R}{Code/ch2-11proptable.R}[2][3]
+\showChunk{R}{Code/ch2-11proptable.R}{spineplot-proptable}
 \runR{Code/ch2-11proptable.R}{ch2-11proptable}
 
 This simulation can represent a hypothetical job market where the x categories
@@ -554,7 +554,7 @@ said
 \item Finally, we live in an era of big data, and for that we sometimes need to
   choose plots based on computational constraints. To demonstrate it, consider
   the following code:
-  \showCode{R}{Code/ch2-12smooth.R}[2][5]
+  \showChunk{R}{Code/ch2-12smooth.R}{smooth-scatter}
   \runR{Code/ch2-12smooth.R}{ch2-12smooth}
 
   We generate 100,000 points \lstinline{(x,y)} and construct a scatterplot (in

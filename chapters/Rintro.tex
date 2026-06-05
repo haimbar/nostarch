@@ -137,7 +137,7 @@ source code, put the cursor anywhere in that line, and click on the Run button
 
 
 When you want to finish your \R session, just enter \lstinline{quit()}
-into the console, and confirm with Yes when prompted to confirm.
+into the console, and confirm with Yes when prompted.
 Congratulations! You're now ready to start learning programming in R.
 
 
@@ -184,7 +184,7 @@ directory and then use the following line to set the working directory to it:
 \end{lstlisting}
 The \lstinline{~/} notation is a shortcut to your home directory. Using this shortcut is
 convenient because if you are using different computers or you share code with others,
-the home directory may be different on each computer.
+the exact path of the home directory may be different on each computer.
 
 
 \subsection{Working with Variables}
@@ -198,7 +198,7 @@ The simplest function to create data is  \lstinline{c()}, which stands for ``com
 We can use it like so:
 \showChunk{R}{Code/ch1sec1.R}{ch1sec1-2}
 %\showCode{R}{Code/ch1sec1.R}[9][9]
-Here we've created a variable called \lstinline{courseNames}, and it contains 
+Here we've also created a variable called \lstinline{courseNames}, and it contains 
 three values: \lstinline{Data Science}, \lstinline{Statistics}, and \lstinline{Probability}.
 We assigned the values into the variable by using the \lstinline{<-} operator. 
 
@@ -352,15 +352,15 @@ The \lstinline{sample()} function in this example is used to draw 20 cards at ra
 from the deck; we don't put the cards back in the deck, so we say they were drawn
 \emph{without replacement}. Then, to divide it into four hands, we use the
 \lstinline{matrix()} function and specify the number of rows and the number of columns.
+When we create a matrix, we may want to name the rows and columns. If we choose
+to do so, we can do it by using the \lstinline{dimnames} options, which is a \emph{list}
+consisting of two vectors -- the first one is used to create row names, and the second
+is used to name the columns.
 The \lstinline{sample()} function draws a different random sample each time unless we
 set the random \emph{seed} to a fixed value. The \lstinline{set.seed()} function is
 \index{R command!\lstinline{set.seed}}
 used to ensure the reproducibility of the results.  Try running the code without the
 \lstinline{set.seed()} line, and you should see that you get different results each time.
-When we create a matrix, we may want to name the rows and columns. If we choose
-to do so, we can do it by using the \lstinline{dimnames} options, which is a \emph{list}
-consisting of two vectors -- the first one is used to create row names, and the second
-is used to name the columns.
 
 
 This is what the results look like with the seed:

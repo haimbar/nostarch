@@ -1,7 +1,9 @@
 pdf("images/chapter_2/scatter2.pdf", width=4, height=4)
+#label===scatter-by-group
 cols <- ifelse(g==1, "navyblue", "orange")
 plot(x, y, pch=19, col=cols, cex=0.3, axes=FALSE)
 axis(1)
 axis(2)
 abline(h=30, lty=2, col="red", lwd=3)
+#===end
 dev.off()

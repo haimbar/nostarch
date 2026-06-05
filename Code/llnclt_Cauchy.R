@@ -1,4 +1,5 @@
 pdf("images/chapter_4/LLNCauchy.pdf", width = 8, height=4)
+#label===cauchy-ratio-sim
 n <- seq(50, 5000, by=10)
 set.seed(59112)
 allDiffs <- rep(0, length(n))
@@ -17,5 +18,6 @@ abline(h=10, col=2, lwd=2)
 plot(n, allRatios, pch=19, col="orange", xlab="n", ylab="Ratio", cex=0.5)
 abline(h=70/60, col=2, lwd=2)
 par(mfrow=c(1, 1))
+#===end
 dev.off()
 
