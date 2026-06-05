@@ -156,14 +156,14 @@ The documentation for each function can be obtained by using
 \lstinline{?___<function>___} or \lstinline{help(___<function>___)} where 
 \lstinline{___<function>___} is the function you're interested in. For example,
 to get the documentation for \lstinline{date()}, try either line of the following:
-\index{R command!\code{help}}
+\index{R command!\lstinline{help}}
 
 %\showCode{R}{Code/ch1sec1.R}[1][2]
 \showChunk{R}{Code/ch1sec1.R}{ch1sec1-1}
 
 \subsection{Changing Your Working Directory}
 When we start an \R session, it's important to determine the \emph{working directory}.
-\index{R command!\code{getwd}}
+\index{R command!\lstinline{getwd}}
 This is the folder on our computer that \R will use to search for data or code files, 
 and it's where \R will save results (unless we explicitly specify another directory).
 To find out what our working directory is, we can use the following:
@@ -176,7 +176,7 @@ directory (which is denoted by a ~\emph{\slash} on Mac and Linux, or
 organization of folders (or directories) on your computer.
 
 
-We can change the working directory by using \index{R command!\code{setwd}}
+We can change the working directory by using \index{R command!\lstinline{setwd}}
 \lstinline{setwd()}.  For example, we may create a folder \emph{work} in our home
 directory and then use the following line to set the working directory to it:
 \begin{lstlisting}
@@ -194,7 +194,7 @@ Data is stored in \textit{variables}.
 % AF:  We do data as singular, per the style guide.
 Let's start by generating some data.
 The simplest function to create data is  \lstinline{c()}, which stands for ``combine.'' 
-\index{R command!\code{c}, combine}
+\index{R command!\lstinline{c}, combine}
 We can use it like so:
 \showChunk{R}{Code/ch1sec1.R}{ch1sec1-2}
 %\showCode{R}{Code/ch1sec1.R}[9][9]
@@ -207,13 +207,13 @@ We can now do things with this variable. For example, we check the variable type
 using the \lstinline{class()} function:
 \showChunk{R}{Code/ch1sec1.R}{ch1sec1-3}
 %\showCode{R}{Code/ch1sec1.R}[10][10]
-\noindent In this case the output should be \index{R command!\code{class}} \index{R command!\code{cat}}
+\noindent In this case the output should be \index{R command!\lstinline{class}} \index{R command!\lstinline{cat}}
  \inlnR{```cat(class(courseNames))```}[introcoursenames], which means that this variable is
  used to store text. % (\lstinline{character} class):
 %\inlnR{```print(class(courseNames))```}[vbox]
 %\includeOutput{ch1ex1class}
 We can also get a bit more detailed information about a variable by checking
-its structure; to do this, we use the \lstinline{str()} function:\index{R command!\code{str}}
+its structure; to do this, we use the \lstinline{str()} function:\index{R command!\lstinline{str}}
 %\showCode{R}{Code/ch1sec1.R}[11][11]
 \showChunk{R}{Code/ch1sec1.R}{ch1sec1-4}
 \noindent As you should see in the output, this shows that the variable is of class 
@@ -224,7 +224,7 @@ its structure; to do this, we use the \lstinline{str()} function:\index{R comman
 
 Our \lstinline{courseNames} is what's called a \emph{vector}, a one-dimensional
 array of objects of the same type (in this case, strings of characters).
-We can also get the number of elements in a vector by using the \index{R command!\code{length}}
+We can also get the number of elements in a vector by using the \index{R command!\lstinline{length}}
 \lstinline{length()} function:
 %\showCode{R}{Code/ch1sec1.R}[12][12]
 \showChunk{R}{Code/ch1sec1.R}{ch1sec1-5}
@@ -241,7 +241,7 @@ be different from an existing function name or other reserved words in the langu
 \subsection{Generating Data}
 We often have to generate variables that contain sequences of numbers. To do that,
 we use the \lstinline{seq()} function. For example, we can create a variable that
-\index{R command!\code{seq}}
+\index{R command!\lstinline{seq}}
 contains all the odd numbers between 1 and 20:
 %\showCode{R}{Code/ch1sec1.R}[14][14]
 \showChunk{R}{Code/ch1sec1.R}{ch1sec1-6}
@@ -277,8 +277,8 @@ will be, and then give it a try.
 
 \subsection{Working with Text}
 There are many functions to handle text. The \lstinline{paste()} function attaches two 
-\index{R command!\code{paste}}
-\index{R command!\code{cat}}
+\index{R command!\lstinline{paste}}
+\index{R command!\lstinline{cat}}
 \emph{strings} of characters together. The default is to combine, or \emph{concatenate},
  strings with a space as a separator, but we can use the \lstinline{collapse} option 
  (also called an \emph{argument} of the function) to use a different separator. For example,
@@ -306,7 +306,7 @@ emphasis on multivariate data.'' To install the package, we use the
 it using the \lstinline{library()} function:
 %\showCode{R}{Code/ch1sec1.R}[45][46]
 \showChunk{R}{Code/ch1sec1.R}{ch1sec1-10}
-\index{R command!\code{install.packages}}
+\index{R command!\lstinline{install.packages}}
 
 
 Installing the package has to be done just once. Occasionally, you may be prompted
@@ -345,7 +345,7 @@ Now that we have our cards, let's use them.
 
 \subsection{Getting Samples}
 Let's `deal' five cards to each player in a game of poker. We will use the
-\lstinline{sample()} function to do this: \index{R command!\code{sample}}
+\lstinline{sample()} function to do this: \index{R command!\lstinline{sample}}
 %\showCode{R}{Code/ch1sec1.R}[32][36]
 \showChunk{R}{Code/ch1sec1.R}{ch1sec1-deal}
 The \lstinline{sample()} function in this example is used to draw 20 cards at random
@@ -354,7 +354,7 @@ from the deck; we don't put the cards back in the deck, so we say they were draw
 \lstinline{matrix()} function and specify the number of rows and the number of columns.
 The \lstinline{sample()} function draws a different random sample each time unless we
 set the random \emph{seed} to a fixed value. The \lstinline{set.seed()} function is
-\index{R command!\code{set.seed}}
+\index{R command!\lstinline{set.seed}}
 used to ensure the reproducibility of the results.  Try running the code without the
 \lstinline{set.seed()} line, and you should see that you get different results each time.
 When we create a matrix, we may want to name the rows and columns. If we choose
@@ -385,8 +385,8 @@ you can set it to another directory with \lstinline{setwd()}.
 We can get the saved variables using the following:
 %\showCode{R}{Code/ch1sec1.R}[37][37]
 \showChunk{R}{Code/ch1sec1.R}{ch1sec1-load}
-\index{R command!\code{save}}
-\index{R command!\code{load}}
+\index{R command!\lstinline{save}}
+\index{R command!\lstinline{load}}
 Variables that we don't save will not be available once we terminate the current
 \R session. When we quit an \R session, we have an option to save the entire session's
 information. However, if there are variables, datasets, or functions that we have created
@@ -395,34 +395,16 @@ function in the example above, the variable \lstinline{pokerHand} will be availa
 to use, even if you quit the \R session in which the variable was created.
 
 
-We can also save and load data using other file formats that are easier to edit
-without \R. For
-example, the following code saves \lstinline{pokerHand} in a
-\emph{comma-separated value (CSV)} file; a CSV file is one where each line
-represents one observation, and  each observation consists of one or more
-fields (columns) that are separated by commas. In our example, the rows correspond
-to the four players, and the columns to the five cards each player was dealt.
-In the code below, we read it as another variable called \lstinline{pH}: 
-\showCode{R}{Code/ch1sec1-rwdata.R}
-\runR{Code/ch1sec1-rwdata.R}{rwdata}
-The output is:
-\includeOutput{rwdata}
-% AF: same here, want to avoid stacking. Add some explanation of the
-% output.
-%\jy{What do X and the colnames come from? Need to control them.}
-% The code now shows how the dimnames are created.
-% The X is added by read.csv, because we used row.names=TRUE, so it
-% shows the player numbers as the row names, but adds an X. It's silly, but that's 
-% how read.csv behaves.
-
-In this example, player 3 got two aces (clubs and spades), the queen of hearts,
-4-diamond, and 7 of spades.
-\index{Comma-separated values (CSV)}
-Note that when we saved the file as CSV we chose the  \lstinline{row.names=TRUE}
-option, in order to preserve the row names. Also, note that when a column name has a 
-space, \R replaces it with a period, since spaces are not allowed in variable names.
-\index{R command!\code{read.csv}}
-\index{R command!\code{write.csv}}
+We can also save and load data using other file formats that are readable
+outside of \R, such as spreadsheets or text editors. The most common is the
+\emph{comma-separated values (CSV)}\index{Comma-separated values (CSV)} format,
+where each line is one observation and fields are separated by commas.
+The following code writes \lstinline{cards} to a CSV file and reads it back:
+\begin{lstlisting}
+write.csv(cards, "tmp/cards.csv", row.names = FALSE)
+cards2 <- read.csv("tmp/cards.csv")
+\end{lstlisting}
+\index{R command!\lstinline{read.csv}}\index{R command!\lstinline{write.csv}}
 
 %There are a few constants in \R, including the letters of the alphabet (upper- and lower-case), the month names, and the number $\pi$. Try running the following:
 %\showCode{R}{Code/ch1sec1.R}[38][42]
@@ -516,7 +498,7 @@ basic function to generate random data is \lstinline{runif()}, and it's used to 
 random numbers uniformly between 0 and 1. In the following example we create
 10,000 random draws from a uniform distribution, we keep these numbers in a
 variable called \lstinline{simData}, and then plot a histogram to show the distribution
-of the data we have generated. \index{R command!\code{runif}}
+of the data we have generated. \index{R command!\lstinline{runif}}
 \index{Random number generation}
 \index{Distribution!Uniform}
 \showChunk{R}{Code/ch1sec2.R}{ch1sec2-1}
@@ -615,7 +597,7 @@ the probability of the first possible outcome (for example, head), and $1-p$ is
 the probability of the second possible outcome (for example, tail).
 \R has a built-in function to generate random numbers from many different
 distributions, including the binomial so the code above can be replaced by
-the following, which uses the \lstinline{rbinom()} function:\index{R command!\code{rbinom}}
+the following, which uses the \lstinline{rbinom()} function:\index{R command!\lstinline{rbinom}}
 \showChunk{R}{Code/ch1sec2.R}{ch1sec2-5}
 
 
@@ -641,8 +623,8 @@ A measure of \emph{central tendency} is a single value that summarizes where the
 bulk of a dataset is located --- the ``center'' of the data in some sense.
 The most commonly used such summary is the \emph{mean} (also known
 \index{Mean}
-as the average), $\overline{x}$:\\
-$$\overline{x}=\frac{x_1+\ldots+x_n}{n}\,.$$
+as the average), $\bar{x}$:\\
+$$\bar{x}=\frac{x_1+\ldots+x_n}{n}\,.$$
 The mean is one way to characterize the \emph{central tendency} of a distribution.
 % AF: Say what a central tendency is?
 But the \emph{center} of a distribution can be defined in more than one way.
@@ -769,8 +751,8 @@ the distribution, we are often interested in estimating the \emph{dispersion} of
 data, which tells us about how the data is spread out around the center of the distribution.
 The most commonly used measures of dispersion are the \emph{variance}, and its\index{Variance}
 square root, the \emph{standard deviation}. The sample variance is defined as:
-$$Var(x)=\frac{(x_1-\overline{x})^2+\ldots+(x_n-\overline{x})^2}{n-1}$$
-where $\overline{x}$ is the sample mean.
+$$\operatorname{Var}(x)=\frac{(x_1-\bar{x})^2+\ldots+(x_n-\bar{x})^2}{n-1}$$
+where $\bar{x}$ is the sample mean.
 % is the mean of the distribution of $X$.
 In words, the variance is the average of the squared deviations from the mean.
 Notice that the sample variance is computed with $n-1$ in the denominator
@@ -809,7 +791,7 @@ and variance $\sigma^2=0.25$}
 
 This histogram was generated by drawing random
 numbers from a normal distribution, using the \lstinline{rnorm()} function. 
-\index{R command!\code{rnorm}}
+\index{R command!\lstinline{rnorm}}
 Here, we
 use $\mu=2.5$ and $\sigma^2=0.25$.
 The curve shows the function $\phi$, by using the \lstinline{dnorm()} function
@@ -827,7 +809,7 @@ in order to change the colors and the width of the shapes in the plot.
 
 \subsection{Using Summary Functions}
 We can obtain more detailed summaries about the sample by using the
-\lstinline{summary()} function. \index{R command!\code{summary}}
+\lstinline{summary()} function. \index{R command!\lstinline{summary}}
 It gives the minimum, maximum, the 25th, 50th,
 and 75th percentiles, as well as the mean of the sample. If we use the random
 numbers from the normal distribution in the previous code:
@@ -851,8 +833,8 @@ of summarizing data in Chapter~\ref{ch:EDA}.
 
 To simulate categorical data we can use the \lstinline{rmultinom()} function,
 which simulates putting $N$ objects in $K$ bins with given probabilities for
-each bin. \index{R command!\code{rmultinom}}
-Another possibility is to use the \lstinline{cut()} function, \index{R command!\code{cut}}
+each bin. \index{R command!\lstinline{rmultinom}}
+Another possibility is to use the \lstinline{cut()} function, \index{R command!\lstinline{cut}}
 which divides a range of numbers into discrete ranges and creates categories
 in a \emph{factor} variable.\index{Factor variable}
 For example, suppose there is a town with three hotels (Motel 6, Best Western,
@@ -860,7 +842,7 @@ and Hilton) with 400, 300, and 300 rooms, respectively, and one auto rental
 company with only two makes of cars (700 Honda, and 300 Teslas). In the
 following code we simulate the allocation of 100 visitors to hotels and cars.
 We use the \lstinline{table()} function to show the counts by hotel, by car,
-and by both.\index{R command!\code{table}}
+and by both.\index{R command!\lstinline{table}}
 \showChunk{R}{Code/ch1sec3.R}{ch1sec3-8}
 
 
@@ -883,8 +865,8 @@ The hotel with the largest number of guests is
 \inlnR{```cat(max(hoteltbl))```}[introhotelguests] guests, and
 \inlnR{```cat(levels(autorental)[which.max(autotbl)])```}[introauto]
 is rented to \inlnR{```cat(max(autotbl))```}[introautorentals] people.
-\index{R command!\code{max}}
-\index{R command!\code{which.max}}
+\index{R command!\lstinline{max}}
+\index{R command!\lstinline{which.max}}
 
 \section{Summary}
 In this chapter we described how to install \R and introduced some

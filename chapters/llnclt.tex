@@ -77,10 +77,10 @@ size is large enough).
 
 \section{The Law of Large Numbers\index{Law of Large Numbers}}
 
-\subsection{Example \#1 -- The IQ Score}
+\subsection{The IQ Score}
 %We get a random sample of 200 people and give them an IQ test. From this sample, we want to infer the true distribution in the entire population.
 
-Suppose that the IQ in the general population has a normal distribution with
+Suppose that the IQ in the general population has a normal distribution\index{normal distribution} with
 mean of 100 and  standard deviation of 15, and from this population we draw 200
 people and calculate the sample mean and standard deviation, like so:
 
@@ -97,7 +97,7 @@ example, which we called \lstinline{samp1}, we want to check if the normal
 distribution is a good model for our data.
 
 One way to check if a distribution fits our data is with a graphical tool
-called the \emph{Q-Q plot}. A Q-Q plot is based on the simple (and very
+called the \emph{Q-Q plot}\index{Q-Q plot}. A Q-Q plot is based on the simple (and very
 important) idea that a distribution is determined by its \emph{quantiles}
 (percentiles), 
 so if the quantiles of our sample match the quantiles of the assumed
@@ -115,7 +115,7 @@ When it's assumed that the data comes from a normal distribution, we can use the
 \lstinline{qqnorm()} function to check if the assumption is reasonable:
 \showCode{R}{Code/llnclt_IQ.R}[7][8]
 
-The points in the Q-Q plot in Figure~\ref{qqplot1} show the actual quantiles
+The points in the Q-Q plot in Figure~\ref{fig:ch4:qqplot1} show the actual quantiles
 (from the data, \lstinline{samp1}) versus the theoretical quantiles (those that
 would be obtained if we drew a sample from a normal distribution). The points in
 the graph lie very close to a straight line, indicating that the sample was
@@ -127,19 +127,19 @@ mathematical model is reasonable.)
 \begin{figure}[H]
 \includegraphics[width=0.6\textwidth]{images/chapter_4/qqplot1.pdf}
 \caption{A Q-Q plot}
-\label{qqplot1}
+\label{fig:ch4:qqplot1}
 \end{figure}
 
 
 
 To understand what the Law of Large Numbers says, let's repeat the previous
 simulation but vary the sample size ($n$) and see what happens to the
-\emph{sample mean} as we increase $n$.
+\emph{sample mean}\index{sample mean} as we increase $n$.
 
 \showCode{R}{Code/llnclt_IQ.R}[12][22]
 
 In \wingding{1} we create a vector of sample sizes on a log scale, covering
-several orders of magnitude so the convergence is easy to see. We will generate
+several orders of magnitude so the convergence\index{convergence} is easy to see. We will generate
 a random sample for each of these \lstinline{ns}. In \wingding{2} we initialize a vector
 which will hold all the sample means (at first, they are set to zero). The
 \lstinline{for} loop in \wingding{3} is the same as the previous demonstration,
@@ -147,21 +147,21 @@ but in each iteration we increase the sample size, which is the first argument
 of the function \lstinline{rnorm()}. The mean from the $i$-th sample is stored
 in the $i$-th position of the vector \lstinline{allMeans} (in \wingding{4}.)
 
-Figure~\ref{LLNdemo} shows the results. We can see that as $n$ increases, the
+Figure~\ref{fig:ch4:LLNdemo} shows the results. We can see that as $n$ increases, the
 sample mean gets closer to the true mean (100, in our simulation), which is
 shown as a horizontal line.
 
 \begin{figure}[H]
 \includegraphics[width=0.5\textwidth]{images/chapter_4/LLNIQ.pdf}
 \caption{Visualizing the Law of Large Numbers -- normal data}
-\label{LLNdemo}
+\label{fig:ch4:LLNdemo}
 \end{figure}
 
-We also see in Figure~\ref{LLNdemo} that the dispersion of the sample means
+We also see in Figure~\ref{fig:ch4:LLNdemo} that the dispersion of the sample means
 gets smaller as the sample size gets larger, but this is the result of the
 \emph{Central Limit Theorem}, which will be discussed later in this chapter.
 
-\subsection{Example \#2 -- The Roulette Wheel}
+\subsection{The Roulette Wheel}
 Here, the outcome is binary -- we either win or lose a bet. The probability of
 winning if we choose the red color, is $18/37$.  Let's simulate 40 bets at the
 roulette wheel, where, in each we put a dollar on red. Each bet is won with a
@@ -182,7 +182,7 @@ in this case we draw the random samples from a \emph{binomial} distribution (in
 
 \showCode{R}{Code/llnclt_roulette.R}[7][17]
 
-We see the results in Figure~\ref{LLNdemoBinomial}. As before, the sample mean
+We see the results in Figure~\ref{fig:ch4:LLNdemoBinomial}. As before, the sample mean
 gets closer to the true mean of the distribution, $p=18/37$, which is
 less than 0.5, so if we keep placing bets we will end up losing money. In fact,
 we can check how much we will lose if we bet \$1 each time, and do it 10,000
@@ -191,7 +191,7 @@ times.
 \begin{figure}[H]
 \includegraphics[width=0.5\textwidth]{images/chapter_4/LLNroulette.pdf}
 \caption{Visualizing the Law of Large Numbers -- binomial data}
-\label{LLNdemoBinomial}
+\label{fig:ch4:LLNdemoBinomial}
 \end{figure}
 
 To simulate what will happen if we play the roulette table 10,000 times, each
@@ -212,7 +212,7 @@ Casinos know that, and use the law of large numbers in order to ensure that in
 the long run, they will win.
 
 
-\subsection{Example \#3 -- Receiving Text Messages}
+\subsection{Receiving Text Messages}
 Let's simulate $n$ days, and in each one count the number of messages, assuming
 they arrive independently from a Poisson distribution with rate=10. To do that,
 run the following code:
@@ -222,12 +222,12 @@ run the following code:
 
 In each day we count messages over 12 hours, so in \wingding{1} we multiply the
 (hourly) random sample from the Poisson distribution by 12. Figure
-\ref{LLNdemoPoisson} shows the results.
+\ref{fig:ch4:LLNdemoPoisson} shows the results.
 
 \begin{figure}[H]
 \includegraphics[width=0.5\textwidth]{images/chapter_4/LLNtexts.pdf}
 \caption{Visualizing the Law of Large Numbers -- Poisson data}
-\label{LLNdemoPoisson}
+\label{fig:ch4:LLNdemoPoisson}
 \end{figure}
 
 If we continue to get text messages at this fixed rate over a long period of
@@ -243,8 +243,8 @@ times. In other words, as the sample size increases, the sample mean will get
 closer to the true population mean.
 
 The LLN is very general -- it doesn't matter if the question is about how many
-boy-births we expect to see (\emph{binomial distribution}), the number of
-received text messages (\emph{Poisson distribution}), or if we measure IQ
+boy-births we expect to see (\emph{binomial distribution}\index{binomial distribution}), the number of
+received text messages (\emph{Poisson distribution}\index{Poisson distribution}), or if we measure IQ
 (\emph{normal distribution}). The only requirements are that the samples are
 independent, and identically distributed, and that the true distribution
 actually has a mean. (We will see an example where this is not the case.)
@@ -256,7 +256,7 @@ better chance of winning the next bet. All the LLN is saying is that if we
 continue to play many times, the overall probability that we win in each round
 will converge to 18/37.
 
-\subsection{Example \#4 -- When the LLN\index{LLN} Doesn't Work}
+\subsection{When the LLN\index{LLN} Doesn't Work}
 We have two groups of students who have to take a math test. Group A has a mean
 score of 70 and a standard deviation of 10, while group B has mean 60 and
 standard deviation 20. Both groups have a normal distribution.  We take a
@@ -279,7 +279,7 @@ keep the calculated values $d_{AB}$ and $r_{AB}$ in vectors called
 \lstinline{plot()} function.
 
 
-Figure~\ref{LLNdemoCauchy}, which is what you should get after running the
+Figure~\ref{fig:ch4:LLNdemoCauchy}, which is what you should get after running the
 code,  shows the distributions of the difference between the average grades
 ($d_{AB}$) on the left, and of the ratio ($r_{AB}$) on the right.  What we see
 here is that the mean difference between the groups, $d_{AB}$, converges to the
@@ -292,7 +292,7 @@ expect $r_{AB}$ to converge to exactly 70/60.)
 \begin{figure}[H]
 \includegraphics[width=1\textwidth]{images/chapter_4/LLNCauchy.pdf}
 \caption{When the Law of Large Numbers\index{Law of Large Numbers} fails}
-\label{LLNdemoCauchy}
+\label{fig:ch4:LLNdemoCauchy}
 \end{figure}
 
 What is happening here? The answer is that while a difference between two
@@ -322,7 +322,7 @@ histogram will look like a normal distribution. This is true even if the
 original variables themselves are not normally distributed!
 
 The CLT requires very little about the actual distribution of the data: the
-sample has to be independent and identically distributed (i.i.d.), and the
+sample has to be independent and identically distributed\index{independent and identically distributed} (i.i.d.\index{i.i.d.|see{independent and identically distributed}}), and the
 distribution must have a finite variance. Here, variance refers to the
 \emph{population variance} --- the true spread of the underlying distribution,
 as opposed to the sample variance we compute from data (which we introduced
@@ -333,7 +333,7 @@ We will draw a random sample of size $n$ from the following distributions:
 \begin{itemize}
 %\item Standard normal (the \lstinline{rnorm(n,0,1)} function).
 %\item Poisson with rate parameter $\lambda=3$ (use \lstinline{rpois(, 3)}).
-\item Exponential with rate parameter 5.5 (using \lstinline{rexp(n, 5.5)}).
+\item Exponential\index{exponential distribution} with rate parameter 5.5 (using \lstinline{rexp(n, 5.5)}).
 \item Binomial with probability 0.15.
 \end{itemize}
 
@@ -352,7 +352,7 @@ order to show that the sample is representative of the true distribution:
 \showCode{R}{Code/llnclt_CLTexp.R}[2][7]
 %\runR{Code/llnclt_CLTexp.R}{cltsimexp}
 
-Notice that the distribution in Figure~\ref{CLTexp} is very skewed, and doesn't
+Notice that the distribution in Figure~\ref{fig:ch4:CLTexp} is very skewed, and doesn't
 look at all like a normal distribution. Try running \lstinline{mean(expsamp1)}. you
 should get \inlnR{```cat(mean(expsamp1))```}[llnmeansampexp], which is approximately
 1/5.5, the theoretical mean of the Exp(5.5) distribution.
@@ -361,7 +361,7 @@ should get \inlnR{```cat(mean(expsamp1))```}[llnmeansampexp], which is approxima
 \includegraphics[width=0.6\textwidth]{images/chapter_4/CLTexp.pdf}
 \caption{One sample of $n=100$ observations from an exponential distribution
 with rate 5.5}
-\label{CLTexp}
+\label{fig:ch4:CLTexp}
 \end{figure}
 
 To understand the CLT, we will draw 10,000 samples, calculate the mean of each
@@ -377,12 +377,12 @@ and use \lstinline{abline} to show the true mean of the population (which is
 1/5.5).
 
 Repeat the same code, but change the first line to \lstinline{n <- 500}. Figure
-\ref{CLTexp2} shows the results for $n=50$ (left) and $n=500$ (right).
+\ref{fig:ch4:CLTexp2} shows the results for $n=50$ (left) and $n=500$ (right).
 
 \begin{figure}[H]
 \includegraphics[width=0.9\textwidth]{images/chapter_4/CLTexp2.pdf}
 \caption{The distribution of the sample mean from 10,000 simulated data from an
-exponential distribution. Left: $n=50$, right: $n=500$} \label{CLTexp2}
+exponential distribution. Left: $n=50$, right: $n=500$} \label{fig:ch4:CLTexp2}
 \end{figure}
 
 We can see that the mean is estimated quite accurately in both cases, and the
@@ -406,7 +406,7 @@ to \lstinline{n <- 500}, and run it again.
 \showCode{R}{Code/llnclt_CLTbinom.R}[3][13]
 %\runR{Code/llnclt_CLTbinom.R}{cltsimbinom}
 
-You should get the plot in Figure~\ref{CLTbinom}. Notice that because we've
+You should get the plot in Figure~\ref{fig:ch4:CLTbinom}. Notice that because we've
 simulated data with a relatively small probability of getting a success
 ($p$=0.15), when $n$=50 the shape of the distribution of sample means is still
 a bit skewed, but when $n$ is large the bell shape appears!
@@ -414,7 +414,7 @@ a bit skewed, but when $n$ is large the bell shape appears!
 \begin{figure}[H]
 \includegraphics[width=0.9\textwidth]{images/chapter_4/CLTbinom.pdf}
 \caption{The distribution of the sample mean from 10,000 simulated data from a
-binomial distribution. Left: $n=50$, right: $n=500$} \label{CLTbinom}
+binomial distribution. Left: $n=50$, right: $n=500$} \label{fig:ch4:CLTbinom}
 \end{figure}
 
 Once again, in both cases the mean of 10,000 simulated sample means is very
@@ -449,7 +449,7 @@ means around the true mean gets smaller and smaller. This is demonstrated in
 the code below. 
 \showCode{R}{Code/llnclt_boygirl.R}[14][32]
 
-The result is shown in Figure~\ref{CLTboygirl}.
+The result is shown in Figure~\ref{fig:ch4:CLTboygirl}.
 The green vertical line represents the expected number of boys, and the red one
 represents the observed ones. Notice that as we increase the sample size, the
 likelihood of the observed number of boys (148, 1,480, 14,800) gets smaller.
@@ -459,7 +459,7 @@ means.
 \begin{figure}[H]
 \includegraphics[width=\textwidth]{images/chapter_4/CLTboygirl.pdf}
 \caption{Number of boy births with different sample sizes ($n$=300, 3,000, and
-30,000)} \label{CLTboygirl}
+30,000)} \label{fig:ch4:CLTboygirl}
 \end{figure}
 
 
@@ -475,7 +475,7 @@ sample mean and sample standard deviation:
 \showCode{R}{Code/llnclt_IQ2.R}[2][8]
 %\runR{Code/llnclt_IQ2.R}{cltiq2}
 
-Figure~\ref{CLTIQfit} shows the result. The red curve shows the true density
+Figure~\ref{fig:ch4:CLTIQfit} shows the result. The red curve shows the true density
 function, and the dashed green one shows the one estimated from the sample of
 200 people. They are very close. The LLN tells us that as we increase our
 sample size, the sample mean will be closer to the true mean.  The CLT tells us
@@ -487,7 +487,7 @@ becomes narrower.)
 \begin{figure}[H]
 \includegraphics[width=0.6\textwidth]{images/chapter_4/IQfit.pdf}
 \caption{Distribution of 200 IQ scores}
-\label{CLTIQfit}
+\label{fig:ch4:CLTIQfit}
 \end{figure}
 
 
@@ -514,13 +514,13 @@ In the following code we draw the density function of the normal distribution,
 and fill the 2\% right tail of it 
 \showCode{R}{Code/llnclt_IQ2.R}[18][23]
 
-Figure~\ref{CLTIQMensa} shows the result. The shaded area covers exactly 2\% of
+Figure~\ref{fig:ch4:CLTIQMensa} shows the result. The shaded area covers exactly 2\% of
 the area under the curve.
 
 \begin{figure}[H]
 \includegraphics[width=0.6\textwidth]{images/chapter_4/IQtail.pdf}
 \caption{The distribution of IQs and the acceptance range to the Mensa club}
-\label{CLTIQMensa}
+\label{fig:ch4:CLTIQMensa}
 \end{figure}
 
 

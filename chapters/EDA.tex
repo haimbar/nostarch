@@ -7,7 +7,7 @@ to summarize data in order to reveal hidden features. These tools include
 histograms and boxplots for numerical data, bar charts for categorical data,
 scatterplots for relationships between variables, and summary statistics such as
 the mean and median. We'll also discuss principles of
-graphical excellence. In the words of Edward Tufte, the guru of data visualization,
+graphical excellence.\index{graphical excellence} In the words of Edward Tufte, the guru of data visualization,
 `\textit{Graphical excellence consists of complex ideas communicated with clarity, precision,
 and efficiency.}'
 }
@@ -21,7 +21,7 @@ and efficiency.}'
 In this book we cover several methods to analyze data with statistical
 tools. However, it's very important to always look at the data, and this means
 creating plots and tables in order to understand it better. We call this process
-\emph{exploratory data analysis}, or \emph{EDA}, and it's a critical step which should
+\emph{exploratory data analysis},\index{exploratory data analysis} or \emph{EDA},\index{EDA|see{exploratory data analysis}} and it's a critical step which should
 never be skipped. The type of plot which we generate in each case depends on the
 data, and usually there's more than one option to choose from. In this chapter
 we cover several visualization methods, and in subsequent chapters we will see
@@ -32,20 +32,20 @@ individual, and each column corresponds to some characteristic of
 individuals. These characteristics are often called \emph{variables}, because they
 vary across individuals. There are three broad types of variables:
 \begin{itemize}
-\item \emph{Quantitative}: a variable that can take numerical values. It
+\item \emph{Quantitative}:\index{variable!quantitative} a variable that can take numerical values. It
   includes two sub-types.
   \begin{itemize}
-  \item \emph{Continuous}: a variable that can take any value within
+  \item \emph{Continuous}:\index{variable!continuous} a variable that can take any value within
     some range. For example, a person's income can take any value greater than
     zero. Sometimes the range of values is unbounded (from minus infinity to
     infinity), and sometimes it is bounded (like age, height, weight).
-  \item \emph{Discrete}: a variable that can take at most a countable number
+  \item \emph{Discrete}:\index{variable!discrete} a variable that can take at most a countable number
     of possible values. For example, the number of distinct chess games. 
   \end{itemize}
-\item \emph{Categorical}: an individual's characteristic that can only take a
+\item \emph{Categorical}:\index{variable!categorical} an individual's characteristic that can only take a
 finite number of values. For example, sex, marital status, or number of years
 of education are categorical. The values that a categorical value can take are
-called \emph{levels}.  \item \emph{Ordinal}: Categorical variables that have a
+called \emph{levels}.  \item \emph{Ordinal}:\index{variable!ordinal} Categorical variables that have a
 natural order (like number of years of education).
 \end{itemize}
 
@@ -59,13 +59,13 @@ cases of these three type of variables. Here are some important examples:
   negative values.
 
 \item \emph{Boolean}: Some variables are either \lstinline{TRUE} or
-  \lstinline{FALSE}. In the coin-flipping simulation in Chapter~\ref{rintro} we
+  \lstinline{FALSE}. In the coin-flipping simulation in Chapter~\ref{ch:rintro} we
   generated a Boolean variable which was \lstinline{TRUE} if a randomly generated
   number drawn uniformly between zero and one was greater than 0.5, and
   \lstinline{FALSE} otherwise. Boolean variables are categorical, with two levels.
 
 \item \textit{Character}: When a variable has a finite number of levels, \R
-  allows to make a distinction between a \emph{factor} type and a \emph{character} type. A
+  allows to make a distinction between a \emph{factor}\index{factor (R)} type and a \emph{character} type. A
   factor is used when the distinct levels of the variable are meaningful for
   analysis and plotting. For example, Sex, marital status, and education level
   are usually used as factors because we are interested in comparing between
@@ -111,8 +111,8 @@ column in the data frame:
 \inlnR{```print(summary(df1))```}[edastrdat][vbox]
 % \includeOutput{ch2_01gendat}
 
-For numerical variables like \lstinline{x} and \lstinline{y}, \R shows the mean
-and the \emph{five-number summary}: the minimum, the maximum, and the 25th,
+For numerical variables like \lstinline{x} and \lstinline{y}, \R shows the mean\index{mean}
+and the \emph{five-number summary}\index{five-number summary}: the minimum, the maximum, and the 25th,
 50th, and 75th
 percentiles. For categorical variables such as \lstinline{g} and \lstinline{yL}
 it shows the counts in each category. For \lstinline{yL} it also shows that it
@@ -127,7 +127,7 @@ the data frame \lstinline{str(df1)} without any hint about how it was
 generated.
 
 Let's see how we might analyze the variable \lstinline{y} by using some plots,
-including a \emph{boxplot}, a \emph{histogram}, and a \emph{scatterplot}.
+including a \emph{boxplot},\index{boxplot} a \emph{histogram},\index{histogram} and a \emph{scatterplot}.\index{scatterplot}
 
 %% lists?
 
@@ -140,13 +140,13 @@ including a \emph{boxplot}, a \emph{histogram}, and a \emph{scatterplot}.
 \subsection{Boxplot}
 Using the data we generated in the previous section, we start by plotting
 \lstinline{y}. One of the simplest graphical representation of numerical
-variables is the boxplot which was introduced in Chapter~\ref{rintro}, and is
+variables is the boxplot which was introduced in Chapter~\ref{ch:rintro}, and is
 constructed from the \emph{five-number
 summary}. Enter the following code:
 \showCode{R}{Code/ch2-02boxplot.R}[2][3]
 \runR{Code/ch2-02boxplot.R}{ch2-02boxplot}
 
-We can see the boxplot in Figure~\ref{boxploty}.
+We can see the boxplot in Figure~\ref{fig:ch2:boxploty}.
 Note the usage of the arguments \lstinline{axes}, \lstinline{border}, and
 \lstinline{col} of the \lstinline{boxplot} function, which are optional, but
 improve the way the plot looks. The \lstinline{axes=F} option means
@@ -159,7 +159,7 @@ you can run the \lstinline{colours()} function.
 \begin{figure}[H]
 \includegraphics[width=0.6\textwidth]{images/chapter_2/boxploty.pdf}
 \caption{A boxplot}
-\label{boxploty}
+\label{fig:ch2:boxploty}
 \end{figure}
 
 What can we learn from this boxplot? Besides the five-number summary which is
@@ -169,8 +169,8 @@ more about how \lstinline{y} is distributed.
 
 \subsection{Histogram}
 Another way to look at the distribution of a single numeric variables is to draw
-a histogram, as we did in Chapter~\ref{rintro}. A histogram is constructed by
-dividing the range of a variable into \emph{bins}, and simply counting the number
+a histogram, as we did in Chapter~\ref{ch:rintro}. A histogram is constructed by
+dividing the range of a variable into \emph{bins}\index{histogram!bin}, and simply counting the number
 of observations in each bin. These counts are depicted as vertical bars. This
 is done with the \lstinline{hist()} function, like so:
 \showCode{R}{Code/ch2-03hist.R}[2][2]
@@ -182,14 +182,14 @@ Again, notice the usage of the function's arguments. For example,
 color of the interior and edges of each bin, respectively. The
 \lstinline{main=""} option is used in order to remove the title of the plot.
 The result is shown in
-Figure~\ref{histy}.
+Figure~\ref{fig:ch2:histy}.
 Try changing the values given in these arguments. What happens when you set
 \lstinline{breaks} to be smaller, or larger?
 
 \begin{figure}[H]
 \includegraphics[width=0.6\textwidth]{images/chapter_2/histy.pdf}
 \caption{A histogram}
-\label{histy}
+\label{fig:ch2:histy}
 \end{figure}
 
 The histogram gives us more information than the boxplot. It shows a more
@@ -248,17 +248,17 @@ The third argument of the \lstinline{text()} function is the actual text we
 want to display, and it's followed by \lstinline{cex=0.6} which sets the font
 size to be 60\% of the default value (which is set internally by \R). The
 result is shown 
-in Figure~\ref{sidebysidebp}.
+in Figure~\ref{fig:ch2:sidebysidebp}.
 
 \begin{figure}[H]
 \includegraphics[width=0.6\textwidth]{images/chapter_2/sidebysidebp.pdf}
 \caption{Side by side boxplots}
-\label{sidebysidebp}
+\label{fig:ch2:sidebysidebp}
 \end{figure}
 
 Is there a difference between the distributions of  \lstinline{y} across the
 two groups, as determined by the variable \lstinline{g}? It's not entirely
-clear. The medians are about the same but the box of group 2 is
+clear. The medians\index{median} are about the same but the box of group 2 is
 slightly elevated. We'll try to use additional plots and other variables that
 are available to us in order to understand the properties of  \lstinline{y}.
 
@@ -266,7 +266,7 @@ are available to us in order to understand the properties of  \lstinline{y}.
 
 We can also plot a histogram for each group. We can do it in two plots, or in
 one, which makes the comparison between the groups easier. To do that we use
-the following code. The result is depicted in Figure~\ref{histoverlay}.
+the following code. The result is depicted in Figure~\ref{fig:ch2:histoverlay}.
 \showCode{R}{Code/ch2-05histoverlay.R}[2][5]
 \runR{Code/ch2-05histoverlay.R}{hist-overlay}
 
@@ -289,25 +289,11 @@ If we didn't use this option,
 the second histogram will be drawn in a new figure. Try it without the
 \lstinline{add=TRUE} option.
 
-In order for the second histogram not to hide the first one, we set the color
-of the second histogram to be partially transparent. To do that, we have to
-specify the color
-in RGB (Red, Green, Blue) format. Every color can be constructed as a mixture of
-these three base colors. Computers use 256 levels (from 0 to 255) for each of
-the base colors, and they represent them as hexadecimal numbers (base 16,
-instead of the familiar decimal, or base 10 which we use in our daily lives.) It
-may be slightly awkward to think in hexadecimal but  \R has functions to help
-you do that. Suppose we want to use the color \emph{navyblue}. If we run
-\lstinline{col2rgb("navyblue")} we get the numbers 0,0,
-and 128, which means that the mixture has 0 red, 0 green, and the intensity for
-the blue is 128 out of 255 (which is 90 in hexadecimal notation). We then run
-\lstinline{rgb(t(col2rgb("navyblue"))/255)} and get
-\#000080. Each pair of digits corresponds to the three base colors. Then, to add
-transparency we can do \lstinline{rgb(t(col2rgb("navyblue"))/255, alpha = 0.5)}.
-Using the  \lstinline{alpha} argument adds two hexadecimal digits to
-the representation of the chosen color. In our example, with
-\lstinline{alpha=0.5} we get \#00008080. For complete transparency
-we use \lstinline{alpha=0}, and for no transparency we use \lstinline{alpha=1}.
+In order for the second histogram not to hide the first one, we set its color
+to be partially transparent. We do this with the \lstinline{alpha} argument of
+\lstinline{rgb()}, where 0 is fully transparent and 1 is fully opaque — here
+we use 0.5 for 50\% transparency:
+\lstinline{rgb(t(col2rgb("navyblue"))/255, alpha = 0.5)}.
 
 What did we learn from the overlayed histograms? This plot helps to see that
 there really is a difference between the groups, and the blue histogram is
@@ -318,7 +304,7 @@ groups.
 \begin{figure}[H]
 \includegraphics[width=0.6\textwidth]{images/chapter_2/histoverlay.pdf}
 \caption{Overlaid histograms}
-\label{histoverlay}
+\label{fig:ch2:histoverlay}
 \end{figure}
 
 
@@ -334,7 +320,7 @@ to the function should be familiar by now.
 \showCode{R}{Code/ch2-06scatter.R}[2][4]
 \runR{Code/ch2-06scatter.R}{ch2-06scatter}
 
-In the left panel of Figure~\ref{scatter} we can see an interesting pattern
+In the left panel of Figure~\ref{fig:ch2:scatter} we can see an interesting pattern
 which we could not observe in the previous plots. First, there seems to be a
 cyclic pattern. Second, in the first half of the x-range, \lstinline{y} appears to
 remain constant (except for the cyclic pattern). However, in the second half we
@@ -347,7 +333,7 @@ now) a line that represents the relationship between \lstinline{x} and
 \includegraphics[width=0.48\textwidth]{images/chapter_2/scatter.pdf}
 \includegraphics[width=0.48\textwidth]{images/chapter_2/scatter2.pdf}
 \caption{Scatterplots}
-\label{scatter}
+\label{fig:ch2:scatter}
 \end{figure}
 
 \subsection{Adding Dimensions to a Plot}
@@ -374,7 +360,7 @@ first argument results in FALSE. In this case, all the points for which
 % \end{center}
 % \end{figure}
 
-The right panel of Figure~\ref{scatter} shows the result. Finally, we can see
+The right panel of Figure~\ref{fig:ch2:scatter} shows the result. Finally, we can see
 the entire picture. The difference between the groups seems real, because the
 blue points
 appear higher than the orange ones. In other words, for any fixed value of
@@ -439,8 +425,8 @@ You can see that there are \inlnR{```cat(table(xcat)[[1]])```}[edacatcount]
 numbers between 0 and 9, and  \inlnR{```cat(table(xcat)[[4]])```}[edacatcount2]
  numbers are greater than 16 and less than or equal to 25.
 
-This can be shown graphically by using the \lstinline{barplot()} function as
-shown in Figure~\ref{barplot} (or as a pie chart by using the \lstinline{pie()}
+This can be shown graphically by using the \lstinline{barplot()} function\index{bar chart} as
+shown in Figure~\ref{fig:ch2:barplot} (or as a pie chart by using the \lstinline{pie()}
 function.)
 \showCode{R}{Code/ch2-09barplot.R}[2][3]
 \runR{Code/ch2-09barplot.R}{ch2-09barplot}
@@ -453,11 +439,11 @@ removing \emph{break-points} in the
 \begin{figure}[H]
 \includegraphics[width=0.8\textwidth]{images/chapter_2/barplot.pdf}
 \caption{A barplot}
-\label{barplot}
+\label{fig:ch2:barplot}
 \end{figure}
 
 When there is more than one variable we can use cross-tabulation, which is also
-referred to as a `contingency table'.  Cross-tabulation means that we count all
+referred to as a `contingency table'.\index{contingency table}  Cross-tabulation means that we count all
 the cases in each \emph{combination} of the variables.
 
 Let's create a new variable called \lstinline{ycat}, based on some ranges of a
@@ -476,10 +462,10 @@ observations in the (0,30] category of the y variable are in (0,9] or (9,12]
 categories of the x variable. However, most of the data in the (100,300]
 column are in the (12,16] or (16,25] rows.
 
-To visualize this table in a plot, we can create a \emph{spine plot}, with 
+To visualize this table in a plot, we can create a \emph{spine plot},\index{spine plot} with 
 the \lstinline{spinogram()} function as in the following code, which shows the
 table of proportions, rather than counts. The output is depicted in
-Figure~\ref{spineplot}.
+Figure~\ref{fig:ch2:spineplot}.
 Because a spinogram uses proportions and not counts, the bars in the plot all
 have the same \emph{total} width and height (since the proportions must all add
 to 1), and the dimensions of boxes within each bar represent the proportion of
@@ -503,10 +489,10 @@ visualize and understand the data.
 \begin{figure}[H]
 \includegraphics[width=0.6\textwidth]{images/chapter_2/spineplot.pdf}
 \caption{A spine plot}
-\label{spineplot}
+\label{fig:ch2:spineplot}
 \end{figure}
 
-Figure~\ref{spineplot} shows that most of the people in this sample belong to
+Figure~\ref{fig:ch2:spineplot} shows that most of the people in this sample belong to
 \lstinline{x} categories 2 and 3 (the widest vertical bars). It also shows that
 all the people in \lstinline{x} category 1 (no high-school education) are in
 the lowest income category
@@ -579,7 +565,7 @@ of points may
   points actually lie close to the center of the point-cloud. When we plot a
 smooth version of the scatterplot as in \wingding{2} we get a much nicer plot,
 which
-we show in Figure~\ref{smooth}. Furthermore, the smooth scatterplot saves us a
+we show in Figure~\ref{fig:ch2:smooth}. Furthermore, the smooth scatterplot saves us a
 lot of
   space. In this example with 100,000 points, when we save the the plots in pdf
   format, the simple scatterplot takes 44MB, while the smooth version is more
@@ -590,8 +576,8 @@ lot of
 \end{itemize}
 \begin{figure}[H]
 \includegraphics[width=0.6\textwidth]{images/chapter_2/smooth.pdf}
-\caption{A smooth scatterplot}
-\label{smooth}
+\caption{A smooth scatterplot\index{scatterplot!smooth}}
+\label{fig:ch2:smooth}
 \end{figure}
 
 

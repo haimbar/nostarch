@@ -30,7 +30,12 @@
 
 ### Math and References
 - Math notation consistency — hat notation for estimates, Greek letters, subscripts consistent across chapters
-- Cross-references — each \ref{} resolves; no dangling labels; use consistent label prefixes (ch:, eqn:, tab:, fig:)
+  - **Adopted convention**: sample mean is $\bar{x}$ (not $\overline{x}$) throughout
+  - **Adopted convention**: variance operator is $\operatorname{Var}$ (not $Var$); similarly use $\operatorname{SD}$, $\operatorname{Cov}$, $\operatorname{E}$ for other operators
+- Cross-references — each \ref{} resolves; no dangling labels; use consistent label prefixes:
+  - **Adopted convention**: figures use `fig:chN:name` (e.g., `fig:ch2:scatter`, `fig:ch3:bayes-rule`)
+  - Chapters: `ch:name` — Sections: `sec:name` — Equations: `eq:name` — Tables: `tab:name` — Listings: `lst:name`
+  - Ch1 already follows `fig:ch1:name`; Ch2–Ch4 updated to match
 - Index terms — key terms introduced in the chapter are indexed; capitalization consistent (avoid duplicates from mixed case)
 - Bibliography — each \cite{} has a matching entry in book.bib; no orphan references
 

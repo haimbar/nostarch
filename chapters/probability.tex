@@ -25,7 +25,7 @@ We begin with some essential terminology and notation:
   flipping a coin, rolling a die, and picking a card from a deck.
 \item Sample Space\index{Sample Space}: the set of all possible outcomes in an experiment, for example,
 \{head, tail\}, \{1, 2, ..., 6\}, and \{all card faces\}.
-\item Event\index{Event}: a subset of the sample space is called an event; an event occurs
+\item Event\index{Event}\index{event (probability)}: a subset of the sample space is called an event; an event occurs
 if the outcome from an experiment belong to the subset of sample space. For
 example, if
   you roll a die, and you are interested in the result of having an even
@@ -33,7 +33,7 @@ number, then the event is $E$=\{2, 4, 6\}.
 \end{itemize}
 
 The relationship between a sample space and an event can be illustrated using a
-Venn diagram such as Figure~\ref{fig:probability-event} for rolling a die. The
+Venn diagram such as Figure~\ref{fig:ch3:probability-event} for rolling a die. The
 sample space labeled as $S$ is represented by the outer rectangle that contains
 all the
 six possible outcomes. The event $E$ of rolling an even number is represented
@@ -49,7 +49,7 @@ by the inner, rounded rectangle  that contains the numbers 2, 4, and 6.
   \draw[text = blue] (0, 0.3) node{$E$};
 \end{tikzpicture}
 \caption{Sample space (the outcomes of a fair six-sided die) and event (rolling
-an even number) illustrated with Venn diagram} \label{fig:probability-event}
+an even number) illustrated with Venn diagram} \label{fig:ch3:probability-event}
 \end{figure}
 
 \emph{Probability}\index{Probability} is a number between zero and one which tells us how likely
@@ -59,7 +59,7 @@ probability of event $E$ is
 \begin{equation}
   P(E) =\frac{\text{size of } E}{\text{size of } S}.
 \end{equation}
-  In the example depicted in Figure~\ref{fig:probability-event} the probability
+  In the example depicted in Figure~\ref{fig:ch3:probability-event} the probability
 that we roll an even number when we use a fair die, is $P(even)=3/6=0.5$.
   
 In the following chapters we will deal with infinite (even uncountable) sample
@@ -88,7 +88,7 @@ We can simulate this situation:
 \showCode{R}{Code/probability-elevator.R}
 \runR{Code/probability-elevator.R}{probability_elevator}{}
 In the above code, \wingding{1} sets the random seed for reproducibility;
-\wingding{2} \code{n} is the number of days to simulate; \wingding{3} records
+\wingding{2} \lstinline{n} is the number of days to simulate; \wingding{3} records
 the outcomes of experiments for which the sample space is the possible locations
 of the elevator between 1 and 15; \wingding{4} checks if the elevator is below
 the 13th floor so that it will go up when it stops on the 13th floor; and
@@ -97,7 +97,7 @@ Mr. Smith wants to go home.
 Running the above code should give
 \inlnR{```cat(prob.up)```}[probability_prob.up], which is very close to what we
 expected from our theoretical calculations. Try the above code by increasing the
-value of $n$, and see if the value you get from the simulation is closer to
+value of $n$, and see if the value you get from the simulation\index{simulation} is closer to
 12/14.
 % \includeOutput{elevator}
 
@@ -112,12 +112,12 @@ than or equal to 3. What is the probability that it's an even number? Given
 that we got 1, 2, or 3, the only possibility that it's even is if the number is
 2. The \emph{unconditional}\index{Probability!unconditional} probability of getting an even number in a roll of
 a die is 1/2, but because of the information provided to us, we conclude
-that the \emph{conditional}\index{Probability!conditional} probability is 1/3.  Using mathematical notation,
+that the \emph{conditional probability}\index{conditional probability}\index{Probability!conditional} is 1/3.  Using mathematical notation,
 we write  $P(B\mid A)=1/3$ which stands for ``conditional on $A$=the number is
 less than or equal to 3, the probability of $B$=the number is even, is 1/3''. 
 
 Once again, it's helpful to visualize such things using a Venn diagram. In
-Figure~\ref{fig:probability-conditional}, the sample space $S$ consists of the
+Figure~\ref{fig:ch3:probability-conditional}, the sample space $S$ consists of the
 six possible outcomes and the two events are depicted as a circle (event $A$)
 and as a rounded rectangle ($B$). To say that we condition on $A$ means that we
 restrict our view and look only at outcomes that could occur if we are told
@@ -137,13 +137,13 @@ the whole set, $S$.
 \end{tikzpicture}
 \caption{Conditional probability -- given that we are told that a die gave a
 number less than or equal to 3 (event $A$), what is the probability that we got
-an even number ($B$)?} \label{fig:probability-conditional}
+an even number ($B$)?} \label{fig:ch3:probability-conditional}
 \end{figure}
 
 \bigskip
 Can it be that we are told that some event $A$ has occurred, but this
 information tells us nothing about the probability of another event, $B$? Yes
--- in this case we say that the two events are \emph{independent}\index{Event!independence}, and we have
+-- in this case we say that the two events are \emph{independent}\index{independence}\index{Event!independence}, and we have
 $$P(B\mid A) = P(B)\,.$$ 
 
 For example, Abby rolls a fair die, while her roommate Amelia tosses a fair
@@ -198,7 +198,7 @@ If we simulate many families, we can find the numerical answer quite accurately.
 \showCode{R}{Code/probability-TwoChildren.R}
 \runR{Code/probability-TwoChildren.R}{TwoChildren}{}
 In the above code, \wingding{1} defines the possible outcomes of a kid's gender; 
-\wingding{2} simulates \code{n} families; 
+\wingding{2} simulates \lstinline{n} families; 
 \wingding{3} calculates the number of families with two girls;
 \wingding{4} calculates the number of families with the older child being a girl;
 \wingding{5} calculates the number of families with at least one girl;
@@ -235,7 +235,7 @@ attends 80\% of the time, and she also has season tickets to the town's ballet
 which she attends 20\% of the time. If she attends the ballet in a week, she
 will flip a fair coin to decide if she will attend the football game.
 % In 10\% of the weeks she attends both the weekly football game and the ballet. 
-This is depicted in Figure~\ref{fig:bayes-rule}, which shows that $P(F)=0.8$ and
+This is depicted in Figure~\ref{fig:ch3:bayes-rule}, which shows that $P(F)=0.8$ and
 $P(B)=0.2$. If we see Jane in the football game, what is the probability that
 we'll see her in the ballet in the same week?
 
@@ -256,7 +256,7 @@ $P(B\mid F) = P(F\mid B)P(B)/P(F) =0.5\times0.2/0.8=0.125$.
 \end{tikzpicture}
 \caption{Bayes' rule. $F$ is the event that Jane attends the weekly football
 game, and $B$ is the event that she attends the weekly ballet.}
-\label{fig:bayes-rule}
+\label{fig:ch3:bayes-rule}
 \end{figure}
 
 \begin{example}[Bertrand's Box\index{Bertrand's Box}]
@@ -271,11 +271,11 @@ also a gold coin?
 This problem is about conditional probability. It's easy to find the
 probability of getting a certain box, and it's easy to find the probability of
 getting a gold coin if we know the box, as shown in
-Figure~\ref{fig:probability-flow}. However, it's non-trivial to find the
+Figure~\ref{fig:ch3:probability-flow}. However, it's non-trivial to find the
 probability of getting a certain box after we take out just one coin.
 %when we know the final coin.
 We see that the six
-possible outcomes in Figure~\ref{fig:probability-flow} are equally likely to
+possible outcomes in Figure~\ref{fig:ch3:probability-flow} are equally likely to
 occur. Two outcomes of a gold coin are through the path of the box with two gold
 coins and one outcome of a gold coin is through the path of the box with a gold
 coin and a silver coin. Thus the answer to this problem is 2/3.
@@ -324,7 +324,7 @@ child{ [sibling distance=2cm]
 \end{tikzpicture}
 }
 \caption{Probability flow for Bertrand's Box}
-\label{fig:probability-flow}
+\label{fig:ch3:probability-flow}
 \end{figure}
 
 This problem can also be solved using the Bayesian formula in
@@ -345,8 +345,8 @@ game and approximate the probability numerically.
 
 \showCode{R}{Code/probability-BertrandBox.R}
 \runR{Code/probability-BertrandBox.R}{BertrandBox}{}
-In the above code, the function \code{boxcoin} in \wingding{1} defines a
-function that mimics one round of the game; the \code{gold.taken} in
+In the above code, the function \lstinline{boxcoin} in \wingding{1} defines a
+function that mimics one round of the game; the \lstinline{gold.taken} in
 \wingding{2} records the games with a gold coin taken; \wingding{3} calculates
 the proportion of games with two gold coins among the games with a gold coin
 taken, which approximates the probability.  Running the above code should give
@@ -495,10 +495,10 @@ Let's use simulation to find answers to these questions.
 \showCode{R}{Code/probability-birthday.R}
 \runR{Code/probability-birthday.R}{birthday}{}
 
-The \code{birthday} in \wingding{1} defines a function to simulate the birthday
-problem. It has two arguments: \code{n}, the number of people on the bus; and
-\code{yours}, your birthday in the format \code{"year-mm-dd"}.  \wingding{2}
-specifies the number of days in a year.  \wingding{3} randomly chooses \code{n}
+The \lstinline{birthday} in \wingding{1} defines a function to simulate the birthday
+problem. It has two arguments: \lstinline{n}, the number of people on the bus; and
+\lstinline{yours}, your birthday in the format \lstinline{"year-mm-dd"}.  \wingding{2}
+specifies the number of days in a year.  \wingding{3} randomly chooses \lstinline{n}
 people to simulate a bus you get on.  \wingding{4} converts your birthday to the
 day of the year.  Since you are on the bus, \wingding{5} removes one person from
 the bus and checks if any of the 22 people have the same birthday as yours.
@@ -562,10 +562,10 @@ Let's use simulation to solve this problem.
 \showCode{R}{Code/probability-FairDivision.R}
 \runR{Code/probability-FairDivision.R}{FairDivision}{}
 
-In the above code, \code{TomFirst} in \wingding{1} records whether Tom won in
-each of the first three games in the \code{n=1000} simulated games.
-\code{TomTwice} in \wingding{2} checks whether Tom won twice in the first three
-rounds.  \code{TomFinal} in \wingding{3} checks whether Tom would be the final
+In the above code, \lstinline{TomFirst} in \wingding{1} records whether Tom won in
+each of the first three games in the \lstinline{n=1000} simulated games.
+\lstinline{TomTwice} in \wingding{2} checks whether Tom won twice in the first three
+rounds.  \lstinline{TomFinal} in \wingding{3} checks whether Tom would be the final
 winner, that is, Tom would win at least three out of the five games.  \wingding{4}
 approximates the probability that Tom would be the final winner.
 Running the above code should give the winning probabilities for Tom and Jerry
@@ -605,19 +605,19 @@ This famous example has confused many smart people. It's also about conditional
 probability and can be solved by using the Bayesian formula. However, setting up
 the conditional and unconditional probabilities for this problem is
 complicated. Some people didn't believe the answer until they were shown some
-simulations. The following code provides a simulation based on \code{n=1000}
+simulations. The following code provides a simulation based on \lstinline{n=1000}
 repetitions.   
 
 \showCode{R}{Code/probability-MontyHall.R}
 \runR{Code/probability-MontyHall.R}{MontyHall}%[run]
 
-In the above code, \code{prize} in \wingding{1} will store the locations of the
-car and \code{host} in \wingding{2} will store the doors that the host will
+In the above code, \lstinline{prize} in \wingding{1} will store the locations of the
+car and \lstinline{host} in \wingding{2} will store the doors that the host will
 open.  \wingding{3} randomly puts the car behind a door.  If the car is behind
 door 1 (\wingding{4}), the host will open door 2 or 3 (\wingding{5}); if the car
 is behind door 2 (\wingding{6}), the host will open door 3 (\wingding{7}); and
 if the car is behind door 3 (\wingding{8}), the host will open door 2
-(\wingding{9}).  In \wingding{10}, the \code{observed} takes the simulated games
+(\wingding{9}).  In \wingding{10}, the \lstinline{observed} takes the simulated games
 the host opened door 3.
 Running the above code should give the probability that the car being behind
 door 2 is \inlnR{```cat(prob.monty)```}[probability_prob.monty].
@@ -760,40 +760,40 @@ samples.
 \runR{Code/probability-Simpson.R}{Simpson}{}
 % Running the above code gives:
 % \includeOutput{Simpson}
-In the above code, the \code{g} in \wingding{1} is the number of groups; the
-\code{n} in \wingding{2} is the number of samples in each group; the \code{z} in
+In the above code, the \lstinline{g} in \wingding{1} is the number of groups; the
+\lstinline{n} in \wingding{2} is the number of samples in each group; the \lstinline{z} in
 \wingding{3} indicates which group each simulated data point belongs to; the
-variable \code{x} in depends on \code{z}; and the variable \code{z} in
-\wingding{5} depends on both \code{x} and \code{z}.
+variable \lstinline{x} in depends on \lstinline{z}; and the variable \lstinline{z} in
+\wingding{5} depends on both \lstinline{x} and \lstinline{z}.
 
 Next, we plot the whole data and fit a trend equation. Clearly, we see in the
-left panels of Figure~\ref{fig:probability-simpson} that as \code{x} increases
-\code{y} increases.
+left panels of Figure~\ref{fig:ch3:probability-simpson} that as \lstinline{x} increases
+\lstinline{y} increases.
 
 \showChunk{R}{Code/probability-Simpson.R}{PRsimpson2}
 %\showCode{R}{Code/probability-Simpson.R}[13][14]
 
 In the above code, \wingding{6} plots the whole data; and \wingding{7} shows the
-overall linear trend, where the \code{lm} function fits a line and \code{abline}
-plots it. Don’t worry about the details about \code{lm} yet -- we will cover
+overall linear trend, where the \lstinline{lm} function fits a line and \lstinline{abline}
+plots it. Don’t worry about the details about \lstinline{lm} yet -- we will cover
 them in Chapter~\ref{ch:regression}.
 
 If we mark the points by the group to which they belong, and fit a trend line
-separately for each group, as \code{x} increases \code{y} decreases in each and
+separately for each group, as \lstinline{x} increases \lstinline{y} decreases in each and
 every group!
 
 \showChunk{R}{Code/probability-Simpson.R}{PRsimpson3}
 %\showCode{R}{Code/probability-Simpson.R}[18][20]
 
 In the above code, \wingding{8} plots the data with groups labeled; the
-\code{for} loop in \wingding{9} fits a line for each group; and the \code{lm}
+\lstinline{for} loop in \wingding{9} fits a line for each group; and the \lstinline{lm}
 function in \wingding{10} is used to fit a linear trend for each group. 
 
 \begin{figure}[H]
 \includegraphics[width=0.49\textwidth]{images/chapter_3/probability-Simpson-plots.pdf}
 \includegraphics[width=0.49\textwidth,page=2]{images/chapter_3/probability-Simpson-plots.pdf}
 \caption{Scatterplot of the full data without (left) and with (right) group labels}
-\label{fig:probability-simpson}
+\label{fig:ch3:probability-simpson}
 \end{figure}
 
 \end{example}
@@ -804,7 +804,7 @@ population may be very different when we break down the data into groups.
 
 \hypertarget{ch:data}{%
 \subsection{Base-Rate Fallacy}\label{sec:base-rate}}
-The \emph{base-rate fallacy}\index{\emph{base-rate fallacy}} is a common source of misconceptions due to
+The \emph{base-rate fallacy}\index{base-rate fallacy} is a common source of misconceptions due to
 counter-intuitive probabilities when one ignores the base rate. Consider the
 following example:
 
@@ -834,7 +834,7 @@ Teddy is the burglar, given a positive test result, is not 0.95.
 Suppose the store is in London, U.K., where only 2\% of the population has $B-$
 blood. Let’s examine whether the prosecutor’s claim holds up, by simulation. In
 the following code we simulate a population of 1,000 people, of which 2\% have
-blood type $B-$. We use the \code{sample} function to draw 20 people out of the
+blood type $B-$. We use the \lstinline{sample} function to draw 20 people out of the
 population to have blood type $B-$ \wingding{1}.
 
 \runR{Code/datacollect-baserate.R}{datacollect-baserate}
@@ -911,16 +911,16 @@ Let's solve this problem using the following simulation.
 \showCode{R}{Code/probability-HenryChoice.R}
 \runR{Code/probability-HenryChoice.R}{HenryChoice}{}
 
-In the above code, we assume that the bullets are in chambers 1 and 2. \wingding{1} simulates \code{n} rounds of spin-and-shoot and
-stores the results in \code{spin.shot}. In \wingding{2}, we check if there was
+In the above code, we assume that the bullets are in chambers 1 and 2. \wingding{1} simulates \lstinline{n} rounds of spin-and-shoot and
+stores the results in \lstinline{spin.shot}. In \wingding{2}, we check if there was
 no bullet in first shot.   
 \wingding{3} approximates the probability of a bullet in a random second shot.
-We define a function \code{twoshots} in \wingding{4} to simulate the results
-from two continuous shots, where \code{first.shot} in \wingding{5} simulates the
+We define a function \lstinline{twoshots} in \wingding{4} to simulate the results
+from two continuous shots, where \lstinline{first.shot} in \wingding{5} simulates the
 location of the first shot, \wingding{6} determines the location of the second
 shot based on the location of the first shot, and \wingding{7} returns the
 result for one round of the simulation. 
-\wingding{8} performs the simulation of continuous shots for \code{n} times, and
+\wingding{8} performs the simulation of continuous shots for \lstinline{n} times, and
 we check if the first shot has no bullet in \wingding{9}. \wingding{10}
 approximates the probability of having a bullet when there was no bullet in the
 first shot for the continuous shooting approach. 
@@ -976,19 +976,19 @@ of randomly opening 50 drawers and the better strategy, respectively.
 %\showCode{R}{Code/probability-100prisoners.R}[2][37]
 \runR{Code/probability-100prisoners.R}{100prisoners}
 
-In the above code, \wingding{1} defines a function \code{open.random} to
+In the above code, \wingding{1} defines a function \lstinline{open.random} to
 simulate the procedure of randomly open 50 ($n/2$) drawers. \wingding{2}
-randomly puts prisoners' numbers in the \code{drawers}. \wingding{3} initializes
-the variable \code{pardon} to be \code{TRUE}. The \code{for} loop in
+randomly puts prisoners' numbers in the \lstinline{drawers}. \wingding{3} initializes
+the variable \lstinline{pardon} to be \lstinline{TRUE}. The \lstinline{for} loop in
 \wingding{4} goes over each prisoner. \wingding{5} simulates the randomly opened
 50 drawers. If any prisoner does not find his number (\wingding{6}),
-\code{pardon} becomes \code{FALSE} (\wingding{7}) and all prisoners die. In this
-case, there is no need to exam the rest of the prisoners so the \code{for} loop
-can be ended by the \code{break} in \wingding{8}. The function \code{open.smart}
+\lstinline{pardon} becomes \lstinline{FALSE} (\wingding{7}) and all prisoners die. In this
+case, there is no need to exam the rest of the prisoners so the \lstinline{for} loop
+can be ended by the \lstinline{break} in \wingding{8}. The function \lstinline{open.smart}
 in \wingding{9} simulates the procedure of smartly opening 50 drawers. We use
-\code{opens} in \wingding{10} to stores the drawers that a prison will open. The
-first draw to open by prisoner with number \code{i} is the drawer with number
-\code{i} (\wingding{11}). The \code{for} loop in \wingding{12} opens the following 49
+\lstinline{opens} in \wingding{10} to stores the drawers that a prison will open. The
+first draw to open by prisoner with number \lstinline{i} is the drawer with number
+\lstinline{i} (\wingding{11}). The \lstinline{for} loop in \wingding{12} opens the following 49
 ($n/2-1$) drawers to open. If the previously opened drawer contains the number
 for the prisoner (\wingding{13}), we don't need to open other drawers and can
 break the loop (\wingding{14}); otherwise, the prisoner needs to open the drawer
