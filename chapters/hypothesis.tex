@@ -72,6 +72,13 @@ enough under $H_0$ that we decide to reject the baseline explanation.
 Similarly, failing to reject $H_0$ does not prove that $H_0$ is true.
 It only means that the data did not give enough evidence against it.
 
+As a warm-up, imagine flipping a fair coin 20 times and seeing 16
+heads. One way to judge this result is to build a pretend world where
+the coin is fair. We could simulate many sets of 20 fair-coin flips and
+count how often 16 or more heads appear. The Lady Tasting Tea example
+uses the same logic, but with cups instead of coins and with an exact
+count of all possible arrangements.
+
 \subsection{Type~I and Type~II Errors}
 
 Because data are random, hypothesis tests can make mistakes. A
@@ -635,6 +642,14 @@ chapter, we shift our attention to estimation---how to infer unknown
 quantities from data and measure how accurate these estimates are.
 
 \section{Problems}
+
+\begin{exercise}
+Suppose you flip a coin 20 times and observe 16 heads. Build a
+simulation in R where the coin is fair, using \lstinline{rbinom()} or
+\lstinline{sample()}. Estimate the probability of seeing 16 or more
+heads by chance. Then repeat the experiment with 14, 15, 17, and 18
+heads. How does the simulated p-value change?
+\end{exercise}
 
 \begin{exercise}
 Repeat the pure-noise experiment with $m = 100$
