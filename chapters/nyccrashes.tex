@@ -1,157 +1,450 @@
 \chapter{A Case Study: NYC Crashes}
 
-Cities never sleep, and neither does their traffic. Every day thousands
-of people move through the streets by car, bus, bike, and on foot, and
-occasionally things go wrong. When a crash happens in New York City, the
-details are recorded by the police and stored in a large public
-database. These records give us a chance to see how data describe real
-events in a busy city, but they also come with quirks, gaps, and
-surprises. In this chapter we use crash data around Labor Day to see how
-open data can help us understand the world, as long as we look carefully
-and check our assumptions.
+Every day, New Yorkers move through the city by car, bus, bike,
+subway, and on foot. Most trips are ordinary. A few end in a crash.
+When a crash is reported, the police write down details such as the
+date, time, location, vehicle types, and whether anyone was hurt.
 
+What can those records tell us about traffic in New York City? In this
+chapter, we use one week of real crash data to practice a full data
+analysis. The data are not as neat as the small examples we made earlier
+in the book. Some entries are missing. Some locations are strange. Some
+times may have been rounded. That messiness is useful because real data
+often need careful checking before we trust a result.
 
-The crash dataset we use contains 29 variables, including the date and
-time of the crash, location information, borough, types of vehicles
-involved, and numbers of injuries and fatalities. We begin by reading
-the data, cleaning the variable names, and checking whether the entries
-actually fall within the week we intend to study. Then we examine
-missing values, create new variables such as the hour of the crash and
-whether the day is a business day, and explore temporal and spatial
-patterns. Finally, we study severity, contributing factors, and vehicle
-types. The goal is to follow the full analysis workflow in a transparent
-and reprosducible way.
+To answer our question, we will read the data, clean the variable names,
+check the dates, look for missing values, create a few new variables,
+and then explore patterns in time, severity, contributing factors, and
+vehicle types.
 
 \section{Importing and Inspecting the Data}
 
-We first load the dataset and take a quick look at its structure.
+We begin by reading the comma-separated values file, or CSV file. A CSV
+file is a plain text file that stores a data table. Each row is one
+record, and commas separate the values in that row.
 
 \showChunk{R}{Code/nyc_crashes.R}{read}
 
-The variable names are all upper case with spaces or periods. To make
-them easier to work with, we convert them to lower case and replace
-spaces and periods with underscores.
+The object \texttt{df} is now a data frame. A data frame is R's usual
+way to store a rectangular data table. Before doing any analysis, we
+check its structure, number of rows, number of columns, and first few
+variable names.
 
-\showChunk{R}{Code/nyc_crashes.R}{rename}
+\showChunk{R}{Code/nyc_crashes.R}{inspect}
 
-With cleaner variable names, we can begin to investigate the range of
-dates in the dataset.
+This quick check tells us what kind of object we have. It also helps us
+catch problems early. For example, if the row count were zero, we would
+know the file did not load correctly.
 
-\showChunk{R}{Code/nyc_crashes.R}{time_window}
+The original variable names use capital letters and spaces. Those names
+are readable, but they are awkward to type in R. We first create a new
+set of names by changing letters to lower case and replacing spaces and
+periods with underscores.
 
-The raw data span eight consecutive days. This is longer than a typical
-seven-day week, and it is a good reminder that we should not take
-anything for granted. Sometimes a “week” begins on Monday, other times
-on Sunday. The raw file includes the Sunday before Labor Day as well as
-the following Sunday. We now filter the dataset so that it covers the
-Sunday--Saturday interval that we intend to study.
+\showChunk{R}{Code/nyc_crashes.R}{rename_build}
+
+Now we apply the new names to the data frame and inspect the result.
+
+\showChunk{R}{Code/nyc_crashes.R}{rename_apply}
+
+This step does not change the data values. It only changes the labels on
+the columns. A name such as \texttt{NUMBER OF PERSONS INJURED} becomes
+\texttt{number\_of\_persons\_injured}, which is easier to type and less
+likely to cause mistakes.
+
+Next we convert the crash date from text into a date object. This lets R
+compare dates in a sensible way.
+
+\showChunk{R}{Code/nyc_crashes.R}{dates_convert}
+
+Now we check the first date, the last date, and the number of crashes on
+each date.
+
+\showChunk{R}{Code/nyc_crashes.R}{dates_check}
+
+This is a small step, but it is one of the most useful habits in data
+analysis: check whether the data match the story you were told. The raw
+file spans eight dates. We want the Sunday--Saturday week around Labor
+Day, so we define that target window.
 
 \showChunk{R}{Code/nyc_crashes.R}{filter_week}
 
-The \texttt{location} variable in the raw data stores a text version of
-the coordinates. Because latitude and longitude are already available,
-the \texttt{location} field is redundant and sometimes inconsistent with
-the numeric values. The following code inspects this variable.
+The logical variable \texttt{in\_week} is \texttt{TRUE} for rows inside
+the target week and \texttt{FALSE} for rows outside it. We count how
+many rows pass that test, keep only those rows, and then check the date
+range again.
 
-\showChunk{R}{Code/nyc_crashes.R}{location_check}
+\showChunk{R}{Code/nyc_crashes.R}{filter_apply}
+
+Check-in: Why do we check the date range both before and after
+filtering? What mistake might this catch?
+
+The raw file has a \texttt{location} column that stores coordinates as
+text. It also has separate numeric columns for latitude and longitude.
+We look at the three columns together.
+
+\showChunk{R}{Code/nyc_crashes.R}{location_preview}
+
+If \texttt{location} repeats the same information as latitude and
+longitude, it may not be useful for our analysis. We also count how many
+different location strings appear and how many are missing or blank.
+
+\showChunk{R}{Code/nyc_crashes.R}{location_unique}
 
 \section{Missing Values and Data Quality}
 
-Several fields have missing entries. We begin with the borough and zip
-code variables. Some borough fields are empty strings rather than
-missing values, so we convert them to \texttt{NA}. We also check cases
-where both borough and zip code are missing.
+Missing values are not just empty spaces. They are clues about how the
+data were collected. A missing borough or zip code might mean the crash
+happened on a highway, at an unusual address, or in a record where the
+location was not entered completely.
 
-\showChunk{R}{Code/nyc_crashes.R}{missing_borough_zip}
+We start with the borough column. The function \texttt{trimws()} removes
+extra spaces at the beginning and end of each entry. Then we convert
+blank borough names into \texttt{NA}, R's missing-value marker.
 
-Location information has its own set of issues. A small number of
-crashes report coordinates at \texttt{(0,0)}, which is not a location in
-New York City. These should be treated as missing values.
+\showChunk{R}{Code/nyc_crashes.R}{borough_clean}
 
-\showChunk{R}{Code/nyc_crashes.R}{missing_geo}
+Zip codes can also have impossible values. If the zip code column is
+numeric, a zero should not be treated as a real New York City zip code,
+so we recode it as missing.
 
-When a crash has valid latitude and longitude but is missing a zip code,
-it is in principle possible to fill in the missing zip based on its
-location. We define a logical variable \texttt{fillable\_zip} that
-indicates such cases. We then compare the proportion of fillable zip
-codes across days of the week.
+\showChunk{R}{Code/nyc_crashes.R}{zip_clean}
 
-\showChunk{R}{Code/nyc_crashes.R}{fillable_zip}
+Now we count missing boroughs, missing zip codes, and rows where both
+are missing.
+
+\showChunk{R}{Code/nyc_crashes.R}{missing_counts}
+
+These counts do not tell us why the values are missing. They tell us
+where to look more carefully.
+
+Location coordinates need their own check. New York City latitudes are
+around 40 degrees north, and longitudes are around 74 degrees west.
+Coordinates such as \texttt{(0,0)} are not in New York City. We mark
+coordinates as bad if they are zero-like or outside a broad box around
+the city.
+
+\showChunk{R}{Code/nyc_crashes.R}{geo_bad}
+
+After counting the bad coordinates, we replace them with \texttt{NA}.
+Then we count rows where either latitude or longitude is missing.
+
+\showChunk{R}{Code/nyc_crashes.R}{geo_recode}
+
+Sometimes a row has latitude and longitude but no zip code. In that
+case, we might be able to fill in the zip code later by using a map. We
+create \texttt{fillable\_zip} for rows with missing zip codes and
+present coordinates.
+
+\showChunk{R}{Code/nyc_crashes.R}{fillable_make}
+
+To compare days of the week, we create a weekday variable. The
+\texttt{levels} argument puts the days in calendar order instead of
+alphabetical order.
+
+\showChunk{R}{Code/nyc_crashes.R}{weekday}
+
+Now we count fillable zip codes by weekday and calculate the proportion
+for each day.
+
+\showChunk{R}{Code/nyc_crashes.R}{fillable_table}
+
+Check-in: If one day has a higher proportion of fillable zip codes, does
+that prove the data collectors worked differently on that day? Why or
+why not?
 
 \section{Exploring Temporal Patterns}
 
-Next we create a \texttt{datetime} variable and extract the hour and
-minute of each crash. This allows us to examine how crashes vary across
-the day and across boroughs.
+The dataset stores date and time in separate columns. To study crashes
+across the day, we combine them into one date-time object.
 
-\showChunk{R}{Code/nyc_crashes.R}{hour}
+\showChunk{R}{Code/nyc_crashes.R}{datetime_make}
 
-There is also a striking number of crashes recorded exactly at midnight
-or exactly on the hour. This pattern may reflect reporting conventions
-rather than the actual times of the crashes.
+From that date-time object, we extract the hour and minute. The hour
+runs from 0 to 23, where 0 means midnight.
 
-To compare business days and non-business days, we define a
-\texttt{business\_day} variable and inspect the number of crashes in each
-borough for each type of day.
+\showChunk{R}{Code/nyc_crashes.R}{hour_make}
 
-\showChunk{R}{Code/nyc_crashes.R}{business_day}
+Now we make a table of crash counts by hour and borough.
+
+\showChunk{R}{Code/nyc_crashes.R}{hour_table}
+
+The same table can be plotted with a base R bar plot. We put this code
+in the script so the book can build the figure automatically.
+
+\showChunk{R}{Code/nyc_crashes.R}{hour_plot}
+
+Figure~\ref{fig:nyc:hour} shows the same information as the table. Each
+bar is one hour of the day. The colored pieces show how many crashes
+came from each borough.
+
+\begin{figure}[H]
+\includegraphics[width=0.85\textwidth]{images/chapter_9/crashes_by_hour.pdf}
+\caption{Crash counts by hour and borough}
+\label{fig:nyc:hour}
+\end{figure}
+
+There is also a data quality question hiding in the time values. Many
+crashes are recorded exactly at midnight or exactly on the hour. That
+may mean the actual crash times were rounded during reporting.
+
+\showChunk{R}{Code/nyc_crashes.R}{rounded_times}
+
+Rounding is not automatically bad, but it changes what we should say.
+If many times are rounded, we should be cautious about making claims
+that depend on exact minutes.
+
+Labor Day week includes weekdays and weekend days. We define a business
+day as Monday through Friday.
+
+\showChunk{R}{Code/nyc_crashes.R}{business_make}
+
+Then we compare borough counts for business days and non-business days.
+
+\showChunk{R}{Code/nyc_crashes.R}{business_table}
+
+Here is the matching plotting code.
+
+\showChunk{R}{Code/nyc_crashes.R}{business_plot}
+
+Figure~\ref{fig:nyc:daytype} makes the business-day comparison easier
+to scan. Remember that there are more business days than weekend days in
+this week, so the taller business-day bars are not surprising by
+themselves.
+
+\begin{figure}[H]
+\includegraphics[width=0.8\textwidth]{images/chapter_9/crashes_by_day_type.pdf}
+\caption{Crash counts by day type and borough}
+\label{fig:nyc:daytype}
+\end{figure}
+
+Check-in: Why might the number of crashes be different on business days
+than on weekend days? Give one traffic reason and one data-recording
+reason.
 
 \section{Crash Severity}
 
-A crash is considered severe if at least one person is injured or
-killed. We construct a logical variable \texttt{severe} for this purpose.
+The dataset records injuries and deaths separately. For a first look, we
+call a crash severe if at least one person was injured or killed. This
+is a simple rule, not the only possible rule.
 
-\showChunk{R}{Code/nyc_crashes.R}{severity}
+\showChunk{R}{Code/nyc_crashes.R}{severity_make}
 
-Crashes can involve different numbers of motor vehicles. We count the
-number of non-missing vehicle type fields to form the variable
-\texttt{n\_vehicles}, and examine how severity relates to the number of
-vehicles involved.
+Now we count severe crashes and calculate the proportion of all crashes
+that were severe.
 
-\showChunk{R}{Code/nyc_crashes.R}{vehcount}
+\showChunk{R}{Code/nyc_crashes.R}{severity_rate}
 
-Severity also varies across the hours of the day. The following
-contingency table examines this relationship.
+We can also draw the crash locations. In
+Figure~\ref{fig:nyc:locations}, each dot is one crash with valid
+coordinates. Red dots are severe crashes.
+
+\showChunk{R}{Code/nyc_crashes.R}{severity_map}
+
+\begin{figure}[H]
+\includegraphics[width=0.7\textwidth]{images/chapter_9/severity_locations.pdf}
+\caption{Crash locations, colored by severity}
+\label{fig:nyc:locations}
+\end{figure}
+
+Crashes can involve different numbers of vehicles. The vehicle type
+columns all begin with \texttt{vehicle\_type\_code\_}, so we use
+\texttt{grep()} to find their names.
+
+\showChunk{R}{Code/nyc_crashes.R}{vehicle_columns}
+
+For each row, we count how many of those vehicle type fields are not
+missing. This gives us \texttt{n\_vehicles}.
+
+\showChunk{R}{Code/nyc_crashes.R}{vehicle_count}
+
+Next we compare severity with the number of vehicles. The first table
+shows counts. The second table shows proportions within each vehicle
+count.
+
+\showChunk{R}{Code/nyc_crashes.R}{severity_by_vehicle}
+
+The plot in Figure~\ref{fig:nyc:vehseverity} shows the severe-crash
+proportion for each vehicle count. The dashed line marks the overall
+severe-crash proportion for the whole week.
+
+\showChunk{R}{Code/nyc_crashes.R}{severity_by_vehicle_plot}
+
+\begin{figure}[H]
+\includegraphics[width=0.75\textwidth]{images/chapter_9/severity_by_vehicle_count.pdf}
+\caption{Severe-crash proportion by number of vehicles}
+\label{fig:nyc:vehseverity}
+\end{figure}
+
+Severity may also change across the day, so we make the same kind of
+table by hour.
 
 \showChunk{R}{Code/nyc_crashes.R}{severe_by_hour}
 
-The most severe crashes, as measured by injuries and fatalities, can
-also be identified and inspected individually. Several of them occur in
-clusters within particular neighborhoods.
+Figure~\ref{fig:nyc:hourseverity} shows the hourly severe-crash
+proportions. The line moves around because each hour has its own mix of
+crashes and because some hours have fewer records than others.
+
+\showChunk{R}{Code/nyc_crashes.R}{severe_by_hour_plot}
+
+\begin{figure}[H]
+\includegraphics[width=0.85\textwidth]{images/chapter_9/severity_by_hour.pdf}
+\caption{Severe-crash proportion by hour}
+\label{fig:nyc:hourseverity}
+\end{figure}
+
+These tables are useful for finding patterns, but they do not prove
+causes. For example, if late-night crashes have a higher severe-crash
+proportion, that could involve traffic speed, road conditions, driver
+behavior, reporting differences, or several of these at once.
+
+Sometimes we want to inspect the most serious individual records. We
+create a simple severity score: each injury counts as 1 point, and each
+death counts as 5 points. This score is a choice we make to help sort
+the rows. It is not an official measurement.
+
+\showChunk{R}{Code/nyc_crashes.R}{severity_score}
+
+Now we sort the crashes by that score and print the top 10 rows.
 
 \showChunk{R}{Code/nyc_crashes.R}{top_severe}
 
+Check-in: Why might two analysts choose different severity scores? What
+should they explain before comparing their results?
+
 \section{Contributing Factors and Vehicle Types}
 
-Each crash record contains up to five contributing factors. We begin by
-studying the factor listed for vehicle~1. Because the entries differ
-only in capitalization or include vague values such as ``unspecified,''
-we standardize them and treat certain values as missing.
+Each crash record can list up to five contributing factors. We begin
+with the factor for vehicle 1 because it is the most often filled in.
+First we clean the text by trimming spaces and changing letters to lower
+case. Then we treat vague entries such as \texttt{unspecified} as
+missing.
 
-\showChunk{R}{Code/nyc_crashes.R}{contrib_factors}
+\showChunk{R}{Code/nyc_crashes.R}{factor_clean}
 
-Finally, we look at the types of vehicles involved in the crashes. The
-most common categories reflect everyday traffic in New York City, such
-as sedans and sport utility vehicles.
+Now we build a frequency table and show the five most common cleaned
+factors.
 
-\showChunk{R}{Code/nyc_crashes.R}{veh_types}
+\showChunk{R}{Code/nyc_crashes.R}{factor_table}
+
+Figure~\ref{fig:nyc:factors} shows the eight most common cleaned
+contributing factors for vehicle 1.
+
+\showChunk{R}{Code/nyc_crashes.R}{factor_plot}
+
+\begin{figure}[H]
+\includegraphics[width=0.85\textwidth]{images/chapter_9/top_contributing_factors.pdf}
+\caption{Most common contributing factors for vehicle 1}
+\label{fig:nyc:factors}
+\end{figure}
+
+This kind of table is easy to read, but it has a limit. A contributing
+factor is what was recorded, not necessarily the full cause of the
+crash.
+
+Finally, we look at vehicle types for vehicles 1 and 2. We trim extra
+spaces and turn blank entries into \texttt{NA}.
+
+\showChunk{R}{Code/nyc_crashes.R}{vehicle_type_clean}
+
+Then we count the most common vehicle categories.
+
+\showChunk{R}{Code/nyc_crashes.R}{vehicle_type_table}
+
+Figure~\ref{fig:nyc:vehicles} shows the most common vehicle 1 types.
+The long sport utility vehicle label is a good reminder that real
+categories are not always short or tidy.
+
+\showChunk{R}{Code/nyc_crashes.R}{vehicle_type_plot}
+
+\begin{figure}[H]
+\includegraphics[width=0.85\textwidth]{images/chapter_9/top_vehicle_types.pdf}
+\caption{Most common vehicle 1 types}
+\label{fig:nyc:vehicles}
+\end{figure}
+
+The most common categories reflect everyday traffic in New York City,
+such as sedans, sport utility vehicles, taxis, bikes, and trucks. The
+exact order depends on the week we chose and on how vehicle types were
+entered in the database.
 
 \section{Summary}
 
-This case study showed how the ideas introduced throughout the book
-naturally lead to practical investigation. By loading the data, checking
-its structure, cleaning fields, creating new variables, and exploring
-patterns, we followed the same steps you can use on almost any dataset.
-Nothing here required new tools—only the habits of curiosity,
-skepticism, and careful reasoning that you have been building. New York
-City’s Open Data portal is only one place to find material for your own
-projects; many cities, federal agencies, and scientific groups share
-their data freely as well. Transportation records, environmental
-measurements, public health reports, sports statistics, and countless
-other datasets are available to explore. With the tools you have
-stumbled into, you can now begin asking your own questions and making
-your own discoveries. This chapter is one example of what is possible.
-The next ones are yours to find.
+This case study used the same habits we have practiced throughout the
+book. We loaded a dataset, checked its shape, cleaned names, converted
+dates, filtered rows, looked for missing values, created new variables,
+and compared groups with tables and proportions.
+
+The biggest lesson is not a single fact about New York City traffic. The
+lesson is the workflow. Real datasets need careful questions at every
+step: Did the file load? Are the dates right? Are missing values coded
+consistently? Do the variables mean what their names suggest? Are we
+describing a pattern, or are we claiming a cause?
+
+Open data makes these questions available to anyone with patience and a
+computer. City agencies, federal agencies, scientific groups, sports
+leagues, and many other organizations share data that students can
+explore. NYC Open Data is a good place to look for more examples. In
+addition to crash records, it includes widely used datasets such as 311
+Service Requests, which record calls and online reports about noise,
+heat, street conditions, trash, and many other city services. With the
+tools from this book, you can begin with one clear question, check the
+data carefully, and build an honest answer one step at a time.
+
+\section{Problems}
+
+\begin{exercise}
+Change the target week in the filtering code. Choose a different
+seven-day window from the file, run the same checks, and compare the
+number of crashes on each day. Which day has the most crashes in your
+new week?
+\end{exercise}
+
+\begin{exercise}
+Find three original variable names that would be awkward to type in R.
+Show what each name becomes after the cleaning step. Explain why the
+cleaned names are easier to use in code.
+\end{exercise}
+
+\begin{exercise}
+The chapter recodes blank borough names and blank ZIP codes as
+\lstinline{NA}. Make a table showing how many crashes have missing
+boroughs, missing ZIP codes, missing latitudes, and missing longitudes.
+Which missing value problem looks largest? Why might that matter for a
+map?
+\end{exercise}
+
+\begin{exercise}
+Change the definition of business hours. Try 8 a.m. to 6 p.m. instead
+of 7 a.m. to 7 p.m. Recompute the table of crashes during business and
+non-business hours. How much does the answer change?
+\end{exercise}
+
+\begin{exercise}
+Choose one borough and repeat the crash-by-hour plot using only crashes
+from that borough. Compare your plot with the citywide plot. Which
+hours look similar, and which hours look different?
+\end{exercise}
+
+\begin{exercise}
+The chapter defines a severe crash as a crash with at least one injury
+or death. Try a stricter definition: a crash is severe only if at least
+one person was killed or at least two people were injured. Recompute
+the severity rate by number of vehicles. What changes?
+\end{exercise}
+
+\begin{exercise}
+Look at the plot of contributing factors. Pick one factor that appears
+often. Write two sentences that describe what the data show, and one
+sentence that explains what the data do not prove.
+\end{exercise}
+
+\begin{exercise}
+Use the vehicle type columns for vehicles 1 and 2. Make a table of the
+ten most common vehicle types in your filtered week. Then choose one
+type, such as bikes or taxis, and count how many crashes include that
+type in either vehicle column.
+\end{exercise}
 
 
 

@@ -1,162 +1,119 @@
 ############################################################
 # R script for NYC Labor Day Week 2025 crash case study
 # Base R only. No tidyverse.
-# Each labeled chunk can be referenced in the book text.
 ############################################################
 
 ############################################################
 #label===read
-# This chunk goes with the "Importing the data" section.
-# It reads the raw CSV file into R.
-#===
+crashes_file <- "Data/nyc_crashes_lbdwk_2025.csv"
 
-# Read the crash data from the CSV file.
-# Adjust the path "data/nyc_crashes_lbdwk_2025.csv" if needed.
-df <- read.csv("data/nyc_crashes_lbdwk_2025.csv",
+df <- read.csv(crashes_file,
                stringsAsFactors = FALSE)
-
-# Take a quick look at the structure.
-str(df)
 #===end
 
 
 ############################################################
-#label===rename
-# This chunk appears right after reading the data.
-# It cleans variable names: lower case and underscores.
-#===
-
-old_names <- names(df)
-
-# Convert to lower case
-new_names <- tolower(old_names)
-
-# Replace spaces and periods with underscores
-new_names <- gsub(" ", "_", new_names)
-new_names <- gsub("\\.", "_", new_names)
-
-# Apply cleaned names
-names(df) <- new_names
-
-# Optional: check the first few variable names
+#label===inspect
+str(df)
+nrow(df)
+ncol(df)
 head(names(df))
 #===end
 
 
 ############################################################
-#label===time_window
-# This chunk goes in the section that checks the time frame.
-# It inspects the range of crash dates in the raw data.
-#===
+#label===rename_build
+old_names <- names(df)
+new_names <- tolower(old_names)
+new_names <- gsub(" ", "_", new_names)
+new_names <- gsub("\\.", "_", new_names)
+#===end
 
-# Convert crash_date to Date
+
+############################################################
+#label===rename_apply
+names(df) <- new_names
+head(names(df))
+#===end
+
+
+############################################################
+#label===dates_convert
 df$crash_date_date <- as.Date(df$crash_date,
                               format = "%m/%d/%Y")
+#===end
 
-# Inspect the earliest and latest dates in the raw file
+
+############################################################
+#label===dates_check
 min(df$crash_date_date, na.rm = TRUE)
 max(df$crash_date_date, na.rm = TRUE)
-
-# Count how many distinct dates are present
 table(df$crash_date_date)
 #===end
 
 
 ############################################################
 #label===filter_week
-# This chunk belongs in the "Are all observations in the
-# target week?" part.
-# It filters to the Sunday–Saturday week of Labor Day 2025:
-# Sunday Aug 31, 2025 to Saturday Sep 6, 2025.
-#===
+week_start <- as.Date("2025-08-31")
+week_end <- as.Date("2025-09-06")
 
-week_start <- as.Date("2025-08-31")  # Sunday
-week_end   <- as.Date("2025-09-06")  # Saturday
-
-# Logical indicator for rows in the target week
 in_week <- (df$crash_date_date >= week_start) &
            (df$crash_date_date <= week_end)
+#===end
 
-# Number of rows before and after filtering
+
+############################################################
+#label===filter_apply
 nrow(df)
 sum(in_week, na.rm = TRUE)
 
-# Keep only crashes in the target week
 df <- df[in_week, ]
 
-# Check the date range again after filtering
 min(df$crash_date_date, na.rm = TRUE)
 max(df$crash_date_date, na.rm = TRUE)
 #===end
 
 
 ############################################################
-#label===location_check
-# This chunk fits the question about the `location` variable.
-# It compares `location` with latitude/longitude.
-#===
-
-# Look at a few rows of location and coordinates
+#label===location_preview
 head(df[, c("location", "latitude", "longitude")])
-
-# Optionally check how many unique location strings there are
-length(unique(df$location))
-
-# Simple check: does location look like "(lat, lon)"?
-# You can examine the pattern in the text output and
-# discuss whether it is redundant with latitude/longitude.
 #===end
 
 
 ############################################################
-#label===missing_borough_zip
-# This chunk belongs in the missing-values section.
-# It identifies borough values that should be NA and inspects
-# joint missingness of borough and zip_code.
-#===
+#label===location_unique
+length(unique(df$location))
+sum(is.na(df$location) | df$location == "")
+#===end
 
-# Clean borough: trim whitespace
+
+############################################################
+#label===borough_clean
 df$borough <- trimws(df$borough)
-
-# Treat empty strings as missing borough
 df$borough[df$borough == ""] <- NA
+#===end
 
-# If desired, also treat specific codes as NA, e.g.:
-# df$borough[df$borough %in% c("Unspecified", "UNKNOWN")] <- NA
 
-# Zip code may be numeric; if so, 0 can be recoded to NA.
-# (If it is character in your file, adjust accordingly.)
+############################################################
+#label===zip_clean
 if (is.numeric(df$zip_code)) {
   df$zip_code[df$zip_code == 0] <- NA
 }
-
-# Count missing borough and missing zip
-sum(is.na(df$borough))
-sum(is.na(df$zip_code))
-
-# Count rows where both borough and zip_code are missing
-both_missing <- is.na(df$borough) & is.na(df$zip_code)
-sum(both_missing)
-
-# You can print a small sample of those rows if needed
-# df[both_missing, c("crash_date", "crash_time",
-#                    "borough", "zip_code")][1:10, ]
 #===end
 
 
 ############################################################
-#label===missing_geo
-# This chunk also belongs in the missing-values section.
-# It identifies unreasonable geocodes and recodes them to NA.
-#===
+#label===missing_counts
+sum(is.na(df$borough))
+sum(is.na(df$zip_code))
 
-# Copy original coordinates (optional)
-# lat_orig <- df$latitude
-# lon_orig <- df$longitude
+both_missing <- is.na(df$borough) & is.na(df$zip_code)
+sum(both_missing)
+#===end
 
-# Define a simple rule for unreasonable geocodes:
-# - latitude <= 0 or longitude >= 0 (e.g., (0,0))
-# - or coordinates outside a broad NYC bounding box
+
+############################################################
+#label===geo_bad
 bad_geo <- (df$latitude <= 0) |
            (df$longitude >= 0) |
            (df$latitude < 40) |
@@ -164,48 +121,42 @@ bad_geo <- (df$latitude <= 0) |
            (df$longitude < -75) |
            (df$longitude > -73)
 
-# Recode unreasonable coordinates as missing
-df$latitude[bad_geo]  <- NA
-df$longitude[bad_geo] <- NA
-
-# Count records with missing geocode (either lat or lon missing)
-geo_missing <- is.na(df$latitude) | is.na(df$longitude)
-sum(geo_missing)
-
-# Optionally inspect a few of them
-# df[geo_missing, c("crash_date", "crash_time",
-#                   "borough", "zip_code",
-#                   "latitude", "longitude")][1:10, ]
+sum(bad_geo, na.rm = TRUE)
 #===end
 
 
 ############################################################
-#label===fillable_zip
-# This chunk answers the question about fillable_zip.
-# It creates a logical variable indicating where a zip code
-# could be filled in from existing geocodes and compares
-# rates across days of the week.
-#===
+#label===geo_recode
+df$latitude[bad_geo] <- NA
+df$longitude[bad_geo] <- NA
 
-# A zip is missing if zip_code is NA
+geo_missing <- is.na(df$latitude) | is.na(df$longitude)
+sum(geo_missing)
+#===end
+
+
+############################################################
+#label===fillable_make
 zip_missing <- is.na(df$zip_code)
-
-# A geocode is present if both latitude and longitude are not NA
 geo_present <- !is.na(df$latitude) & !is.na(df$longitude)
 
-# fillable_zip is TRUE when geocode present but zip missing
 df$fillable_zip <- geo_present & zip_missing
+#===end
 
-# Day of week as a factor (Sunday, Monday, ...)
+
+############################################################
+#label===weekday
 df$weekday <- factor(weekdays(df$crash_date_date),
                      levels = c("Sunday", "Monday", "Tuesday",
                                 "Wednesday", "Thursday",
                                 "Friday", "Saturday"))
+#===end
 
-# Table of fillable_zip by weekday
+
+############################################################
+#label===fillable_table
 table(df$weekday, df$fillable_zip)
 
-# Proportion of fillable_zip by weekday
 prop_fillable_zip <- tapply(df$fillable_zip,
                             df$weekday,
                             mean)
@@ -214,145 +165,224 @@ prop_fillable_zip
 
 
 ############################################################
-#label===hour
-# This chunk belongs in the "Data exploration" section.
-# It creates an `hour` variable and examines hourly patterns.
-#===
-
-# Combine date and time strings into a POSIXct datetime
+#label===datetime_make
 datetime_str <- paste(df$crash_date, df$crash_time)
+
 df$datetime <- as.POSIXct(datetime_str,
                           format = "%m/%d/%Y %H:%M")
+#===end
 
-# Extract hour (0–23) and minute (0–59)
-df$hour   <- as.integer(format(df$datetime, "%H"))
+
+############################################################
+#label===hour_make
+df$hour <- as.integer(format(df$datetime, "%H"))
 df$minute <- as.integer(format(df$datetime, "%M"))
+#===end
 
-# Count crashes by hour and borough
+
+############################################################
+#label===hour_table
 tab_hour_borough <- table(df$hour, df$borough)
 tab_hour_borough
+#===end
 
-# Simple plot: crashes by hour for each borough (stacked)
-# (In the book, you may prefer a nicer plot, but this is
-# enough for a basic base-R barplot.)
-if (interactive()) {
-  barplot(tab_hour_borough,
-          beside = FALSE,
-          legend.text = TRUE,
-          xlab = "Hour of day",
-          ylab = "Number of crashes",
-          main = "NYC crashes by hour and borough")
-}
 
-# Number of crashes at exactly midnight (hour == 0)
+############################################################
+#label===hour_plot
+pdf("images/chapter_9/crashes_by_hour.pdf",
+    width = 7, height = 4.5)
+
+barplot(t(tab_hour_borough),
+        col = c("darkorange", "steelblue", "seagreen",
+                "orchid", "gray50"),
+        border = NA,
+        xlab = "Hour of day",
+        ylab = "Number of crashes")
+
+legend("topright",
+       legend = colnames(tab_hour_borough),
+       fill = c("darkorange", "steelblue", "seagreen",
+                "orchid", "gray50"),
+       bty = "n",
+       cex = 0.8)
+
+dev.off()
+#===end
+
+
+############################################################
+#label===rounded_times
 sum(df$hour == 0, na.rm = TRUE)
-
-# Number of crashes at whole hours (minute == 0)
 sum(df$minute == 0, na.rm = TRUE)
 #===end
 
 
 ############################################################
-#label===business_day
-# This chunk continues the data exploration.
-# It creates a business_day indicator and summarizes
-# crashes by business_day and borough.
-#===
-
-# Define business days: Monday–Friday
+#label===business_make
 df$business_day <- !(df$weekday %in% c("Saturday", "Sunday"))
-
-# Table of crashes by business_day and borough
-tab_bd_borough <- table(df$business_day, df$borough)
-tab_bd_borough
-
-# Simple barplot: crashes by business_day and borough
-if (interactive()) {
-  barplot(tab_bd_borough,
-          beside = TRUE,
-          legend.text = TRUE,
-          names.arg = c("Non-business day", "Business day"),
-          xlab = "Day type",
-          ylab = "Number of crashes",
-          main = "Crashes by business-day status and borough")
-}
 #===end
 
 
 ############################################################
-#label===severity
-# This chunk belongs in the "Severity analysis" section.
-# It defines a logical severe indicator and examines counts.
-#===
+#label===business_table
+tab_bd_borough <- table(df$business_day, df$borough)
+tab_bd_borough
+#===end
 
-# A crash is severe if at least one person is injured or killed
+
+############################################################
+#label===business_plot
+pdf("images/chapter_9/crashes_by_day_type.pdf",
+    width = 6.5, height = 4.5)
+
+barplot(t(tab_bd_borough),
+        beside = TRUE,
+        col = c("darkorange", "steelblue", "seagreen",
+                "orchid", "gray50"),
+        border = NA,
+        names.arg = c("Weekend", "Business day"),
+        xlab = "Day type",
+        ylab = "Number of crashes")
+
+legend("topleft",
+       legend = colnames(tab_bd_borough),
+       fill = c("darkorange", "steelblue", "seagreen",
+                "orchid", "gray50"),
+       bty = "n",
+       cex = 0.8)
+
+dev.off()
+#===end
+
+
+############################################################
+#label===severity_make
 df$severe <- (df$number_of_persons_injured > 0) |
-             (df$number_of_persons_killed   > 0)
+             (df$number_of_persons_killed > 0)
+#===end
 
-# Number of severe crashes
+
+############################################################
+#label===severity_rate
 sum(df$severe, na.rm = TRUE)
-
-# Proportion of severe crashes
 mean(df$severe, na.rm = TRUE)
 #===end
 
 
 ############################################################
-#label===vehcount
-# This chunk counts the number of vehicles involved in each crash.
-# It then constructs a contingency table of severe by n_vehicles.
-#===
+#label===severity_map
+pdf("images/chapter_9/severity_locations.pdf",
+    width = 5.5, height = 5.5)
 
-# Identify the vehicle_type_code columns
+plot(df$longitude, df$latitude,
+     col = ifelse(df$severe, "firebrick", "gray70"),
+     pch = 19,
+     cex = 0.45,
+     xlab = "Longitude",
+     ylab = "Latitude")
+
+legend("bottomleft",
+       legend = c("Not severe", "Severe"),
+       col = c("gray70", "firebrick"),
+       pch = 19,
+       bty = "n")
+
+dev.off()
+#===end
+
+
+############################################################
+#label===vehicle_columns
 veh_cols <- grep("^vehicle_type_code_", names(df), value = TRUE)
+veh_cols
+#===end
 
-# Count how many vehicle_type_code fields are non-missing
-df$n_vehicles <- rowSums(!is.na(df[veh_cols]))
 
-# Inspect the distribution of n_vehicles
+############################################################
+#label===vehicle_count
+vehicle_entries <- df[veh_cols]
+vehicle_entries[] <- lapply(vehicle_entries, trimws)
+vehicle_entries[vehicle_entries == ""] <- NA
+
+df$n_vehicles <- rowSums(!is.na(vehicle_entries))
 table(df$n_vehicles)
+#===end
 
-# Contingency table of severe by n_vehicles
+
+############################################################
+#label===severity_by_vehicle
 tab_severe_veh <- table(df$severe, df$n_vehicles)
 tab_severe_veh
 
-# Optional: proportions of severe within each vehicle count
 prop_severe_by_veh <- prop.table(tab_severe_veh, margin = 2)
 prop_severe_by_veh
 #===end
 
 
 ############################################################
-#label===severe_by_hour
-# This chunk constructs a contingency table of severe by hour.
-#===
+#label===severity_by_vehicle_plot
+pdf("images/chapter_9/severity_by_vehicle_count.pdf",
+    width = 6, height = 4)
 
-# Contingency table of severe (rows) by hour (columns)
+barplot(prop_severe_by_veh["TRUE", ],
+        col = "firebrick",
+        border = NA,
+        ylim = c(0, 1),
+        xlab = "Number of vehicles",
+        ylab = "Proportion severe")
+
+abline(h = mean(df$severe, na.rm = TRUE),
+       lty = 2,
+       col = "gray40")
+
+dev.off()
+#===end
+
+
+############################################################
+#label===severe_by_hour
 tab_severe_hour <- table(df$severe, df$hour)
 tab_severe_hour
 
-# Optional: proportion of severe crashes within each hour
 prop_severe_by_hour <- prop.table(tab_severe_hour, margin = 2)
 prop_severe_by_hour
 #===end
 
 
 ############################################################
-#label===top_severe
-# This chunk identifies the top 10 severe crashes and can be
-# used for a discussion on geographic clustering.
-#===
+#label===severe_by_hour_plot
+pdf("images/chapter_9/severity_by_hour.pdf",
+    width = 7, height = 4)
 
-# Define a simple severity score:
-# each injury counts as 1, each fatality counts as 5
+plot(as.integer(colnames(prop_severe_by_hour)),
+     prop_severe_by_hour["TRUE", ],
+     type = "o",
+     pch = 19,
+     col = "firebrick",
+     xlab = "Hour of day",
+     ylab = "Proportion severe",
+     ylim = c(0, 1))
+
+abline(h = mean(df$severe, na.rm = TRUE),
+       lty = 2,
+       col = "gray40")
+
+dev.off()
+#===end
+
+
+############################################################
+#label===severity_score
 df$severity_score <- df$number_of_persons_injured +
                      5 * df$number_of_persons_killed
+#===end
 
-# Order crashes from most to least severe
+
+############################################################
+#label===top_severe
 ord <- order(df$severity_score, decreasing = TRUE,
              na.last = NA)
 
-# Extract the top 10 severe crashes
 top10 <- df[ord[1:10],
             c("crash_date", "crash_time", "borough",
               "zip_code", "latitude", "longitude",
@@ -361,86 +391,118 @@ top10 <- df[ord[1:10],
               "severity_score")]
 
 top10
-
-# For clustering discussion, you might inspect their
-# locations visually in a map outside of this script.
 #===end
 
 
 ############################################################
-#label===contrib_factors
-# This chunk belongs to the "Contributing factors" section.
-# It examines contributing_factor_vehicle_1, normalizes case,
-# and identifies the most common factors.
-#===
-
-# Extract raw contributing factors for vehicle 1
+#label===factor_clean
 cf1_raw <- df$contributing_factor_vehicle_1
-
-# Make a cleaned version: lower-case and trimmed
 cf1_clean <- tolower(trimws(cf1_raw))
 
-# Decide which values to treat as NA
-# e.g., empty strings, "unspecified", "unknown"
 cf1_clean[cf1_clean == ""] <- NA
 cf1_clean[cf1_clean %in% c("unspecified",
                            "unknown",
                            "other vehicular")] <- NA
-
-# Frequency table of cleaned contributing factors
-cf1_table <- sort(table(cf1_clean), decreasing = TRUE)
-cf1_table
-
-# Top five contributing factors
-head(cf1_table, 5)
-
-# You can compare cf1_raw vs cf1_clean if you want to
-# illustrate the effect of cleaning.
 #===end
 
 
 ############################################################
-#label===veh_types
-# This chunk examines the most frequent vehicle categories
-# for vehicle 1 and vehicle 2.
-#===
+#label===factor_table
+cf1_table <- sort(table(cf1_clean), decreasing = TRUE)
+cf1_table
 
-# Vehicle type columns for vehicle 1 and 2
-vt1 <- df$vehicle_type_code_1
-vt2 <- df$vehicle_type_code_2
+head(cf1_table, 5)
+#===end
 
-# Clean by trimming whitespace
-vt1 <- trimws(vt1)
-vt2 <- trimws(vt2)
 
-# Optionally set empty strings to NA
+############################################################
+#label===factor_plot
+pdf("images/chapter_9/top_contributing_factors.pdf",
+    width = 8.5, height = 4.5)
+
+top_factors <- head(cf1_table, 8)
+top_factor_counts <- as.numeric(top_factors)
+factor_labels <- c(
+  "driver inattention/distraction" = "Inattention",
+  "following too closely" = "Following too closely",
+  "failure to yield right-of-way" = "Failure to yield",
+  "unsafe speed" = "Unsafe speed",
+  "passing or lane usage improper" = "Lane use improper",
+  "backing unsafely" = "Backing unsafely",
+  "driver inexperience" = "Driver inexperience",
+  "passing too closely" = "Passing too closely")
+names(top_factor_counts) <- factor_labels[names(top_factors)]
+
+par(mar = c(5, 8, 1, 1))
+
+barplot(rev(top_factor_counts),
+        horiz = TRUE,
+        las = 1,
+        cex.names = 0.85,
+        col = "steelblue",
+        border = NA,
+        xlab = "Number of crashes")
+
+dev.off()
+#===end
+
+
+############################################################
+#label===vehicle_type_clean
+vt1 <- trimws(df$vehicle_type_code_1)
+vt2 <- trimws(df$vehicle_type_code_2)
+
 vt1[vt1 == ""] <- NA
 vt2[vt2 == ""] <- NA
+#===end
 
-# Frequency tables
+
+############################################################
+#label===vehicle_type_table
 vt1_table <- sort(table(vt1), decreasing = TRUE)
 vt2_table <- sort(table(vt2), decreasing = TRUE)
 
-# Most common vehicle categories (top 10 shown)
 head(vt1_table, 10)
 head(vt2_table, 10)
+#===end
 
-# You can discuss whether the most frequent types
-# match what you expect for NYC traffic.
+
+############################################################
+#label===vehicle_type_plot
+pdf("images/chapter_9/top_vehicle_types.pdf",
+    width = 8.5, height = 4.5)
+
+top_vehicle_types <- head(vt1_table, 8)
+top_vehicle_counts <- as.numeric(top_vehicle_types)
+vehicle_labels <- c(
+  "Sedan" = "Sedan",
+  "Station Wagon/Sport Utility Vehicle" = "SUV/station wagon",
+  "Taxi" = "Taxi",
+  "Bike" = "Bike",
+  "Motorcycle" = "Motorcycle",
+  "Pick-up Truck" = "Pick-up truck",
+  "Bus" = "Bus",
+  "Box Truck" = "Box truck")
+names(top_vehicle_counts) <- vehicle_labels[names(top_vehicle_types)]
+
+par(mar = c(5, 8, 1, 1))
+
+barplot(rev(top_vehicle_counts),
+        horiz = TRUE,
+        las = 1,
+        cex.names = 0.85,
+        col = "seagreen",
+        border = NA,
+        xlab = "Number of crashes")
+
+dev.off()
 #===end
 
 
 ############################################################
 #label===master
-# This final chunk is not meant to appear in the text.
-# It simply reminds the reader that running this script
-# from top to bottom reproduces all objects used in the
-# chapter figures and tables.
-#===
-
 # To reproduce the analysis in the chapter:
-# 1. Set the working directory so that "data/nyc_crashes_lbdwk_2025.csv"
-#    is found correctly.
+# 1. Set the working directory to the project root.
 # 2. Run this file from top to bottom in R.
-# 3. Each labeled chunk corresponds to a code snippet in the text.
+# 3. Each labeled chunk matches one code snippet in the text.
 #===end
