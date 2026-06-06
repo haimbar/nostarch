@@ -86,7 +86,7 @@ cases of these three type of variables. Here are some important examples:
 
 Let's generate some data and store it in a data frame by entering the following code:
 
-\showCode{R}{Code/ch2-01gendat.R}
+\showChunk{R}{Code/ch2-01gendat.R}{ch2-gendat-init}
 \runR{Code/ch2-01gendat.R}{ch2-01gendat}
 
 In \wingding{1} we create a variable called \lstinline{g} in two steps:
@@ -158,7 +158,7 @@ you can run the \lstinline{colours()} function.
 
 \begin{figure}[H]
 \includegraphics[width=0.6\textwidth]{images/chapter_2/boxploty.pdf}
-\caption{A boxplot}
+\caption{Boxplot of \lstinline{y}, showing an approximately symmetric distribution with no outliers}
 \label{fig:ch2:boxploty}
 \end{figure}
 
@@ -188,7 +188,7 @@ Try changing the values given in these arguments. What happens when you set
 
 \begin{figure}[H]
 \includegraphics[width=0.6\textwidth]{images/chapter_2/histy.pdf}
-\caption{A histogram}
+\caption{Histogram of \lstinline{y}, revealing a bimodal distribution}
 \label{fig:ch2:histy}
 \end{figure}
 
@@ -252,7 +252,7 @@ in Figure~\ref{fig:ch2:sidebysidebp}.
 
 \begin{figure}[H]
 \includegraphics[width=0.6\textwidth]{images/chapter_2/sidebysidebp.pdf}
-\caption{Side by side boxplots}
+\caption{Side-by-side boxplots comparing the distribution of \lstinline{y} across groups \lstinline{g = 1} and \lstinline{g = 2}}
 \label{fig:ch2:sidebysidebp}
 \end{figure}
 
@@ -262,7 +262,7 @@ clear. The medians\index{median} are about the same but the box of group 2 is
 slightly elevated. We'll try to use additional plots and other variables that
 are available to us in order to understand the properties of  \lstinline{y}.
 
-\subsection{Overlayed Histograms}
+\subsection{Overlaid Histograms}
 
 We can also plot a histogram for each group. We can do it in two plots, or in
 one, which makes the comparison between the groups easier. To do that we use
@@ -295,7 +295,7 @@ to be partially transparent. We do this with the \lstinline{alpha} argument of
 we use 0.5 for 50\% transparency:
 \lstinline{rgb(t(col2rgb("navyblue"))/255, alpha = 0.5)}.
 
-What did we learn from the overlayed histograms? This plot helps to see that
+What did we learn from the overlaid histograms? This plot helps to see that
 there really is a difference between the groups, and the blue histogram is
 similar in shape to the one in orange, but more
 shifted to the right. The bi-modality is a feature that is common to both
@@ -303,7 +303,7 @@ groups.
 
 \begin{figure}[H]
 \includegraphics[width=0.6\textwidth]{images/chapter_2/histoverlay.pdf}
-\caption{Overlaid histograms}
+\caption{Overlaid histograms of \lstinline{y} for group 1 (orange) and group 2 (blue), showing a rightward shift between groups}
 \label{fig:ch2:histoverlay}
 \end{figure}
 
@@ -332,7 +332,7 @@ now) a line that represents the relationship between \lstinline{x} and
 \begin{figure}[H]
 \includegraphics[width=0.48\textwidth]{images/chapter_2/scatter.pdf}
 \includegraphics[width=0.48\textwidth]{images/chapter_2/scatter2.pdf}
-\caption{Scatterplots}
+\caption{Scatterplots of \lstinline{y} versus \lstinline{x}: plain (left) and colored by group \lstinline{g}, with a reference line at \lstinline{y = 30} (right)}
 \label{fig:ch2:scatter}
 \end{figure}
 
@@ -398,10 +398,16 @@ may depend on other variables, both continuous and categorical. When we want to
 explore and investigate categorical variables we often use tables, or their
 graphical representation.
 
-Let's simulate some categorical data. In the following code we use the
-\lstinline{rpois()} function to draw random numbers which are all non-negative
-integers (from the Poisson distribution). We then create categories using
-the \lstinline{cut()} function, which creates \emph{bins} based on ranges of the
+Let's simulate some categorical data using the \emph{Poisson
+distribution}.\index{Distribution!Poisson} The Poisson distribution models
+the count of random events occurring in a fixed interval of time or space---for
+example, the number of calls a call center receives per hour, or the number of
+emails that arrive in an inbox per day. Its single parameter, $\lambda$ (lambda),
+sets the expected (average) count; it always produces non-negative integers
+(0, 1, 2, \ldots), making it a natural choice for simulating count data.
+In the following code we use the \lstinline{rpois()} function with $\lambda = 10$
+to draw 10,000 such counts. We then create categories using the
+\lstinline{cut()} function, which creates \emph{bins} based on ranges of the
 original values.  In this example we have 5 cut-points, which define 4
 non-overlapping ranges -- \lstinline{[0, 9]}, 
 \lstinline{(9, 12]}, \lstinline{(12, 16]}, and \lstinline{(16, 25]}. Recall
@@ -411,7 +417,7 @@ between a and b, including b but excluding a.
 
 
 
-\showCode{R}{Code/ch2-08gendat2.R}
+\showChunk{R}{Code/ch2-08gendat2.R}{ch2-rpois-xcat}
 \runR{Code/ch2-08gendat2.R}{ch2-08gendat2}
 
 Use what you learned in the previous section to plot this \lstinline{x},
@@ -438,7 +444,7 @@ removing \emph{break-points} in the
 
 \begin{figure}[H]
 \includegraphics[width=0.8\textwidth]{images/chapter_2/barplot.pdf}
-\caption{A barplot}
+\caption{Counts for each education-level category (\lstinline{xcat}) shown as a barplot}
 \label{fig:ch2:barplot}
 \end{figure}
 
@@ -447,7 +453,8 @@ referred to as a `contingency table'.\index{contingency table}  Cross-tabulation
 the cases in each \emph{combination} of the variables.
 
 Let's create a new variable called \lstinline{ycat}, based on some ranges of a
-continuous variable called \lstinline{y}: \showCode{R}{Code/ch2-10genycat.R}
+continuous variable called \lstinline{y}:
+\showChunk{R}{Code/ch2-10genycat.R}{ch2-gen-ycat}
 \runR{Code/ch2-10genycat.R}{ch2-10genycat}
 
 The function \lstinline{ftable()} (for `flat table') is used to cross-tabulate.
@@ -462,11 +469,11 @@ observations in the (0,30] category of the y variable are in (0,9] or (9,12]
 categories of the x variable. However, most of the data in the (100,300]
 column are in the (12,16] or (16,25] rows.
 
-To visualize this table in a plot, we can create a \emph{spine plot},\index{spine plot} with 
-the \lstinline{spinogram()} function as in the following code, which shows the
+To visualize this table in a plot, we can create a \emph{spine plot},\index{spine plot} with
+the \lstinline{spineplot()} function as in the following code, which shows the
 table of proportions, rather than counts. The output is depicted in
 Figure~\ref{fig:ch2:spineplot}.
-Because a spinogram uses proportions and not counts, the bars in the plot all
+Because a spine plot uses proportions and not counts, the bars in the plot all
 have the same \emph{total} width and height (since the proportions must all add
 to 1), and the dimensions of boxes within each bar represent the proportion of
 the corresponding cell in the table relative to the total in the row/column of
@@ -488,7 +495,7 @@ visualize and understand the data.
 
 \begin{figure}[H]
 \includegraphics[width=0.6\textwidth]{images/chapter_2/spineplot.pdf}
-\caption{A spine plot}
+\caption{Spine plot of income category (\lstinline{ycat}) by education level (\lstinline{xcat}), showing conditional proportions}
 \label{fig:ch2:spineplot}
 \end{figure}
 
@@ -576,17 +583,24 @@ lot of
 \end{itemize}
 \begin{figure}[H]
 \includegraphics[width=0.6\textwidth]{images/chapter_2/smooth.pdf}
-\caption{A smooth scatterplot\index{scatterplot!smooth}}
+\caption{Smooth scatterplot of 100,000 points using \lstinline{smoothScatter()}, avoiding overplotting\index{scatterplot!smooth}}
 \label{fig:ch2:smooth}
 \end{figure}
 
 
 \section{Summary}
-In this chapter we described how to visualize data by using plots, tables, or
-summary statistics. The process of exploratory data analysis is critical to
-understanding the data, and to communicating results.
-In the next chapter we will introduce probability --- the mathematical basis
-for all statistical reasoning.
+In this chapter we described how to explore data through plots, tables, and
+summary statistics---the core of \emph{exploratory data analysis (EDA)}.
+For continuous variables we covered boxplots, histograms, and scatterplots,
+and saw how adding color or multiple panels can reveal group differences and
+higher-dimensional structure. For large datasets we introduced smooth
+scatterplots as a way to avoid overplotting. For categorical variables we
+used bar charts and spine plots to visualize counts and proportions, and the
+\lstinline{table()}, \lstinline{ftable()}, and \lstinline{prop.table()}
+functions to cross-tabulate two categorical variables. The process of
+exploratory data analysis is critical to understanding the data before applying
+any formal model. In the next chapter we will introduce probability---the
+mathematical basis for all statistical reasoning.
 
 \section{Problems}
 
@@ -620,6 +634,41 @@ additional extreme values appended (for example, add five copies of 10{,}000) an
 recompute the mean and median. Which measure is more resistant to outliers?
 Create boxplots of both the original and modified datasets side by side
 to visualize the difference.
+\end{exercise}
+
+\begin{exercise}
+R's built-in \lstinline{faithful} dataset records eruptions of the Old Faithful
+geyser in Yellowstone National Park. It has two variables: \lstinline{eruptions}
+(duration of each eruption in minutes) and \lstinline{waiting} (time until the
+next eruption in minutes).
+\begin{enumerate}
+\item Create a histogram of \lstinline{eruptions}. What unusual feature do you
+notice about the shape of the distribution?
+\item Create a scatterplot of \lstinline{waiting} (y-axis) versus
+\lstinline{eruptions} (x-axis). What relationship do you see between eruption
+duration and waiting time?
+\item Create a grouping variable using
+\lstinline{long <- factor(faithful$eruptions > 3)}, which labels eruptions as
+long (over three minutes) or short. Color your scatterplot points by this
+variable. Does the grouping explain the pattern you observed in the histogram?
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}
+R's built-in \lstinline{mtcars} dataset contains fuel consumption and other
+characteristics for 32 cars. Using the \lstinline{cyl} column (number of
+cylinders: 4, 6, or 8) and the \lstinline{am} column (transmission type:
+0 = automatic, 1 = manual):
+\begin{enumerate}
+\item Use \lstinline{table(mtcars$cyl, mtcars$am)} to cross-tabulate cylinders
+by transmission type. How many four-cylinder cars have manual transmissions?
+\item Use \lstinline{prop.table(table(mtcars$cyl, mtcars$am), margin=1)} to
+show the proportion of each transmission type within each cylinder group.
+Are manual transmissions more common in cars with fewer cylinders?
+\item Create a barplot of the cylinder counts using
+\lstinline{barplot(table(mtcars$cyl))}. Which cylinder count is most common in
+this dataset?
+\end{enumerate}
 \end{exercise}
 
 %%% Local Variables:
