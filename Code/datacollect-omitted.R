@@ -5,7 +5,7 @@ house_age <- seq(1:n)
 house_distance <- 10/sqrt(house_age) - 0.5                # (@\wingding{1}@)
 house_price <- 100 + 100*house_distance + rnorm(n, 0, 30) # (@\wingding{2}@)
 
-pdf("images/chapter_6/omitted.pdf", width=4, height=4)
+pdf("images/chapter_7/omitted.pdf", width=4, height=4)
 plot(sqrt(house_distance), house_price,
      ylim=c(0, max(house_price)),
      xlim=c(0,max(sqrt(house_distance))),

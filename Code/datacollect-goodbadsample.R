@@ -1,4 +1,4 @@
-pdf("images/chapter_6/population.pdf", width=3.5, height=3.5)
+pdf("images/chapter_7/population.pdf", width=3.5, height=3.5)
 #label===BIASgbs1
 set.seed(2023)
 N = 500
@@ -12,7 +12,7 @@ axis(1); axis(2)
 #===end
 dev.off()
 
-pdf("images/chapter_6/representSample.pdf", width=3.5, height=3.5)
+pdf("images/chapter_7/representSample.pdf", width=3.5, height=3.5)
 #label===BIASgbs2
 plot(population, ylim=range(weight), xlim=range(height),
      pch=19, cex=0.5, col='grey', axes=FALSE)
@@ -25,7 +25,7 @@ points(rsample, col="darkgreen", pch=17, cex=1)
 #===end
 dev.off()
 
-pdf("images/chapter_6/biasedSample.pdf", width=3.5, height=3.5)
+pdf("images/chapter_7/biasedSample.pdf", width=3.5, height=3.5)
 #label===BIASgbs3
 plot(population, ylim=range(weight), xlim=range(height),
      pch=19, cex=0.5, col='grey', axes=FALSE)

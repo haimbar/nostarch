@@ -1,4 +1,4 @@
-pdf("images/chapter_6/aliasing1.pdf", width=7, height=4)
+pdf("images/chapter_7/aliasing1.pdf", width=7, height=4)
 par(mar=c(4, 4, 0.5, 0.5), mfrow=c(1,2))
 #label===aliasing1
 library("pracma")
@@ -21,7 +21,7 @@ axis(1); axis(2)
 dev.off()
 
 
-pdf("images/chapter_6/aliasing2.pdf", width=4, height=4)
+pdf("images/chapter_7/aliasing2.pdf", width=4, height=4)
 par(mar=c(4, 4, 0.5, 0.5))
 #label===aliasing2
 f <- 8                  # (@\wingding{1}@)

@@ -1,5 +1,5 @@
 set.seed(2021)
-pdf("images/chapter_6/berkson1.pdf", width=4, height=4)
+pdf("images/chapter_7/berkson1.pdf", width=4, height=4)
 n  <- 1000
 book  <- rnorm(n)                       # (@\wingding{1}@)
 movie <- rnorm(n)                       # (@\wingding{2}@)
@@ -8,7 +8,7 @@ abline(lm(movie~book), lwd=3, col=2)
 axis(1); axis(2)
 dev.off()
 
-pdf("images/chapter_6/berkson2.pdf", width=4, height=4)
+pdf("images/chapter_7/berkson2.pdf", width=4, height=4)
 good.b <- book > quantile(book, 0.9)    # (@\wingding{3}@)
 good.m <- movie > quantile(movie, 0.9)  # (@\wingding{4}@)
 good  <- good.b | good.m                # (@\wingding{5}@)
