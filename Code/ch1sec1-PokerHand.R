@@ -6,7 +6,7 @@ drawPokerHands <- function(ncards=5, nplayers=4) { # (@\wingding{1}@)
   }
   M <- matrix(sample(cards, ncards*nplayers, replace=FALSE),
               ncol=ncards, nrow=nplayers)
-  colnames(M) <- paste0("Player", 1:nplayers)
+  rownames(M) <- paste0("Player", 1:nplayers)
   M
 }
 # Run this function:

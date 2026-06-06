@@ -411,9 +411,130 @@ cards2 <- read.csv("tmp/cards.csv")
 %If you run the code above, you should see this output:
 %\inlnR{```cat(month.abb)```}[vbox]
 
-\section{Writing Your Own Functions}
-A nice feature of computers is that they can do the same thing many times and
-not get tired. When we have to compute something many times, it's useful to
+\section{Harnessing the Power of Computer Programs}\label{sec:powertools}
+A nice feature of computers is that they can do the same thing many times,
+usually much more quickly and accurately than we can, and
+never get tired. In this section we cover three programming power-tools: loops,
+conditional processing (if/else statements), and writing your own functions.
+Mastering these tools will not only open up many possibilities when using \R,
+but the same principles will be transferable to virtually any programming language
+that you may end up using. Let's begin with loops.
+
+\subsection{Loops}
+The story about Johann Carl Friedrich Gauss (one of the most famous mathematicians
+in history) says that when he was six years old and already a math prodigy, one
+of his teachers wanted to keep him busy and told him to calculate the sum of
+all the integers between 1 and 100. It seemed to the teacher that this task will keep
+young Gauss busy for a while.
+
+Or, consider the case of Abraham de Moivre, who worked on calculating the
+area under the curve of the so-called error function, $$f(x)=e^{-x^2/2}.$$
+The function's name is due to the fact that the area can't be obtained as a
+nice formula, and must be calculated via numeric approximations.
+
+These problems become quite easy when we have computers that can
+run loops. Let's see how, first with Gauss' task.
+ One way is with a \lstinline{for} loop:\index{Loops!for loop}\index{R command!\lstinline{for}}
+\showChunk{R}{Code/ch1-loops.R}{loop-demo-for}
+\runR{Code/ch1-loops.R}{loop-demo-for}
+We start by initializing \lstinline{total} to zero \wingding{1}.
+The \lstinline{for} statement then defines \lstinline{i} as a loop variable
+that takes each integer value from 1 to 100 in turn \wingding{2}.
+Inside the loop body, we add the current value of \lstinline{i} to
+\lstinline{total} \wingding{3}, so after all 100 iterations the variable
+holds the running sum. Once the loop finishes, \lstinline{cat()} prints
+the result: 5,050. (Of course, being the genius that Gauss was, he immediately
+recognized that the answer is given by the formula $n(n+1)/2$---for $n=100$,
+that's $100 \times 101/2 = 5{,}050$---but a loop gets us there just as
+reliably.)
+
+\R\ also supports a \lstinline{while} loop, which repeats as long as a
+condition remains true:\index{Loops!while loop}\index{R command!\lstinline{while}}
+\showChunk{R}{Code/ch1-loops.R}{loop-demo-while}
+\runR{Code/ch1-loops.R}{loop-demo-while}
+This time we initialize both \lstinline{total} and a separate counter
+\lstinline{i} before the loop begins \wingding{1}. The \lstinline{while}
+statement checks its condition before every pass: as long as
+\lstinline{i <= 100} is true \wingding{2}, the body runs. At the end of
+each pass we increment \lstinline{i} by one \wingding{3}, which ensures
+the loop eventually terminates. The output is the same: 5,050.
+
+Use a \lstinline{for} loop when you know in advance how many iterations you
+need. Use a \lstinline{while} loop when the number of iterations depends on
+some condition---for example, when computing a numerical approximation
+like the area under de Moivre's error function, you might repeat until the
+result changes by less than some small tolerance.
+
+One more thing worth noting: in \R, many loops can be replaced with
+\emph{vectorized} operations, which apply a function to an entire vector at
+once rather than processing one element at a time. For our Gauss example,
+the \lstinline{sum()} function we saw earlier does exactly that:
+\lstinline{sum(1:100)} produces 5,050 in a single call, with no loop
+required. Vectorized code is generally shorter, faster, and easier to read,
+so it's worth reaching for it whenever the problem allows.
+
+\subsection{Conditional Processing -- If/Else Statements}
+\index{Conditional processing}\index{R command!\lstinline{if}}
+While conceptually very simple, the ability to run only certain parts of a code is a
+powerful tool. An \lstinline{if} statement executes a block of code only when a
+specified condition is true; the optional \lstinline{else} clause handles the
+opposite case:
+\begin{lstlisting}
+if (<condition>) {
+    # runs when condition is TRUE
+} else {
+    # runs when condition is FALSE
+}
+\end{lstlisting}
+To see this in action, let's return to de Moivre's problem. The idea behind
+computing the area numerically is to approximate it with a large number of
+thin rectangles. Imagine slicing the region under the curve into many narrow
+vertical strips, each of width $h$. The area of one strip at position $x$ is
+roughly $f(x) \cdot h = e^{-x^2/2} \cdot h$. Adding up all these rectangle
+areas gives an approximation to the true area under the curve---and the
+thinner the strips (smaller $h$), the more accurate the approximation.
+The exact value is $\sqrt{2\pi} \approx 2.5066$, but because the formula has
+no closed form, this rectangular approximation is how we get there in practice.
+
+Rather than fixing the number of strips in advance, we can start with a coarse
+grid and keep halving $h$ until two successive estimates are practically
+identical. Once refining the grid no longer changes the answer, we know we
+have converged:
+\showChunk{R}{Code/ch1-loops.R}{demoivre-while}
+\runR{Code/ch1-loops.R}{demoivre-while}
+We set \lstinline{area_prev} to \lstinline{Inf} \wingding{1} so that the
+condition is always true on the first pass (since no real number differs from
+\lstinline{Inf} by less than $10^{-6}$). The \lstinline{while} condition
+\wingding{2} is checked before every pass: it compares the latest estimate
+to the one saved from the previous pass. Inside the loop, we save
+\lstinline{area} into \lstinline{area_prev}, recompute \lstinline{area} with
+the current step size using an inner \lstinline{while} loop, then halve
+\lstinline{h} \wingding{3} to prepare a finer grid for the next pass. Once
+two consecutive estimates agree to within $10^{-6}$, the outer loop exits.
+The trailing \lstinline{if}/\lstinline{else} \wingding{4} then checks whether
+the converged result is within 0.01 of the known true value $\sqrt{2\pi}$
+and prints an appropriate message.
+
+Worth noting: \R\ can often apply a condition to an entire vector at once,
+without an explicit \lstinline{if} statement. Recall the \lstinline{singer}
+dataset from the \lstinline{lattice} package introduced earlier in this
+chapter. The expression \lstinline{singer$height > 70} compares every
+element of the \lstinline{height} column to 70 and returns a logical vector
+of \lstinline{TRUE} and \lstinline{FALSE} values:
+\begin{lstlisting}
+tall <- singer$height > 70
+sum(tall)      # count singers taller than 70 inches
+mean(tall)     # proportion taller than 70 inches
+\end{lstlisting}
+Because \R\ treats \lstinline{TRUE} as 1 and \lstinline{FALSE} as 0,
+\lstinline{sum(tall)} counts the singers over 70 inches tall and
+\lstinline{mean(tall)} gives the fraction. No loop or \lstinline{if}
+statement is needed. This kind of vectorized conditional is a common \R\
+idiom\index{Vectorized operations} and connects back to the vectorized
+operations we saw in the Loops section. We will use it throughout the book.
+
+\subsection{Writing Your Own Functions}
+When we have to compute something many times, it's useful to
 create a sequence of commands and give it a name---we'll call that named
 sequence of commands a \emph{function}. \index{Functions in \R}
 Once we have a function, we don't
@@ -439,9 +560,8 @@ arithmetic operations on it.
 
 
 In the \emph{body} of the function, we initialize a variable called $s$ by setting
- it to zero. 
-% AF: We don't define loops until later, so I might not mention it here. "Don't worry about the details for now, but we add our variable to all the vlaues in the vector..."
-Using a \lstinline{for} loop, we add to it all the values in the vector \lstinline{x}. We
+it to zero. Using a \lstinline{for} loop, we add to it all the values in the
+vector \lstinline{x}. We
 \emph{return} the final value of \lstinline{s} \wingding{2}.
 Note that not every function has to return a value. Some may just print something
 to the screen or to a file, for example. 
@@ -887,10 +1007,17 @@ is rented to \inlnR{```cat(max(autotbl))```}[introautorentals] people.
 
 \section{Summary}
 In this chapter we described how to install \R and introduced some
-basic functions. We learned how to use variables, create and run
-our own functions, and covered some basic notions in descriptive
-statistics. In the next chapter we will elaborate on \emph{exploratory
-data analysis (EDA)} and see how to create tables and plots.
+basic functions. We learned how to use variables and covered some
+basic notions in descriptive statistics. We also introduced three
+fundamental programming tools: \emph{loops} (\lstinline{for} and
+\lstinline{while}) for repeating operations, \emph{conditional
+processing} (\lstinline{if}/\lstinline{else}) for executing code
+selectively, and \emph{functions} for packaging reusable sequences
+of commands. Along the way we saw these tools applied to Gauss's
+summation problem and to numerically approximating the area under
+de Moivre's error function. In the next chapter we will elaborate
+on \emph{exploratory data analysis (EDA)} and see how to create
+tables and plots.
 
 \section{Problems}
 
@@ -909,6 +1036,39 @@ it to 0.8. What do you observe?
 Try other values of the number of trials and the probability of heads.
 \end{exercise}
 
+\begin{exercise}
+We can numerically approximate the area under de Moivre's error function
+$f(x) = e^{-x^2/2}$ using a \lstinline{for} loop. Here we divide the interval
+$[-6,\, 6]$ into $n = 50$ equal subintervals of width $h$ and sum the
+area of each rectangle:
+\showChunk{R}{Code/ch1-loops.R}{demoivre-for}
+\runR{Code/ch1-loops.R}{demoivre-for}
+The true value is $\sqrt{2\pi} \approx 2.506628$. Even with only 50 iterations
+the approximation is accurate to within a small fraction of a percent---the
+function decays so rapidly near $\pm 6$ that the rectangle rule introduces
+almost no error at the boundaries. Try changing \lstinline{n} to 10, 100,
+and 500 and observe how the result changes.
+\end{exercise}
+
+\begin{exercise}
+Combining the tools covered in Section~\ref{sec:powertools}, write a
+function that numerically approximates the area under the curve
+$f(x) = e^{-x^2/2}$ between two user-supplied points. The function
+should take three arguments: the left boundary \lstinline{a}, the right
+boundary \lstinline{b}, and a convergence tolerance \lstinline{tol}
+with a default value of \lstinline{1e-6}. Use an \lstinline{if}/\lstinline{else}
+statement to check that the input is valid (that is, \lstinline{a < b} and
+both boundaries lie within $[-6, 6]$); if not, print an informative message
+and return \lstinline{NULL}. Use the convergence loop from the
+\lstinline{demoivre-while} example to compute the area.
+
+Use your function to compute the area between $-1$ and $1$, between
+$-2$ and $2$, and between $-3$ and $3$. Compare your results to the
+true values obtained from \lstinline{pnorm()}: for example, the true
+area between $-1$ and $1$ is
+\lstinline{sqrt(2*pi) * (pnorm(1) - pnorm(-1))}, which is approximately
+1.7125. How close are your approximations?
+\end{exercise}
 %%% Local Variables:
 %%% mode: latex
 %%% TeX-command-extra-options: "-shell-escape"
