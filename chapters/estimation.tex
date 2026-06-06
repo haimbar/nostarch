@@ -84,7 +84,7 @@ Their values are \inlnR{```cat(estimates[1])```}[est1],
 \inlnR{```cat(estimates[2])```}[est2], and \inlnR{```cat(estimates[3])```}[est3], respectively.
 
 
-Which of the three estimator is the best? In this game, the Nature knows the truexs
+Which of the three estimators is the best? In this game, Nature knows the true
 value of $\mu$, so it can compare the estimation errors across the three
 estimates. Compared with the true $\mu$, the squared errors of the three
 estimates are obtained by:
@@ -155,8 +155,8 @@ race on average.
 \showCode{R}{Code/est-hide-norm.R}[11][14]
 The results are
 \inlnR{```print(rowMeans(sim))```}[estrowmeans1][vbox]
-The first estimator, the sample mean, is a clear winner! The estimator (sample
-median) follows and the third estimator (sample midrange) is the poorest among
+The first estimator, the sample mean, is a clear winner! The sample median
+comes next, and the third estimator, the sample midrange, is the poorest among
 the three.
 \end{example}
 
@@ -173,8 +173,8 @@ normal distribution. For a heavier-tailed distribution, we are more likely to
 observe extreme-valued observations.
 
 
-It is desirable to adapt the \lstinline{do1rep} function to make it
-capable of taking an arbitary distribution as input to generate data.
+It is useful to adapt the \lstinline{do1rep} function so that it can take an
+arbitrary distribution as input to generate data.
 \showCode{R}{Code/est-hide-cauchy.R}[1][5]
 The argument \lstinline{datagen} is assumed to be a function with two inputs:
 \lstinline{n} for sample size and \lstinline{mu} for a location parameter. When
@@ -194,7 +194,7 @@ The results are
 So, for this experiment, the second estimator, sample median, is the best among
 the three.
 
-The code has made it easy to compare the three estimators for data generated
+The code makes it easy to compare the three estimators for data generated
 from $t$ distributions with other degrees of freedom. One can verify that as the
 degrees of freedom increases (so the $t$ distribution gets closer to the normal
 distribution), the mean estimator eventually outperforms the median estimator.
@@ -219,8 +219,8 @@ all the information about the location parameter $\mu$ in this setting.
 \end{example}
 
 
-It would be nice if one estimator is always the best regardless of what the true
-data generating scheme is. Such estimator may not, however, always exist.
+It would be nice if one estimator were always the best regardless of the true
+data-generating scheme. Such an estimator may not, however, exist.
 
 \subsection{Maximum Likelihood Estimator}
 To play the hide-and-seek game better, we need to select a good strategy. From
@@ -286,8 +286,8 @@ likelihood of observing $16$ successful shots out of $20$ attempts is
 
 We can evaluate this expression for many possible values of $p$ between
 $0$ and $1$ and see which one gives the largest likelihood. Because
-the log transformation is monotonely increasing, the solution is the
-same when we maximize the loglikelihood.
+the log transformation is monotonically increasing, the solution is the
+same when we maximize the log-likelihood.
 \showCode{R}{Code/est-mle-binom.R}[1][6]
 
 The largest likelihood occurs when $p$ is near
@@ -308,7 +308,7 @@ MLE may no longer be the most efficient estimator.
 
 \section{Uncertainty}
 Point estimation is not enough! We need some measure of uncertainty to make
-inferences. This lead to interval estimators. The two endpoints of an interval
+inferences. This leads to interval estimators. The two endpoints of an interval
 estimator are statistics such that the random interval formed by them captures
 the unknown target parameter with certain probability. A
 \emph{confidence interval}\index{confidence interval} with
@@ -322,7 +322,7 @@ One way to construct confidence intervals is to use the asymptotic
 distributional properties of some estimator. In the simple situation of
 estimating the population mean of a distribution, for example, we can use the
 sample mean and the central limit theorem to construct an interval centered at
-the sample mean. Suppose that we have a sample mean $\bar X_n$ based a sample of
+the sample mean. Suppose that we have a sample mean $\bar X_n$ based on a sample of
 size~$n$ from a population with mean $\mu$ and variance $\sigma^2$. From the
 central limit theorem discussed in Chapter~\ref{ch:llnclt}, we know that $\bar
 X_n$'s behavior can be approximated by a normal distribution with mean $\mu$ and
@@ -351,7 +351,7 @@ case, especially when the confidence intervals are constructed based on
 asymptotic results but applied to finite sample sizes.
 
 
-Now let's play a game to appreciate the importance of uncertainty in
+Now let's play a game to see why uncertainty matters in
 estimation.
 \begin{example}[Interval estimation for a gamma mean]
 \label{ex:ci-clt}
@@ -359,8 +359,8 @@ estimation.
 We write a function to construct a confidence interval with level $1 - \alpha$
 for a population mean $\mu$ given an observed sample vector.
 \showCode{R}{Code/est-ci-clt.R}[1][6]
-Let's apply this to a have random of sample of size $n$ from a gamma
-distribution with mean~$\mu$. For simplicity, let's set the the scale parameter
+Let's apply this to a random sample of size $n$ from a gamma
+distribution with mean~$\mu$. For simplicity, let's set the scale parameter
 of the gamma distribution to be known as~$2$.
 \showCode{R}{Code/est-ci-clt.R}[9][12]
 The resulting 95\% confidence interval is
@@ -391,7 +391,7 @@ well for $n = 20$.
 \subsection{Resampling}
 
 Constructing confidence intervals depends on the uncertainty of the
-estimator. Often times, a point estimator can be easily obtained, for example,
+estimator. Often, a point estimator can be easily obtained, for example,
 through optimizing an objective function or solving some estimating
 equations. The variation of a point estimator, however, can be much more
 difficult to obtain. Asymptotic approximations of the variance of an estimator
@@ -401,8 +401,8 @@ variance approximation may not work well with small to moderate sample sizes.
 
 \emph{Bootstrap}\index{bootstrap}
 is a powerful tool to approximate the uncertainty of an estimator.
-As a self-assisted approach, it approximates the variation of the sample by
-treating the sample as a population and resample repeatedly from it with
+As a self-assisted approach, it approximates the variation of the estimator by
+treating the sample as a population and resampling repeatedly from it with
 replacement, each time forming a so-called bootstrap sample of the same size as
 the original sample. For each bootstrap sample, we can obtain the point
 estimator. The variation of the original point estimator can be approximated by
@@ -411,7 +411,7 @@ the bootstrap samples.
 
 
 
-Here we demonstrate how well bootstrap can approximate the variance of some
+Here we demonstrate how well the bootstrap can approximate the variance of some
 simple statistics. Suppose that \lstinline{statistic} is a function that takes a
 random sample \lstinline{x} as input and returns a scalar statistic. A bootstrap
 procedure to obtain a large number \lstinline{R} of bootstrap copies of the
@@ -421,11 +421,11 @@ statistic from a sample \lstinline{x} is implemented in the following function
 
 
 Function \lstinline{myboot} returns a list with two components. The first
-component \lstinline{t0} is the scalar statistics computed from the observed
+component \lstinline{t0} is the scalar statistic computed from the observed
 sample \lstinline{x}; the second component \lstinline{t} is a vector of dimension
 \lstinline{R}, each element of which is a scalar statistic computed from a
 bootstrap sample. We use the empirical variation of \lstinline{t} to approximate
-the variation of \lstinline{t0}. An 95\% confidence interval can be constructed
+the variation of \lstinline{t0}. A 95\% confidence interval can be constructed
 simply by the 2.5 and 97.5 percentiles of \lstinline{t}. This type of confidence
 interval is known as \emph{percentile bootstrap confidence
 interval}\index{bootstrap!percentile confidence interval}.
@@ -450,7 +450,7 @@ from this sample.
 
 
 To investigate the coverage rate of the percentile bootstrap confidence
-interval, we need to run a simulation study. Again, we layout what we need to do
+interval, we need to run a simulation study. Again, we lay out what we need to do
 in one replicate first:
 \showCode{R}{Code/est-ci-boot.R}[23][27]
 
@@ -501,6 +501,52 @@ simulation. Finally, we introduced the bootstrap, a computational method
 that approximates the variability of an estimator by resampling from
 the observed data. Throughout the chapter, simulation played a central
 role in understanding estimation and uncertainty.
+
+\section{Problems}
+
+\begin{exercise}
+In the normal hide-and-seek game, change the sample size in
+\lstinline{Code/est-hide-norm.R} from \lstinline{n = 20} to \lstinline{n = 5},
+\lstinline{n = 50}, and \lstinline{n = 200}. For each sample size,
+compare the MSE of the sample mean, sample median, and midrange. Which
+estimator improves the most as the sample size grows?
+\end{exercise}
+
+\begin{exercise}
+Use the Cauchy hide-and-seek code, but replace \lstinline{rcauchy} with
+a $t$ distribution with 2, 5, and 10 degrees of freedom. How does the
+ordering of the sample mean and sample median change as the tails of
+the distribution become less extreme?
+\end{exercise}
+
+\begin{exercise}
+In the uniform population example, change the bandwidth from 20 to 5
+and then to 50. Does the midrange still perform well? Explain why the
+largest and smallest observations are especially informative for a
+uniform distribution.
+\end{exercise}
+
+\begin{exercise}
+In the free-throw MLE example, change the observed data from 16 made
+shots out of 20 to 8 out of 20, 12 out of 20, and 19 out of 20. For
+each case, plot the likelihood over possible values of $p$. Where does
+the likelihood reach its maximum?
+\end{exercise}
+
+\begin{exercise}
+In the gamma confidence interval simulation, try sample sizes
+\lstinline{n = 10}, \lstinline{n = 20}, \lstinline{n = 50}, and
+\lstinline{n = 100}. Estimate the coverage rate for each sample size.
+At what sample size does the large-sample confidence interval begin to
+look reliable?
+\end{exercise}
+
+\begin{exercise}
+Modify the bootstrap example by estimating the population mean instead
+of the population median. Compare the bootstrap confidence interval for
+the mean with the large-sample confidence interval from the previous
+section. When do the two intervals look similar, and when do they differ?
+\end{exercise}
 
 %%% Local Variables:
 %%% mode: latex
