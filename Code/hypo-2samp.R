@@ -23,6 +23,7 @@ do1rep(30, rnorm, 0)
 
 
 ### check empirical rejection rate
+n <- 30
 nrep <- 1000
 sim <- replicate(nrep, do1rep(n, rnorm, 0))
 rowMeans(sim < .05)
@@ -47,16 +48,24 @@ empRejRate(nrep, n, rcauchy, 0.5)
 ### power curve
 delta <- seq(0, 1, by = .2)
 
-## normal distribuion
+pdf("images/chapter_5/hypo-power-normal.pdf", width = 5, height = 4)
+#label===power-normal
+## normal distribution
 rejrate <- sapply(delta, function(x) empRejRate(nrep, n, rnorm, x))
 plot(delta, rejrate["t", ], type = "l",
-     ylab = "emporical rejection rate", ylim = c(0, 1))
+     ylab = "empirical rejection rate", ylim = c(0, 1))
 lines(delta, rejrate["wilcox", ], lty = 2, col = "blue")
 abline(.05, 0)
+#===end
+dev.off()
 
-## Cauchy distribuion
+pdf("images/chapter_5/hypo-power-cauchy.pdf", width = 5, height = 4)
+#label===power-cauchy
+## Cauchy distribution
 rejrate <- sapply(delta, function(x) empRejRate(nrep, n, rcauchy, x))
 plot(delta, rejrate["t", ], type = "l",
-     ylab = "emporical rejection rate", ylim = c(0, 1))
+     ylab = "empirical rejection rate", ylim = c(0, 1))
 lines(delta, rejrate["wilcox", ], lty = 2, col = "blue")
 abline(.05, 0)
+#===end
+dev.off()

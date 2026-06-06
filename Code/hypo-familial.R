@@ -60,4 +60,5 @@ perm_pvalue <- function(id, symptom, B = 10000) {
 # compute p-value of observed statistic
 obs_stat <- family_stat(dat$id, dat$symptom)
 obs_stat
+perm_pvalue(dat$id, dat$symptom)
 #===end
