@@ -141,23 +141,57 @@ normal distribution with location $\mu$ and variance~1.
 \showCode{R}{Code/est-hide-norm.R}[1][5]
 
 
-The function \lstinline{do1rep} generates one sample of size \lstinline{n} from
-the normal distribution with location parameter~$\mu$, collects three estimates
-of $\mu$, and returns the squared errors of the three estimates in a vector.
-Try it a few times, for example, with sample size \lstinline{n = 50},
-to see what it does.
-\showCode{R}{Code/est-hide-norm.R}[8][8]
+The function \lstinline{do1est} generates one sample of size \lstinline{n} from
+the normal distribution with location parameter~$\mu$ and collects three
+estimates of $\mu$. Keeping the estimates themselves is useful because we can
+use them later for plots. For the race, we also need squared errors, so we wrap
+\lstinline{do1est} inside \lstinline{do1rep}.
+\showCode{R}{Code/est-hide-norm.R}[7][10]
+
+
+Try both functions a few times, for example, with sample size \lstinline{n = 50},
+to see what they return.
+\showCode{R}{Code/est-hide-norm.R}[13][14]
 
 
 Now we play the game repeatedly for 1000 times, each with sample
 size \lstinline{n = 20} and see which estimator wins the
 race on average.
-\showCode{R}{Code/est-hide-norm.R}[11][14]
+\showCode{R}{Code/est-hide-norm.R}[17][20]
 The results are
 \inlnR{```print(rowMeans(sim))```}[estrowmeans1][vbox]
 The first estimator, the sample mean, is a clear winner! The sample median
 comes next, and the third estimator, the sample midrange, is the poorest among
 the three.
+
+To make a picture of the estimates, not just their squared errors, we first
+write a more general function. The argument \lstinline{datagen} is a data
+generator, so the same code can be used for normal, Cauchy, and uniform
+hide-and-seek games.
+\showCode{R}{Code/est-hide-norm.R}[24][34]
+
+
+The plotting function draws one shape for each estimator. The wider the shape
+is at a height, the more estimates landed near that error value.
+\showCode{R}{Code/est-hide-norm.R}[36][54]
+
+
+Finally, we store the estimate errors from each game and draw the three panels.
+\showCode{R}{Code/est-hide-norm.R}[56][66]
+
+
+Figure~\ref{fig:est:violin-games} shows the same race in a more visual way for
+three hide-and-seek games. Each shape shows where the estimates landed across
+many simulated samples. The dashed line marks zero error, which means the
+estimate landed exactly on the true value that Nature hid from us. A taller,
+wider shape means the estimates moved around more.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{images/chapter_6/estimator_violin_by_game.pdf}
+\caption{Estimation errors from repeated hide-and-seek games}
+\label{fig:est:violin-games}
+\end{figure}
 \end{example}
 
 
@@ -375,6 +409,35 @@ We can check the actual coverage rate in a simulation study.
 The empirical coverage rate from the 1000 replicates is
 \inlnR{```cat(mean(sim50[1, ] < mu & sim50[2,] > mu))```}[estsim50].
 
+For the figure, we keep 50 intervals for each sample size. We also record
+whether each interval covered the true value, because missed intervals will be
+colored differently.
+\showCode{R}{Code/est-ci-clt.R}[30][36]
+
+
+The next function draws the stored intervals. Each interval is one horizontal
+line, and the dashed vertical line marks the true value of \(\mu\).
+\showCode{R}{Code/est-ci-clt.R}[38][49]
+
+
+Then we make the two sets of intervals and write the figure file.
+\showCode{R}{Code/est-ci-clt.R}[51][65]
+
+
+Figure~\ref{fig:est:ci-sizes} shows 50 intervals for $n = 50$ and 50 intervals
+for $n = 20$. Each horizontal line is one confidence interval from one
+simulated sample. The dashed vertical line is the true value of $\mu$. Most
+intervals cross the truth, but a few miss it. That is exactly what ``95\%
+confidence'' allows: the method should work most of the time, not every single
+time.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{images/chapter_6/confidence_intervals_by_sample_size.pdf}
+\caption{Fifty simulated confidence intervals for two sample sizes}
+\label{fig:est:ci-sizes}
+\end{figure}
+
 
 What if the sample size is smaller, say 20?
 \showCode{R}{Code/est-ci-clt.R}[26][27]
@@ -482,6 +545,33 @@ The empirical coverage rate of the 95\% confidence interval from the
 \inlnR{```cat(nrep)```}[estnrep3]  replicates is
 %\inlnR{```cat(mean(sim20[2,] < target & target < sim20[3,]))```},
 which is still reasonably close to the nominal level 95\%.
+
+The bootstrap figure uses the same idea as the previous interval figure, but
+now each stored row contains the sample median and the two ends of its
+percentile bootstrap interval.
+\showCode{R}{Code/est-ci-boot.R}[43][49]
+
+
+The plotting function again draws stored intervals as horizontal lines. The
+dashed vertical line now marks the true population median.
+\showCode{R}{Code/est-ci-boot.R}[51][62]
+
+
+Finally, we draw the two panels for the bootstrap intervals.
+\showCode{R}{Code/est-ci-boot.R}[64][78]
+
+
+Figure~\ref{fig:est:boot-ci-sizes} shows 50 percentile bootstrap intervals for
+each sample size. The dashed vertical line is the true population median. As
+before, each line comes from one simulated sample. The bootstrap interval is
+built by resampling from that sample, not by using the normal approximation.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{images/chapter_6/bootstrap_intervals_by_sample_size.pdf}
+\caption{Fifty simulated bootstrap confidence intervals for two sample sizes}
+\label{fig:est:boot-ci-sizes}
+\end{figure}
 \end{example}
 
 \section{Summary}
