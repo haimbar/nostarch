@@ -7,6 +7,7 @@ nrep <- 2000
 teddy <- rep(NA, nrep)
 test_bneg <- rep(NA, nrep)
 
+#label===prob-baserate
 for (i in 1:nrep) {
   teddy[i] <- sample(popsize, size=1) # (@\wingding{2}@)
   if (teddy[i] %in% blood_type_bneg) {

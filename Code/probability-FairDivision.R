@@ -1,3 +1,4 @@
+#label===prob-fair-division
 set.seed(123)
 players <- c("Tom", "Jerry")
 res <- replicate(n=1000, sample(players, 5, replace=TRUE))

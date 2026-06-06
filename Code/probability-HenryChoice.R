@@ -1,3 +1,4 @@
+#label===prob-henry-choice
 set.seed(123)
 n <- 10000
 spin.shot <- replicate(n, sample(1:6, 2, replace=TRUE))          # (@\wingding{1}@)

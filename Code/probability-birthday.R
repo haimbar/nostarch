@@ -1,3 +1,4 @@
+#label===prob-birthday
 set.seed(123)
 birthday <- function(n=23, yours="1980-05-01"){      # (@\wingding{1}@)
     N <- 365                                         # (@\wingding{2}@)

@@ -1,3 +1,4 @@
+#label===prob-bertrand-box
 set.seed(123)
 boxs <- c("GG", "GS", "SS")
 boxcoin <- function(boxs){                # (@\wingding{1}@)

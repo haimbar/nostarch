@@ -1,3 +1,4 @@
+#label===prob-elevator
 set.seed(123)                        # (@\wingding{1}@)
 n <- 10000                           # (@\wingding{2}@)
 elevator <- runif(n, min=1, max=15)  # (@\wingding{3}@)

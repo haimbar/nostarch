@@ -85,7 +85,7 @@ more likely that the elevator is going up.
 
 We can simulate this situation:
 
-\showCode{R}{Code/probability-elevator.R}
+\showChunk{R}{Code/probability-elevator.R}{prob-elevator}
 \runR{Code/probability-elevator.R}{probability_elevator}{}
 In the above code, \wingding{1} sets the random seed for reproducibility;
 \wingding{2} \lstinline{n} is the number of days to simulate; \wingding{3} records
@@ -195,7 +195,7 @@ probability of having two girls, given that at least one of them is a girl, is 1
 
 If we simulate many families, we can find the numerical answer quite accurately.
 
-\showCode{R}{Code/probability-TwoChildren.R}
+\showChunk{R}{Code/probability-TwoChildren.R}{prob-two-children}
 \runR{Code/probability-TwoChildren.R}{TwoChildren}{}
 In the above code, \wingding{1} defines the possible outcomes of a kid's gender; 
 \wingding{2} simulates \lstinline{n} families; 
@@ -323,7 +323,7 @@ child{ [sibling distance=2cm]
 };
 \end{tikzpicture}
 }
-\caption{Probability flow for Bertrand's Box}
+\caption{Probability tree for Bertrand's Box, showing all possible outcomes when a box is chosen at random and a coin drawn from it}
 \label{fig:ch3:probability-flow}
 \end{figure}
 
@@ -343,7 +343,7 @@ we don't have to go through the counting or reasoning. If we can simulate the
 game, we can find the result pretty accurately. The following code simulates the 
 game and approximate the probability numerically.
 
-\showCode{R}{Code/probability-BertrandBox.R}
+\showChunk{R}{Code/probability-BertrandBox.R}{prob-bertrand-box}
 \runR{Code/probability-BertrandBox.R}{BertrandBox}{}
 In the above code, the function \lstinline{boxcoin} in \wingding{1} defines a
 function that mimics one round of the game; the \lstinline{gold.taken} in
@@ -437,7 +437,7 @@ We should choose die C over die A!
 
 Here is an experiment to simulate the intransitive dice.
 
-\showCode{R}{Code/probability-IntransitiveDice.R}
+\showChunk{R}{Code/probability-IntransitiveDice.R}{prob-intransitive-dice}
 Running this code should give the following:
 \runR{Code/probability-IntransitiveDice.R}{IntransitiveDice}{}
 \includeOutput{IntransitiveDice}
@@ -492,7 +492,7 @@ share a birthday on that plane, because the probability is almost one.
 
 Let's use simulation to find answers to these questions.
 
-\showCode{R}{Code/probability-birthday.R}
+\showChunk{R}{Code/probability-birthday.R}{prob-birthday}
 \runR{Code/probability-birthday.R}{birthday}{}
 
 The \lstinline{birthday} in \wingding{1} defines a function to simulate the birthday
@@ -559,7 +559,7 @@ So the probabilities that Tom and Jerry would be the final winner are 3/4 and
 
 Let's use simulation to solve this problem.
 
-\showCode{R}{Code/probability-FairDivision.R}
+\showChunk{R}{Code/probability-FairDivision.R}{prob-fair-division}
 \runR{Code/probability-FairDivision.R}{FairDivision}{}
 
 In the above code, \lstinline{TomFirst} in \wingding{1} records whether Tom won in
@@ -608,7 +608,7 @@ complicated. Some people didn't believe the answer until they were shown some
 simulations. The following code provides a simulation based on \lstinline{n=1000}
 repetitions.   
 
-\showCode{R}{Code/probability-MontyHall.R}
+\showChunk{R}{Code/probability-MontyHall.R}{prob-monty-hall}
 \runR{Code/probability-MontyHall.R}{MontyHall}%[run]
 
 In the above code, \lstinline{prize} in \wingding{1} will store the locations of the
@@ -848,7 +848,7 @@ as $B-$), we count the frequency that the person really has $B-$ blood type
 \wingding{5}. This approximates the probability that Teddy really has $B-$
 blood, that is, the probability that he is the burglar?
 
-\showCode{R}{Code/datacollect-baserate.R} %
+\showChunk{R}{Code/datacollect-baserate.R}{prob-baserate}
 
 Running the above code shows that Teddy is the burglar with a probability of 
 \inlnR{```cat(p_bneg)```}[p_bneg], which means that Teddy was \emph{not}
@@ -877,7 +877,12 @@ the prevalence of the disease and the probability of a false positive
 \citep{darkdata_ch2}.
 
 \hypertarget{further}{%
-\section{Further Examples}\label{sec:further}}
+\section{Simulation-Based Probability Puzzles}\label{sec:further}}
+Some probability problems are too intricate to solve cleanly with pencil and
+paper, but yield readily to simulation. The two puzzles below illustrate
+this approach.
+
+\subsection{Henry's Choice}
 
 \begin{example}[Henry's Choice\index{Henry's choice}\footnote{\url{https://www.braingle.com/brainteasers/20227/loaded-revolver.html}}]
 Henry has been caught stealing cattle, and is brought into town for justice. The
@@ -908,7 +913,7 @@ position out of the six possible chambers that would be in position.
 
 Let's solve this problem using the following simulation.
 
-\showCode{R}{Code/probability-HenryChoice.R}
+\showChunk{R}{Code/probability-HenryChoice.R}{prob-henry-choice}
 \runR{Code/probability-HenryChoice.R}{HenryChoice}{}
 
 In the above code, we assume that the bullets are in chambers 1 and 2. \wingding{1} simulates \lstinline{n} rounds of spin-and-shoot and
@@ -930,9 +935,9 @@ before pulling the trigger as
 approximate probability for keeping shooting as
 \inlnR{```cat(prob.revolver[2])```}[probability_prob.revolver2], respectively.
 
-The technique of simulation is useful in finding answers in very complicated
-problems. Consider the following example modified from
-\cite{flajolet2009analytic}.
+\subsection{The 100 Prisoners Problem}
+
+Consider the following example modified from \cite{flajolet2009analytic}.
 
 \begin{example}[100 Prisoners\index{100 prisoners}]
 In a prison, there are 100 death row prisoners who are numbered from 1
@@ -1010,11 +1015,21 @@ while the smart strategy gives a survival probability close to 0.3.
 % football code
 
 \section{Summary}
-This chapter covered basic concepts of probability and provided examples for how
-probability can help interpret real-life phenomena. Faced with counter-intuitive
-and challenging probability problems, we were able to leverage numerical
-simulation techniques to gain deeper insights and find solutions easily. Moving
-forward, the next chapter will focus on two important probability theorems.
+This chapter introduced the foundations of probability, including sample spaces,
+events, and the rules for computing probabilities of unions and intersections.
+We defined \emph{conditional probability}---the probability of an event given
+that another has occurred---and derived \emph{Bayes' rule}, which lets us
+reverse the direction of conditioning. Bayes' rule proved essential for
+understanding the \emph{base-rate fallacy}: when a condition is rare,
+even an accurate test yields a surprisingly high rate of false positives.
+
+We also explored a collection of counter-intuitive results---intransitive dice,
+the birthday problem, Simpson's paradox, the Monty Hall problem, and
+others---that show how probability can defy everyday intuition.
+Throughout, we used \R\ simulation as a tool for verifying analytical answers
+and for tackling problems that are difficult to solve by hand.
+In the next chapter we will focus on two important probability theorems that
+underpin much of statistical inference.
 
 \section{Problems}
 
@@ -1028,6 +1043,55 @@ from a list of one million names one thousand times.
 Use simulation to find the probability that some prisoners start from opening
 the same drawer if they all start with a draw at random.
 \emph{Hint:} Consider the birthday problem in Example~\ref{exam:birthday}.
+\end{exercise}
+
+\begin{exercise}
+In Example~\ref{exam:blood-type}, Teddy is detained because his blood type
+matches blood found at the scene. The chapter uses simulation to show that
+the probability Teddy is actually the burglar is far below 95\%.
+Use Bayes' rule (Equation~\ref{eq:bayes}) to derive this probability
+analytically.
+
+Let $T$ be the event ``Teddy's blood type is $B-$'' and $+$ be the event
+``the test result is positive.'' The relevant quantities are:
+\begin{itemize}
+  \item $P(T) = 0.02$ (prevalence of $B-$ in London)
+  \item $P(+ \mid T) = 1.0$ (the test never misses a true $B-$)
+  \item $P(+ \mid \overline{T}) = 0.05$ (false-positive rate)
+\end{itemize}
+\begin{enumerate}
+  \item Use the law of total probability to compute $P(+)$, the overall
+    probability of a positive test result.
+  \item Apply Bayes' rule to find $P(T \mid +)$, the probability that
+    Teddy actually has blood type $B-$ given a positive test. Compare
+    your answer to the simulation result from the chapter.
+  \item Repeat the calculation with $P(T) = 0.05$ and then $P(T) = 0.10$.
+    How does the prevalence of $B-$ blood affect the conclusion?
+    At what prevalence would the prosecutor's claim of 95\% actually be
+    correct?
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}
+Return to the intransitive dice from the section
+``Intransitivity'' (Section~\ref{sec:Intransitive-Dice}).
+Recall that die A has sides 2, 2, 4, 4, 9, 9; die B has sides
+1, 1, 6, 6, 8, 8; and die C has sides 3, 3, 5, 5, 7, 7.
+All three dice have the same expected value of 5.
+
+Now consider a fourth die, D, with sides 1, 1, 5, 5, 9, 9---also
+with expected value 5.
+\begin{enumerate}
+  \item Adapt the simulation code from the chapter to estimate the winning
+    probability for all six pairwise matchups among A, B, C, and D.
+  \item Does Die D beat any of the others more than half the time?
+    Is there a die it consistently loses to? You should find a
+    surprising result---describe it and think about why it might occur.
+  \item Try modifying Die D's face values (keeping the expected value
+    equal to 5) to see if you can construct a fourth die that creates a
+    four-die intransitive cycle: $D > A > B > C > D$. Report the values
+    you tried and the winning probabilities your simulation produced.
+\end{enumerate}
 \end{exercise}
 
 %%% Local Variables:

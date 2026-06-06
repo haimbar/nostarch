@@ -1,3 +1,4 @@
+#label===prob-two-children
 set.seed(123)
 kids <- c("boy", "girl")                                            # (@\wingding{1}@)
 n <- 1000

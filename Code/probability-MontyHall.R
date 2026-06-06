@@ -1,3 +1,4 @@
+#label===prob-monty-hall
 set.seed(123)
 n <- 1000
 prize <- rep(NA, n)                    # (@\wingding{1}@)

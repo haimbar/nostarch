@@ -1,3 +1,4 @@
+#label===prob-intransitive-dice
 set.seed(123)
 A <- c(2, 2, 4, 4, 9, 9)
 B <- c(1, 1, 6, 6, 8, 8)
@@ -15,3 +16,4 @@ cat("The proportion that Die B gave a value greater than Die C:", bc,
     "\n")
 cat("The proportion that Die C gave a value greater than Die A:", ca,
     "\n")
+#===end
