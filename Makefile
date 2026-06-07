@@ -1,10 +1,8 @@
-# Use the cache, compile from generated files, remove temporary code files
+# Build a self-contained copy in tmpoverleaf/, compile it, then rsync to Overleaf.
+# Usage: make overleaf              (compile only)
+#        make overleaf DEST=~/Documents/GitHub/<project-id>/  (compile + rsync)
 overleaf:
-	touch ForceCache
-	xelatex -shell-escape sidsmain.tex
-	bibtex sidsmain
-	makeindex sidsmain
-	xelatex -shell-escape sidsmain.tex
+	python3 make_overleaf.py $(DEST)
 
 clean:
 	rm -f sidsmain.aux generated/*.txt  sidsmain.ind

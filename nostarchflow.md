@@ -28,21 +28,51 @@ There is an option to stop the runcode server, in case we see that code is not p
 
 #### Phase 2: passing the chapter to NoStarch for editing
 
-When we are done with our draft, we have to build the pdf file from cache, so that when it is compiled by OverLeaf it will not need the runcode package.
-Before we copy new chapters to OverLeaf, we have to run:
+When we are done with our draft, we first rebuild everything from scratch so the cache is up to date:
 ```
 make stopserver
 make build
-make overleaf
 ```
 
-That way, the copy they will get will be the latest (because we build from scratch) but will allow them to compile it without the talk2stat server (because make overleaf forces the compilation to run in the cache mode).
+Then we use `make_overleaf.py` to prepare a self-contained copy for OverLeaf. This script:
+1. Creates a `tmpoverleaf/` folder (git-ignored) with all necessary files.
+2. **Inlines** every `\inlnR` and `\includeOutput` call by replacing it with the cached output from `generated/`. This avoids the zero-bytes-in-output bug that occurs on OverLeaf when the talk2stat server is not running.
+3. Compiles the PDF locally to verify it works.
+4. Rsyncs `tmpoverleaf/` to the local OverLeaf repo (excluding `.git` and compiled artefacts).
 
+To do a dry run first (see what would be transferred without writing anything):
 ```
-rsync -crv --dry-run --exclude={'uconn-pcs','.git','tmp','proposal','styfiles','.DS_Store','fonts','.gitignore','ForceCache','Makefile*','R.config','Rdebug.txt','nohup.out','ToDo.md','talk2stat.log','serverPIDR.txt'} nostarch/ OverLeaf/
+python3 make_overleaf.py --dry-run ~/Documents/GitHub/62d8236139638c60adaa065c/
 ```
 
-In principle, we will not have to change the main tex file unless we add a chapter. If all we did was to add a chapter, then we can copy the chapter's files to the OverLeaf repo, and then git add/commit/push the changes. At this point, the two repos should be synchronized.
+If the dry run looks good, run without `--dry-run`:
+```
+python3 make_overleaf.py ~/Documents/GitHub/62d8236139638c60adaa065c/
+```
+
+Equivalently via make:
+```
+make overleaf DEST=~/Documents/GitHub/62d8236139638c60adaa065c/
+```
+
+Finally, push the changes to OverLeaf's git remote. OverLeaf requires a personal git authentication token (not your password). Generate one at https://www.overleaf.com/user/settings under **Git Integration**, then configure the remote once:
+```
+cd ~/Documents/GitHub/62d8236139638c60adaa065c
+git remote set-url origin https://git:<YOUR_TOKEN>@git.overleaf.com/62d8236139638c60adaa065c
+```
+
+Then commit and push:
+```
+git add -A
+git commit -m "sync from local project"
+git push origin master
+```
+
+Note: OverLeaf only accepts the `master` branch and does not allow force pushes. If the push is rejected because the remote is ahead, pull first:
+```
+git pull --no-rebase --allow-unrelated-histories -X ours origin master
+git push origin master
+```
 
 #### Phase 3: updating our repo with NoStarch edits
 
@@ -58,9 +88,14 @@ Then, we can git add/commit/push to our nostarch repo and now the chapters which
 
 #### Phase 4: updating the NoStarch repo with our edits
 
-After we get the edits and comments from NoStarch and update our repor, we will still be able to make changes. This is essentially like phase 2, except for one thing: the files we've edited are not new to the OverLeaf repo. Identifying the changes manually is cumbersome, and using symlinks has issues (mentioned above), so we use rsync, but reverse the source and the destination. The dry-run version looks like this:
+After incorporating NoStarch's comments and making further changes, pushing back to OverLeaf is the same as Phase 2:
 ```
-rsync -crv --dry-run --exclude={'uconn-pcs','.git','tmp','proposal','styfiles','.DS_Store','fonts','.gitignore','ForceCache','Makefile*','R.config','Rdebug.txt','nohup.out','ToDo.md','talk2stat.log','serverPIDR.txt'} nostarch/ OverLeaf/
+make stopserver
+make build
+python3 make_overleaf.py ~/Documents/GitHub/62d8236139638c60adaa065c/
+cd ~/Documents/GitHub/62d8236139638c60adaa065c
+git add -A
+git commit -m "sync from local project"
+git push origin master
 ```
-Then, we can git add/commit/push the OverLeaf repo, and again the completed chapters are synchronized.
 
