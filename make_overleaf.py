@@ -189,8 +189,21 @@ def transform_tex(text: str) -> str:
     n = len(text)
 
     while i < n:
-        if text[i] != "\\":
-            result.append(text[i])
+        ch = text[i]
+
+        # Respect LaTeX line comments: copy % ... \n verbatim so that
+        # commented-out commands like "% \includeOutput{...}" are not replaced.
+        if ch == "%" and (i == 0 or text[i - 1] != "\\"):
+            eol = text.find("\n", i)
+            if eol == -1:
+                result.append(text[i:])
+                break
+            result.append(text[i : eol + 1])
+            i = eol + 1
+            continue
+
+        if ch != "\\":
+            result.append(ch)
             i += 1
             continue
 
@@ -206,7 +219,7 @@ def transform_tex(text: str) -> str:
             i = new_i
             continue
 
-        result.append(text[i])
+        result.append(ch)
         i += 1
 
     return "".join(result)
