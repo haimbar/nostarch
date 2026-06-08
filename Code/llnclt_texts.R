@@ -6,8 +6,8 @@ set.seed((40001))
 for (i in 1:length(ssize)) {
     myMsg[i] <- mean(12*rpois(ssize[i], 10))  # (@\wingding{1}@)
 }
-plot(ssize, myMsg, pch=17, col="blue", axes=FALSE, xlab="Sample Size",
-     ylab="Average number of texts")
+plot(ssize, myMsg, pch=17, col="blue", axes=FALSE,
+	xlab="Sample Size", ylab="Average number of texts")
 axis(1); axis(2)
 #===end
 abline(h=12*10, lwd=2,col=2)

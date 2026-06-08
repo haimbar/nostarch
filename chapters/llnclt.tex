@@ -9,7 +9,8 @@
 
 \hypertarget{ch:llnclt}{%
 %  \chapter{The Law of Large Numbers and the Central Limit Theorem}\label{ch:llnclt}}
-\chapter{Laws of Large Samples: Where Chaos Becomes Order}\label{ch:llnclt}}
+\chapter{The Law of Large Numbers and the Central Limit Theorem:
+The Pillars of Statistics}\label{ch:llnclt}}
 The previous chapter gave us probability as a language for describing
 uncertainty. Now we ask a practical question: when we collect data from a
 random process, what can we expect to see, and how does our confidence grow as
@@ -28,9 +29,12 @@ we'll be able to say to what extent we can trust our results, and also tell us
 how much data we need in order to draw conclusions with a certain degree of
 confidence. Without these results, conducting experiments would be meaningless,
 no matter how many samples are collected.
+We'll demonstrate both theorems through simulation across normal, binomial,
+and Poisson distributions. You'll see why the sample mean converges to
+the population mean (LLN), why its spread shrinks as $\sigma/\sqrt{n}$
+(CLT), and apply these ideas to IQ scores and birth-ratio problems.
 
-\section{Introduction}
-Let's start with a few simple examples which will be used in this chapter:
+Let's start with a few motivating examples that will run through the chapter:
 \begin{enumerate}
 \item We get a random sample of 200 people and give them an IQ test. What is
 the distribution of the scores in this sample? How close is it to the true
@@ -68,7 +72,7 @@ the curve of the function, and so on.
 
 This chapter deals with inference which can be derived from the mean of a
 population, and we show the (arguably) two most important results in statistics
--- the \emph{law of large numbers} (\emph{LLN}) and the \emph{central limit
+--- the \emph{law of large numbers} (\emph{LLN}) and the \emph{central limit
 theorem} (\emph{CLT}). Together, these two very general theorems make it
 possible to draw conclusions about the whole population, from a single sample!
 (as long as the sample represents the whole population and the sample
@@ -126,7 +130,7 @@ mathematical model is reasonable.)
 
 \begin{figure}[H]
 \includegraphics[width=0.6\textwidth]{images/chapter_4/qqplot1.pdf}
-\caption{A Q-Q plot}
+\caption{Normal Q-Q plot for the IQ sample of 200}
 \label{fig:ch4:qqplot1}
 \end{figure}
 
@@ -139,9 +143,9 @@ simulation but vary the sample size ($n$) and see what happens to the
 \showChunk{R}{Code/llnclt_IQ.R}{iq-lln-sim}
 
 In \wingding{1} we create a vector of sample sizes on a log scale, covering
-several orders of magnitude so the convergence\index{convergence} is easy to see. We will generate
+several orders of magnitude so the convergence\index{convergence} is easy to see. We'll generate
 a random sample for each of these \lstinline{ns}. In \wingding{2} we initialize a vector
-which will hold all the sample means (at first, they are set to zero). The
+which will hold all the sample means (at first, they're set to zero). The
 \lstinline{for} loop in \wingding{3} is the same as the previous demonstration,
 but in each iteration we increase the sample size, which is the first argument
 of the function \lstinline{rnorm()}. The mean from the $i$-th sample is stored
@@ -153,7 +157,7 @@ shown as a horizontal line.
 
 \begin{figure}[H]
 \includegraphics[width=0.5\textwidth]{images/chapter_4/LLNIQ.pdf}
-\caption{Visualizing the Law of Large Numbers -- normal data}
+\caption{Visualizing the Law of Large Numbers --- normal data}
 \label{fig:ch4:LLNdemo}
 \end{figure}
 
@@ -162,10 +166,11 @@ gets smaller as the sample size gets larger, but this is the result of the
 \emph{Central Limit Theorem}, which will be discussed later in this chapter.
 
 \subsection{The Roulette Wheel}
-Here, the outcome is binary -- we either win or lose a bet. The probability of
+Here, the outcome is binary --- we either win or lose a bet. The probability of
 winning if we choose the red color, is $18/37$.  Let's simulate 40 bets at the
-roulette wheel, where, in each we put a dollar on red. Each bet is won with a
-Bernoulli distribution, $Ber(18/37)$ and we repeat it 40 times. Equivalently,
+roulette wheel, where, in each we put a dollar on red. Each bet follows a \emph{Bernoulli distribution}\index{Bernoulli distribution},
+$Ber(p)$, which takes the value 1 (win) with probability $p$ and 0 (loss) with
+probability $1-p$. Here $p=18/37$, and we repeat it 40 times. Equivalently,
 we can look at it as a single binomial sample, with $n=40$ and $p=18/37$.
 
 %\runR{Code/llnclt_roulette.R}{roulette}
@@ -173,7 +178,7 @@ we can look at it as a single binomial sample, with $n=40$ and $p=18/37$.
 
 Run this code. You should get in this particular sample of 40 bets, that the
 probability of winning (the mean of \lstinline{samp2}) is
-\inlnR{```cat(mean(samp2))```}[llnsamp2m] (greater than 0.5.) This seems great -- if we
+\inlnR{```cat(mean(samp2))```}[llnsamp2m] (greater than 0.5.) This seems great --- if we
 keep going we might get rich! However, let's see what happens to the sample
 mean (which is the probability of winning) as we increase $n$. The following
 code is nearly identical to the one used in the previous example, except that
@@ -184,13 +189,13 @@ in this case we draw the random samples from a \emph{binomial} distribution (in
 
 We see the results in Figure~\ref{fig:ch4:LLNdemoBinomial}. As before, the sample mean
 gets closer to the true mean of the distribution, $p=18/37$, which is
-less than 0.5, so if we keep placing bets we will end up losing money. In fact,
+less than 0.5, so if we keep placing bets we'll end up losing money. In fact,
 we can check how much we will lose if we bet \$1 each time, and do it 10,000
 times.
 
 \begin{figure}[H]
 \includegraphics[width=0.5\textwidth]{images/chapter_4/LLNroulette.pdf}
-\caption{Visualizing the Law of Large Numbers -- binomial data}
+\caption{Visualizing the Law of Large Numbers --- binomial data}
 \label{fig:ch4:LLNdemoBinomial}
 \end{figure}
 
@@ -206,7 +211,7 @@ The probability of winning in this simulation should be
 means that we lost  \inlnR{```cat(prettyNum(10000-2*sum(roulette), big.mark = ","))```}[llnprettysum2] dollars.
 
 To the casino it doesn't matter if one person bets \$1,000,000 or if 1,000
-people each bets on \$1,000 -- in both cases the casino will win with
+people each bets on \$1,000 --- in both cases the casino will win with
 probability 19/37 and will have a positive net gain (you can't beat the house).
 Casinos know that, and use the law of large numbers in order to ensure that in
 the long run, they will win.
@@ -221,33 +226,32 @@ run the following code:
 \showChunk{R}{Code/llnclt_texts.R}{texts-lln-sim}
 
 In each day we count messages over 12 hours, so in \wingding{1} we multiply the
-(hourly) random sample from the Poisson distribution by 12. Figure
-\ref{fig:ch4:LLNdemoPoisson} shows the results.
+(hourly) random sample from the Poisson distribution by 12. Figure~\ref{fig:ch4:LLNdemoPoisson} shows the results.
 
 \begin{figure}[H]
 \includegraphics[width=0.5\textwidth]{images/chapter_4/LLNtexts.pdf}
-\caption{Visualizing the Law of Large Numbers -- Poisson data}
+\caption{Visualizing the Law of Large Numbers --- Poisson data}
 \label{fig:ch4:LLNdemoPoisson}
 \end{figure}
 
 If we continue to get text messages at this fixed rate over a long period of
 time, and we calculate the average daily messages (from 8am to 8pm) we see that
-the average converges to 12*10=120 messages per day.
+the average converges to $12 \times 10 = 120$ messages per day.
 
 
 
-\subsection{The LLN\index{LLN} -- An Intuitive Statement of the Theorem}
+\subsection{The LLN\index{LLN}: An Informal Statement}
 Informally, the law of large numbers states that the results of an experiment
 tend to settle down to a fixed average when the experiment is repeated many
 times. In other words, as the sample size increases, the sample mean will get
 closer to the true population mean.
 
-The LLN is very general -- it doesn't matter if the question is about how many
+The LLN is very general --- it doesn't matter if the question is about how many
 boy-births we expect to see (\emph{binomial distribution}\index{binomial distribution}), the number of
 received text messages (\emph{Poisson distribution}\index{Poisson distribution}), or if we measure IQ
 (\emph{normal distribution}). The only requirements are that the samples are
 independent, and identically distributed, and that the true distribution
-actually has a mean. (We will see an example where this is not the case.)
+actually has a mean. (We'll see an example where this is not the case.)
 
 It's important to emphasize that the LLN doesn't imply that the results of
 future experiments will balance out what already happened! If we bet 100 times
@@ -255,6 +259,15 @@ at the roulette wheel and lost each time, this doesn't mean that we have a
 better chance of winning the next bet. All the LLN is saying is that if we
 continue to play many times, the overall probability that we win in each round
 will converge to 18/37.
+
+\medskip
+\noindent\textbf{Law of Large Numbers.} Let $X_1, X_2, \ldots, X_n$ be
+i.i.d.\ random variables with mean $\mu$. The sample mean
+\[
+  \bar{X}_n = \frac{1}{n}\sum_{i=1}^{n} X_i
+\]
+converges to $\mu$ as $n \to \infty$.
+\medskip
 
 \subsection{When the LLN\index{LLN} Doesn't Work}
 We have two groups of students who have to take a math test. Group A has a mean
@@ -284,7 +297,7 @@ code,  shows the distributions of the difference between the average grades
 ($d_{AB}$) on the left, and of the ratio ($r_{AB}$) on the right.  What we see
 here is that the mean difference between the groups, $d_{AB}$, converges to the
 true difference between the groups (10), but the ratio, $r_{AB}$, doesn't
-converge -- $n$ can be as large as we want, and we will still see ratios that
+converge --- $n$ can be as large as we want, and we'll still see ratios that
 are quite extreme. (Note that the mean of a ratio between two distributions is
 generally not equal to the ratio of the means of the distributions, so we don't
 expect $r_{AB}$ to converge to exactly 70/60.)
@@ -302,7 +315,7 @@ in its tails (exactly Cauchy when both means are zero), which
 doesn't have a theoretical mean, so the LLN doesn't apply to the ratios
 between the grades of the two groups,  $r_{AB}$.
 
-Although the LLN applies to almost any distribution we will ever encounter, the
+Although the LLN applies to almost any distribution we'll ever encounter, the
 lesson here is that taking the ratio between two perfectly well-behaved
 distributions may lead to a distribution to which the LLN doesn't apply. Other
 manipulations of random variables may lead to similar results.
@@ -328,8 +341,8 @@ distribution must have a finite variance. Here, variance refers to the
 as opposed to the sample variance we compute from data (which we introduced
 in Chapter~\ref{ch:rintro}).
 
-\subsection{CLT -- Examples}
-We will draw a random sample of size $n$ from the following distributions:
+\subsection{CLT Examples}
+We'll draw a random sample of size $n$ from the following distributions:
 \begin{itemize}
 %\item Standard normal (the \lstinline{rnorm(n,0,1)} function).
 %\item Poisson with rate parameter $\lambda=3$ (use \lstinline{rpois(, 3)}).
@@ -337,9 +350,9 @@ We will draw a random sample of size $n$ from the following distributions:
 \item Binomial with probability 0.15.
 \end{itemize}
 
-In each case, we will plot a histogram of the sample, and overlay the
-probability density function on top of it.  We will repeat it 10,000 times and
-each time calculate the sample mean. Then, we will plot a histogram of the
+In each case, we'll plot a histogram of the sample, and overlay the
+probability density function on top of it.  We'll repeat it 10,000 times and
+each time calculate the sample mean. Then, we'll plot a histogram of the
 10,000 sample means.
 
 \subsubsection{Exponential Distribution}
@@ -364,8 +377,8 @@ with rate 5.5}
 \label{fig:ch4:CLTexp}
 \end{figure}
 
-To understand the CLT, we will draw 10,000 samples, calculate the mean of each
-sample, and plot a histogram of those 10,000 sample means. We will first do it
+To understand the CLT, we'll draw 10,000 samples, calculate the mean of each
+sample, and plot a histogram of those 10,000 sample means. We'll first do it
 with $n$=50, like so:
 
 \showChunk{R}{Code/llnclt_CLTexp.R}{clt-exp-sim}
@@ -376,8 +389,8 @@ sample, and update the vector \lstinline{allMeans}. Then, we plot the histogram
 and use \lstinline{abline} to show the true mean of the population (which is
 1/5.5).
 
-Repeat the same code, but change the first line to \lstinline{n <- 500}. Figure
-\ref{fig:ch4:CLTexp2} shows the results for $n=50$ (left) and $n=500$ (right).
+Repeat the same code, but change the first line to \lstinline{n <- 500}.
+Figure~\ref{fig:ch4:CLTexp2} shows the results for $n=50$ (left) and $n=500$ (right).
 
 \begin{figure}[H]
 \includegraphics[width=0.9\textwidth]{images/chapter_4/CLTexp2.pdf}
@@ -423,7 +436,7 @@ that the \emph{only} value that we got from \emph{a single} experiment is close
 to the true value, because the range in which we can find the true value is
 narrower.
 
-\subsubsection{Application to Child Births -- Boy/Girl Ratio}
+\subsubsection{Application: Boy/Girl Birth Ratio}
 In 2021 the boy to girl birth ratio in the USA is estimated to be 1.05. If we
 took a random sample of 300 newborns across the USA, how many do you expect to
 be boys? Run the following code:
@@ -462,15 +475,34 @@ means.
 30,000)} \label{fig:ch4:CLTboygirl}
 \end{figure}
 
+The key quantitative result of the CLT is the formula for the
+\emph{standard error}\index{standard error} --- the standard deviation of the sample mean:
+\[
+  \operatorname{SD}(\bar{X}) = \frac{\sigma}{\sqrt{n}}
+\]
+where $\sigma$ is the standard deviation of the individual observations.
+Doubling the sample size shrinks the spread of the sample mean by a factor of
+$\sqrt{2}$, not by a factor of 2.
 
-\section{Application -- the  IQ Scores}
+\medskip
+\noindent\textbf{Central Limit Theorem.} Let $X_1, \ldots, X_n$ be i.i.d.\
+random variables with mean $\mu$ and finite variance $\sigma^2$. For large
+$n$, the sample mean $\bar{X}_n$ is approximately normally distributed:
+\[
+  \bar{X}_n \;\approx\; N\!\left(\mu,\;\frac{\sigma^2}{n}\right).
+\]
+The approximation improves as $n$ increases, and holds regardless of the shape
+of the original distribution.
+\medskip
+
+\section{Application: IQ Scores}
 Let's revisit the IQ example, where we assumed that in the general population
 IQ scores have a normal distribution with mean of 100 and  standard deviation
 of 15.  We drew a sample of 200 people, and calculated the sample mean and
 standard deviation, which turned out to be 99.4, and 15.6, respectively.
 
 In the following code, we plot two curves on top of the histogram we obtain
-from the sample -- one for the true normal distribution, and one using the
+from the sample --- one for the true normal distribution, and one using the
 sample mean and sample standard deviation:
 \showChunk{R}{Code/llnclt_IQ2.R}{iq-fit-plot}
 %\runR{Code/llnclt_IQ2.R}{cltiq2}
@@ -523,23 +555,61 @@ the area under the curve.
 \label{fig:ch4:CLTIQMensa}
 \end{figure}
 
+\subsection{Sample Size Planning}
+
+How large a sample do we need to estimate a population mean to within a
+specified margin?  The standard error gives a direct answer.  We want the
+spread of the sample mean to satisfy
+\[
+  \operatorname{SD}(\bar{X}) = \frac{\sigma}{\sqrt{n}} \leq E,
+\]
+where $E$ is our target margin of error.  Solving for $n$:
+\[
+  n \;\geq\; \left(\frac{\sigma}{E}\right)^2.
+\]
+For IQ scores $\sigma = 15$.  The following code computes the required
+sample size for several values of $E$:
+\showChunk{R}{Code/llnclt_IQ2.R}{iq-samplesize}
+%\runR{Code/llnclt_IQ2.R}{iq-samplesize}
+
+The output is:
+\includeOutput{iq-samplesize}
+
+Cutting the margin of error in half quadruples the required sample size --- a
+direct consequence of the $\sqrt{n}$ in the denominator.  Note that
+$\operatorname{SD}(\bar{X})$ measures \emph{typical} variability, not a
+hard ceiling.  A sample of $n = 57$ will usually produce an estimate
+within 2 IQ points of the truth, but not with certainty.  In
+Chapter~\ref{ch:estimation} we will turn the standard error into a formal
+\emph{confidence interval} that carries an explicit probability guarantee.
 
 \section{Summary}
-The LLN and CLT are very powerful results. Keep in mind that in real-life when
-we do not know the true distribution, we can usually get just \textit{one
-sample}, not 10,000 like we did in our simulations.  However, these theorems
-tell us that as long as this one sample is large enough, we can get a very good
-approximation for the distribution of the sample mean, \emph{as if we had
-multiple samples}.
-Not only that, but (almost) regardless of the distribution of the data, the sample mean
-will have a normal distribution with mean which is equal to the true mean of
-the original distribution (even if it's skewed, or discrete), and the variance
-of the sample mean will shrink as we increase the sample size.  In the next
-chapter we will see how the CLT can be used to test hypotheses and construct
-confidence intervals for estimates. For example, we'll be able to answer
-questions such as: ``You are given the IQ test results of 13 people and they
-are: 139, 104, 115, 151, 116, 141, 117, 105, 134, 155, 130, 139, 121. Is this
-group different than the overall population?''
+This chapter introduced the two most important results in statistics.
+The \emph{Law of Large Numbers} says that the sample mean
+$\bar{X}_n$ converges to the true population mean $\mu$ as the sample size
+grows --- demonstrated here for normal, binomial, and Poisson data.
+The \emph{Central Limit Theorem} goes further: regardless of the shape of
+the underlying distribution, $\bar{X}_n$ is approximately normally
+distributed with mean $\mu$ and standard deviation $\sigma/\sqrt{n}$.
+This standard deviation --- called the \emph{standard error} --- tells us
+how quickly uncertainty shrinks: doubling the sample size reduces it by a
+factor of $\sqrt{2}$, not 2.
+
+In real life we usually have \emph{one} sample, not 10,000 like in our
+simulations. These theorems justify treating that single sample mean as if
+it came from a normal distribution, which makes it possible to draw
+rigorous conclusions about the whole population.  Throughout the chapter
+we used \R\ simulation both to verify the theorems and to answer applied
+questions --- the Mensa IQ threshold, the expected loss at roulette, and
+why 14,800 boy births in a sample of 30,000 would be surprisingly low.
+
+The CLT's normal approximation is not free: it requires a sufficiently
+large sample and a distribution with finite variance. For very small
+samples, or data from heavily skewed or heavy-tailed distributions, the
+approximation can be poor. In the next chapter we'll build directly on the
+CLT to test hypotheses and construct confidence intervals, and we'll
+discuss rules of thumb for when $n$ is large enough for the approximation
+to be trusted.
 
 \section{Problems}
 
@@ -561,6 +631,24 @@ Using the IQ distribution (normal with mean 100 and standard deviation 15),
 use the \lstinline{pnorm()} function to find the probability that a randomly
 selected person has an IQ above 130 (two standard deviations above the mean).
 Then verify with a simulation of 100,000 random draws.
+\end{exercise}
+
+\begin{exercise}
+The exponential distribution with rate $\lambda$ has standard deviation
+$\sigma = 1/\lambda$. Set $\lambda = 4$ and simulate 10,000 sample means
+for $n = 16$ and $n = 64$. Compute the standard deviation of the 10,000
+simulated means in each case, and compare it to the theoretical standard
+error $\sigma/\sqrt{n}$. By what factor does the standard error shrink when
+$n$ is multiplied by 4?  Does this match the formula?
+\end{exercise}
+
+\begin{exercise}
+At the roulette wheel, a single bet on red is won with probability $p=18/37$.
+Over 1,000 bets the number of wins is approximately
+$N\!\left(np,\,np(1-p)\right)$ by the CLT.
+Use \lstinline{pnorm()} to estimate the probability of winning more than 520
+times out of 1,000. Then compute the exact probability with
+\lstinline{pbinom()} and compare the two answers.
 \end{exercise}
 
 %%% Local Variables:

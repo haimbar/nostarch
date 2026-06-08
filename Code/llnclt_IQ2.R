@@ -32,3 +32,9 @@ polygon(c(xx, rev(xx)), c(rep(0,length(xx)), rev(yy)), col="green", border="gree
 
 dev.off()
 
+#label===iq-samplesize
+sigma <- 15
+for (E in c(5, 3, 2, 1))
+    cat(sprintf("E = %d  =>  n = %d\n", E, ceiling((sigma / E)^2)))
+#===end
+
