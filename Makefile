@@ -8,7 +8,7 @@ clean:
 	rm -f sidsmain.aux generated/*.txt  sidsmain.ind
 
 deepclean:
-	rm -fr sidsmain.aux sidsmain.mw sidsmain.ind generated/*
+	rm -fr sidsmain.aux sidsmain.mw sidsmain.ind generated/* images/chapter_*
 
 # stop the talk2stat server, but don't compile the book:
 stopserver: deepclean
