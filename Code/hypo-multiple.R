@@ -43,10 +43,8 @@ mean(sig_count >= 1)
 #===end
 
 
-min_p <- apply(all_p, 2, min)
-
-pdf("images/chapter_5/hypo-minp.pdf", width = 5, height = 4)
 #label===minp
+min_p <- apply(all_p, 2, min)
 hist(min_p, breaks = 30, col = "lightgreen",
      main = "Smallest p-value from Each Experiment",
      xlab = "Minimum p-value")

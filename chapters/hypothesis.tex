@@ -108,7 +108,7 @@ of the test. Power measures how well the test detects a real effect.
 
 \begin{example}[Lady tasting tea]
 R. A. Fisher's ``Lady Tasting Tea'' experiment, described in his 1935 
-book \emph{The Design of Experiments} \citep{fisher1935design},
+book \emph{The Design of Experiments}~\citep{fisher1935design},
 became one of the earliest and 
 most elegant demonstrations of formal hypothesis testing 
 \citep{salsburg2002lady}. Fisher recounted an event at Rothamsted 
@@ -280,45 +280,6 @@ a \emph{Monte Carlo approximation}\index{Monte Carlo approximation}.
 That means we draw many random permutations and use them to approximate
 the sampling distribution under $H_0$.
 
-\begin{example}[Familial clustering of certain diseases]
-\runR{Code/hypo-familial.R}{hypo-familial}
-
-Consider a study of 10 families, each with 4 relatives participating.
-Each person either shows a certain symptom (coded 1) or not (coded 0).
-We want to test whether the symptom tends to appear in clusters within
-families. In other words, do relatives share the symptom more often
-than would occur by chance?
-
-Here is what the data looks like: \why{should show the results instead of code here.}
-\showChunk{R}{Code/hypo-familial.R}{dataHead}
-
-Consider a test statistic $T$ defined as the total number of
-within-family affected pairs. Here an affected pair means a pair of
-relatives who both have symptom value 1.
-\why{Need to explain how $T$ is connected with the code below. Maybe using a
-  the simpler example of comparing two groups first?}
-
-\showChunk{R}{Code/hypo-familial.R}{familyStat}
-
-Under the null hypothesis, there is no family clustering of this
-symptom. In that case, the symptom labels can be randomly shuffled
-across all individuals. For each permutation, we compute the total
-number of within-family affected pairs. The empirical distribution of
-these counts gives us a way to judge whether the observed $T$ is
-unusually large. The p-value is approximated by the proportion of
-permuted test statistics that are at least as large as the observed
-test statistic.
-
-\showChunk{R}{Code/hypo-familial.R}{familyPvalue}
-
-
-We apply the functions to the example dataset and get the observed test
-statistic and its p-value.
-
-\showChunk{R}{Code/hypo-familial.R}{application}
-\end{example}
-
-\why{The following example should comes before the above one.}
 \begin{example}[Permutation test for two-group comparison]
 To make this concrete, let us consider a two-group comparison
 example. Suppose we have two
@@ -378,6 +339,48 @@ under $H_0$.
 \end{example}
 
 
+\begin{example}[Familial clustering of certain diseases]
+\runR{Code/hypo-familial.R}{hypo-familial}
+
+Consider a study of 10 families, each with 4 relatives participating.
+Each person either shows a certain symptom (coded 1) or not (coded 0).
+We want to test whether the symptom tends to appear in clusters within
+families. In other words, do relatives share the symptom more often
+than would occur by chance?
+
+Here is what the data looks like:
+\showChunk{R}{Code/hypo-familial.R}{dataHead}
+
+Consider a test statistic $T$ defined as the total number of 
+within-family affected pairs. Here, an ``affected pair'' means two 
+relatives in the same family who both have symptom value 1. If a 
+family has $k$ affected members, there are $k(k-1)/2$ such pairs. We 
+sum these counts across all families to get $T$. If the symptom 
+clusters within families, $T$ will be larger than expected by chance.
+
+The code below implements the calculation of $T$:
+
+\showChunk{R}{Code/hypo-familial.R}{familyStat}
+
+Under the null hypothesis, there is no family clustering of this
+symptom. In that case, the symptom labels can be randomly shuffled
+across all individuals. For each permutation, we compute the total
+number of within-family affected pairs. The empirical distribution of
+these counts gives us a way to judge whether the observed $T$ is
+unusually large. The p-value is approximated by the proportion of
+permuted test statistics that are at least as large as the observed
+test statistic.
+
+\showChunk{R}{Code/hypo-familial.R}{familyPvalue}
+
+
+We apply the functions to the example dataset and get the observed test
+statistic and its p-value.
+
+\showChunk{R}{Code/hypo-familial.R}{application}
+\end{example}
+
+
 Permutation tests rely on minimal assumptions, so they are useful when
 we do not want to assume a particular population distribution. A small
 p-value means that the observed statistic is unusual among the shuffled
@@ -400,8 +403,6 @@ Hypothesis tests are often judged by two properties: size and power.
 Size controls false positives. Power measures how well the test detects
 real effects.
 
-\why{For the target audience, should it be sufficient just introduce type I and
-  type II error rates?}
 The \emph{size} of a hypothesis test is the maximum probability of making a
 Type~I error. It is usually set equal to the significance level
 $\alpha$. For instance, if $\alpha = 0.05$, then a valid test should
@@ -433,14 +434,13 @@ is therefore not only about choosing a formula. It is also about
 understanding the errors we are willing to risk.
 
 In the next example, we will illustrate these 
-concepts by comparing two common tests for comparing two 
-samples: the t-test and the Wilcoxon test \why{mention that this is based on permutations}. Using simulations, 
+concepts by comparing two common methods for two-sample comparison: the t-test and the Wilcoxon test (which is based on the ranks of the data and can be viewed as a permutation test on those ranks). Using simulations, 
 we will examine their size and power under different 
 conditions and demonstrate how their performance varies.
 
 
 \begin{example}[Two-sample comparison]
-First, let’s see how we can perform the tests for one pair of datasets:
+First, let's see how we can perform the tests for one pair of datasets:
 \runR{Code/hypo-2samp.R}{hypo-2samp}
 \showCode{R}{Code/hypo-2samp.R}[2][9]
 
@@ -458,7 +458,7 @@ records their p-values.
 
 
 Here, \code{delta} represents the true difference between the means
-of the two groups. When \code{delta = 0}, there’s no real difference
+of the two groups. When \code{delta = 0}, there's no real difference
 (null hypothesis is true). For each test, we calculate the p-value to
 assess whether to reject the null hypothesis.
 
@@ -497,7 +497,8 @@ For the t-test, performance depends on the assumption of normality,
 while the Wilcoxon test is more robust under non-normal distributions
 like the Cauchy.
 
-\why{The figures need labels for the curves.}
+The solid line represents the t-test, and the dashed blue line represents the
+Wilcoxon test. \why{better to add label in the legend.}
 \begin{figure}[H]
 \includegraphics[width=0.6\textwidth]{images/chapter_5/hypo-power-normal.pdf}
 \caption{Empirical rejection rates for normal data}
@@ -569,9 +570,9 @@ high:
 
 \showChunk{R}{Code/hypo-multiple.R}{meansig}
 
-\why{Explain what this number is.}
+This represents the probability that at least one out of 20 independent tests will be significant at the 0.05 level when all null hypotheses are true. It is calculated as $1 - (1 - 0.05)^{20} \approx 0.6415$.
 This number is typically around 0.64. In fact, when testing 20 useless
-drugs at the 0.05 level, there is a $1 - 0.95^{20} \approx  64\%$
+drugs at the 0.05 level, there is a $1 - 0.95^{20} \approx 64\%$
 chance that at least one appears significant by accident.
 
 
@@ -583,7 +584,6 @@ This is one of the core issues of multiple testing.
 
 Every experiment has a ``best'' drug, the one with the smallest p-value.
 Let us look at that distribution.
-\why{\code{min_p} not defined in showed code.}
 \showChunk{R}{Code/hypo-multiple.R}{minp}
 
 Figure~\ref{fig:ch5:minp} shows that tiny p-values (like 0.01 or
