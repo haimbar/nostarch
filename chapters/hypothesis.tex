@@ -325,6 +325,7 @@ the observed difference in the sample means, $\bar x_1 - \bar x_2$,
 where $\bar x_1$ and $\bar x_2$ are, respectively, the sample mean of
 the 1st and 2nd groups, is simply due to chance.
 
+\runR{Code/hypo-perm.R}{hypo-perm}
 \showChunk{R}{Code/hypo-perm.R}{HypoPermSetup}
 
 Here, \code{xd} is the observed difference in means between $x_1$ and 
@@ -435,6 +436,7 @@ conditions and demonstrate how their performance varies.
 
 \begin{example}[Two-sample comparison]
 First, let’s see how we can perform the tests for one pair of datasets:
+\runR{Code/hypo-2samp.R}{hypo-2samp}
 \showCode{R}{Code/hypo-2samp.R}[2][9]
 
 
@@ -520,6 +522,7 @@ independent tests in parallel.
 
 We first write a function that performs one full screening round,
 returning 20 p-values from 20 two-sample t-tests.
+\runR{Code/hypo-multiple.R}{hypo-multiple}
 \showChunk{R}{Code/hypo-multiple.R}{do1screen}
 
 
