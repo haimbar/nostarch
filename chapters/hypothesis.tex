@@ -81,7 +81,7 @@ It only means that the data did not give enough evidence against it.
 As a warm-up, imagine flipping a fair coin 20 times and seeing 16
 heads. One way to judge this result is to build a pretend world where
 the coin is fair. We could simulate many sets of 20 fair-coin flips and
-count how often 16 or more heads appear. The Lady Tasting Tea example
+count how often 16 or more heads appear. The Lady Tasting Tea example below
 uses the same logic, but with cups instead of coins and with an exact
 count of all possible arrangements.
 
@@ -144,8 +144,8 @@ $H_0$ and quantifies the evidence against it. The choice of test
 statistic depends on the specific hypothesis and the structure of the 
 data. A test rejects $H_0$ if its test statistic, denoted by $T$, 
 falls into a designated \emph{rejection region}\index{\emph{rejection region}}. 
-The probability that $T$ falls in this region when $H_0$ is true is 
-called the \emph{significance level}, typically denoted by $\alpha$. 
+The probability that $T$ falls in this region when $H_0$ is true (Type I error) is 
+controlled by the \emph{significance level}, typically denoted by $\alpha$. 
 This threshold is usually chosen to be small, such as 0.05 or 0.01, 
 to limit the chance of making a Type~I error.
 
@@ -167,12 +167,12 @@ $H_0$ is true and measures how surprising the observed data are under
 that assumption. As shown in empirical studies, this misinterpretation 
 is widespread, even among statistically trained researchers 
 \citep{falk1995significance}. Understanding that the p-value reflects 
-compatibility between the data and the null model---not the truth of 
+compatibility between the data and the null hypothesis---not the truth of 
 the hypothesis---is essential for proper statistical reasoning.
 
 Here is a useful check: if a p-value is 0.03, it does not mean there
 is a 3\% chance that $H_0$ is true. It means that results at least this
-extreme would be uncommon if $H_0$ were true.
+extreme would be 3\% among all possible results if $H_0$ were true.
 
 
 \begin{example}[Lady tasting tea (continued)]
@@ -289,12 +289,14 @@ We want to test whether the symptom tends to appear in clusters within
 families. In other words, do relatives share the symptom more often
 than would occur by chance?
 
-Here is what the data looks like:
+Here is what the data looks like: \why{should show the results instead of code here.}
 \showChunk{R}{Code/hypo-familial.R}{dataHead}
 
 Consider a test statistic $T$ defined as the total number of
 within-family affected pairs. Here an affected pair means a pair of
 relatives who both have symptom value 1.
+\why{Need to explain how $T$ is connected with the code below. Maybe using a
+  the simpler example of comparing two groups first?}
 
 \showChunk{R}{Code/hypo-familial.R}{familyStat}
 
@@ -316,6 +318,7 @@ statistic and its p-value.
 \showChunk{R}{Code/hypo-familial.R}{application}
 \end{example}
 
+\why{The following example should comes before the above one.}
 \begin{example}[Permutation test for two-group comparison]
 To make this concrete, let us consider a two-group comparison
 example. Suppose we have two
@@ -386,7 +389,7 @@ that is true, then the shuffled datasets are reasonable versions of the
 world where the null hypothesis holds. The observed dataset is then
 compared with this collection of null-world datasets. If the observed
 test statistic is near the edge of that collection, the data are
-telling us that the null explanation may not be enough.
+telling us that the null explanation may not be true.
 
 
 \section{Properties of Hypothesis Tests}
@@ -397,7 +400,9 @@ Hypothesis tests are often judged by two properties: size and power.
 Size controls false positives. Power measures how well the test detects
 real effects.
 
-The \emph{size} of a hypothesis test is the probability of making a
+\why{For the target audience, should it be sufficient just introduce type I and
+  type II error rates?}
+The \emph{size} of a hypothesis test is the maximum probability of making a
 Type~I error. It is usually set equal to the significance level
 $\alpha$. For instance, if $\alpha = 0.05$, then a valid test should
 falsely reject $H_0$ about 5\% of the time when $H_0$ is true.
@@ -429,7 +434,7 @@ understanding the errors we are willing to risk.
 
 In the next example, we will illustrate these 
 concepts by comparing two common tests for comparing two 
-samples: the t-test and the Wilcoxon test. Using simulations, 
+samples: the t-test and the Wilcoxon test \why{mention that this is based on permutations}. Using simulations, 
 we will examine their size and power under different 
 conditions and demonstrate how their performance varies.
 
@@ -492,6 +497,7 @@ For the t-test, performance depends on the assumption of normality,
 while the Wilcoxon test is more robust under non-normal distributions
 like the Cauchy.
 
+\why{The figures need labels for the curves.}
 \begin{figure}[H]
 \includegraphics[width=0.6\textwidth]{images/chapter_5/hypo-power-normal.pdf}
 \caption{Empirical rejection rates for normal data}
@@ -563,7 +569,7 @@ high:
 
 \showChunk{R}{Code/hypo-multiple.R}{meansig}
 
-
+\why{Explain what this number is.}
 This number is typically around 0.64. In fact, when testing 20 useless
 drugs at the 0.05 level, there is a $1 - 0.95^{20} \approx  64\%$
 chance that at least one appears significant by accident.
@@ -577,7 +583,7 @@ This is one of the core issues of multiple testing.
 
 Every experiment has a ``best'' drug, the one with the smallest p-value.
 Let us look at that distribution.
-
+\why{\code{min_p} not defined in showed code.}
 \showChunk{R}{Code/hypo-multiple.R}{minp}
 
 Figure~\ref{fig:ch5:minp} shows that tiny p-values (like 0.01 or
