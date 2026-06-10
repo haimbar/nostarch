@@ -5,28 +5,25 @@
 
 ############################################################
 #label===read
-crashes_file <- "Data/nyc_crashes_lbdwk_2025.csv"
-
-df <- read.csv(crashes_file,
+df <- read.csv("Data/nyc_crashes_lbdwk_2025.csv",
                stringsAsFactors = FALSE)
 #===end
 
 
 ############################################################
 #label===inspect
-str(df)
-nrow(df)
-ncol(df)
-head(names(df))
+str(df)           # structure of the df
+nrow(df)          # number of rows of df
+ncol(df)          # number of columns of df
+head(names(df))   # first few variable names of df
 #===end
 
 
 ############################################################
 #label===rename_build
 old_names <- names(df)
-new_names <- tolower(old_names)
-new_names <- gsub(" ", "_", new_names)
-new_names <- gsub("\\.", "_", new_names)
+new_names <- tolower(old_names)          # force to lower cases
+new_names <- gsub("\\.", "_", new_names) # replace . with _
 #===end
 
 
@@ -39,8 +36,7 @@ head(names(df))
 
 ############################################################
 #label===dates_convert
-df$crash_date_date <- as.Date(df$crash_date,
-                              format = "%m/%d/%Y")
+df$crash_date_date <- as.Date(df$crash_date, format = "%m/%d/%Y")
 #===end
 
 

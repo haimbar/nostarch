@@ -21,7 +21,10 @@ science can be used together to answer questions with real-world data.
 
 We begin by reading the comma-separated values file, or CSV file. A CSV
 file is a plain text file that stores a data table. Each row is one
-record, and commas separate the values in that row.
+record, and commas separate the values in that row. The raw data was
+downloaded from NYC Open Data Portal and included all the crashes
+reported in the week containing the Labor Day of 2025. The first row
+of the CSV file contains the variable names.
 
 \showChunk{R}{Code/nyc_crashes.R}{read}
 
@@ -38,7 +41,7 @@ know the file did not load correctly.
 
 The original variable names use capital letters and spaces. Those names
 are readable, but they are awkward to type in R. We first create a new
-set of names by changing letters to lower case and replacing spaces and
+set of names by changing letters to lower case and replacing
 periods with underscores.
 
 \showChunk{R}{Code/nyc_crashes.R}{rename_build}
@@ -48,8 +51,8 @@ Now we apply the new names to the data frame and inspect the result.
 \showChunk{R}{Code/nyc_crashes.R}{rename_apply}
 
 This step does not change the data values. It only changes the labels on
-the columns. A name such as \texttt{NUMBER OF PERSONS INJURED} becomes
-\texttt{number\_of\_persons\_injured}, which is easier to type and less
+the columns. A name such as \code{NUMBER.OF.PERSONS.INJURED} becomes
+\code{number\_of\_persons\_injured}, which is easier to type and less
 likely to cause mistakes.
 
 Next we convert the crash date from text into a date object. This lets R
