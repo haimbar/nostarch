@@ -336,6 +336,30 @@ dev.off()
 
 
 ############################################################
+#label===severity_inference
+tab_business_severe <- table(df$business_day, df$severe)
+tab_business_severe
+
+chisq_business_severe <- chisq.test(tab_business_severe)
+chisq_business_severe
+
+severe_rate <- mean(df$severe, na.rm = TRUE)
+severe_rate_ci <- binom.test(sum(df$severe, na.rm = TRUE),
+                             nrow(df))
+severe_rate
+severe_rate_ci
+
+fit_severe <- glm(severe ~ business_day + hour + n_vehicles,
+                  data = df,
+                  family = binomial)
+coef(summary(fit_severe))[c("(Intercept)",
+                            "business_dayTRUE",
+                            "hour",
+                            "n_vehicles"), ]
+#===end
+
+
+############################################################
 #label===severe_by_hour
 tab_severe_hour <- table(df$severe, df$hour)
 tab_severe_hour
