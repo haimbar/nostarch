@@ -2,20 +2,22 @@
 \label{ch:estimation}
 
 
-How tall are 12‑year‑old boys, on average? You could measure a few hundred,
-but you cannot measure them all. Still, governments, scientists, and
-businesses make such guesses every day. They use limited data to learn about
-hidden quantities—averages, percentages, or relationships.
+Imagine trying to guess the average height of all 12-year-old boys in the
+United States. You could measure a few hundred children, but you could
+never measure them all. Yet governments, scientists, businesses, and sports
+analysts make this kind of guess every day. They use limited data to learn
+about quantities that are hidden from view, such as averages, percentages,
+or relationships between variables. This challenge is the heart of
+estimation. It is a hide-and-seek game that we play with nature: the answers
+we want are hidden, and the sample provides clues about where they might
+be. In the previous chapter, we focused on deciding whether an observed
+effect could be explained by chance alone. Now we turn to a different
+question: if a quantity exists, how can we estimate its value and how
+confident should we be in our estimate? In this chapter, we will learn how
+to construct estimates, compare different estimation strategies, discover
+the idea behind maximum likelihood estimation, and quantify uncertainty
+using confidence intervals and resampling methods.
 
-Estimation is the art of making good guesses from partial information. Think
-of it as a hide‑and‑seek game: the truth is hidden, and the sample gives
-clues. In the previous chapter we asked whether an observed effect could be
-explained by chance. Here we ask a different question: if a quantity exists,
-how can we estimate it, and how confident should we be in that estimate?
-
-This chapter shows practical strategies: computing point estimates, comparing
-estimators, learning the idea behind maximum likelihood, and quantifying
-uncertainty with confidence intervals and resampling.
 
 
 \section{Introduction}
@@ -63,19 +65,17 @@ With these tools in place, several natural questions arise:
 
 \section{Point Estimation: Seeking Strategies}
 
-For a normal distribution, the location parameter $\mu$ equals the mean and
-median. Two natural ways to estimate the center are the sample mean and the
-sample median. A third possibility is the midrange, the average of the smallest
-and largest observations. Each estimator uses different parts of the data,
-so they can behave differently in practice. Here are the three candidate
-estimators we will compare:
+The location parameter $\mu$ of a normal distribution coincides with its mean and
+median. The sample version of mean and median appear to be reasonably good
+estimators. The sample mid-range, the average of the largest and smallest
+observations of the sample range, also
+seems a reasonable estimator for the population center. So, let us consider
+three candidate estimators, or strategies to seek the true~$\mu$:
 \begin{itemize}
 \item Sample mean
 \item Sample median
 \item Midrange
 \end{itemize}
-
-% Check-in: which estimator uses the most information from the data?
 
 
 When an estimator is computed for a given sample, its value is called an
@@ -87,8 +87,6 @@ The three estimates based on the observed sample are obtained by:
 \showCode{R}{Code/est-hide.R}[8][8]
 Their values are \inlnR{```cat(estimates[1])```}[est1],
 \inlnR{```cat(estimates[2])```}[est2], and \inlnR{```cat(estimates[3])```}[est3], respectively.
-
-% Check-in: Which estimator would you expect to perform well if the data can include extreme outliers? Explain briefly.
 
 
 Which of the three estimators is the best? In this game, Nature knows the true
@@ -264,10 +262,10 @@ It would be nice if one estimator were always the best regardless of the true
 data-generating scheme. Such an estimator may not, however, exist.
 
 \subsection{Maximum Likelihood Estimator}
-To play the hide‑and‑seek game better, pick a strategy that makes the observed
-data plausible. Which strategy is best depends on how the data were
-generated, which we usually do not know. Still, maximum likelihood often
-produces highly efficient estimates under broad conditions.
+To play the hide-and-seek game better, we need to select a good strategy. From
+the examples in the last section, which strategy is better depends on the
+underlying data generation model, which is unknown. There is, however,
+an estimator which is the most efficient under quite general assumptions.
 
 
 Let's start with a simple example.
@@ -331,20 +329,6 @@ the log transformation is monotonically increasing, the solution is the
 same when we maximize the log-likelihood.
 \showCode{R}{Code/est-mle-binom.R}[1][6]
 
-Figure~\ref{fig:est:loglik-binom} shows the log-likelihood as a function of
-$p$ for the observed data (16 successes out of 20). The dashed vertical line
-marks the maximum-likelihood estimate.
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.7\textwidth]{images/chapter_6/loglik_binom.pdf}
-\caption{Log-likelihood for the binomial example (16/20). The dashed line marks the MLE at $\hat p = 0.80$.}
-\label{fig:est:loglik-binom}
-\end{figure}
-
-% Check-in: Which value of $p$ makes the observed data most likely? (Hint: compare likelihood values at a few candidate p's.)
-% Answer: The likelihood is highest near $p=0.80$, which is the observed proportion of successes.
-
 The largest likelihood occurs when $p$ is near
 \inlnR{```cat(phat[1])```}[phat]. In fact, for this problem, the
 MLE is exactly $\hat p = 16/20 = 0.80$.
@@ -362,14 +346,14 @@ this also means that when these regularity conditions are violated, the
 MLE may no longer be the most efficient estimator.
 
 \section{Uncertainty}
-To answer how sure we should be about an estimate, we build a range of
-plausible values. This range is called a confidence interval. A simple way
-to think about a confidence interval is: it is an interval, computed from the
-sample, that is likely to contain the unknown target value. A confidence
-interval with level $1-\alpha$ aims to capture the true parameter in about
-$100(1-\alpha)\%$ of repeated samples.
-
-% Check-in: If you see a 95\% confidence interval for a mean that is wide, what does that tell you about the data or sample size?
+Point estimation is not enough! We need some measure of uncertainty to make
+inferences. This leads to interval estimators. The two endpoints of an interval
+estimator are statistics such that the random interval formed by them captures
+the unknown target parameter with certain probability. A
+\emph{confidence interval}\index{confidence interval} with
+\emph{confidence level}\index{confidence level} $1-\alpha$ means an interval
+estimator of the target parameter such that the probability that the interval
+covers the target is~$1-\alpha$.
 
 
 \subsection{Large sample approximation}

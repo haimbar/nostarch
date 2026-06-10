@@ -336,85 +336,26 @@ dev.off()
 
 
 ############################################################
-#label===severity_inference_table
-# 2x2 table of severe crashes by day type
+#label===severity_inference
 tab_business_severe <- table(df$business_day, df$severe)
 tab_business_severe
-#===end
 
-############################################################
-#label===severity_chisq
-# Pearson chi-squared test for association between business day and severity
 chisq_business_severe <- chisq.test(tab_business_severe)
 chisq_business_severe
-#===end
 
-############################################################
-#label===severity_binom_table
-# Overall counts used for binomial test
-severity_counts <- table(df$severe)
-severity_counts
-#===end
-
-############################################################
-#label===severity_glm_prep
-# Prepare data for logistic regression: select predictors and drop missing
-sev_model_data <- df[, c("severe", "business_day", "hour", "n_vehicles", "borough")]
-sev_model_data <- sev_model_data[complete.cases(sev_model_data), ]
-# Quick summary of the model data
-summary(sev_model_data)
-#===end
-
-############################################################
-#label===severity_glm_fit
-# Fit logistic regression: severe ~ business_day + hour + n_vehicles
-# Use the prepared dataset to avoid missing-data surprises
-fit_severe <- glm(severe ~ business_day + hour + n_vehicles,
-                  data = sev_model_data,
-                  family = binomial)
-summary(fit_severe)
-#===end
-
-############################################################
-#label===severity_glm_or
-# Show odds ratios and Wald 95% confidence intervals for interpretation
-coef_est <- coef(summary(fit_severe))
-or <- exp(coef(fit_severe))
-wald_ci <- exp(confint.default(fit_severe))
-cbind(Estimate = coef(fit_severe),
-      OR = or,
-      "2.5%" = wald_ci[, 1],
-      "97.5%" = wald_ci[, 2])
-#===end
-
-############################################################
-#label===severity_glm_diag
-# Simple diagnostics: fitted probabilities and deviance residuals
-fitted_prob <- predict(fit_severe, type = "response")
-summary(fitted_prob)
-resid_dev <- residuals(fit_severe, type = "deviance")
-summary(resid_dev)
-#===end
-
-############################################################
-#label===nyc-severity-inference
-# Master chunk used by the book to run inference and produce inline results.
-# Recompute the key objects (table, chi-squared, rate, exact CI, and model fit)
-# so that the LaTeX build finds them when running this chunk.
-tab_business_severe <- table(df$business_day, df$severe)
-chisq_business_severe <- chisq.test(tab_business_severe)
-# overall counts used for the binomial test
-severity_counts <- table(df$severe)
 severe_rate <- mean(df$severe, na.rm = TRUE)
-severe_rate_ci <- binom.test(sum(df$severe, na.rm = TRUE), nrow(df))
-# fit using same prepared dataset as above (recreate if not present)
-if (!exists("sev_model_data")) {
-  sev_model_data <- df[, c("severe", "business_day", "hour", "n_vehicles", "borough")]
-  sev_model_data <- sev_model_data[complete.cases(sev_model_data), ]
-}
+severe_rate_ci <- binom.test(sum(df$severe, na.rm = TRUE),
+                             nrow(df))
+severe_rate
+severe_rate_ci
+
 fit_severe <- glm(severe ~ business_day + hour + n_vehicles,
-                  data = sev_model_data,
+                  data = df,
                   family = binomial)
+coef(summary(fit_severe))[c("(Intercept)",
+                            "business_dayTRUE",
+                            "hour",
+                            "n_vehicles"), ]
 #===end
 
 

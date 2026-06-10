@@ -320,10 +320,7 @@ chi-squared test of independence. That test works with counts, which is
 the right scale for this data.
 
 \runR{Code/nyc_crashes.R}{nyc-severity-inference}
-
-% Show the 2x2 table and chi-squared test as a small, focused step.
-\showChunk{R}{Code/nyc_crashes.R}{severity_inference_table}
-\showChunk{R}{Code/nyc_crashes.R}{severity_chisq}
+\showChunk{R}{Code/nyc_crashes.R}{severity_inference}
 
 The contingency table is
 \inlnR{```tab_business_severe```}[nyc-sev-tab][vbox]
@@ -340,45 +337,12 @@ to \inlnR{```round(severe_rate_ci$conf.int[2], 3)```}[nyc-sev-hi].
 This interval is a direct estimate for a binary response; it does not
 rely on a normal approximation for the raw crash outcomes.
 
-To make the binomial calculation concrete, here are the raw counts of
-severe and non-severe crashes used by the binomial test:
-
-\showChunk{R}{Code/nyc_crashes.R}{severity_binom_table}
-
-Interpretation: the point estimate above reports the fraction of crashes
-in this sampled week that were classified as severe. The exact binomial
-confidence interval gives a range of plausible values for that
-underlying proportion. A narrow interval means the estimate is relatively
-stable (we observed many crashes); a wide interval means more sampling
-uncertainty (fewer crashes). These values describe the observed week and
-should not be interpreted as causal effects.
-
-% Break the regression into small chunks with explanation and interpretation.
-First, prepare a clean dataset for modeling and inspect it:
-
-\showChunk{R}{Code/nyc_crashes.R}{severity_glm_prep}
-
-Next, fit a logistic regression predicting the binary severity outcome
-from business-day indicator, hour of day (numeric), and number of
-vehicles involved.
-
-\showChunk{R}{Code/nyc_crashes.R}{severity_glm_fit}
-
-To make coefficients easier to interpret, transform the estimates into
-odds ratios and show Wald 95\% confidence intervals.
-
-\showChunk{R}{Code/nyc_crashes.R}{severity_glm_or}
-
-Finally, inspect simple diagnostics: fitted probabilities and deviance
-residuals to check for gross model misfit.
-
-\showChunk{R}{Code/nyc_crashes.R}{severity_glm_diag}
-
-These steps separate modeling into preparation, fitting, interpretation,
-and validation. The logistic model gives an interpretable summary via
-odds ratios, but remember the usual caveats: association is not
-causation, and omitted variables or reporting differences can affect
-estimates.
+Finally, we can fit a simple logistic regression to look at severity as
+a function of business day, hour, and number of vehicles. In this
+model, hour and the number of vehicles have positive associations with
+severity, while the business-day indicator is not clearly separated from
+zero. That is the kind of result we want from regression: something more
+structured than a table, but still grounded in the real data.
 
 Sometimes we want to inspect the most serious individual records. We
 create a simple severity score: each injury counts as 1 point, and each
