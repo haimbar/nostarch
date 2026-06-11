@@ -5,7 +5,7 @@ overleaf:
 	python3 make_overleaf.py $(DEST)
 
 clean:
-	rm -f sidsmain.aux generated/*.txt  sidsmain.ind
+	rm -f sidsmain.aux generated/*.txt generated/*.md5 sidsmain.ind
 
 deepclean:
 	rm -fr sidsmain.aux sidsmain.mw sidsmain.ind generated/* images/chapter_*
