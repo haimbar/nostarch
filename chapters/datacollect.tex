@@ -449,8 +449,9 @@ results from a biased sample.
 \hypertarget{omitted-vars}{%
 \subsection{Omitted Variables}\label{omitted-vars}}
 Sometimes we just don't know that we're missing critical data. It can be
-(unless we're careful) is the prevalence of something in the population,
-such as blood type or a disease. In other cases, we may be missing data
+in the form of the base-rate fallacy (Chapter~\ref{ch:probability}, Section~\ref{sec:base-rate}),
+where the data we may be ignoring (unless we're careful) is the prevalence of something
+in the population, such as blood type or a disease. In other cases, we may be missing data
 because of \emph{selection bias}\index{bias!selection bias}, where we inadvertently analyze only
 a non-random sample, as was the case with Berkson's bias or in the
 survival bias story.
@@ -591,18 +592,23 @@ The three functions are shown in Figure~\ref{fig:ch7:ext2}.
 
 \showChunk{R}{Code/datacollect-extrapolate.R}{EXT1}
 
-In the range shown as a rectangle (for \code{x} between 0 and 0.4), the three functions are
-nearly identical.
+The dashed rectangle in the left panel of Figure~\ref{fig:ch7:ext2} marks the region
+where \code{x} is between 0 and 0.4, which covers the narrower range visible in Figure~\ref{fig:ch7:ext1}.
+The right panel enlarges that rectangle, showing that all three functions are
+nearly indistinguishable there: this is exactly why Figure~\ref{fig:ch7:ext1} alone
+gives no clue which function generated the data.
 However, beyond 0.4, the three functions become very different. While \code{y1}
-continues along a straight line,  \code{y2} starts to `bend' and although it continues to
+continues along a straight line, \code{y2} starts to `bend' and although it continues to
 increase, it does so at a slower rate. The function \code{y3} increases at an exponential
-rate at first, but then it has a change-point, where the trend changes and it starts to decrease.
+rate at first, but then has a change-point where the trend reverses and it starts to decrease.
 
 \begin{figure}[H]
-  \includegraphics[width=.6\textwidth]{images/chapter_7/extra2.pdf}
-  \caption{The relationship between \code{x} and \code{y} for three different
-  functions. Between 0 and 0.4, the three functions are similar, but after
-  that they are different.}
+  \includegraphics[width=\textwidth]{images/chapter_7/extra2.pdf}
+  \caption{Three functions that look nearly identical in the limited range of
+  Figure~\protect\ref{fig:ch7:ext1} but diverge sharply beyond it.
+  Left: full range with the dashed rectangle marking the region shown in
+  Figure~\protect\ref{fig:ch7:ext1}. Right: that rectangle enlarged, showing
+  all three functions are nearly indistinguishable within the original data range.}
   \label{fig:ch7:ext2}
 \end{figure}
 
@@ -619,12 +625,13 @@ way to tell how the function we try to predict behaves outside the range
 of observed \code{x}.
 
 It is possible to perform a follow-up experiment, and check if our prediction is
-correct. For example, suppose that \code{y} in the data in Figure~\ref{fig:ch7:ext1}
-represents the average monthly amount spent on online shopping in thousands of dollars,
-and \code{x} represents their annual income (in \$100,000). In our original sample
-which gave us Figure~\ref{fig:ch7:ext1}, we only had people who spend between 0 and \$300
-in a month, and their annual salaries were between 0 and \$30,000, with an
-approximate linear relationship between \code{x} and \code{y}.
+correct. For example, suppose that \code{y} in Figure~\ref{fig:ch7:ext1} represents
+the average monthly amount spent on online shopping, measured in thousands of dollars
+(so \code{y}~$= 0.25$ means \$250 per month), and \code{x} represents annual income,
+measured in units of \$100{,}000 (so \code{x}~$= 0.25$ means \$25{,}000 per year).
+In our original sample, which gave us Figure~\ref{fig:ch7:ext1}, we only had
+people with annual incomes up to about \$25{,}000 spending up to about \$250 per month,
+with an approximate linear relationship between \code{x} and \code{y}.
 
 If we want to know the spending habits of people with higher income, we could
 perform a second study and collect data for people who make \$50,000, \$100,000,
@@ -764,8 +771,8 @@ of their actual probabilities.
 
 Even when data is collected in a carefully designed experiment, some bias may occur.
 For example, rejection of bad data on arbitrary grounds instead of according to
-a previously stated or generally agreed criteria. For example, one may choose
-to discard what one perceives as ``outliers'' without valid reasons.
+a previously stated or generally agreed criteria---for instance, discarding
+what one perceives as ``outliers'' without valid reasons.
 
 Another common source is \emph{self-selection bias} or a \emph{volunteer bias},
 which happens when subjects in an experiment decide on their own if they will be included in a
