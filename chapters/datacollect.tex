@@ -1,14 +1,16 @@
-\chapter{Data Collection: Cathing the Right Data in the Wild}\label{ch:data}
-You can't make bricks without straw. Data is necessary to make inference, and
-since it's usually only possible to get a sample from the entire population,
-it is important that the sample represents the population faithfully. This chapter 
-discusses the problems that may arise when a sample is not representative
-of the population, and how this may lead to entirely invalid conclusions.
+\chapter{Data Collection: Catching the Right Data in the Wild}\label{ch:data}
+You can't make bricks without straw. In the previous chapters we built tools---the
+law of large numbers, the central limit theorem, and probability theory---that let
+us reason carefully from a sample to a population. All of those guarantees rest on
+one crucial assumption: the sample must be \emph{representative} of the population.
+This chapter examines what representativeness means, what can go wrong when a sample
+is not representative, and how to recognize the most common pitfalls in data
+collection.
 
-\hypertarget{ch:data}{%
-\section{Representative sample}\label{representative}}
-\hypertarget{ch:data}{%
-\subsection{Definitions of key terms}\label{keyterms}}
+\hypertarget{representative}{%
+\section{Representative Sample}\label{representative}}
+\hypertarget{keyterms}{%
+\subsection{Definitions of Key Terms}\label{keyterms}}
 First, let's introduce some terminology. A \emph{population}\index{\emph{population}} is the set of 
 individuals (\emph{subjects}\index{\emph{population}}) which we're interested in studying. Subjects may be 
 people, mice, or devices produced in a factory, just to name a few examples. 
@@ -23,7 +25,7 @@ smaller sample to draw conclusions on the population.
 We saw in Chapter~\ref{ch:llnclt} that the law of large numbers and the central limit
 theorem guarantee that if the sample is representative of the entire population,
 then our estimates can be trusted with a certain degree of confidence,
-and the largest the sample, the more confident we are about the estimate
+and the larger the sample, the more confident we are about the estimate
 and the conclusions that we can draw from it.
 
 However, if the sample doesn't faithfully represent the population, then no matter
@@ -38,22 +40,23 @@ Let's illustrate the notions of population, sample, and bias through simulations
 Assume that for a group of people,  weight and height have a linear relationship
 \begin{equation}
   \label{eq:weightheight}
-  \text{weight} = -194.49 + 5.30*\text{height}\,.
+  \text{weight} = -194.49 + 5.30 \times \text{height}\,.
 \end{equation}
 
 However, because people have different activity levels and different diets, each
-person's weight is a little different than the one predicted by Equation (\ref{eq:weightheight}).
+person's weight is a little different from the one predicted by Equation (\ref{eq:weightheight}).
 We write the weight as a function of height using an equation that includes this 
 random `noise', by adding
 a non-deterministic (\emph{stochastic}) term, denoted by $\text{Error}$:
 \begin{equation}
   \label{eq:weightheight-stochastic}
-  \text{weight} = -194.49 + 5.30*\text{height} + \text{Error},
+  \text{weight} = -194.49 + 5.30 \times \text{height} + \text{Error},
 \end{equation}
 where, in our simulation, the Error has a normal distribution with mean zero and standard deviation
-23.26. We simulate such a population with $N=500$ people and plot their weights
+23.26. Models of this form---a linear predictor plus a stochastic error term---are the foundation of
+linear regression, which we cover in detail in the next chapter. We simulate such a population with $N=500$ people and plot their weights
 against heights using the following code. The result is given in
-Figure~\ref{fig:representativesample} (a), where, in addition to the 
+Figure~\ref{fig:ch7:representativesample} (a), where, in addition to the 
 `noisy' data of the population we also show the true (linear)
 relationship between height and weight.
 
@@ -61,7 +64,7 @@ relationship between height and weight.
 
 Now we use the following code to uniformly and randomly select $n=50$ people as
 a sample from the population and mark the selected people in
-Figure~\ref{fig:representativesample} (b) using the dark trinagles. The \code{sample()} function
+Figure~\ref{fig:ch7:representativesample} (b) using the dark triangles. The \code{sample()} function
 is used to draw a \emph{simple random sample (SRS)}\index{\emph{simple random sample}} of size \code{n}
 from the population of size \code{N}. SRS means that every subject in
 the population has an equal probability of being selected into the sample.
@@ -77,20 +80,22 @@ heights in the population. We create a function of weight and height
 and use it to 
 determine the probability of including a person in the sample. The following code
 uses this way to take a sample and plot it in
-Figure~\ref{fig:representativesample} (c).
-In the code, \wingding{1} and \wingding{2} create a variable \code{w} that
-depends on the weight and height of the people in the population; and
-\wingding{3} uses the variable \code{w} to decide the probability of including a
-person into the sample. The larger the value of \code{w}, the higher the
+Figure~\ref{fig:ch7:representativesample} (c).
+In the code, \wingding{1} fits a linear regression model of weight on height
+using R's \code{lm()} function (we will cover \code{lm()} in detail in the next chapter;
+for now, think of it as finding the best-fit line through the data);
+\wingding{2} uses the model's residuals---the differences between each person's actual weight
+and the fitted value---to build a sampling weight \code{w}; and
+\wingding{3} uses \code{w} to decide the probability of including a person in the sample. The larger the value of \code{w}, the higher the
 probability of including the person in the sample. The exact way we 
 obtain \code{w} in this example is not important. What's important is
 that the selection of an individual into the sample is \emph{not random}. 
-When the probability of drawing a subject into the sample depends on his/her
+When the probability of drawing a subject into the sample depends on their
 height, weight, or both, then the sample is no longer representative and
 as such, it doesn't retain the properties of the population. 
 \showChunk{R}{Code/datacollect-goodbadsample.R}{BIASgbs3}
 
-In Figure~\ref{fig:representativesample} (c) you can see that the relationship
+In Figure~\ref{fig:ch7:representativesample} (c) you can see that the relationship
 between the height and the weight in the population is along the line
 with slope 5.3, but in the sample (dark red dots) the relationship between 
 the two variables is more or less along a vertical line with mean height of
@@ -115,7 +120,7 @@ about 70.
       \caption{Biased sample}
   \end{subfigure}
   \caption{An illustration of representative and non-representative samples}
-  \label{fig:representativesample}
+  \label{fig:ch7:representativesample}
 \end{figure}
 
 To see the effect of a biased sample, let's look at the variance of height
@@ -126,12 +131,16 @@ The variance in the population is called \code{var0} in the code and it's equal 
 \inlnR{```cat(var0)```}[var0]. In the first (simple random) sample the
 variance is called \code{var1} and is equal to \inlnR{```cat(var1)```}[var1], which is very close to the
 actual variance in the population (the difference is \inlnR{```cat(var1-var0)```} [diff01]),
-but in the second (biased) sample, the variance of height is much smaller: \code{var2} 
-is 
+but in the second (biased) sample, the variance of height is much smaller: \code{var2}
+is
 \inlnR{```cat(var2)```}[var2].
+This illustrates the core danger of a biased sample: it doesn't just shift the
+mean---it distorts the entire distribution, making the population appear far more
+homogeneous than it actually is. Any conclusion drawn from such a sample about
+the spread or diversity of the population would be seriously misleading.
 
-\hypertarget{ch:data}{%
-\subsection{A representative sample is more important than a larger sample}\label{representative-size}}
+\hypertarget{representative-size}{%
+\subsection{A Representative Sample Is More Important Than a Larger Sample}\label{representative-size}}
 
 \begin{example}[The 1936 Literary Digest Poll, \citep{darkdata_ch2}]
  For the 1936 presidential election, the Literary Digest poll was one of the
@@ -145,11 +154,11 @@ Franklin D. Roosevelt's 43\%, while the actual results were 38\% for Landon
 against 62\% for Roosevelt. At the same time, George Gallup was able to predict
 a victory for Roosevelt using a much smaller sample of about 50,000 people.
 
-There were two major flaws in the way Literary Digest collect the sample: 1) The
+There were two major flaws in the way Literary Digest collected the sample: 1) The
 mailing list only contained some subgroups of people in the U.S. For example,
 telephone service was not commonly available in the 1930s. Similarly, most people might not
-belong to any club or other associations. So, the Literary Digest poll 
-reached only the relatively affluent part of the population. 
+belong to any club or other associations. So, the Literary Digest poll
+reached only the relatively affluent part of the population.
 2) People on the list decided if they
 would return the ballot to the magazine, so the resulting sample is a
 ``volunteer'' sample.
@@ -163,10 +172,10 @@ to eliminate any bias from our sample (and we do!) is to be aware of the potenti
 pitfalls.
 \end{example}
 
-\subsection{Controlled Experiments vs. Observational Studies}
+\subsection{Controlled Experiments versus Observational Studies}
 
 Understanding how data is collected is crucial for interpreting the resulting
-analyses and for drawing valid conclusions. The two primary approach in data
+analyses and for drawing valid conclusions. The two primary approaches in data
 collection are controlled experiments and observational studies. Each of these
 has strengths and weaknesses, and choosing between them often depends on the
 feasibility and ethics of the research question.
@@ -178,24 +187,23 @@ A typical example of a controlled experiment is a \emph{randomized controlled
   trial}} (RCT), which is considered the gold standard in data collection. 
 RCTs are possible when we can pre-plan an experiment and determine in advance
 what data needs to be collected. This approach is frequently used in medical
-research, where we wish to evaluate the effectiveness of a new treatment (e.g.,
-a new drug) on an outcome (e.g., blood pressure).
+research, where we wish to evaluate the effectiveness of a new treatment (for example,
+a new drug) on an outcome (for example, blood pressure).
 There may be multiple factors affecting the outcome (or at least, that could affect it).
 For example, we may have a reason to think that age, sex, body mass index (BMI),
 or other things are related to one's blood pressure.
-In a randomized control trial we can get a representative sample of the population,
+In a randomized controlled trial we can get a representative sample of the population,
 and randomly assign each individual to one of the treatments. With randomization
 we end up with comparable groups of individuals. For example, if we are testing
 two new drugs, and one old drug, then there are three treatment groups and in each one
 we have approximately the same age distribution, the same proportions of females,
-the same distribution of BMI, etc.
+the same distribution of BMI, and so on.
 
 Then, the comparison between the three types of treatments is meaningful,
-and we can use it to draw conclusions about the effect of the treatment (drug, in our example)
-on the outcome (blood pressure). Because, if other than the treatment,
-the subpopulations in all groups are identical, then if there is a difference in
-the outcome between the groups, then it must be due to the one thing that separates the
-groups.
+and we can use it to draw conclusions about the effect of the treatment (drug, in our
+example) on the outcome (blood pressure). If, apart from the treatment, the
+subpopulations in all groups are identical, then any difference in the outcome between
+the groups must be due to the one thing that separates them: the treatment itself.
 
 The \emph{control} \index{\emph{randomized controlled
   trial!control}} part in RCT means that one of the treatment groups is our baseline,
@@ -218,7 +226,8 @@ authorities, in order to ensure that it is done properly and fairly.
 Second, it may be impossible to randomize participants into groups
 that only differ in the treatment that they receive. This can be, for example, due to
 ethical reasons, especially when human subjects are considered.
-For example, if we want to check the effect of smoking on the risk of getting lung cancer,
+For example, if we want to check the effect of smoking on the risk of getting lung
+cancer,
 we can't assign people to the smoking group, since we have reason to believe that
 this is harmful.
 Third, there may be many factors that \emph{could be} related to the outcome. If we want
@@ -229,7 +238,7 @@ and we can randomize the subjects properly and ethically, there may still be fac
 that we haven't considered, but are important. Any missing variable (a factor that
 may affect the outcome) can make it impossible to draw conclusions about the
 treatment effect. After all, without the missing data, we can never tell for sure if
-the observed differences between the groups is due to the treatments, or to the
+the observed differences between the groups are due to the treatments, or to the
 missing factors!
 
 \subsubsection{Observational Studies}
@@ -259,8 +268,8 @@ must be careful when we draw conclusions.  Usually, we can only make statements
 about \emph{associations} between variables, but not much (if at all) about
 causality.
 
-\hypertarget{ch:data}{%
-\section{Types of data problems}}
+\hypertarget{types-data-problems}{%
+\section{Types of Data Problems}\label{types-data-problems}}
 In this section we introduce a few types of data collection problems that lead to
 biased samples. 
 David Hand, in his book \emph{Dark Data} \citep{darkdata_ch2} discusses 15 different
@@ -268,7 +277,7 @@ types of `dark data' -- data that we don't observe, and by ignoring its existenc
 are lead to wrong (potentially disastrous) conclusions. 
 We will demonstrate some of these data problems in this chapter.
 
-\subsection{Berkson's bias\index{bias!Berkson's bias}}\label{berkson-bias}
+\subsection{Berkson's Bias\index{bias!Berkson's bias}}\label{berkson-bias}
 In his book, \textit{How Not to Be Wrong: The Power of Mathematical Thinking}, 
 Jordan Ellenberg poses the question:
  `\textit{Why are handsome men such jerks?}' \citep{ellenberg2015not}.
@@ -285,7 +294,7 @@ that pretty girls are meaner, and more talented people are less attractive.
 
 What is the source of these (false) impressions? The answer is that 
 they usually result from a type of \emph{selection bias}, where the data
-are not collected at random and some items have a higher or lower probability
+is not collected at random and some items have a higher or lower probability
 of being included in the sample. The particular form of bias in this case has a name,
 and it's called \emph{Berkson's bias}. Let's start with an example to explain.
 
@@ -295,7 +304,7 @@ and it's called \emph{Berkson's bias}. Let's start with an example to explain.
   to show some of your stamps to your friends. You probably want to show them
   the pretty ones and the rare ones. Let's say you only show the 370 stamps which
   are either pretty or rare to your friends. Based on what your friends
-  observe, will they conclude that a rare stamp more likely to be pretty?
+  observe, will they conclude that a rare stamp is more likely to be pretty?
 \end{example}
 
 Let's calculate some numbers to see the answer. For all the stamps, the
@@ -308,11 +317,11 @@ For the stamps you showed your friends, the probability that a stamp is pretty i
 30/100=0.3. Your friends' conclusion would be: a rare stamp is much less likely
 to be pretty!
 
-The reason for their incorrect conclusion is that the 370 stumps are not a
+The reason for their incorrect conclusion is that the 370 stamps are not a
 representative sample of all the stamps you have. They were picked
 specifically to impress, so the stamps that were neither rare, nor pretty
 are not represented in the sample. This means that this sample is biased.
-As showed in the Venn diagram in Figure~\ref{fig:stamps}, the area of the red
+As shown in the Venn diagram in Figure~\ref{fig:ch7:stamps}, the area of the red
 circle is a small proportion (0.3) of the area of the rectangle, while it is a
 large proportion (0.81) of the area of the colored region (the biased sample). 
 
@@ -336,7 +345,7 @@ large proportion (0.81) of the area of the colored region (the biased sample).
   stamps, the large red circle represents the pretty stamps, and the small blue
   circle represents the rare stamps. The numbers indicate how many stamps are in
   each region.}
-  \label{fig:stamps}
+  \label{fig:ch7:stamps}
 \end{figure}
 
 Now let's simulate some data to further illustrate the problem. In this simulation,
@@ -350,17 +359,17 @@ standard normal distribution (\wingding{1} and \wingding{2}). \wingding{3}
 checks if a book is good (better than 90\% of all books) and \wingding{4} checks
 if a movie is good (better than 90\% of all movies). A component of the variable
 \code{good} in \wingding{5} is \code{TRUE} if the book and/or the movie is good.
-Running the above code should give the two figures in Figure~\ref{fig:berkson}
+Running the above code should give the two figures in Figure~\ref{fig:ch7:berkson}
 and the following output.
 \includeOutput{datacollect-berkson} %
 
-We see from the output and Figure~\ref{fig:berkson} (a) that the correlation between
+We see from the output and Figure~\ref{fig:ch7:berkson} (a) that the correlation between
 the goodness of books and the goodness of movies is very close to zero---there
-is no linear association between them. However, if we limit our data to inoclude
+is no linear association between them. However, if we limit our data to include
 only movies such that either the book is good, or the movie is good, or both are good, 
 and we then look for a linear association between the quality of books and movies,
-then there is a clear negative linear relationship, as can be seen in 
-Figure~\ref{fig:berkson} (b).
+then there is a clear negative linear relationship, as can be seen in
+Figure~\ref{fig:ch7:berkson} (b).
 
 
 \begin{figure}[H]
@@ -373,17 +382,17 @@ Figure~\ref{fig:berkson} (b).
     \includegraphics[width=\textwidth]{images/chapter_7/berkson2.pdf}
     \caption{Negative linear association for top 10 percent books and/or movies}
   \end{subfigure}
-  \caption{Goodness of movies v.s. goodness of books}
-  \label{fig:berkson}
+  \caption{Goodness of movies versus goodness of books}
+  \label{fig:ch7:berkson}
 \end{figure}
 
 People typically only recommend good books or good movies to other
-people, so what we see are only these with the best review. If a book is
-bad and the movie based on it is terrible, it's very likely that you ever have
+people, so what we see are only those with the best reviews. If a book is
+bad and the movie based on it is terrible, it's very unlikely you'll ever have
 a chance to hear about them. Thus, the impression that Hollywood ruins good books is
 false. It's just an impression based on a biased sample. 
 
-The `blank square' in the bottom-left corner of Figure~\ref{fig:berkson} (b), where we see no
+The `blank square' in the bottom-left corner of Figure~\ref{fig:ch7:berkson} (b), where we see no
 points at all, is our \emph{dark data}\index{bias!Berkson's bias!dark data} in this example, and is the source of
 our biased result, and the false impression. There are, in fact, many data
 points in this region, but we never observe them. They include the majority of
@@ -397,32 +406,31 @@ an impact on our analysis. Only when the selection of the subset is \emph{indepe
 of the characteristics of subjects in the population, can we trust the results obtained
 from a sample.
 
-\hypertarget{ch:data}{%
+\hypertarget{survival-bias}{%
 \subsection{Survival Bias\index{bias!Survival Bias}}\label{survival-bias}}
 
-Survivor bias arises when observations are limited to subjects or objects that
+Survival bias arises when observations are limited to subjects or objects that
 have ``survived'' or successfully completed a particular process, while those
-that did not are overlooked. For instance, poorly performing hedge funds often
-close and are excluded from indexes, skewing performance analyses. Similarly,
-prominent success stories like Facebook dominate the spotlight, overshadowing
-the vast majority of failures. Ignoring survivor bias can result in misleading
+that did not are overlooked. For instance, when studying tech startups, prominent success stories like
+Facebook dominate the spotlight, overshadowing the vast majority of ventures
+that failed and quietly disappeared. Ignoring survivor bias can result in misleading
 or even entirely incorrect conclusions, as it fails to account for the unseen
 data that play a critical role in understanding the complete picture.
 
-\begin{example}[hit aircraft\index{bias!Survival Bias!hit aircraft}]
+\begin{example}[WWII Aircraft Damage\index{bias!Survival Bias!hit aircraft}]
 During World War II, aircraft that had returned from missions were examined and
 the most-hit areas of the plane are given in
-Figure~\ref{fig:survival-bias}. Which areas should the army add armor to
+Figure~\ref{fig:ch7:survival-bias}. Which areas should the army add armor to
 increase the survivorship of the planes?
 
 A direct intuition may suggest to reinforce areas with the most bullet holes
-because these are the most hit region. However, the data were collected from the
-aircraft that had survived their missions, and if an aircraft was hit and down
+because these are the most-hit region. However, the data was collected from the
+aircraft that had survived their missions, and if an aircraft was hit and downed
 it would not be included in the data. If there is a bullet hole in the engine
-area or in the cockpit, then it would unlikely that the aircraft could
+area or in the cockpit, then it would be unlikely that the aircraft could
 return. This was actually the reason why the engine and cockpit regions were
-almost free of bullet holes. Knowing that the marked dots for bullets holes were
-a biased sample and the cause of the bias, we should realized that these regions
+almost free of bullet holes. Knowing that the marked dots for bullet holes were
+a biased sample and the cause of the bias, we should realize that these regions
 with bullet holes could take damage and the aircraft could still fly well enough
 to return safely. These regions did not need additional armor. It is the areas
 where the returning aircraft were unscathed that need additional armor.
@@ -430,18 +438,17 @@ where the returning aircraft were unscathed that need additional armor.
 
 This example shows that ignoring the bias may give a very wrong conclusion. If
 we take into account the source of the bias, then we can still obtain valid
-result from a biased sample.
+results from a biased sample.
 
 \begin{figure}[H]
   \includegraphics[width=.85\textwidth]{images/static/Survivorship-bias.png}
   \caption{Most-hit areas of the returned aircraft. Source: \url{https://en.wikipedia.org/wiki/Survivorship_bias}}
-  \label{fig:survival-bias}
+  \label{fig:ch7:survival-bias}
 \end{figure}
 
-\hypertarget{ch:data}{%
+\hypertarget{omitted-vars}{%
 \subsection{Omitted Variables}\label{omitted-vars}}
 Sometimes we just don't know that we're missing critical data. It can be
-in the form of base-rate fallacy, where the data we may be ignoring
 (unless we're careful) is the prevalence of something in the population,
 such as blood type or a disease. In other cases, we may be missing data
 because of \emph{selection bias}\index{bias!selection bias}, where we inadvertently analyze only
@@ -458,14 +465,14 @@ conclusions.
 
 In this subsection we consider the case where what we're missing
 is \emph{columns} (variables) in the data table.
-We've already seen two such examples in previous chapters. The first one
-appeared in Chapter~\ref{ch:EDA}, Figures~\ref{fig:ch2:sidebysidebp} and 
-\ref{fig:ch2:scatter}. There, the variables where \code{x} (e.g., time) and
-\code{g} (e.g., the A/C is working or not). We saw that only when we 
-considered both variables  \code{x}  and  \code{g}, were we able
-to see the real pattern of \code{y} (say, the temperature).
+We've already seen two such examples in previous chapters. The first appears
+in Chapter~\ref{ch:EDA}, Figures~\ref{fig:ch2:sidebysidebp} and
+\ref{fig:ch2:scatter}. There, the variables were \code{x} (for example, time) and
+\code{g} (for example, whether the A/C is working). We saw that only when we
+considered both variables \code{x} and \code{g} were we able to see the real
+pattern of \code{y} (say, the temperature).
 
-The second example appeared in Chapter~\ref{sec:simpsons-paradox}, where we
+The second appears in Chapter~\ref{ch:probability}, Section~\ref{sec:simpsons-paradox}, where we
 discussed Simpson's paradox. When we looked at the overall admission rate
 to UC  Berkeley, it looked like the rate for women is considerably lower, but when 
 we added a variable (the specific departments), the conclusion was quite different,
@@ -486,7 +493,7 @@ Phil is a realtor who works in a small college town. The college has been around
 a couple of centuries, and is very prestigious. His clients often wonder
 why the houses that are farther from the campus cost so much more than the 
 ones in walking distance.
-Phil collected data and plotted the graph in Figure~\ref{fig:omitted},
+Phil collected data and plotted the graph in Figure~\ref{fig:ch7:omitted},
 which shows the square of the distance in miles of houses from the 
 campus on the x-axis, and the price (in thousands of dollars) on the 
 y-axis. He also added a fitted line, which shows a positive trend.
@@ -495,7 +502,7 @@ y-axis. He also added a fitted line, which shows a positive trend.
   \includegraphics[width=.6\textwidth]{images/chapter_7/omitted.pdf}
   \caption{The relationship between the square of the distance from a house to the campus, and 
   the house price, in thousands of dollars}
-  \label{fig:omitted}
+  \label{fig:ch7:omitted}
 \end{figure}
 
 Phil concludes that, indeed, the farther the house is from campus, the more
@@ -519,7 +526,7 @@ In this case, we simulate the data, so we know the real reason. You can see
 how we did it in the following code. In  \wingding{1} we create
 an inverse relationship between the square root of the house age and
 the distance from campus. (This is a simulation so we can do anything, 
-but the motivation for this is that in reality, college town often expand around the 
+but the motivation for this is that in reality, college towns often expand around the
 campus.)
 
 In  \wingding{2} we generate a linear relationship between the house price and
@@ -537,7 +544,7 @@ When we use observational data and see an interesting relationship, it's natural
 to come up with an explanation. Once we do that, we may say: `oh, yes, that makes sense!'
 even though before looking at the data we had a totally different idea in mind.
 The `it makes sense' argument is not a valid scientific method to prove or
-disproves theories!
+disprove theories!
 
 This is often a subconscious process. Once we see some phenomenon or
 relationship, we start seeking explanations and data that will support our
@@ -547,7 +554,7 @@ possibility that ours is wrong. Establishing causality is generally impossible
 with observational data, and we have to remember the risk of confirmation bias.
 
 
-\hypertarget{ch:data}{%
+\hypertarget{extrapolations}{%
 \subsection{Extrapolations}\label{extrapolations}}
 
 One of the main reasons to collect data is so that we can make predictions.
@@ -557,7 +564,7 @@ get to our destination, given the traffic and our speed.
 
 \runR{Code/datacollect-extrapolate.R}{datacollect-extrapolate}
 
-Look at Figure~\ref{fig:ext1}, which shows the relationship between \code{x}
+Look at Figure~\ref{fig:ch7:ext1}, which shows the relationship between \code{x}
 and \code{y}, for \code{x} between 0 and 0.25. We've also added the line
 \code{y=x} for reference. Can you guess the value of \code{y} when \code{x}=0.5? 
 How about  when \code{x}=2?
@@ -565,7 +572,7 @@ How about  when \code{x}=2?
 \begin{figure}[H]
   \includegraphics[width=.6\textwidth]{images/chapter_7/extra1.pdf}
   \caption{The relationship between \code{x} and \code{y}}
-  \label{fig:ext1}
+  \label{fig:ch7:ext1}
 \end{figure}
 
 Did you guess that when  \code{x}=0.5, \code{y} will be approximately 0.5, 
@@ -580,7 +587,7 @@ Next, we generate three functions: in \wingding{3} we create a linear
 function of \code{x}, in \wingding{4} we create the function \code{log(1+x)},
 and in \wingding{5} and \wingding{6} we generate an exponential function that
 increases between 0 and 1, and decreases after 1.
-The three functions are shown in Figure~\ref{fig:ext2}.
+The three functions are shown in Figure~\ref{fig:ch7:ext2}.
 
 \showChunk{R}{Code/datacollect-extrapolate.R}{EXT1}
 
@@ -593,12 +600,13 @@ rate at first, but then it has a change-point, where the trend changes and it st
 
 \begin{figure}[H]
   \includegraphics[width=.6\textwidth]{images/chapter_7/extra2.pdf}
-  \caption{The relationship between \code{x} and \code{y} for three different function. Between
-  0 and 0.4, the three functions are similar, but after that they are different}
-  \label{fig:ext2}
+  \caption{The relationship between \code{x} and \code{y} for three different
+  functions. Between 0 and 0.4, the three functions are similar, but after
+  that they are different.}
+  \label{fig:ch7:ext2}
 \end{figure}
 
-The code used to produce  Figure~\ref{fig:ext2} is as follows. Note that we
+The code used to produce  Figure~\ref{fig:ch7:ext2} is as follows. Note that we
 show a sample of 100 points out of the 500 (using the variable \code{pts}),
 only to make it easier to see individual points.
 
@@ -611,10 +619,10 @@ way to tell how the function we try to predict behaves outside the range
 of observed \code{x}.
 
 It is possible to perform a follow-up experiment, and check if our prediction is
-correct. For example, suppose that \code{y} in the data in Figure~\ref{fig:ext1}
-represents the average monthly amount spent on online shopping in thousand of dollars,
+correct. For example, suppose that \code{y} in the data in Figure~\ref{fig:ch7:ext1}
+represents the average monthly amount spent on online shopping in thousands of dollars,
 and \code{x} represents their annual income (in \$100,000). In our original sample
-which gave us Figure~\ref{fig:ext1}, we only had people who spend between 0 and \$300
+which gave us Figure~\ref{fig:ch7:ext1}, we only had people who spend between 0 and \$300
 in a month, and their annual salaries were between 0 and \$30,000, with an
 approximate linear relationship between \code{x} and \code{y}.
 
@@ -625,7 +633,7 @@ and see whether the linear trend continues, or whether a different function
 fits better when we look at an extended range of \code{x} values.
 
 
-\hypertarget{ch:data}{%
+\hypertarget{aliasing}{%
 \subsection{Aliasing}\label{aliasing}}
 \runR{Code/datacollect-aliasing.R}{datacollect-aliasing}
 Suppose that we have data that we know consists of periodic functions.
@@ -639,24 +647,22 @@ a range of frequencies, up to a few thousand oscillations per second.
 Let's generate some data, and try to estimate the true function from it
 using the following code. Don't worry for now about  \wingding{1}, where
 we initialize the parameter \code{f}. We'll get back to it later.
-We start by choosing a small time interval in \wingding{2}, and 
-divide the interval $[0, 3]$ into equal parts in  \wingding{3}.
-In  \wingding{4}, we get the sample (e.g., by measuring the temperature,
+We start by choosing a small time interval and 
+divide the interval $[0, 3]$ into equal parts in \wingding{2}.
+In  \wingding{3}, we get the sample (for example, by measuring the temperature,
 or the frequency of some sound).
 We show a  plot of the data in the left panel
-of Figure~\ref{fig:aliasing1}. 
+of Figure~\ref{fig:ch7:aliasing1}. 
 
-\why{Some variables such as dt1, \code{dt1_est}, and dt2 are used only one
-time. Maybe remove them to shorten the code?}
 \showChunk{R}{Code/datacollect-aliasing.R}{aliasing1}
 
 We know that the data is supposed to be of the form
 $$y(t)=\cos(2\pi ft)\,,$$
 for some unknown frequency $f$. So, we use the  code in
-\wingding{5}\wingding{6}\wingding{7} to interpolate the data at more dense,
+\wingding{4} and \wingding{5} to interpolate the data at more dense,
 and equally spaced points. For the interpolation, or fitting the data, 
 we use the function \code{interp1} from the \code{pracma} package.
-We can see  in the right panel of  Figure~\ref{fig:aliasing1} that the 
+We can see  in the right panel of  Figure~\ref{fig:ch7:aliasing1} that the 
 interpolated function fits the data perfectly.
 
 But, is it really a perfect fit?
@@ -664,7 +670,7 @@ But, is it really a perfect fit?
 \begin{figure}[H]
   \includegraphics[width=\textwidth]{images/chapter_7/aliasing1.pdf}
   \caption{Sampling from a periodic function, with a low sampling rate}
-  \label{fig:aliasing1}
+  \label{fig:ch7:aliasing1}
 \end{figure}
 
  
@@ -675,16 +681,16 @@ Let's look at the following code:
 
 \showChunk{R}{Code/datacollect-aliasing.R}{aliasing2}
 
-As you can see in \wingding{1}-\wingding{4}, we now collect data for
+As you can see in \wingding{2}-\wingding{3}, we now collect data for
 our sample at a rate that is 10 times higher than before (it's the same code
-as before, except that the time intervals are 0.01, instead of 0.1). In \wingding{5} 
+as before, except that the time intervals are 0.01, instead of 0.1). In \wingding{4} 
 we plot the data that we got from the first (low sampling rate) data.
-The new function is shown in Figure~\ref{fig:aliasing2}, and it also fits perfectly.
+The new function is shown in Figure~\ref{fig:ch7:aliasing2}, and it also fits perfectly.
 
 \begin{figure}[H]
   \includegraphics[width=0.5\textwidth]{images/chapter_7/aliasing2.pdf}
   \caption{Sampling from a periodic function, with a high sampling rate}
-  \label{fig:aliasing2}
+  \label{fig:ch7:aliasing2}
 \end{figure}
 
 How can it be? Which function is the correct one? What we see here is, that
@@ -702,11 +708,11 @@ optimal---no smaller one is sufficient, and a larger one is not needed.
 Let's revisit the parameter \code{f} which we saw in \wingding{1}. This is
 the true frequency that we used. What it means is, that we know the
 function has to oscillate 8 times per time unit. Now, look at Figures  
-\ref{fig:aliasing1} and \ref{fig:aliasing2}. Can you tell which one is the correct 
-function? The function in Figure~\ref{fig:aliasing1} completes only two
-cycles between 0 and 1, while the one in Figure~\ref{fig:aliasing2}
+\ref{fig:ch7:aliasing1} and \ref{fig:ch7:aliasing2}. Can you tell which one is the correct 
+function? The function in Figure~\ref{fig:ch7:aliasing1} completes only two
+cycles between 0 and 1, while the one in Figure~\ref{fig:ch7:aliasing2}
 shows 8 cycles in one time unit. The higher sampling rate gave us the
-true function. The lower sampling rate, although fits the given data perfectly, 
+true function. The lower sampling rate, although it fits the given data perfectly,
 gives us the wrong function.
 
 So, when dealing with data like in this example, it's important to have some prior
@@ -717,16 +723,16 @@ waves that oscillate around 4,000 times per second. (Dogs, for example
 can hear much higher frequencies). So, a telephone only has to sample the
 audio at a rate of 8,000 times per second.
 
-We mentioned in Section \ref{representative} of this chapter that a representative sample is more
+We noted in this chapter that a representative sample is more
 important than a large sample, but here we see that in some situations
-the sample size is also important. In the examples discussed here,
+the sample size also matters. In the examples discussed here,
 we know exactly how large the sample has to be in order to identify
 the correct function, and prevent the problem of aliasing.
 
 
 
-\hypertarget{ch:data}{%
-  \section{Common biases}\label{sources-bias}}
+\hypertarget{sources-bias}{%
+  \section{Common Biases}\label{sources-bias}}
 We've seen a number of sources of bias above, including Berkson's bias---where
 we only get to observe data based on some selection rule,
 the related survival bias---where we never see the outcome from the worst case 
@@ -742,12 +748,11 @@ Some biases are due to human tendencies. For example, \emph{observation time
 interval bias} may occur if data collection ends too early, or worse, when it is
 stopped at a convenient time that supports the desired conclusion.
 
-\emph{confirmation bias} occurs when people
-try to search for, interpret, favor, and recall information in a way that confirms
-or supports their prior beliefs or values. It's also sometimes referred to
-as \emph{cherry picking}.  The picker selects only the ripest and most
-appealing fruits, and the collection is not representative of all the fruit in the 
-orchard. 
+\emph{Confirmation bias}, which we also saw in the omitted-variables example
+above, occurs when people search for, interpret, and recall information in ways
+that confirm their prior beliefs. It is sometimes called \emph{cherry picking}:
+the picker selects only the ripest and most appealing fruit, and the collection
+is not representative of all the fruit in the orchard.
 
 Another example is \emph{availability bias}, which arises because
 people have a natural tendency to assign probability or likelihood
@@ -757,14 +762,14 @@ attention (such as disease diagnoses or disasters)
 tend to stay on people's minds, leading to overestimation
 of their actual probabilities.
 
-Even when data are collected in a carefully designed experiment, some bias may occur.
+Even when data is collected in a carefully designed experiment, some bias may occur.
 For example, rejection of bad data on arbitrary grounds instead of according to
 a previously stated or generally agreed criteria. For example, one may choose
 to discard what one perceives as ``outliers'' without valid reasons.
 
 Another common source is \emph{self-selection bias} or a \emph{volunteer bias},
 which happens when subjects in an experiment decide on their own if they will be included in a
-sample, or in each group in the sample. Volunteers tend to have intrinsically different characteristics from
+sample, or in which group in the sample. Volunteers tend to have intrinsically different characteristics from
 the whole population of people in consideration. 
 For example, people with a terminal disease are much more likely to opt into
 a clinical trial of an experimental drug. If only terminally ill patients receive the
@@ -779,11 +784,11 @@ Related to this is the ``Hawthorne effect'', which is when people tend to behave
 differently if they know they're being observed.
 This one is particularly hard to detect or to prevent.
 
-\hypertarget{ch:data}{%
-  \section{Basic sampling designs}\label{sampling-designs}}
+\hypertarget{sampling-designs}{%
+  \section{Basic Sampling Designs}\label{sampling-designs}}
 
 Sampling can be conducted with or without replacement. Sampling with replacement
-may produce duplicate selections (e.g., the birthday problem in
+may produce duplicate selections (for example, the birthday problem in
 Chapter~\ref{ch:probability}) but is often simpler to implement. Sampling
 without replacement avoids duplicates and yields higher precision, especially
 when sampling a large proportion of the population.
@@ -811,7 +816,7 @@ foundational designs in various ways.
   sampling, and ensures samples are evenly spread through the
   population. However, it may introduce bias if a pattern exists in the list.
 
-\item Cluster Sampling: Divide the population into clusters (e.g., geographic
+\item Cluster Sampling: Divide the population into clusters (for example, geographic
   areas), randomly select some clusters, and sample all or some items within
   them. This method is cost-effective for large, geographically dispersed
   populations, but typically results in higher sampling error compared to other
@@ -848,16 +853,28 @@ foundational designs in various ways.
 % \end{example}
 
 \section{Summary}
-In this chapter we discussed the importance of proper sampling, and the risk of 
-reaching wrong conclusions when the data collection is not done
-right. We introduced the notion of a representative sample, and demonstrated
-what can happen when a sample is non-representative (biased).
-In general, when the data collection is done as a planned experiment,
-we can prevent biases (but it's still not always easy, and require careful planning!)
-But, when we use so-called observational data, there is not much we can do to
-prevent bias in data collection. We should, however, be aware of the possible
-biases, and be careful not to draw far-reaching or decisive conclusions when
-we can't be sure that there is no hidden bias.
+In this chapter we discussed the importance of proper sampling and the risk of
+reaching wrong conclusions when data collection is not done right. We introduced
+the notion of a representative sample, and demonstrated what can happen when a
+sample is non-representative (biased). We saw that even a very large sample can
+give badly wrong estimates if it is collected in a biased way. We also examined
+the difference between randomized controlled experiments---which can establish
+causation---and observational studies, which can only reveal associations. We
+then surveyed several specific data-collection hazards: Berkson's bias, survival
+bias, omitted variables, extrapolation, and aliasing. Finally, we described the
+most common sampling designs and noted when each is appropriate.
+
+When the data collection is done as a planned experiment we can prevent many
+biases---but this still requires careful design. When we use observational data
+there is often little we can do to prevent bias entirely. We should, however,
+always be aware of the possible pitfalls, and be careful not to draw
+far-reaching or decisive conclusions when we cannot rule out hidden bias.
+
+In Chapter~\ref{ch:regression} we will build regression models that quantify
+relationships between variables. The ideas developed here---representative
+sampling, omitted variable bias, and the limits of observational data---will
+reappear throughout that chapter as we ask whether a fitted model can be
+trusted and what its estimates actually mean.
 
 %%% Local Variables:
 %%% mode: latex
