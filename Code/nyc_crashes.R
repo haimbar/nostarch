@@ -252,6 +252,22 @@ dev.off()
 
 
 ############################################################
+#label===business_hours_make
+df$business_hours <- (df$hour >= 7) & (df$hour < 19)
+#===end
+
+
+############################################################
+#label===business_hours_table
+tab_bh_borough <- table(df$business_hours, df$borough)
+tab_bh_borough
+
+prop_bh_borough <- prop.table(tab_bh_borough, margin = 2)
+round(prop_bh_borough, 3)
+#===end
+
+
+############################################################
 #label===severity_make
 df$severe <- (df$number_of_persons_injured > 0) |
              (df$number_of_persons_killed > 0)
@@ -359,7 +375,7 @@ severity_counts
 ############################################################
 #label===severity_glm_prep
 # Prepare data for logistic regression: select predictors and drop missing
-sev_model_data <- df[, c("severe", "business_day", "hour", "n_vehicles", "borough")]
+sev_model_data <- df[, c("severe", "business_day", "n_vehicles", "borough")]
 sev_model_data <- sev_model_data[complete.cases(sev_model_data), ]
 # Quick summary of the model data
 summary(sev_model_data)
@@ -367,12 +383,12 @@ summary(sev_model_data)
 
 ############################################################
 #label===severity_glm_fit
-# Fit logistic regression: severe ~ business_day + hour + n_vehicles
+# Fit logistic regression: severe ~ business_day + n_vehicles
 # Use the prepared dataset to avoid missing-data surprises
-fit_severe <- glm(severe ~ business_day + hour + n_vehicles,
+fit_severe <- glm(severe ~ business_day + n_vehicles,
                   data = sev_model_data,
                   family = binomial)
-summary(fit_severe)
+capture.output(summary(fit_severe), file = "generated/nyc-glm-fit.tex")
 #===end
 
 ############################################################
@@ -381,19 +397,22 @@ summary(fit_severe)
 coef_est <- coef(summary(fit_severe))
 or <- exp(coef(fit_severe))
 wald_ci <- exp(confint.default(fit_severe))
-cbind(Estimate = coef(fit_severe),
-      OR = or,
-      "2.5%" = wald_ci[, 1],
-      "97.5%" = wald_ci[, 2])
+capture.output(
+  cbind(Estimate = coef(fit_severe),
+        OR = or,
+        "2.5%" = wald_ci[, 1],
+        "97.5%" = wald_ci[, 2]),
+  file = "generated/nyc-glm-or.tex"
+)
 #===end
 
 ############################################################
 #label===severity_glm_diag
 # Simple diagnostics: fitted probabilities and deviance residuals
 fitted_prob <- predict(fit_severe, type = "response")
-summary(fitted_prob)
 resid_dev <- residuals(fit_severe, type = "deviance")
-summary(resid_dev)
+capture.output(summary(fitted_prob), file = "generated/nyc-glm-fitted.tex")
+capture.output(summary(resid_dev), file = "generated/nyc-glm-resid.tex")
 #===end
 
 ############################################################
@@ -409,10 +428,10 @@ severe_rate <- mean(df$severe, na.rm = TRUE)
 severe_rate_ci <- binom.test(sum(df$severe, na.rm = TRUE), nrow(df))
 # fit using same prepared dataset as above (recreate if not present)
 if (!exists("sev_model_data")) {
-  sev_model_data <- df[, c("severe", "business_day", "hour", "n_vehicles", "borough")]
+  sev_model_data <- df[, c("severe", "business_day", "n_vehicles", "borough")]
   sev_model_data <- sev_model_data[complete.cases(sev_model_data), ]
 }
-fit_severe <- glm(severe ~ business_day + hour + n_vehicles,
+fit_severe <- glm(severe ~ business_day + n_vehicles,
                   data = sev_model_data,
                   family = binomial)
 #===end
@@ -459,15 +478,16 @@ df$severity_score <- df$number_of_persons_injured +
 
 ############################################################
 #label===top_severe
-ord <- order(df$severity_score, decreasing = TRUE,
-             na.last = NA)
+ord <- order(df$severity_score, decreasing = TRUE, na.last = NA)
 
-top10 <- df[ord[1:10],
-            c("crash_date", "crash_time", "borough",
-              "zip_code", "latitude", "longitude",
-              "number_of_persons_injured",
-              "number_of_persons_killed",
-              "severity_score")]
+top10 <- df[ord[1:10], c("crash_date", "crash_time", "borough",
+                         "zip_code", "latitude", "longitude",
+                         "number_of_persons_injured",
+                         "number_of_persons_killed",
+                         "severity_score")]
+names(top10)[names(top10) == "number_of_persons_injured"] <- "injured"
+names(top10)[names(top10) == "number_of_persons_killed"] <- "killed"
+names(top10)[names(top10) == "severity_score"] <- "score"
 
 top10
 #===end

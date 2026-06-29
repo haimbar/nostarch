@@ -15,20 +15,15 @@ and times, handling missing values, and interpreting results
 carefully. This chapter brings together many of the concepts and
 skills we have learned and shows how statistical thinking and data
 science can be used together to answer questions with real-world data.
+We will focus on three questions: when during the day do crashes happen,
+where in the city are they concentrated, and what recorded factors are
+most common.
 
-Along the way, we will also ask a few inferential questions. Are severe
-crashes more common on business days than on weekends? What is a
-reasonable estimate of the overall severe-crash rate for the week, and
-how uncertain is that estimate? Which recorded features are associated
-with crash severity? These questions are natural candidates for
-count-based hypothesis testing, estimation, and regression. They do not
-call for a t-test, because the response is binary rather than normally
-distributed.
-
+\runR{Code/nyc_crashes.R}{nyc-crashes-init}
 
 \section{Importing and Inspecting the Data}
 
-We begin by reading the comma-separated values file, or CSV file. A CSV
+We begin by reading the comma-separated values file, or CSV file\index{CSV file}. A CSV
 file is a plain text file that stores a data table. Each row is one
 record, and commas separate the values in that row. The raw data was
 downloaded from NYC Open Data Portal and included all the crashes
@@ -37,7 +32,7 @@ of the CSV file contains the variable names.
 
 \showChunk{R}{Code/nyc_crashes.R}{read}
 
-The object \texttt{df} is now a data frame. A data frame is R's usual
+The object \lstinline{df} is now a data frame\index{data frame}. A data frame is R's usual
 way to store a rectangular data table. Before doing any analysis, we
 check its structure, number of rows, number of columns, and first few
 variable names.
@@ -60,8 +55,8 @@ Now we apply the new names to the data frame and inspect the result.
 \showChunk{R}{Code/nyc_crashes.R}{rename_apply}
 
 This step does not change the data values. It only changes the labels on
-the columns. A name such as \code{NUMBER.OF.PERSONS.INJURED} becomes
-\code{number\_of\_persons\_injured}, which is easier to type and less
+the columns. A name such as \lstinline{NUMBER.OF.PERSONS.INJURED} becomes
+\lstinline{number_of_persons_injured}, which is easier to type and less
 likely to cause mistakes.
 
 Next we convert the crash date from text into a date object. This lets R
@@ -81,8 +76,8 @@ Day, so we define that target window.
 
 \showChunk{R}{Code/nyc_crashes.R}{filter_week}
 
-The logical variable \texttt{in\_week} is \texttt{TRUE} for rows inside
-the target week and \texttt{FALSE} for rows outside it. We count how
+The logical variable \lstinline{in_week} is \lstinline{TRUE} for rows inside
+the target week and \lstinline{FALSE} for rows outside it. We count how
 many rows pass that test, keep only those rows, and then check the date
 range again.
 
@@ -91,13 +86,13 @@ range again.
 Check-in: Why do we check the date range both before and after
 filtering? What mistake might this catch?
 
-The raw file has a \texttt{location} column that stores coordinates as
+The raw file has a \lstinline{location} column that stores coordinates as
 text. It also has separate numeric columns for latitude and longitude.
 We look at the three columns together.
 
 \showChunk{R}{Code/nyc_crashes.R}{location_preview}
 
-If \texttt{location} repeats the same information as latitude and
+If \lstinline{location} repeats the same information as latitude and
 longitude, it may not be useful for our analysis. We also count how many
 different location strings appear and how many are missing or blank.
 
@@ -105,18 +100,18 @@ different location strings appear and how many are missing or blank.
 
 \section{Missing Values and Data Quality}
 
-Missing values are not just empty spaces. They are clues about how the
+Missing values\index{missing value} are not just empty spaces. They are clues about how the
 data were collected. A missing borough or zip code might mean the crash
 happened on a highway, at an unusual address, or in a record where the
 location was not entered completely.
 
-We start with the borough column. The function \texttt{trimws()} removes
+We start with the borough\index{borough} column. The function \lstinline{trimws()} removes
 extra spaces at the beginning and end of each entry. Then we convert
-blank borough names into \texttt{NA}, R's missing-value marker.
+blank borough names into \lstinline{NA}, R's missing-value marker\index{missing value!NA@\lstinline{NA}}.
 
 \showChunk{R}{Code/nyc_crashes.R}{borough_clean}
 
-Zip codes can also have impossible values. If the zip code column is
+Zip codes\index{zip code} can also have impossible values. If the zip code column is
 numeric, a zero should not be treated as a real New York City zip code,
 so we recode it as missing.
 
@@ -130,28 +125,28 @@ are missing.
 These counts do not tell us why the values are missing. They tell us
 where to look more carefully.
 
-Location coordinates need their own check. New York City latitudes are
-around 40 degrees north, and longitudes are around 74 degrees west.
-Coordinates such as \texttt{(0,0)} are not in New York City. We mark
+Location coordinates need their own check. New York City latitudes\index{latitude} are
+around 40 degrees north, and longitudes\index{longitude} are around 74 degrees west.
+Coordinates such as \lstinline{(0,0)} are not in New York City. We mark
 coordinates as bad if they are zero-like or outside a broad box around
 the city.
 
 \showChunk{R}{Code/nyc_crashes.R}{geo_bad}
 
-After counting the bad coordinates, we replace them with \texttt{NA}.
+After counting the bad coordinates, we replace them with \lstinline{NA}.
 Then we count rows where either latitude or longitude is missing.
 
 \showChunk{R}{Code/nyc_crashes.R}{geo_recode}
 
 Sometimes a row has latitude and longitude but no zip code. In that
 case, we might be able to fill in the zip code later by using a map. We
-create \texttt{fillable\_zip} for rows with missing zip codes and
+create \lstinline{fillable_zip} for rows with missing zip codes and
 present coordinates.
 
 \showChunk{R}{Code/nyc_crashes.R}{fillable_make}
 
-To compare days of the week, we create a weekday variable. The
-\texttt{levels} argument puts the days in calendar order instead of
+To compare days of the week, we create a weekday variable\index{weekday}. The
+\lstinline{levels} argument puts the days in calendar order instead of
 alphabetical order.
 
 \showChunk{R}{Code/nyc_crashes.R}{weekday}
@@ -168,7 +163,7 @@ why not?
 \section{Exploring Temporal Patterns}
 
 The dataset stores date and time in separate columns. To study crashes
-across the day, we combine them into one date-time object.
+across the day, we combine them into one date-time object\index{date-time object}.
 
 \showChunk{R}{Code/nyc_crashes.R}{datetime_make}
 
@@ -181,18 +176,13 @@ Now we make a table of crash counts by hour and borough.
 
 \showChunk{R}{Code/nyc_crashes.R}{hour_table}
 
-The same table can be plotted with a base R bar plot. We put this code
-in the script so the book can build the figure automatically.
-
-\showChunk{R}{Code/nyc_crashes.R}{hour_plot}
-
-Figure~\ref{fig:nyc:hour} shows the same information as the table. Each
+Figure~\ref{fig:nyc:hour} shows the same table as a bar plot. Each
 bar is one hour of the day. The colored pieces show how many crashes
 came from each borough.
 
 \begin{figure}[H]
 \includegraphics[width=0.85\textwidth]{images/chapter_9/crashes_by_hour.pdf}
-\caption{Crash counts by hour and borough}
+\caption{Crash counts by hour and borough. Crashes rise during morning and evening rush hours and fall overnight.}
 \label{fig:nyc:hour}
 \end{figure}
 
@@ -207,17 +197,13 @@ If many times are rounded, we should be cautious about making claims
 that depend on exact minutes.
 
 Labor Day week includes weekdays and weekend days. We define a business
-day as Monday through Friday.
+day\index{business day} as Monday through Friday.
 
 \showChunk{R}{Code/nyc_crashes.R}{business_make}
 
 Then we compare borough counts for business days and non-business days.
 
 \showChunk{R}{Code/nyc_crashes.R}{business_table}
-
-Here is the matching plotting code.
-
-\showChunk{R}{Code/nyc_crashes.R}{business_plot}
 
 Figure~\ref{fig:nyc:daytype} makes the business-day comparison easier
 to scan. Remember that there are more business days than weekend days in
@@ -226,7 +212,7 @@ themselves.
 
 \begin{figure}[H]
 \includegraphics[width=0.8\textwidth]{images/chapter_9/crashes_by_day_type.pdf}
-\caption{Crash counts by day type and borough}
+\caption{Crash counts by day type and borough. Business days have more crashes than weekend days in every borough, partly because there are more business days in the week.}
 \label{fig:nyc:daytype}
 \end{figure}
 
@@ -234,10 +220,29 @@ Check-in: Why might the number of crashes be different on business days
 than on weekend days? Give one traffic reason and one data-recording
 reason.
 
+We can also compare crashes during business hours with crashes outside
+business hours. For a first definition, let business hours be 7 a.m. to
+7 p.m.
+
+\showChunk{R}{Code/nyc_crashes.R}{business_hours_make}
+
+Now we count crashes inside and outside those hours for each borough.
+
+\showChunk{R}{Code/nyc_crashes.R}{business_hours_table}
+
+As with business days, the raw counts are higher during business hours
+because that time window is longer. The proportions within each borough
+tell us what fraction of each borough's crashes happened during those
+hours.
+
+Taken together, the hourly, business-day, and business-hours comparisons
+give a first answer to our ``when'' question: crashes are not spread
+evenly across the day or the week.
+
 \section{Crash Severity}
 
 The dataset records injuries and deaths separately. For a first look, we
-call a crash severe if at least one person was injured or killed. This
+call a crash severe\index{severe crash} if at least one person was injured or killed. This
 is a simple rule, not the only possible rule.
 
 \showChunk{R}{Code/nyc_crashes.R}{severity_make}
@@ -247,26 +252,23 @@ that were severe.
 
 \showChunk{R}{Code/nyc_crashes.R}{severity_rate}
 
-We can also draw the crash locations. In
-Figure~\ref{fig:nyc:locations}, each dot is one crash with valid
-coordinates. Red dots are severe crashes.
-
-\showChunk{R}{Code/nyc_crashes.R}{severity_map}
+We can also draw the crash locations; Figure~\ref{fig:nyc:locations}
+shows each dot as one crash with valid coordinates, colored by severity.
 
 \begin{figure}[H]
 \includegraphics[width=0.7\textwidth]{images/chapter_9/severity_locations.pdf}
-\caption{Crash locations, colored by severity}
+\caption{Crash locations, colored by severity. Red dots show crashes with at least one injury or death; gray dots show crashes with none. Most crashes cluster in the city's densest areas.}
 \label{fig:nyc:locations}
 \end{figure}
 
 Crashes can involve different numbers of vehicles. The vehicle type
-columns all begin with \texttt{vehicle\_type\_code\_}, so we use
-\texttt{grep()} to find their names.
+columns all begin with \lstinline{vehicle_type_code_}, so we use
+\lstinline{grep()} to find their names.
 
 \showChunk{R}{Code/nyc_crashes.R}{vehicle_columns}
 
 For each row, we count how many of those vehicle type fields are not
-missing. This gives us \texttt{n\_vehicles}.
+missing. This gives us \lstinline{n_vehicles}.
 
 \showChunk{R}{Code/nyc_crashes.R}{vehicle_count}
 
@@ -277,14 +279,12 @@ count.
 \showChunk{R}{Code/nyc_crashes.R}{severity_by_vehicle}
 
 The plot in Figure~\ref{fig:nyc:vehseverity} shows the severe-crash
-proportion for each vehicle count. The dashed line marks the overall
-severe-crash proportion for the whole week.
-
-\showChunk{R}{Code/nyc_crashes.R}{severity_by_vehicle_plot}
+proportion for each vehicle count, with the overall severe-crash
+proportion marked by a dashed line.
 
 \begin{figure}[H]
 \includegraphics[width=0.75\textwidth]{images/chapter_9/severity_by_vehicle_count.pdf}
-\caption{Severe-crash proportion by number of vehicles}
+\caption{Severe-crash proportion by number of vehicles. Crashes involving more vehicles tend to have a higher proportion of injuries or deaths, though counts with many vehicles are small.}
 \label{fig:nyc:vehseverity}
 \end{figure}
 
@@ -297,11 +297,9 @@ Figure~\ref{fig:nyc:hourseverity} shows the hourly severe-crash
 proportions. The line moves around because each hour has its own mix of
 crashes and because some hours have fewer records than others.
 
-\showChunk{R}{Code/nyc_crashes.R}{severe_by_hour_plot}
-
 \begin{figure}[H]
 \includegraphics[width=0.85\textwidth]{images/chapter_9/severity_by_hour.pdf}
-\caption{Severe-crash proportion by hour}
+\caption{Severe-crash proportion by hour. The proportion of crashes with injuries or deaths varies across the day, with higher values in some overnight hours.}
 \label{fig:nyc:hourseverity}
 \end{figure}
 
@@ -309,76 +307,6 @@ These tables are useful for finding patterns, but they do not prove
 causes. For example, if late-night crashes have a higher severe-crash
 proportion, that could involve traffic speed, road conditions, driver
 behavior, reporting differences, or several of these at once.
-
-\subsection{A few inferential questions}
-
-The descriptive tables above invite a few simple inferential checks.
-Because severity is a yes-or-no outcome, the appropriate comparison is
-not a t-test. Instead, we can compare the 2-by-2 table of severe and
-non-severe crashes on business days and weekends with Pearson's
-chi-squared test of independence. That test works with counts, which is
-the right scale for this data.
-
-\runR{Code/nyc_crashes.R}{nyc-severity-inference}
-
-% Show the 2x2 table and chi-squared test as a small, focused step.
-\showChunk{R}{Code/nyc_crashes.R}{severity_inference_table}
-\showChunk{R}{Code/nyc_crashes.R}{severity_chisq}
-
-The contingency table is
-\inlnR{```tab_business_severe```}[nyc-sev-tab][vbox]
-and the chi-squared test gives a p-value of
-\inlnR{```round(chisq_business_severe$p.value, 4)```}[nyc-sev-p].
-For this week, the evidence is not strong enough to say that severe
-crashes differ by day type.
-
-We can also estimate the overall severe-crash rate for the week. The
-point estimate is \inlnR{```round(severe_rate, 3)```}[nyc-sev-rate],
-and the exact 95\% binomial confidence interval is
-\inlnR{```round(severe_rate_ci$conf.int[1], 3)```}[nyc-sev-lo]
-to \inlnR{```round(severe_rate_ci$conf.int[2], 3)```}[nyc-sev-hi].
-This interval is a direct estimate for a binary response; it does not
-rely on a normal approximation for the raw crash outcomes.
-
-To make the binomial calculation concrete, here are the raw counts of
-severe and non-severe crashes used by the binomial test:
-
-\showChunk{R}{Code/nyc_crashes.R}{severity_binom_table}
-
-Interpretation: the point estimate above reports the fraction of crashes
-in this sampled week that were classified as severe. The exact binomial
-confidence interval gives a range of plausible values for that
-underlying proportion. A narrow interval means the estimate is relatively
-stable (we observed many crashes); a wide interval means more sampling
-uncertainty (fewer crashes). These values describe the observed week and
-should not be interpreted as causal effects.
-
-% Break the regression into small chunks with explanation and interpretation.
-First, prepare a clean dataset for modeling and inspect it:
-
-\showChunk{R}{Code/nyc_crashes.R}{severity_glm_prep}
-
-Next, fit a logistic regression predicting the binary severity outcome
-from business-day indicator, hour of day (numeric), and number of
-vehicles involved.
-
-\showChunk{R}{Code/nyc_crashes.R}{severity_glm_fit}
-
-To make coefficients easier to interpret, transform the estimates into
-odds ratios and show Wald 95\% confidence intervals.
-
-\showChunk{R}{Code/nyc_crashes.R}{severity_glm_or}
-
-Finally, inspect simple diagnostics: fitted probabilities and deviance
-residuals to check for gross model misfit.
-
-\showChunk{R}{Code/nyc_crashes.R}{severity_glm_diag}
-
-These steps separate modeling into preparation, fitting, interpretation,
-and validation. The logistic model gives an interpretable summary via
-odds ratios, but remember the usual caveats: association is not
-causation, and omitted variables or reporting differences can affect
-estimates.
 
 Sometimes we want to inspect the most serious individual records. We
 create a simple severity score: each injury counts as 1 point, and each
@@ -391,15 +319,122 @@ Now we sort the crashes by that score and print the top 10 rows.
 
 \showChunk{R}{Code/nyc_crashes.R}{top_severe}
 
+The ten rows with the highest scores are shown below, with only the
+most useful columns kept so the table fits on the page.
+
+\inlnR{```print(top10[, c("borough", "injured", "killed", "score")])```}[nyc-top10][vbox]
+
 Check-in: Why might two analysts choose different severity scores? What
 should they explain before comparing their results?
 
+The crash map and borough counts begin to answer our ``where''
+question: crashes cluster in the densest parts of the city, and the
+proportion of severe crashes varies by location, time, and number of
+vehicles involved.
+
+\section{From Description to Inference}
+
+The descriptive tables above invite a few simple inferential checks.
+Because severity is a yes-or-no outcome, the appropriate comparison is
+not a t-test. In this section we use three tools: a chi-squared test
+to compare severe and non-severe crashes across day types, a binomial
+confidence interval to estimate the overall severe-crash rate, and a
+logistic regression model to see how severity relates to several
+predictors at once.
+
+\subsection{Chi-Squared Test of Independence}
+
+We can compare the 2-by-2 table of severe and non-severe crashes on
+business days and weekends with Pearson's chi-squared test of
+independence\index{chi-squared test of independence}. That test works with counts, which is
+the right scale for this data.
+
+\showChunk{R}{Code/nyc_crashes.R}{severity_inference_table}
+\showChunk{R}{Code/nyc_crashes.R}{severity_chisq}
+
+The contingency table is
+\inlnR{```tab_business_severe```}[nyc-sev-tab][vbox]
+and the chi-squared test gives a p-value of
+\inlnR{```round(chisq_business_severe$p.value, 4)```}[nyc-sev-p].
+For this week, the evidence is not strong enough to say that severe
+crashes differ by day type.
+
+\subsection{A Confidence Interval for the Severe-Crash Rate}
+
+We can also estimate the overall severe-crash rate for the week. The
+point estimate\index{point estimate} is \inlnR{```round(severe_rate, 3)```}[nyc-sev-rate],
+and the exact 95\% binomial confidence interval\index{confidence interval!binomial} is
+\inlnR{```round(severe_rate_ci$conf.int[1], 3)```}[nyc-sev-lo]
+to \inlnR{```round(severe_rate_ci$conf.int[2], 3)```}[nyc-sev-hi].
+This interval is a direct estimate for a binary response; it does not
+rely on a normal approximation for the raw crash outcomes.
+
+To make the binomial calculation concrete, here are the raw counts of
+severe and non-severe crashes used by the binomial test:
+
+\showChunk{R}{Code/nyc_crashes.R}{severity_binom_table}
+
+The table shows
+\inlnR{```sum(df$severe, na.rm = TRUE)```}[nyc-sev-count]
+severe crashes and
+\inlnR{```sum(!df$severe, na.rm = TRUE)```}[nyc-nonsev-count]
+non-severe crashes. The point estimate reports the fraction of crashes
+in this sampled week that were classified as severe. The exact binomial
+confidence interval gives a range of plausible values for that
+underlying proportion. A narrow interval means the estimate is relatively
+stable (we observed many crashes); a wide interval means more sampling
+uncertainty (fewer crashes). These values describe the observed week and
+should not be interpreted as causal effects.
+
+\subsection{Logistic Regression}
+
+A logistic regression model\index{logistic regression} lets us relate the binary severity outcome
+to two predictors at once: business-day indicator and number of vehicles
+involved. We interpret the coefficients on the odds-ratio scale.
+
+First, prepare a clean dataset for modeling and inspect it:
+
+\showChunk{R}{Code/nyc_crashes.R}{severity_glm_prep}
+
+Next, fit the model:
+
+\showChunk{R}{Code/nyc_crashes.R}{severity_glm_fit}
+
+The model output is shown below.
+
+\includeOutput{nyc-glm-fit}[vbox]
+
+To make coefficients easier to interpret, transform the estimates into
+odds ratios\index{odds ratio} and show Wald 95\% confidence intervals.
+
+\showChunk{R}{Code/nyc_crashes.R}{severity_glm_or}
+
+The odds ratios and confidence intervals are shown below.
+
+\includeOutput{nyc-glm-or}[vbox]
+
+Finally, inspect simple diagnostics: fitted probabilities and deviance
+residuals to check for gross model misfit.
+
+\showChunk{R}{Code/nyc_crashes.R}{severity_glm_diag}
+
+The summaries are shown below.
+
+\includeOutput{nyc-glm-fitted}[vbox]
+\includeOutput{nyc-glm-resid}[vbox]
+
+These steps separate modeling into preparation, fitting, interpretation,
+and validation. The logistic model gives an interpretable summary via
+odds ratios, but remember the usual caveats: association is not
+causation, and omitted variables or reporting differences can affect
+estimates.
+
 \section{Contributing Factors and Vehicle Types}
 
-Each crash record can list up to five contributing factors. We begin
+Each crash record can list up to five contributing factors\index{contributing factor}. We begin
 with the factor for vehicle 1 because it is the most often filled in.
 First we clean the text by trimming spaces and changing letters to lower
-case. Then we treat vague entries such as \texttt{unspecified} as
+case. Then we treat vague entries such as \lstinline{unspecified} as
 missing.
 
 \showChunk{R}{Code/nyc_crashes.R}{factor_clean}
@@ -412,11 +447,9 @@ factors.
 Figure~\ref{fig:nyc:factors} shows the eight most common cleaned
 contributing factors for vehicle 1.
 
-\showChunk{R}{Code/nyc_crashes.R}{factor_plot}
-
 \begin{figure}[H]
 \includegraphics[width=0.85\textwidth]{images/chapter_9/top_contributing_factors.pdf}
-\caption{Most common contributing factors for vehicle 1}
+\caption{Most common contributing factors for vehicle 1. Driver inattention and following too closely are the most frequently recorded factors in this week.}
 \label{fig:nyc:factors}
 \end{figure}
 
@@ -424,8 +457,8 @@ This kind of table is easy to read, but it has a limit. A contributing
 factor is what was recorded, not necessarily the full cause of the
 crash.
 
-Finally, we look at vehicle types for vehicles 1 and 2. We trim extra
-spaces and turn blank entries into \texttt{NA}.
+Finally, we look at vehicle types\index{vehicle type} for vehicles 1 and 2. We trim extra
+spaces and turn blank entries into \lstinline{NA}.
 
 \showChunk{R}{Code/nyc_crashes.R}{vehicle_type_clean}
 
@@ -437,11 +470,9 @@ Figure~\ref{fig:nyc:vehicles} shows the most common vehicle 1 types.
 The long sport utility vehicle label is a good reminder that real
 categories are not always short or tidy.
 
-\showChunk{R}{Code/nyc_crashes.R}{vehicle_type_plot}
-
 \begin{figure}[H]
 \includegraphics[width=0.85\textwidth]{images/chapter_9/top_vehicle_types.pdf}
-\caption{Most common vehicle 1 types}
+\caption{Most common vehicle 1 types. Sedans, sport utility vehicles, and taxis account for the largest shares of crashes.}
 \label{fig:nyc:vehicles}
 \end{figure}
 
@@ -449,6 +480,10 @@ The most common categories reflect everyday traffic in New York City,
 such as sedans, sport utility vehicles, taxis, bikes, and trucks. The
 exact order depends on the week we chose and on how vehicle types were
 entered in the database.
+
+These tables answer our ``what factors'' question with an important
+caveat: the most common recorded factors and vehicle types show what
+appears in the data, not necessarily the true causes of the crashes.
 
 \section{Summary}
 
