@@ -176,7 +176,12 @@ Now we make a table of crash counts by hour and borough.
 
 \showChunk{R}{Code/nyc_crashes.R}{hour_table}
 
-Figure~\ref{fig:nyc:hour} shows the same table as a bar plot. Each
+The same table can be plotted with a base R bar plot. We put this code
+in the script so the book can build the figure automatically.
+
+\showChunk{R}{Code/nyc_crashes.R}{hour_plot}
+
+Figure~\ref{fig:nyc:hour} shows the same information as the table. Each
 bar is one hour of the day. The colored pieces show how many crashes
 came from each borough.
 
@@ -204,6 +209,10 @@ day\index{business day} as Monday through Friday.
 Then we compare borough counts for business days and non-business days.
 
 \showChunk{R}{Code/nyc_crashes.R}{business_table}
+
+Here is the matching plotting code.
+
+\showChunk{R}{Code/nyc_crashes.R}{business_plot}
 
 Figure~\ref{fig:nyc:daytype} makes the business-day comparison easier
 to scan. Remember that there are more business days than weekend days in
@@ -252,8 +261,11 @@ that were severe.
 
 \showChunk{R}{Code/nyc_crashes.R}{severity_rate}
 
-We can also draw the crash locations; Figure~\ref{fig:nyc:locations}
-shows each dot as one crash with valid coordinates, colored by severity.
+We can also draw the crash locations. In
+Figure~\ref{fig:nyc:locations}, each dot is one crash with valid
+coordinates. Red dots are severe crashes.
+
+\showChunk{R}{Code/nyc_crashes.R}{severity_map}
 
 \begin{figure}[H]
 \includegraphics[width=0.7\textwidth]{images/chapter_9/severity_locations.pdf}
@@ -282,6 +294,8 @@ The plot in Figure~\ref{fig:nyc:vehseverity} shows the severe-crash
 proportion for each vehicle count, with the overall severe-crash
 proportion marked by a dashed line.
 
+\showChunk{R}{Code/nyc_crashes.R}{severity_by_vehicle_plot}
+
 \begin{figure}[H]
 \includegraphics[width=0.75\textwidth]{images/chapter_9/severity_by_vehicle_count.pdf}
 \caption{Severe-crash proportion by number of vehicles. Crashes involving more vehicles tend to have a higher proportion of injuries or deaths, though counts with many vehicles are small.}
@@ -296,6 +310,8 @@ table by hour.
 Figure~\ref{fig:nyc:hourseverity} shows the hourly severe-crash
 proportions. The line moves around because each hour has its own mix of
 crashes and because some hours have fewer records than others.
+
+\showChunk{R}{Code/nyc_crashes.R}{severe_by_hour_plot}
 
 \begin{figure}[H]
 \includegraphics[width=0.85\textwidth]{images/chapter_9/severity_by_hour.pdf}
@@ -447,6 +463,8 @@ factors.
 Figure~\ref{fig:nyc:factors} shows the eight most common cleaned
 contributing factors for vehicle 1.
 
+\showChunk{R}{Code/nyc_crashes.R}{factor_plot}
+
 \begin{figure}[H]
 \includegraphics[width=0.85\textwidth]{images/chapter_9/top_contributing_factors.pdf}
 \caption{Most common contributing factors for vehicle 1. Driver inattention and following too closely are the most frequently recorded factors in this week.}
@@ -469,6 +487,8 @@ Then we count the most common vehicle categories.
 Figure~\ref{fig:nyc:vehicles} shows the most common vehicle 1 types.
 The long sport utility vehicle label is a good reminder that real
 categories are not always short or tidy.
+
+\showChunk{R}{Code/nyc_crashes.R}{vehicle_type_plot}
 
 \begin{figure}[H]
 \includegraphics[width=0.85\textwidth]{images/chapter_9/top_vehicle_types.pdf}

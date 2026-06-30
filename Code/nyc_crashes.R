@@ -184,10 +184,10 @@ tab_hour_borough
 
 
 ############################################################
-#label===hour_plot
 pdf("images/chapter_9/crashes_by_hour.pdf",
     width = 7, height = 4.5)
 
+#label===hour_plot
 barplot(t(tab_hour_borough),
         col = c("darkorange", "steelblue", "seagreen",
                 "orchid", "gray50"),
@@ -201,9 +201,9 @@ legend("topright",
                 "orchid", "gray50"),
        bty = "n",
        cex = 0.8)
+#===end
 
 dev.off()
-#===end
 
 
 ############################################################
@@ -227,10 +227,10 @@ tab_bd_borough
 
 
 ############################################################
-#label===business_plot
 pdf("images/chapter_9/crashes_by_day_type.pdf",
     width = 6.5, height = 4.5)
 
+#label===business_plot
 barplot(t(tab_bd_borough),
         beside = TRUE,
         col = c("darkorange", "steelblue", "seagreen",
@@ -246,9 +246,9 @@ legend("topleft",
                 "orchid", "gray50"),
        bty = "n",
        cex = 0.8)
+#===end
 
 dev.off()
-#===end
 
 
 ############################################################
@@ -282,10 +282,10 @@ mean(df$severe, na.rm = TRUE)
 
 
 ############################################################
-#label===severity_map
 pdf("images/chapter_9/severity_locations.pdf",
     width = 5.5, height = 5.5)
 
+#label===severity_map
 plot(df$longitude, df$latitude,
      col = ifelse(df$severe, "firebrick", "gray70"),
      pch = 19,
@@ -298,9 +298,9 @@ legend("bottomleft",
        col = c("gray70", "firebrick"),
        pch = 19,
        bty = "n")
+#===end
 
 dev.off()
-#===end
 
 
 ############################################################
@@ -332,10 +332,10 @@ prop_severe_by_veh
 
 
 ############################################################
-#label===severity_by_vehicle_plot
 pdf("images/chapter_9/severity_by_vehicle_count.pdf",
     width = 6, height = 4)
 
+#label===severity_by_vehicle_plot
 barplot(prop_severe_by_veh["TRUE", ],
         col = "firebrick",
         border = NA,
@@ -346,9 +346,9 @@ barplot(prop_severe_by_veh["TRUE", ],
 abline(h = mean(df$severe, na.rm = TRUE),
        lty = 2,
        col = "gray40")
+#===end
 
 dev.off()
-#===end
 
 
 ############################################################
@@ -448,10 +448,10 @@ prop_severe_by_hour
 
 
 ############################################################
-#label===severe_by_hour_plot
 pdf("images/chapter_9/severity_by_hour.pdf",
     width = 7, height = 4)
 
+#label===severe_by_hour_plot
 plot(as.integer(colnames(prop_severe_by_hour)),
      prop_severe_by_hour["TRUE", ],
      type = "o",
@@ -464,9 +464,9 @@ plot(as.integer(colnames(prop_severe_by_hour)),
 abline(h = mean(df$severe, na.rm = TRUE),
        lty = 2,
        col = "gray40")
+#===end
 
 dev.off()
-#===end
 
 
 ############################################################
@@ -515,10 +515,12 @@ head(cf1_table, 5)
 
 
 ############################################################
-#label===factor_plot
 pdf("images/chapter_9/top_contributing_factors.pdf",
     width = 8.5, height = 4.5)
 
+par(mar = c(5, 8, 1, 1))
+
+#label===factor_plot
 top_factors <- head(cf1_table, 8)
 top_factor_counts <- as.numeric(top_factors)
 factor_labels <- c(
@@ -532,8 +534,6 @@ factor_labels <- c(
   "passing too closely" = "Passing too closely")
 names(top_factor_counts) <- factor_labels[names(top_factors)]
 
-par(mar = c(5, 8, 1, 1))
-
 barplot(rev(top_factor_counts),
         horiz = TRUE,
         las = 1,
@@ -541,9 +541,9 @@ barplot(rev(top_factor_counts),
         col = "steelblue",
         border = NA,
         xlab = "Number of crashes")
+#===end
 
 dev.off()
-#===end
 
 
 ############################################################
@@ -567,10 +567,12 @@ head(vt2_table, 10)
 
 
 ############################################################
-#label===vehicle_type_plot
 pdf("images/chapter_9/top_vehicle_types.pdf",
     width = 8.5, height = 4.5)
 
+par(mar = c(5, 8, 1, 1))
+
+#label===vehicle_type_plot
 top_vehicle_types <- head(vt1_table, 8)
 top_vehicle_counts <- as.numeric(top_vehicle_types)
 vehicle_labels <- c(
@@ -584,8 +586,6 @@ vehicle_labels <- c(
   "Box Truck" = "Box truck")
 names(top_vehicle_counts) <- vehicle_labels[names(top_vehicle_types)]
 
-par(mar = c(5, 8, 1, 1))
-
 barplot(rev(top_vehicle_counts),
         horiz = TRUE,
         las = 1,
@@ -593,9 +593,9 @@ barplot(rev(top_vehicle_counts),
         col = "seagreen",
         border = NA,
         xlab = "Number of crashes")
+#===end
 
 dev.off()
-#===end
 
 
 ############################################################
