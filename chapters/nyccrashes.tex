@@ -98,6 +98,17 @@ different location strings appear and how many are missing or blank.
 
 \showChunk{R}{Code/nyc_crashes.R}{location_unique}
 
+Every record also has a \lstinline{collision_id}. Before relying on it
+as a unique key, we check that no id appears twice.
+
+\showChunk{R}{Code/nyc_crashes.R}{id_check}
+
+Because \lstinline{location} is just a text version of the latitude and
+longitude, we drop it once the numeric coordinates are clean. Keeping
+redundant columns increases the chance of inconsistent results.
+
+\showChunk{R}{Code/nyc_crashes.R}{location_drop}
+
 \section{Missing Values and Data Quality}
 
 Missing values\index{missing value} are not just empty spaces. They are clues about how the
@@ -122,8 +133,10 @@ are missing.
 
 \showChunk{R}{Code/nyc_crashes.R}{missing_counts}
 
-These counts do not tell us why the values are missing. They tell us
-where to look more carefully.
+The cross-tabulation shows that missing boroughs and missing zip codes
+go together perfectly in this week: every row with a missing borough
+also has a missing zip code. That pattern suggests the location was not
+entered at all, not that one piece was forgotten.
 
 Location coordinates need their own check. New York City latitudes\index{latitude} are
 around 40 degrees north, and longitudes\index{longitude} are around 74 degrees west.
@@ -197,9 +210,53 @@ may mean the actual crash times were rounded during reporting.
 
 \showChunk{R}{Code/nyc_crashes.R}{rounded_times}
 
+About 15\% of the crashes are recorded on the hour, far more than we
+would expect if crash times were spread uniformly across minutes. The
+spike at hour 0 is especially suspicious. Of those midnight crashes, a
+large share are recorded at exactly 00:00. That pattern is hard to
+explain with real traffic: it is much more likely that a missing or
+unknown crash time was entered as the default value 00:00:00. If we
+ignored this, we might conclude that midnight is one of the most
+dangerous hours of the day, when the truth is that many of those
+crashes simply happened at some unknown time.
+
+The exact-midnight rate is not the same in every borough. A higher rate
+in one borough could mean weaker data-quality control there, or simply
+that small boroughs have more variable rates because they have fewer
+crashes.
+
+\showChunk{R}{Code/nyc_crashes.R}{midnight_by_borough}
+
+Staten Island has the highest share of exact-midnight crashes in this
+week, but it also has the smallest number of crashes overall, so the
+rate is based on only two records. The pattern is still worth watching
+across a longer time window.
+
+To see how misleading the default entries can be, we can reassign the
+crashes recorded at exactly 00:00 uniformly at random within each
+borough. This is not a claim about when those crashes really happened;
+it is a way to show how much the midnight peak depends on a data-entry
+choice.
+
+\showChunk{R}{Code/nyc_crashes.R}{hour_corrected_make}
+
+Figure~\ref{fig:nyc:hourcorrected} compares the original hourly counts
+by borough with the counts after the exact-midnight crashes have been
+redistributed within each borough. The midnight spike shrinks
+dramatically.
+
+\showChunk{R}{Code/nyc_crashes.R}{hour_corrected_plot}
+
+\begin{figure}[H]
+\includegraphics[width=0.95\textwidth]{images/chapter_9/crashes_by_hour_corrected.pdf}
+\caption{Original crash counts by hour and borough (left) and counts after reassigning crashes recorded at exactly 00:00 uniformly within each borough (right). The midnight peak in the left panel is largely a data-entry artifact.}
+\label{fig:nyc:hourcorrected}
+\end{figure}
+
 Rounding is not automatically bad, but it changes what we should say.
-If many times are rounded, we should be cautious about making claims
-that depend on exact minutes.
+If many times are rounded or defaulted, we should be cautious about
+making claims that depend on exact minutes or hours. A single default
+value can create a fake peak.
 
 Labor Day week includes weekdays and weekend days. We define a business
 day\index{business day} as Monday through Friday.
@@ -250,9 +307,21 @@ evenly across the day or the week.
 
 \section{Crash Severity}
 
-The dataset records injuries and deaths separately. For a first look, we
-call a crash severe\index{severe crash} if at least one person was injured or killed. This
-is a simple rule, not the only possible rule.
+The dataset records injuries and deaths separately. Before using those
+numbers, we check one internal consistency relationship: the total number
+of persons injured should equal the sum of pedestrians, cyclists, and
+motorists injured. The same should hold for deaths.
+
+\showChunk{R}{Code/nyc_crashes.R}{injury_consistency}
+
+A few rows report injured persons without reporting any injured
+pedestrians, cyclists, or motorists. The totals and the subtotals do not
+match, which is a reminder that real data can contain internal
+inconsistencies. For our severity rule we use the total counts, because
+those are the broadest measure available.
+
+For a first look, we call a crash severe\index{severe crash} if at least one person was
+injured or killed. This is a simple rule, not the only possible rule.
 
 \showChunk{R}{Code/nyc_crashes.R}{severity_make}
 
@@ -450,8 +519,11 @@ estimates.
 Each crash record can list up to five contributing factors\index{contributing factor}. We begin
 with the factor for vehicle 1 because it is the most often filled in.
 First we clean the text by trimming spaces and changing letters to lower
-case. Then we treat vague entries such as \lstinline{unspecified} as
-missing.
+case. Then we treat blank entries and \lstinline{unspecified} as missing,
+because they do not tell us what actually happened. We keep
+\lstinline{other vehicular} as a separate category: it is vague, but it
+still signals that the factor was vehicular rather than, say, a road
+condition or a pedestrian action.
 
 \showChunk{R}{Code/nyc_crashes.R}{factor_clean}
 
@@ -476,7 +548,10 @@ factor is what was recorded, not necessarily the full cause of the
 crash.
 
 Finally, we look at vehicle types\index{vehicle type} for vehicles 1 and 2. We trim extra
-spaces and turn blank entries into \lstinline{NA}.
+spaces and turn blank entries or the literal value \lstinline{unknown}
+into \lstinline{NA}. Those are the only missing-value patterns that
+appear in this week, but it is good practice to look for them because
+free-form entry fields can contain several spellings of ``unknown.''
 
 \showChunk{R}{Code/nyc_crashes.R}{vehicle_type_clean}
 
@@ -504,6 +579,61 @@ entered in the database.
 These tables answer our ``what factors'' question with an important
 caveat: the most common recorded factors and vehicle types show what
 appears in the data, not necessarily the true causes of the crashes.
+
+\section{Recommendations for the Open Data Team}
+
+Open data releases are only as useful as their quality allows. In this
+single week we found several patterns that are worth flagging for the
+NYC Open Data team.
+
+\showChunk{R}{Code/nyc_crashes.R}{publisher_summary}
+
+\begin{itemize}
+\item
+  \textbf{Default crash times.} About
+  \inlnR{```round(100 * prop_on_hour, 1)```}[nyc-prop-on-hour]\% of
+  records have a time ending in ``:00'', and
+  \inlnR{```n_exact_midnight```}[nyc-exact-midnight] are recorded at
+  exactly 00:00. Those exact-midnight entries are almost certainly a
+  default value for missing times, not real midnight crashes. A missing
+  time should be coded as missing rather than as 00:00:00.
+\item
+  \textbf{Missing location fields.} In this week,
+  \inlnR{```n_both_missing```}[nyc-both-missing] rows are missing both
+  borough and zip code, and the two fields are missing together in every
+  case. A single missing-location flag would be clearer than separate
+  blank columns.
+\item
+  \textbf{Internal consistency of injury counts.}
+  \inlnR{```n_injury_mismatch```}[nyc-injury-mismatch] rows report a
+  positive total number of persons injured while reporting zero injured
+  pedestrians, cyclists, and motorists. Either the total or the
+  subtotals are in error; the form or the validation rules should ensure
+  they agree.
+\item
+  \textbf{Vague contributing factors.} Vehicle 1 has
+  \inlnR{```n_unspecified```}[nyc-n-unspecified]
+  \lstinline{unspecified} entries. This category is too vague to support
+  policy decisions. Either removing it from the pick-list or requiring a
+  more specific follow-up would improve the data. We keep
+  \lstinline{other vehicular} as a separate catch-all, but a more
+  detailed breakdown would be better.
+\item
+  \textbf{Standardized vehicle types.} The vehicle type columns are
+  free-form text. Consolidating entries into a controlled vocabulary or
+  at least cleaning common misspellings would make the data much easier
+  to summarize.
+\item
+  \textbf{Drop or document redundant columns.} The
+  \lstinline{location} column is a text copy of latitude and longitude.
+  Keeping it invites inconsistencies; storing only the numeric
+  coordinates is cleaner.
+\end{itemize}
+
+These recommendations are based on one week of data, so they describe
+patterns rather than prove systemic problems. Still, each is easy to
+investigate across the full dataset and each would make the published
+data easier for analysts, journalists, and citizens to use correctly.
 
 \section{Summary}
 

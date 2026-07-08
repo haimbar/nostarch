@@ -84,6 +84,23 @@ sum(is.na(df$location) | df$location == "")
 
 
 ############################################################
+#label===id_check
+# COLLISION_ID should uniquely identify each crash record.
+length(unique(df$collision_id))
+nrow(df)
+any(duplicated(df$collision_id))
+#===end
+
+
+############################################################
+#label===location_drop
+# The location column is a text version of latitude and longitude.
+# Once those numeric columns are clean, location is redundant.
+df$location <- NULL
+#===end
+
+
+############################################################
 #label===borough_clean
 df$borough <- trimws(df$borough)
 df$borough[df$borough == ""] <- NA
@@ -105,6 +122,10 @@ sum(is.na(df$zip_code))
 
 both_missing <- is.na(df$borough) & is.na(df$zip_code)
 sum(both_missing)
+
+# Cross-tabulation: do missing borough and missing zip code co-occur?
+table(borough_missing = is.na(df$borough),
+      zip_missing = is.na(df$zip_code))
 #===end
 
 
@@ -188,17 +209,18 @@ pdf("images/chapter_9/crashes_by_hour.pdf",
     width = 7, height = 4.5)
 
 #label===hour_plot
+borough_cols <- c("darkorange", "steelblue", "seagreen",
+                  "orchid", "gray50")
+
 barplot(t(tab_hour_borough),
-        col = c("darkorange", "steelblue", "seagreen",
-                "orchid", "gray50"),
+        col = borough_cols,
         border = NA,
         xlab = "Hour of day",
         ylab = "Number of crashes")
 
-legend("topright",
+legend("topleft",
        legend = colnames(tab_hour_borough),
-       fill = c("darkorange", "steelblue", "seagreen",
-                "orchid", "gray50"),
+       fill = borough_cols,
        bty = "n",
        cex = 0.8)
 #===end
@@ -210,7 +232,86 @@ dev.off()
 #label===rounded_times
 sum(df$hour == 0, na.rm = TRUE)
 sum(df$minute == 0, na.rm = TRUE)
+mean(df$minute == 0, na.rm = TRUE)
+sum(df$hour == 0 & df$minute == 0, na.rm = TRUE)
 #===end
+
+
+############################################################
+#label===hour_corrected_make
+# Reassign exact-midnight crashes uniformly for comparison.
+mid_idx <- df$hour == 0 & df$minute == 0
+n_midnight <- sum(mid_idx)
+
+set.seed(20250901)
+df$hour_corrected <- df$hour
+df$hour_corrected[mid_idx] <- sample(0:23, n_midnight, replace = TRUE)
+
+tab_hour_total <- table(df$hour)
+tab_hour_corrected <- table(df$hour_corrected)
+
+# Preserve borough breakdown by reassigning within each borough.
+df$hour_corrected_borough <- df$hour
+for (b in unique(df$borough[!is.na(df$borough)])) {
+  idx <- which(df$borough == b & mid_idx)
+  if (length(idx)) {
+    df$hour_corrected_borough[idx] <- sample(0:23, length(idx),
+                                              replace = TRUE)
+  }
+}
+
+tab_hour_borough_total <- table(df$hour, df$borough)
+tab_hour_borough_corrected <- table(df$hour_corrected_borough, df$borough)
+#===end
+
+
+############################################################
+#label===midnight_by_borough
+# Does the exact-midnight rate vary by borough?
+exact_midnight <- df$hour == 0 & df$minute == 0
+midnight_by_borough <- tapply(exact_midnight, df$borough, sum,
+                              na.rm = TRUE)
+total_by_borough <- table(df$borough)
+midnight_rate_by_borough <- midnight_by_borough / total_by_borough
+
+midnight_by_borough
+total_by_borough
+round(midnight_rate_by_borough, 3)
+#===end
+
+
+############################################################
+pdf("images/chapter_9/crashes_by_hour_corrected.pdf",
+    width = 10, height = 4.5)
+
+#label===hour_corrected_plot
+borough_cols <- c("darkorange", "steelblue", "seagreen",
+                  "orchid", "gray50")
+
+par(mfrow = c(1, 2))
+
+barplot(t(tab_hour_borough_total),
+        col = borough_cols,
+        border = NA,
+        xlab = "Hour of day",
+        ylab = "Number of crashes",
+        main = "Original hours")
+
+barplot(t(tab_hour_borough_corrected),
+        col = borough_cols,
+        border = NA,
+        xlab = "Hour of day",
+        ylab = "Number of crashes",
+        main = "Midnight crashes reassigned within borough")
+
+legend("topleft",
+       legend = colnames(tab_hour_borough_total),
+       fill = borough_cols,
+       bty = "n",
+       cex = 0.8)
+#===end
+
+dev.off()
 
 
 ############################################################
@@ -264,6 +365,23 @@ tab_bh_borough
 
 prop_bh_borough <- prop.table(tab_bh_borough, margin = 2)
 round(prop_bh_borough, 3)
+#===end
+
+
+############################################################
+#label===injury_consistency
+# Check whether total injured/killed match the sum of subcategories.
+inj_cols <- c("number_of_pedestrians_injured",
+              "number_of_cyclist_injured",
+              "number_of_motorist_injured")
+kill_cols <- c("number_of_pedestrians_killed",
+               "number_of_cyclist_killed",
+               "number_of_motorist_killed")
+df$injured_sum <- rowSums(df[, inj_cols])
+df$killed_sum <- rowSums(df[, kill_cols])
+
+sum(df$number_of_persons_injured != df$injured_sum, na.rm = TRUE)
+sum(df$number_of_persons_killed != df$killed_sum, na.rm = TRUE)
 #===end
 
 
@@ -360,7 +478,7 @@ tab_business_severe
 
 ############################################################
 #label===severity_chisq
-# Pearson chi-squared test for association between business day and severity
+# Pearson chi-squared test for business day and severity.
 chisq_business_severe <- chisq.test(tab_business_severe)
 chisq_business_severe
 #===end
@@ -375,7 +493,8 @@ severity_counts
 ############################################################
 #label===severity_glm_prep
 # Prepare data for logistic regression: select predictors and drop missing
-sev_model_data <- df[, c("severe", "business_day", "n_vehicles", "borough")]
+pred_cols <- c("severe", "business_day", "n_vehicles", "borough")
+sev_model_data <- df[, pred_cols]
 sev_model_data <- sev_model_data[complete.cases(sev_model_data), ]
 # Quick summary of the model data
 summary(sev_model_data)
@@ -417,18 +536,16 @@ capture.output(summary(resid_dev), file = "generated/nyc-glm-resid.tex")
 
 ############################################################
 #label===nyc-severity-inference
-# Master chunk used by the book to run inference and produce inline results.
-# Recompute the key objects (table, chi-squared, rate, exact CI, and model fit)
-# so that the LaTeX build finds them when running this chunk.
+# Master chunk to recompute inference objects for inline R.
+# Recompute table, chi-squared, rate, exact CI, and model fit.
 tab_business_severe <- table(df$business_day, df$severe)
 chisq_business_severe <- chisq.test(tab_business_severe)
-# overall counts used for the binomial test
 severity_counts <- table(df$severe)
 severe_rate <- mean(df$severe, na.rm = TRUE)
 severe_rate_ci <- binom.test(sum(df$severe, na.rm = TRUE), nrow(df))
-# fit using same prepared dataset as above (recreate if not present)
 if (!exists("sev_model_data")) {
-  sev_model_data <- df[, c("severe", "business_day", "n_vehicles", "borough")]
+  pred_cols <- c("severe", "business_day", "n_vehicles", "borough")
+  sev_model_data <- df[, pred_cols]
   sev_model_data <- sev_model_data[complete.cases(sev_model_data), ]
 }
 fit_severe <- glm(severe ~ business_day + n_vehicles,
@@ -499,9 +616,7 @@ cf1_raw <- df$contributing_factor_vehicle_1
 cf1_clean <- tolower(trimws(cf1_raw))
 
 cf1_clean[cf1_clean == ""] <- NA
-cf1_clean[cf1_clean %in% c("unspecified",
-                           "unknown",
-                           "other vehicular")] <- NA
+cf1_clean[cf1_clean == "unspecified"] <- NA
 #===end
 
 
@@ -551,8 +666,9 @@ dev.off()
 vt1 <- trimws(df$vehicle_type_code_1)
 vt2 <- trimws(df$vehicle_type_code_2)
 
-vt1[vt1 == ""] <- NA
-vt2[vt2 == ""] <- NA
+# Blank entries and the one "unknown" value are treated as missing.
+vt1[tolower(vt1) %in% c("", "unknown")] <- NA
+vt2[tolower(vt2) %in% c("", "unknown")] <- NA
 #===end
 
 
@@ -596,6 +712,24 @@ barplot(rev(top_vehicle_counts),
 #===end
 
 dev.off()
+
+
+############################################################
+#label===publisher_summary
+# Summary statistics for the recommendations section.
+on_hour <- df$minute == 0
+n_exact_midnight <- sum(df$hour == 0 & on_hour, na.rm = TRUE)
+n_on_hour <- sum(on_hour, na.rm = TRUE)
+prop_on_hour <- mean(on_hour, na.rm = TRUE)
+n_both_missing <- sum(is.na(df$borough) & is.na(df$zip_code),
+                      na.rm = TRUE)
+
+inj_mismatch <- df$number_of_persons_injured != df$injured_sum
+n_injury_mismatch <- sum(inj_mismatch, na.rm = TRUE)
+
+cf1_raw <- tolower(trimws(df$contributing_factor_vehicle_1))
+n_unspecified <- sum(cf1_raw == "unspecified", na.rm = TRUE)
+#===end
 
 
 ############################################################
