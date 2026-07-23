@@ -1,6 +1,6 @@
 ############################################################
-# R script for NYC Labor Day Week 2025 crash case study
-# Base R only. No tidyverse.
+## R script for NYC Labor Day Week 2025 crash case study
+## Base R only. No tidyverse.
 ############################################################
 
 ############################################################
@@ -85,7 +85,7 @@ sum(is.na(df$location) | df$location == "")
 
 ############################################################
 #label===id_check
-# COLLISION_ID should uniquely identify each crash record.
+## COLLISION_ID should uniquely identify each crash record.
 length(unique(df$collision_id))
 nrow(df)
 any(duplicated(df$collision_id))
@@ -94,8 +94,8 @@ any(duplicated(df$collision_id))
 
 ############################################################
 #label===location_drop
-# The location column is a text version of latitude and longitude.
-# Once those numeric columns are clean, location is redundant.
+## The location column is a text version of latitude and longitude.
+## Once those numeric columns are clean, location is redundant.
 df$location <- NULL
 #===end
 
@@ -123,7 +123,7 @@ sum(is.na(df$zip_code))
 both_missing <- is.na(df$borough) & is.na(df$zip_code)
 sum(both_missing)
 
-# Cross-tabulation: do missing borough and missing zip code co-occur?
+## Cross-tabulation: do missing borough and missing zip code co-occur?
 table(borough_missing = is.na(df$borough),
       zip_missing = is.na(df$zip_code))
 #===end
@@ -239,7 +239,7 @@ sum(df$hour == 0 & df$minute == 0, na.rm = TRUE)
 
 ############################################################
 #label===hour_corrected_make
-# Reassign exact-midnight crashes uniformly for comparison.
+## Reassign exact-midnight crashes uniformly for comparison.
 mid_idx <- df$hour == 0 & df$minute == 0
 n_midnight <- sum(mid_idx)
 
@@ -250,7 +250,7 @@ df$hour_corrected[mid_idx] <- sample(0:23, n_midnight, replace = TRUE)
 tab_hour_total <- table(df$hour)
 tab_hour_corrected <- table(df$hour_corrected)
 
-# Preserve borough breakdown by reassigning within each borough.
+## Preserve borough breakdown by reassigning within each borough.
 df$hour_corrected_borough <- df$hour
 for (b in unique(df$borough[!is.na(df$borough)])) {
   idx <- which(df$borough == b & mid_idx)
@@ -267,7 +267,7 @@ tab_hour_borough_corrected <- table(df$hour_corrected_borough, df$borough)
 
 ############################################################
 #label===midnight_by_borough
-# Does the exact-midnight rate vary by borough?
+## Does the exact-midnight rate vary by borough?
 exact_midnight <- df$hour == 0 & df$minute == 0
 midnight_by_borough <- tapply(exact_midnight, df$borough, sum,
                               na.rm = TRUE)
@@ -370,7 +370,7 @@ round(prop_bh_borough, 3)
 
 ############################################################
 #label===injury_consistency
-# Check whether total injured/killed match the sum of subcategories.
+## Check whether total injured/killed match the sum of subcategories.
 inj_cols <- c("number_of_pedestrians_injured",
               "number_of_cyclist_injured",
               "number_of_motorist_injured")
@@ -404,10 +404,15 @@ pdf("images/chapter_9/severity_locations.pdf",
     width = 5.5, height = 5.5)
 
 #label===severity_map
+## Correct for the longitude/latitude scale mismatch at this latitude,
+## so the map is not visibly stretched.
+map_asp <- 1 / cos(mean(df$latitude, na.rm = TRUE) * pi / 180)
+
 plot(df$longitude, df$latitude,
      col = ifelse(df$severe, "firebrick", "gray70"),
      pch = 19,
      cex = 0.45,
+     asp = map_asp,
      xlab = "Longitude",
      ylab = "Latitude")
 
@@ -471,39 +476,39 @@ dev.off()
 
 ############################################################
 #label===severity_inference_table
-# 2x2 table of severe crashes by day type
+## 2x2 table of severe crashes by day type
 tab_business_severe <- table(df$business_day, df$severe)
 tab_business_severe
 #===end
 
 ############################################################
 #label===severity_chisq
-# Pearson chi-squared test for business day and severity.
+## Pearson chi-squared test for business day and severity.
 chisq_business_severe <- chisq.test(tab_business_severe)
 chisq_business_severe
 #===end
 
 ############################################################
 #label===severity_binom_table
-# Overall counts used for binomial test
+## Overall counts used for binomial test
 severity_counts <- table(df$severe)
 severity_counts
 #===end
 
 ############################################################
 #label===severity_glm_prep
-# Prepare data for logistic regression: select predictors and drop missing
+## Prepare data for logistic regression: select predictors and drop missing
 pred_cols <- c("severe", "business_day", "n_vehicles", "borough")
 sev_model_data <- df[, pred_cols]
 sev_model_data <- sev_model_data[complete.cases(sev_model_data), ]
-# Quick summary of the model data
+## Quick summary of the model data
 summary(sev_model_data)
 #===end
 
 ############################################################
 #label===severity_glm_fit
-# Fit logistic regression: severe ~ business_day + n_vehicles
-# Use the prepared dataset to avoid missing-data surprises
+## Fit logistic regression: severe ~ business_day + n_vehicles
+## Use the prepared dataset to avoid missing-data surprises
 fit_severe <- glm(severe ~ business_day + n_vehicles,
                   data = sev_model_data,
                   family = binomial)
@@ -512,7 +517,7 @@ capture.output(summary(fit_severe), file = "generated/nyc-glm-fit.tex")
 
 ############################################################
 #label===severity_glm_or
-# Show odds ratios and Wald 95% confidence intervals for interpretation
+## Show odds ratios and Wald 95% confidence intervals for interpretation
 coef_est <- coef(summary(fit_severe))
 or <- exp(coef(fit_severe))
 wald_ci <- exp(confint.default(fit_severe))
@@ -527,7 +532,7 @@ capture.output(
 
 ############################################################
 #label===severity_glm_diag
-# Simple diagnostics: fitted probabilities and deviance residuals
+## Simple diagnostics: fitted probabilities and deviance residuals
 fitted_prob <- predict(fit_severe, type = "response")
 resid_dev <- residuals(fit_severe, type = "deviance")
 capture.output(summary(fitted_prob), file = "generated/nyc-glm-fitted.tex")
@@ -536,8 +541,8 @@ capture.output(summary(resid_dev), file = "generated/nyc-glm-resid.tex")
 
 ############################################################
 #label===nyc-severity-inference
-# Master chunk to recompute inference objects for inline R.
-# Recompute table, chi-squared, rate, exact CI, and model fit.
+## Master chunk to recompute inference objects for inline R.
+## Recompute table, chi-squared, rate, exact CI, and model fit.
 tab_business_severe <- table(df$business_day, df$severe)
 chisq_business_severe <- chisq.test(tab_business_severe)
 severity_counts <- table(df$severe)
@@ -666,7 +671,7 @@ dev.off()
 vt1 <- trimws(df$vehicle_type_code_1)
 vt2 <- trimws(df$vehicle_type_code_2)
 
-# Blank entries and the one "unknown" value are treated as missing.
+## Blank entries and the one "unknown" value are treated as missing.
 vt1[tolower(vt1) %in% c("", "unknown")] <- NA
 vt2[tolower(vt2) %in% c("", "unknown")] <- NA
 #===end
@@ -716,7 +721,7 @@ dev.off()
 
 ############################################################
 #label===publisher_summary
-# Summary statistics for the recommendations section.
+## Summary statistics for the recommendations section.
 on_hour <- df$minute == 0
 n_exact_midnight <- sum(df$hour == 0 & on_hour, na.rm = TRUE)
 n_on_hour <- sum(on_hour, na.rm = TRUE)
@@ -734,8 +739,8 @@ n_unspecified <- sum(cf1_raw == "unspecified", na.rm = TRUE)
 
 ############################################################
 #label===master
-# To reproduce the analysis in the chapter:
-# 1. Set the working directory to the project root.
-# 2. Run this file from top to bottom in R.
-# 3. Each labeled chunk matches one code snippet in the text.
+## To reproduce the analysis in the chapter:
+## 1. Set the working directory to the project root.
+## 2. Run this file from top to bottom in R.
+## 3. Each labeled chunk matches one code snippet in the text.
 #===end

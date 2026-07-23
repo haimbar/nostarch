@@ -19,7 +19,7 @@ stopserver: deepclean
 build: clean
 	rm -f ForceCache nohup.out
 	mkdir -p tmp
-	@for i in $$(seq 1 8); do \
+	@for i in $$(seq 1 9); do \
 	    mkdir -p images/chapter_$$i; \
 	done
 	# Stop any existing server so the fresh one picks up the current R.config

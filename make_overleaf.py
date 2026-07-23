@@ -363,6 +363,13 @@ def compile_pdf() -> bool:
 
     pdf = TMPOVERLEAF / "sidsmain.pdf"
     print(f"  OK — {pdf} ({pdf.stat().st_size // 1024} KB)")
+
+    # Also drop a copy in the project root under a distinct name, so it's
+    # easy to find without mistaking it for the main `make build` output.
+    dest_copy = PROJECT_DIR / "sidsmain-overleaf.pdf"
+    shutil.copy2(pdf, dest_copy)
+    print(f"  copied → {dest_copy}")
+
     return True
 
 
