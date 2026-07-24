@@ -131,9 +131,10 @@ two numbers match, confirming that \lstinline{collision_id} works as a
 unique key.
 
 Because \lstinline{location} is just a text version of the latitude and
-longitude, we drop it now and keep the numeric coordinates, which we
-clean in the next section. Keeping redundant columns increases the
-chance of inconsistent results.
+longitude, we drop it now --- in R, assigning \lstinline{NULL} to a
+column removes it --- and keep the numeric coordinates, which we clean
+in the next section. Dropping redundant columns decreases the chance
+of inconsistent results.
 
 \showChunk{R}{Code/nyc_crashes.R}{location_drop}
 
@@ -199,6 +200,10 @@ Now we count fillable zip codes by weekday and calculate the proportion
 for each day.
 
 \showChunk{R}{Code/nyc_crashes.R}{fillable_table}
+
+The output should look like so:
+
+\inlnR{```print(table(df$weekday, df$fillable_zip))```}[nyc-fillable][vbox]
 
 If one day has a higher proportion of fillable zip codes, does that
 prove the data collectors worked differently that day? Why or why not?
