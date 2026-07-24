@@ -7,52 +7,55 @@ buses and subways. Most of these journeys end safely, but some result
 in crashes that cause injuries, delays, and sometimes fatalities. Can
 data help us understand when crashes occur, where they are most
 common, and what factors are associated with them? In this chapter, we
-investigate these questions using a real dataset from NYC Open
-Data. Along the way, we will apply many of the ideas developed
-throughout this book, including importing data, cleaning messy
-records, exploring patterns with tables and graphs, working with dates
-and times, handling missing values, and interpreting results
-carefully. This chapter brings together many of the concepts and
-skills we have learned and shows how statistical thinking and data
-science can be used together to answer questions with real-world data.
-We will focus on three questions: when during the day do crashes happen,
-where in the city are they concentrated, and what recorded factors are
-most common.
+investigate these questions using a real dataset from NYC Open Data,
+applying ideas from throughout this book: importing and cleaning data,
+exploring patterns with tables and graphs, working with dates and
+times, handling missing values, and interpreting results carefully.
+
 
 \runR{Code/nyc_crashes.R}{nyc-crashes-init}
 
 \section{Importing and Inspecting the Data}
 
-We begin by reading the comma-separated values file, or CSV file\index{CSV file}. A CSV
-file is a plain text file that stores a data table. Each row is one
-record, and commas separate the values in that row. The raw data was
-downloaded from NYC Open Data Portal and included all the crashes
-reported in the week containing the Labor Day of 2025. The first row
-of the CSV file contains the variable names.
+We begin by reading the data, which was downloaded as a CSV
+file\index{CSV file} from the NYC Open Data Portal and includes all
+crashes reported in the week containing Labor Day of 2025. As before,
+the first row of the file contains the variable names.
 
 \showChunk{R}{Code/nyc_crashes.R}{read}
 
-The object \lstinline{df} is now a data frame\index{data frame}. A data frame is R's usual
-way to store a rectangular data table. Before doing any analysis, we
-check its structure, number of rows, number of columns, and first few
-variable names.
+The object \lstinline{df} is now a data frame\index{data frame}. Before
+doing any analysis, we check its structure, number of rows, number of
+columns, and first few variable names.
 
 \showChunk{R}{Code/nyc_crashes.R}{inspect}
 
-This quick check tells us what kind of object we have. It also helps us
-catch problems early. For example, if the row count were zero, we would
-know the file did not load correctly.
+The \lstinline{str()} output lists every column with its type and a
+peek at its first few values --- worth running on your own, but too
+long to reproduce here. The row count and column count are shorter: the
+data has \inlnR{```cat(raw_nrow)```}[nyc-nrow] rows and
+\inlnR{```cat(raw_ncol)```}[nyc-ncol] columns, and the first few variable
+names look like this:
 
-The original variable names use capital letters and spaces. Those names
-are readable, but they are awkward to type in R. We first create a new
-set of names by changing letters to lower case and replacing
-periods with underscores.
+\inlnR{```print(raw_names_head)```}[nyc-inspect][vbox]
+
+This quick check tells us what kind of object we have. It also helps us
+catch problems early. For example, if the row count were zero, or if
+we had just one column, we would know the file did not load correctly.
+
+The original variable names use capital letters and spaces; R replaces
+each space with a period when it reads them from the file. The
+resulting names are valid but awkward to type. We first create a new
+set of names by changing letters to lowercase and replacing periods
+with underscores.
 
 \showChunk{R}{Code/nyc_crashes.R}{rename_build}
 
 Now we apply the new names to the data frame and inspect the result.
 
 \showChunk{R}{Code/nyc_crashes.R}{rename_apply}
+
+\inlnR{```print(renamed_head)```}[nyc-rename][vbox]
 
 This step does not change the data values. It only changes the labels on
 the columns. A name such as \lstinline{NUMBER.OF.PERSONS.INJURED} becomes
@@ -69,8 +72,14 @@ each date.
 
 \showChunk{R}{Code/nyc_crashes.R}{dates_check}
 
+The first date is \inlnR{```cat(format(raw_min_date))```}[nyc-mindate]
+and the last is \inlnR{```cat(format(raw_max_date))```}[nyc-maxdate],
+with the following counts by date:
+
+\inlnR{```print(raw_date_table)```}[nyc-datecheck][vbox]
+
 This is a small step, but it is one of the most useful habits in data
-analysis: check whether the data match the story you were told. The raw
+analysis: check whether the data matches the story you were told. The raw
 file spans eight dates. We want the Sunday--Saturday week around Labor
 Day, so we define that target window.
 
@@ -83,8 +92,14 @@ range again.
 
 \showChunk{R}{Code/nyc_crashes.R}{filter_apply}
 
-Check-in: Why do we check the date range both before and after
-filtering? What mistake might this catch?
+Filtering keeps \inlnR{```cat(rows_in_week)```}[nyc-rowskept] of the
+original \inlnR{```cat(rows_before_filter)```}[nyc-rowsbefore] rows, with
+dates now ranging from
+\inlnR{```cat(format(filtered_min_date))```}[nyc-filtmin] to
+\inlnR{```cat(format(filtered_max_date))```}[nyc-filtmax].
+
+Why do we check the date range both before and after filtering? Think
+about what mistake this simple habit could catch.
 
 The raw file has a \lstinline{location} column that stores coordinates as
 text. It also has separate numeric columns for latitude and longitude.
@@ -92,22 +107,38 @@ We look at the three columns together.
 
 \showChunk{R}{Code/nyc_crashes.R}{location_preview}
 
+\inlnR{```print(location_preview)```}[nyc-locpreview][vbox]
+
 If \lstinline{location} repeats the same information as latitude and
 longitude, it may not be useful for our analysis. We also count how many
 different location strings appear and how many are missing or blank.
 
 \showChunk{R}{Code/nyc_crashes.R}{location_unique}
 
+Out of \inlnR{```cat(rows_in_week)```}[nyc-rowsinweek] rows, there are
+\inlnR{```cat(location_unique_n)```}[nyc-locunique] distinct location
+strings, and \inlnR{```cat(location_missing_n)```}[nyc-locmissing] are
+missing or blank.
+
 Every record also has a \lstinline{collision_id}. Before relying on it
-as a unique key, we check that no id appears twice.
+as a unique key, we check that no ID appears twice.
 
 \showChunk{R}{Code/nyc_crashes.R}{id_check}
 
+There are \inlnR{```cat(length(unique(df$collision_id)))```}[nyc-iduniq]
+distinct IDs among \inlnR{```cat(nrow(df))```}[nyc-idnrow] rows --- the
+two numbers match, confirming that \lstinline{collision_id} works as a
+unique key.
+
 Because \lstinline{location} is just a text version of the latitude and
-longitude, we drop it once the numeric coordinates are clean. Keeping
-redundant columns increases the chance of inconsistent results.
+longitude, we drop it now and keep the numeric coordinates, which we
+clean in the next section. Keeping redundant columns increases the
+chance of inconsistent results.
 
 \showChunk{R}{Code/nyc_crashes.R}{location_drop}
+
+Try running this yourself and confirm that \lstinline{ncol(df)} is one
+less than it was before.
 
 \section{Missing Values and Data Quality}
 
@@ -169,9 +200,8 @@ for each day.
 
 \showChunk{R}{Code/nyc_crashes.R}{fillable_table}
 
-Check-in: If one day has a higher proportion of fillable zip codes, does
-that prove the data collectors worked differently on that day? Why or
-why not?
+If one day has a higher proportion of fillable zip codes, does that
+prove the data collectors worked differently that day? Why or why not?
 
 \section{Exploring Temporal Patterns}
 
@@ -200,7 +230,7 @@ came from each borough.
 
 \begin{figure}[H]
 \includegraphics[width=0.85\textwidth]{images/chapter_9/crashes_by_hour.pdf}
-\caption{Crash counts by hour and borough. Crashes rise during morning and evening rush hours and fall overnight.}
+\caption{Crash counts by hour and borough, showing crashes rising during morning and evening rush hours and falling overnight}
 \label{fig:ch9:hour}
 \end{figure}
 
@@ -249,7 +279,7 @@ dramatically.
 
 \begin{figure}[H]
 \includegraphics[width=0.95\textwidth]{images/chapter_9/crashes_by_hour_corrected.pdf}
-\caption{Original crash counts by hour and borough (left) and counts after reassigning crashes recorded at exactly 00:00 uniformly within each borough (right). The midnight peak in the left panel is largely a data-entry artifact.}
+\caption{Original crash counts by hour and borough (left) and counts after reassigning crashes recorded at exactly 00:00 uniformly within each borough (right), showing that the midnight peak in the left panel is largely a data-entry artifact}
 \label{fig:ch9:hourcorrected}
 \end{figure}
 
@@ -278,13 +308,13 @@ themselves.
 
 \begin{figure}[H]
 \includegraphics[width=0.8\textwidth]{images/chapter_9/crashes_by_day_type.pdf}
-\caption{Crash counts by day type and borough. Business days have more crashes than weekend days in every borough, partly because there are more business days in the week.}
+\caption{Crash counts by day type and borough, showing more crashes on business days than weekend days in every borough, partly because there are more business days in the week}
 \label{fig:ch9:daytype}
 \end{figure}
 
-Check-in: Why might the number of crashes be different on business days
-than on weekend days? Give one traffic reason and one data-recording
-reason.
+Why might the number of crashes differ between business days and
+weekend days? Try to come up with one traffic-related reason and one
+data-recording reason.
 
 We can also compare crashes during business hours with crashes outside
 business hours. For a first definition, let business hours be 7 a.m. to
@@ -338,7 +368,7 @@ coordinates. Red dots are severe crashes.
 
 \begin{figure}[H]
 \includegraphics[width=0.7\textwidth]{images/chapter_9/severity_locations.pdf}
-\caption{Crash locations, colored by severity. Red dots show crashes with at least one injury or death; gray dots show crashes with none. Most crashes cluster in the city's densest areas.}
+\caption{Crash locations, colored by severity (red for crashes with at least one injury or death, gray for crashes with none), showing that most crashes cluster in the city's densest areas}
 \label{fig:ch9:locations}
 \end{figure}
 
@@ -367,7 +397,7 @@ proportion marked by a dashed line.
 
 \begin{figure}[H]
 \includegraphics[width=0.75\textwidth]{images/chapter_9/severity_by_vehicle_count.pdf}
-\caption{Severe-crash proportion by number of vehicles. Crashes involving more vehicles tend to have a higher proportion of injuries or deaths, though counts with many vehicles are small.}
+\caption{Severe-crash proportion by number of vehicles, showing a higher proportion of injuries or deaths as more vehicles are involved, though counts with many vehicles are small}
 \label{fig:ch9:vehseverity}
 \end{figure}
 
@@ -384,7 +414,7 @@ crashes and because some hours have fewer records than others.
 
 \begin{figure}[H]
 \includegraphics[width=0.85\textwidth]{images/chapter_9/severity_by_hour.pdf}
-\caption{Severe-crash proportion by hour. The proportion of crashes with injuries or deaths varies across the day, with higher values in some overnight hours.}
+\caption{Severe-crash proportion by hour, showing that the proportion of crashes with injuries or deaths varies across the day, with higher values in some overnight hours}
 \label{fig:ch9:hourseverity}
 \end{figure}
 
@@ -409,7 +439,7 @@ most useful columns kept so the table fits on the page.
 
 \inlnR{```print(top10[, c("borough", "injured", "killed", "score")])```}[nyc-top10][vbox]
 
-Check-in: Why might two analysts choose different severity scores? What
+Why might two analysts choose different severity scores, and what
 should they explain before comparing their results?
 
 The crash map and borough counts begin to answer our ``where''
@@ -539,7 +569,7 @@ contributing factors for vehicle 1.
 
 \begin{figure}[H]
 \includegraphics[width=0.85\textwidth]{images/chapter_9/top_contributing_factors.pdf}
-\caption{Most common contributing factors for vehicle 1. Driver inattention and following too closely are the most frequently recorded factors in this week.}
+\caption{Most common contributing factors for vehicle 1, with driver inattention and following too closely as the most frequently recorded factors this week}
 \label{fig:ch9:factors}
 \end{figure}
 
@@ -567,7 +597,7 @@ categories are not always short or tidy.
 
 \begin{figure}[H]
 \includegraphics[width=0.85\textwidth]{images/chapter_9/top_vehicle_types.pdf}
-\caption{Most common vehicle 1 types. Sedans, sport utility vehicles, and taxis account for the largest shares of crashes.}
+\caption{Most common vehicle 1 types, with sedans, sport utility vehicles, and taxis accounting for the largest shares of crashes}
 \label{fig:ch9:vehicles}
 \end{figure}
 

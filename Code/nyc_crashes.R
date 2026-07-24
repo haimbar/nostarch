@@ -12,10 +12,10 @@ df <- read.csv("Data/nyc_crashes_lbdwk_2025.csv",
 
 ############################################################
 #label===inspect
-str(df)           # structure of the df
-nrow(df)          # number of rows of df
-ncol(df)          # number of columns of df
-head(names(df))   # first few variable names of df
+str(df)                             # structure of df
+(raw_nrow <- nrow(df))              # number of rows of df
+(raw_ncol <- ncol(df))              # number of columns of df
+(raw_names_head <- head(names(df))) # first few variable names of df
 #===end
 
 
@@ -30,7 +30,7 @@ new_names <- gsub("\\.", "_", new_names) # replace . with _
 ############################################################
 #label===rename_apply
 names(df) <- new_names
-head(names(df))
+(renamed_head <- head(names(df)))
 #===end
 
 
@@ -42,9 +42,9 @@ df$crash_date_date <- as.Date(df$crash_date, format = "%m/%d/%Y")
 
 ############################################################
 #label===dates_check
-min(df$crash_date_date, na.rm = TRUE)
-max(df$crash_date_date, na.rm = TRUE)
-table(df$crash_date_date)
+(raw_min_date <- min(df$crash_date_date, na.rm = TRUE))
+(raw_max_date <- max(df$crash_date_date, na.rm = TRUE))
+(raw_date_table <- table(df$crash_date_date))
 #===end
 
 
@@ -60,26 +60,26 @@ in_week <- (df$crash_date_date >= week_start) &
 
 ############################################################
 #label===filter_apply
-nrow(df)
-sum(in_week, na.rm = TRUE)
+(rows_before_filter <- nrow(df))
+(rows_in_week <- sum(in_week, na.rm = TRUE))
 
 df <- df[in_week, ]
 
-min(df$crash_date_date, na.rm = TRUE)
-max(df$crash_date_date, na.rm = TRUE)
+(filtered_min_date <- min(df$crash_date_date, na.rm = TRUE))
+(filtered_max_date <- max(df$crash_date_date, na.rm = TRUE))
 #===end
 
 
 ############################################################
 #label===location_preview
-head(df[, c("location", "latitude", "longitude")])
+(location_preview <- head(df[, c("location", "latitude", "longitude")]))
 #===end
 
 
 ############################################################
 #label===location_unique
-length(unique(df$location))
-sum(is.na(df$location) | df$location == "")
+(location_unique_n <- length(unique(df$location)))
+(location_missing_n <- sum(is.na(df$location) | df$location == ""))
 #===end
 
 
@@ -95,7 +95,7 @@ any(duplicated(df$collision_id))
 ############################################################
 #label===location_drop
 ## The location column is a text version of latitude and longitude.
-## Once those numeric columns are clean, location is redundant.
+## We drop it now and clean the numeric coordinates in the next section.
 df$location <- NULL
 #===end
 
