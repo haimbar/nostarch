@@ -188,7 +188,8 @@ it can be shown that the distribution of $T$ under $H_0$ follows a
 \emph{hypergeometric distribution}\index{distribution!\emph{hypergeometric}}, 
 and large values of $T$ provide stronger evidence against $H_0$.
 
-
+\why{It could be better to use a simulation instead of the formula to show the
+  distribution of $T$ under $H_0$ in the following three paragraphs.}
 To carry out the test, we fix a significance level $\alpha$, such as
 $0.05$, representing the maximum tolerable probability of a Type~I
 error. We then define the \emph{rejection region}, consisting of
@@ -281,12 +282,11 @@ That means we draw many random permutations and use them to approximate
 the sampling distribution under $H_0$.
 
 \begin{example}[Permutation test for two-group comparison]
-To make this concrete, let us consider a two-group comparison
-example. Suppose we have two
+Suppose we have two
 groups of data, $x_1$ and $x_2$, with sample sizes $n_1 = n_2 = 30$. 
 If $H_0$ is true, there is no real difference between the groups, so 
 the observed difference in the sample means, $\bar x_1 - \bar x_2$,
-where $\bar x_1$ and $\bar x_2$ are, respectively, the sample mean of
+where $\bar x_1$ and $\bar x_2$ are, respectively, the sample means of
 the 1st and 2nd groups, is simply due to chance.
 
 \runR{Code/hypo-perm.R}{hypo-perm}
@@ -310,11 +310,13 @@ statistic under $H_0$. Permutation testing constructs this distribution
 by repeatedly shuffling the data to simulate the null hypothesis. For a 
 single permutation, we shuffle the combined data, split it into two groups, 
 and compute the test statistic:
+\why{Define \code{x1p=xperm[n1+1:n2]} and \code{x2p} to make the code more readable?}
 \showChunk{R}{Code/hypo-perm.R}{HypoPermOnePerm}
 
 
 Each permutation represents a possible arrangement of the data
 under~$H_0$. The total number of permutations is:
+\why{replace the code with the actual number?}
 \showChunk{R}{Code/hypo-perm.R}{HypoPermFullCount}
 
 This total number of permutations is about $1.18 \times 10^{17}$,
@@ -333,6 +335,7 @@ distributions, with a true difference ($\delta = 10$):
 \showChunk{R}{Code/hypo-perm.R}{HypoPermDemo}
 
 
+\why{Show the resulting p-value and explain what it means?}
 This outputs the p-value, which quantifies the probability of observing a 
 test statistic as extreme as or more extreme than the observed statistic 
 under $H_0$. 
@@ -349,6 +352,7 @@ families. In other words, do relatives share the symptom more often
 than would occur by chance?
 
 Here is what the data looks like:
+\why{show the result instead of the code?}
 \showChunk{R}{Code/hypo-familial.R}{dataHead}
 
 Consider a test statistic $T$ defined as the total number of 
@@ -416,7 +420,7 @@ effects, and less variable data usually lead to higher power.
 When two tests have the same size, the test with higher power is
 usually preferred. But there is a trade-off. Reducing $\alpha$ lowers
 the chance of a false positive, but it can also make real effects
-harder to detect. Increasing the sample size is often the best way to
+harder to detect. Increasing the sample size is often the only way to
 gain power without raising the false positive rate.
 
 Here is another way to remember the difference. Size describes how the
@@ -564,6 +568,9 @@ high:
 
 \begin{figure}[H]
 \includegraphics[width=0.6\textwidth]{images/chapter_5/hypo-sigcount.pdf}
+\why{use relative frequency instead of count for the y-axis? This ties closer to
+the probability interpretation used below. The title of the figure should also
+be updated.}
 \caption{Number of significant results in each 20-drug experiment under pure noise}
 \label{fig:ch5:sigcount}
 \end{figure}
@@ -571,9 +578,6 @@ high:
 \showChunk{R}{Code/hypo-multiple.R}{meansig}
 
 This represents the probability that at least one out of 20 independent tests will be significant at the 0.05 level when all null hypotheses are true. It is calculated as $1 - (1 - 0.05)^{20} \approx 0.6415$.
-This number is typically around 0.64. In fact, when testing 20 useless
-drugs at the 0.05 level, there is a $1 - 0.95^{20} \approx 64\%$
-chance that at least one appears significant by accident.
 
 
 This is one of the core issues of multiple testing.
@@ -594,6 +598,7 @@ statistic, provided we take into account how many tests were performed.
 
 \begin{figure}[H]
 \includegraphics[width=0.6\textwidth]{images/chapter_5/hypo-minp.pdf}
+\why{update or remove the title of the figure to reflect that it is a distribution of the minimum p-value.}
 \caption{Smallest p-value from each 20-drug experiment under pure noise}
 \label{fig:ch5:minp}
 \end{figure}
@@ -615,14 +620,15 @@ effect.
 We compare two strategies:
 
 \begin{enumerate}
-\item Uncorrected testing: $p < 0.05$
-\item Bonferroni correction: $p < 0.05/20$
+\item Uncorrected testing: p-value $< 0.05$
+\item Bonferroni correction: p-value $ < 0.05/20$
 \end{enumerate}
 
 We simulate many experiments and count true positives (TP) and false
 positives (FP).
 
 \showChunk{R}{Code/hypo-multiple.R}{altresults}
+\why{show the results of the simulation and explain what they mean.}
 
 Uncorrected tests find many real effects but also many fake ones.
 Bonferroni greatly reduces false positives, but also misses some real
@@ -641,11 +647,13 @@ From these experiments, we discovered:
   significance?'' becomes central.
 \item Adjustments like Bonferroni reduce false discoveries but make true
   effects harder to detect.
-\item Simulation shows all of this clearly---no formulas required.
 \end{itemize}
 
 \section{Summary}
   
+\why{Maybe I missed some point, but the summary does not seem to align with the
+  content of the chapter. For example, I did not get this point ``how randomness can lead to surprising results if we do not
+analyze data carefully.''}
 In this chapter we introduced the logic of hypothesis testing and
 showed how randomness can lead to surprising results if we do not
 analyze data carefully. We learned how to state a null hypothesis,
@@ -659,6 +667,7 @@ quantities from data and measure how accurate these estimates are.
 \section{Problems}
 
 \begin{exercise}
+\why{We don't seem to have a similar example in the chapter.}
 Suppose you flip a coin 20 times and observe 16 heads. Build a
 simulation in R where the coin is fair, using \lstinline{rbinom()} or
 \lstinline{sample()}. Estimate the probability of seeing 16 or more
@@ -666,6 +675,9 @@ heads by chance. Then repeat the experiment with 14, 15, 17, and 18
 heads. How does the simulated p-value change?
 \end{exercise}
 
+\why{Are the following three exercises suppose to be three parts of one
+  exercise? Need to clarify what "pure-noise experiment" and ``the simulation''
+  refer to.}
 \begin{exercise}
 Repeat the pure-noise experiment with $m = 100$
   independent t-tests per experiment. What is the probability that at
@@ -685,7 +697,8 @@ In the pure-noise setting, record the largest
   distribution. Why does the largest value tend to be quite large even
   when nothing is happening?
 \end{exercise}
-
+\why{The following exercise is a bit open-ended. It may be better to provide
+  more guidance on what to do.}
 \begin{exercise}
 Create your own ``multiple testing world.'' You may use
   many regressions, many correlations, or many group comparisons.
