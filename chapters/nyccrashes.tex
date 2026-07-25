@@ -224,8 +224,7 @@ Now we make a table of crash counts by hour and borough.
 
 \showChunk{R}{Code/nyc_crashes.R}{hour_table}
 
-The same table can be plotted with a base R bar plot. We put this code
-in the script so the book can build the figure automatically.
+The same table can be plotted with a base R bar plot.
 
 \showChunk{R}{Code/nyc_crashes.R}{hour_plot}
 
@@ -241,19 +240,26 @@ came from each borough.
 
 There is also a data quality question hiding in the time values. Many
 crashes are recorded exactly at midnight or exactly on the hour. That
-may mean the actual crash times were rounded during reporting.
+may mean the actual crash times were rounded during reporting,
+or that a default value was used.
 
 \showChunk{R}{Code/nyc_crashes.R}{rounded_times}
 
-About 15\% of the crashes are recorded on the hour, far more than we
-would expect if crash times were spread uniformly across minutes. The
-spike at hour 0 is especially suspicious. Of those midnight crashes, a
-large share are recorded at exactly 00:00. That pattern is hard to
-explain with real traffic: it is much more likely that a missing or
-unknown crash time was entered as the default value 00:00:00. If we
-ignored this, we might conclude that midnight is one of the most
-dangerous hours of the day, when the truth is that many of those
-crashes simply happened at some unknown time.
+\inlnR{```cat(round(100 * mean(df$minute == 0, na.rm = TRUE),
+1))```}[nyc-onhour-pct]\%
+of the crashes are recorded on the hour, far more than we would expect
+if crash times were spread uniformly across minutes. The spike at hour
+0 is especially suspicious:
+\inlnR{```cat(sum(df$hour == 0, na.rm = TRUE))```}[nyc-hour0-count]
+crashes are recorded there, and
+\inlnR{```cat(sum(df$hour == 0 & df$minute == 0,
+na.rm = TRUE))```}[nyc-midnight-count]
+of those are recorded at exactly 00:00. That pattern is hard to explain
+with real traffic: it is much more likely that a missing or unknown
+crash time was entered as the default value 00:00:00. If we ignored
+this, we might conclude that midnight is one of the most dangerous
+hours of the day, when the truth is that many of those crashes simply
+happened at some unknown time.
 
 The exact-midnight rate is not the same in every borough. A higher rate
 in one borough could mean weaker data-quality control there, or simply
@@ -261,6 +267,8 @@ that small boroughs have more variable rates because they have fewer
 crashes.
 
 \showChunk{R}{Code/nyc_crashes.R}{midnight_by_borough}
+
+\inlnR{```print(round(midnight_rate_by_borough, 3))```}[nyc-midnightrate][vbox]
 
 Staten Island has the highest share of exact-midnight crashes in this
 week, but it also has the smallest number of crashes overall, so the
@@ -309,7 +317,23 @@ Here is the matching plotting code.
 Figure~\ref{fig:ch9:daytype} makes the business-day comparison easier
 to scan. Remember that there are more business days than weekend days in
 this week, so the taller business-day bars are not surprising by
-themselves.
+themselves. To compare boroughs directly, we calculate the ratio of
+business-day crashes to weekend crashes for each borough.
+
+\showChunk{R}{Code/nyc_crashes.R}{business_ratio}
+
+\inlnR{```print(round(ratio_bd_weekend, 2))```}[nyc-bdratio][vbox]
+
+The ratio ranges from
+\inlnR{```cat(round(min(ratio_bd_weekend), 2))```}[nyc-bdratio-min] in
+Queens to
+\inlnR{```cat(round(max(ratio_bd_weekend), 2))```}[nyc-bdratio-max] in
+Staten Island.
+The Staten Island ratio should be read with caution: it is based on
+just
+\inlnR{```cat(tab_bd_borough["Weekend", "STATEN ISLAND"])```}[nyc-si-weekend]
+weekend crashes, so a single extra or missing crash would move it a
+lot.
 
 \begin{figure}[H]
 \includegraphics[width=0.8\textwidth]{images/chapter_9/crashes_by_day_type.pdf}
@@ -330,6 +354,10 @@ business hours. For a first definition, let business hours be 7 a.m. to
 Now we count crashes inside and outside those hours for each borough.
 
 \showChunk{R}{Code/nyc_crashes.R}{business_hours_table}
+
+The result sshould look like this:
+
+\inlnR{```print(round(prop_bh_borough, 3))```}[nyc-bhprop][vbox]
 
 As with business days, the raw counts are higher during business hours
 because that time window is longer. The proportions within each borough

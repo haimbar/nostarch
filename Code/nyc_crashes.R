@@ -322,7 +322,9 @@ df$business_day <- !(df$weekday %in% c("Saturday", "Sunday"))
 
 ############################################################
 #label===business_table
-tab_bd_borough <- table(df$business_day, df$borough)
+day_type <- factor(df$business_day, levels = c(FALSE, TRUE),
+                   labels = c("Weekend", "Business day"))
+tab_bd_borough <- table(day_type, df$borough)
 tab_bd_borough
 #===end
 
@@ -353,6 +355,15 @@ dev.off()
 
 
 ############################################################
+#label===business_ratio
+## Ratio of business-day crashes to weekend crashes, per borough.
+ratio_bd_weekend <- tab_bd_borough["Business day", ] /
+  tab_bd_borough["Weekend", ]
+round(ratio_bd_weekend, 2)
+#===end
+
+
+############################################################
 #label===business_hours_make
 df$business_hours <- (df$hour >= 7) & (df$hour < 19)
 #===end
@@ -360,7 +371,9 @@ df$business_hours <- (df$hour >= 7) & (df$hour < 19)
 
 ############################################################
 #label===business_hours_table
-tab_bh_borough <- table(df$business_hours, df$borough)
+hours_type <- factor(df$business_hours, levels = c(FALSE, TRUE),
+                     labels = c("Outside business hours", "Business hours"))
+tab_bh_borough <- table(hours_type, df$borough)
 tab_bh_borough
 
 prop_bh_borough <- prop.table(tab_bh_borough, margin = 2)
