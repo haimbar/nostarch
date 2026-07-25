@@ -377,11 +377,16 @@ motorists injured. The same should hold for deaths.
 
 \showChunk{R}{Code/nyc_crashes.R}{injury_consistency}
 
-A few rows report injured persons without reporting any injured
-pedestrians, cyclists, or motorists. The totals and the subtotals do not
-match, which is a reminder that real data can contain internal
-inconsistencies. For our severity rule we use the total counts, because
-those are the broadest measure available.
+\inlnR{```cat(sum(df$number_of_persons_injured != df$injured_sum,
+na.rm = TRUE))```}[nyc-injmismatch]
+rows report injured persons without reporting any injured pedestrians,
+cyclists, or motorists, and
+\inlnR{```cat(sum(df$number_of_persons_killed != df$killed_sum,
+na.rm = TRUE))```}[nyc-killmismatch]
+rows show the same pattern for deaths. The totals and the subtotals do
+not always match, which is a reminder that real data can contain
+internal inconsistencies. For our severity rule we use the total
+counts, because those are the broadest measure available.
 
 For a first look, we call a crash severe\index{severe crash} if at least one person was
 injured or killed. This is a simple rule, not the only possible rule.
@@ -393,15 +398,23 @@ that were severe.
 
 \showChunk{R}{Code/nyc_crashes.R}{severity_rate}
 
+\inlnR{```cat(sum(df$severe, na.rm = TRUE))```}[nyc-severecount] of the
+\inlnR{```cat(nrow(df))```}[nyc-severenrow] crashes are severe by this
+rule, a rate of
+\inlnR{```cat(round(100 * mean(df$severe, na.rm = TRUE), 1))```}
+[nyc-severepct]\%.
+
 We can also draw the crash locations. In
 Figure~\ref{fig:ch9:locations}, each dot is one crash with valid
-coordinates. Red dots are severe crashes.
+coordinates. We split the not-severe and severe crashes into separate
+panels, on the same longitude and latitude scale, so that the more
+numerous not-severe points do not visually bury the severe ones.
 
 \showChunk{R}{Code/nyc_crashes.R}{severity_map}
 
 \begin{figure}[H]
-\includegraphics[width=0.7\textwidth]{images/chapter_9/severity_locations.pdf}
-\caption{Crash locations, colored by severity (red for crashes with at least one injury or death, gray for crashes with none), showing that most crashes cluster in the city's densest areas}
+\includegraphics[width=0.95\textwidth]{images/chapter_9/severity_locations.pdf}
+\caption{Crash locations by severity: not-severe crashes (left) and severe crashes (right), showing that both patterns cluster in the city's densest areas}
 \label{fig:ch9:locations}
 \end{figure}
 
@@ -411,16 +424,28 @@ columns all begin with \lstinline{vehicle_type_code_}, so we use
 
 \showChunk{R}{Code/nyc_crashes.R}{vehicle_columns}
 
+The vehicle type columns are:
+
+\inlnR{```print(veh_cols)```}[nyc-vehcols][vbox]
+
 For each row, we count how many of those vehicle type fields are not
 missing. This gives us \lstinline{n_vehicles}.
 
 \showChunk{R}{Code/nyc_crashes.R}{vehicle_count}
+
+You should get the following:
+
+\inlnR{```print(table(df$n_vehicles))```}[nyc-nvehicles][vbox]
 
 Next we compare severity with the number of vehicles. The first table
 shows counts. The second table shows proportions within each vehicle
 count.
 
 \showChunk{R}{Code/nyc_crashes.R}{severity_by_vehicle}
+
+\inlnR{```print(tab_severe_veh)```}[nyc-sevvehcounts][vbox]
+
+\inlnR{```print(round(prop_severe_by_veh, 3))```}[nyc-sevvehprop][vbox]
 
 The plot in Figure~\ref{fig:ch9:vehseverity} shows the severe-crash
 proportion for each vehicle count, with the overall severe-crash
@@ -433,6 +458,22 @@ proportion marked by a dashed line.
 \caption{Severe-crash proportion by number of vehicles, showing a higher proportion of injuries or deaths as more vehicles are involved, though counts with many vehicles are small}
 \label{fig:ch9:vehseverity}
 \end{figure}
+
+The proportion severe for zero vehicles stands out:
+\inlnR{```cat(round(100 * prop_severe_by_veh["Severe", "0"], 1))```}
+[nyc-vehzero-pct]\% of the
+\inlnR{```cat(sum(tab_severe_veh[, "0"]))```}[nyc-vehzero-n]
+crashes with zero vehicles recorded are severe, the highest rate in
+the table. This should not be read as ``crashes with no vehicles are
+the most dangerous.'' Every row in this dataset comes from a motor
+vehicle collision report, so \lstinline{n_vehicles == 0} means the
+report's vehicle type fields were left blank, not that no vehicle was
+involved. That group is also tiny, so a handful of severe outcomes can
+swing the proportion a long way, similar to the small-sample caution
+from the Staten Island ratio earlier in the chapter. The pattern is
+more likely a data-quality artifact --- severe crashes may get logged
+in a hurry, before every field is filled in --- than a genuine safety
+signal about vehicle count.
 
 Severity may also change across the day, so we make the same kind of
 table by hour.
@@ -451,10 +492,11 @@ crashes and because some hours have fewer records than others.
 \label{fig:ch9:hourseverity}
 \end{figure}
 
-These tables are useful for finding patterns, but they do not prove
-causes. For example, if late-night crashes have a higher severe-crash
-proportion, that could involve traffic speed, road conditions, driver
-behavior, reporting differences, or several of these at once.
+These tables and plots are useful for finding patterns, but they do 
+not prove causes. For example, if late-night crashes have a higher
+severe-crash proportion, that could involve traffic speed, road 
+conditions, driver behavior, reporting differences, or several of
+these at once.
 
 Sometimes we want to inspect the most serious individual records. We
 create a simple severity score: each injury counts as one point, and each

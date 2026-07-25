@@ -414,26 +414,38 @@ mean(df$severe, na.rm = TRUE)
 
 ############################################################
 pdf("images/chapter_9/severity_locations.pdf",
-    width = 5.5, height = 5.5)
+    width = 9, height = 4.8)
 
 #label===severity_map
 ## Correct for the longitude/latitude scale mismatch at this latitude,
-## so the map is not visibly stretched.
+## so the maps are not visibly stretched.
 map_asp <- 1 / cos(mean(df$latitude, na.rm = TRUE) * pi / 180)
+lon_range <- range(df$longitude, na.rm = TRUE)
+lat_range <- range(df$latitude, na.rm = TRUE)
 
-plot(df$longitude, df$latitude,
-     col = ifelse(df$severe, "firebrick", "gray70"),
+par(mfrow = c(1, 2))
+
+plot(df$longitude[!df$severe], df$latitude[!df$severe],
+     col = "gray70",
      pch = 19,
      cex = 0.45,
      asp = map_asp,
+     xlim = lon_range,
+     ylim = lat_range,
      xlab = "Longitude",
-     ylab = "Latitude")
+     ylab = "Latitude",
+     main = "Not severe")
 
-legend("bottomleft",
-       legend = c("Not severe", "Severe"),
-       col = c("gray70", "firebrick"),
-       pch = 19,
-       bty = "n")
+plot(df$longitude[df$severe], df$latitude[df$severe],
+     col = "firebrick",
+     pch = 19,
+     cex = 0.45,
+     asp = map_asp,
+     xlim = lon_range,
+     ylim = lat_range,
+     xlab = "Longitude",
+     ylab = "Latitude",
+     main = "Severe")
 #===end
 
 dev.off()
@@ -459,7 +471,9 @@ table(df$n_vehicles)
 
 ############################################################
 #label===severity_by_vehicle
-tab_severe_veh <- table(df$severe, df$n_vehicles)
+severe_label <- factor(df$severe, levels = c(FALSE, TRUE),
+                       labels = c("Not severe", "Severe"))
+tab_severe_veh <- table(severe_label, df$n_vehicles)
 tab_severe_veh
 
 prop_severe_by_veh <- prop.table(tab_severe_veh, margin = 2)
@@ -472,8 +486,8 @@ pdf("images/chapter_9/severity_by_vehicle_count.pdf",
     width = 6, height = 4)
 
 #label===severity_by_vehicle_plot
-barplot(prop_severe_by_veh["TRUE", ],
-        col = "firebrick",
+barplot(prop_severe_by_veh["Severe", ],
+        col = "lightblue",
         border = NA,
         ylim = c(0, 1),
         xlab = "Number of vehicles",
@@ -481,7 +495,7 @@ barplot(prop_severe_by_veh["TRUE", ],
 
 abline(h = mean(df$severe, na.rm = TRUE),
        lty = 2,
-       col = "gray40")
+       col = "gray33")
 #===end
 
 dev.off()
