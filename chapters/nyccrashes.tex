@@ -60,6 +60,8 @@ Now we apply the new names to the data frame and inspect the result.
 
 \showChunk{R}{Code/nyc_crashes.R}{rename_apply}
 
+You should see the following:
+
 \inlnR{```print(renamed_head)```}[nyc-rename][vbox]
 
 This step does not change the data values. It only changes the labels on
@@ -111,6 +113,8 @@ text. It also has separate numeric columns for latitude and longitude.
 We look at the three columns together.
 
 \showChunk{R}{Code/nyc_crashes.R}{location_preview}
+
+You should see the following:
 
 \inlnR{```print(location_preview)```}[nyc-locpreview][vbox]
 
@@ -172,6 +176,8 @@ are missing.
 
 \showChunk{R}{Code/nyc_crashes.R}{missing_counts}
 
+Try the code above. What do you see? How many rows have a missing 
+borough, a missing zip code, or both?
 The cross-tabulation shows that missing boroughs and missing zip codes
 go together perfectly in this week: every row with a missing borough
 also has a missing zip code. That pattern suggests the location was not
@@ -284,6 +290,8 @@ that small boroughs have more variable rates because they have fewer
 crashes.
 
 \showChunk{R}{Code/nyc_crashes.R}{midnight_by_borough}
+
+Try the code above. You should see the following:
 
 \inlnR{```print(round(midnight_rate_by_borough, 3))```}[nyc-midnightrate][vbox]
 
@@ -494,9 +502,18 @@ count.
 
 \showChunk{R}{Code/nyc_crashes.R}{severity_by_vehicle}
 
+The raw counts table should look like this:
+
 \inlnR{```print(tab_severe_veh)```}[nyc-sevvehcounts][vbox]
 
+And the proportions table should look like this:
+
 \inlnR{```print(round(prop_severe_by_veh, 3))```}[nyc-sevvehprop][vbox]
+
+With the exception of the zero-vehicle group, the proportion of severe crashes
+tends to rise as the number of vehicles involved rises. That pattern
+makes sense: more vehicles in a crash can mean more energy, more
+damage, and more people involved. The zero-vehicle group is a data-quality artifact, as we discuss below.
 
 The plot in Figure~\ref{fig:ch9:vehseverity} shows the severe-crash
 proportion for each vehicle count, with the overall severe-crash
@@ -536,6 +553,11 @@ table by hour.
 Figure~\ref{fig:ch9:hourseverity} shows the hourly severe-crash
 proportions. The line moves around because each hour has its own mix of
 crashes and because some hours have fewer records than others.
+Overall, the proportion of severe crashes is higher in some overnight
+hours than during the day, but the pattern is not as clear as the
+vehicle-count pattern. The overnight hours have fewer crashes, so the
+proportions are more variable. The zero-vehicle group is not shown in
+this plot because it is a data-quality artifact, as discussed above.
 
 \showChunk{R}{Code/nyc_crashes.R}{severe_by_hour_plot}
 
@@ -552,6 +574,10 @@ could reflect crash dynamics, or simply that multi-vehicle crashes are
 harder to under-report. A higher proportion late at night could
 involve traffic speed, road conditions, driver behavior, reporting
 differences, or several of these at once.
+To esablish causation, we would need a more careful study design and
+more data than we have in this single week of crash reports. The tables
+and plots do, however, give us a first look at the data and help us
+formulate questions for further study.
 
 \subsection{The Most Serious Crashes}
 
