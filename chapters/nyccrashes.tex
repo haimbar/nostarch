@@ -408,7 +408,11 @@ We can also draw the crash locations. In
 Figure~\ref{fig:ch9:locations}, each dot is one crash with valid
 coordinates. We split the not-severe and severe crashes into separate
 panels, on the same longitude and latitude scale, so that the more
-numerous not-severe points do not visually bury the severe ones.
+numerous not-severe points do not visually bury the severe ones. We
+also draw the outlines of the five boroughs, using the
+\lstinline{sf} package and NYC Open Data's official Borough
+Boundaries, so the points can be read against the city's actual shape
+and coastline instead of a blank grid.
 
 \showChunk{R}{Code/nyc_crashes.R}{severity_map}
 

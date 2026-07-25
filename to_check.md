@@ -27,6 +27,7 @@
 - Chunk labels — use descriptive names, not line numbers; always use `\showChunk{R}{file}{chunk-name}` rather than `\showCode{R}{file}[start][end]`; add `#label===name` / `#===end` markers in the R file to define the chunk
 - Plots — resolution, aesthetics, work in B&W as well as in color; span full text width; golden ratio for `asp` unless symmetry required (e.g., Q-Q plots); label and point sizes legible after rescaling; minimize white space margins
 - Code line length (see NoStarch Compliance above)
+- Package dependencies — every package a chapter's R code uses must be either a base R package or installed via `Code/bookinit.R` (run once at the start of the book via `\runR` in `Rintro.tex`); chapter scripts should not carry their own `install.packages()` calls, but should still call `library()` for any non-base package they use so the script also runs standalone (outside the book build)
 
 ### Math and References
 - Math notation consistency — hat notation for estimates, Greek letters, subscripts consistent across chapters

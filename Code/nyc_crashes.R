@@ -1,7 +1,12 @@
 ############################################################
 ## R script for NYC Labor Day Week 2025 crash case study
-## Base R only. No tidyverse.
+## Base R only, plus the sf package (installed by bookinit.R) for the
+## borough basemap in Figure 9-4, built from NYC Open Data's official
+## Borough Boundaries (Data/nyc_borough_boundaries.geojson). No
+## tidyverse.
 ############################################################
+
+library(sf)
 
 ############################################################
 #label===read
@@ -417,6 +422,11 @@ pdf("images/chapter_9/severity_locations.pdf",
     width = 9, height = 4.8)
 
 #label===severity_map
+## Load the city's official borough boundaries (NYC Open Data) so the
+## crash locations can be read against real coastlines, not a blank
+## grid.
+boroughs <- st_read("Data/nyc_borough_boundaries.geojson", quiet = TRUE)
+
 ## Correct for the longitude/latitude scale mismatch at this latitude,
 ## so the maps are not visibly stretched.
 map_asp <- 1 / cos(mean(df$latitude, na.rm = TRUE) * pi / 180)
@@ -425,27 +435,25 @@ lat_range <- range(df$latitude, na.rm = TRUE)
 
 par(mfrow = c(1, 2))
 
-plot(df$longitude[!df$severe], df$latitude[!df$severe],
-     col = "gray70",
-     pch = 19,
-     cex = 0.45,
-     asp = map_asp,
-     xlim = lon_range,
-     ylim = lat_range,
-     xlab = "Longitude",
-     ylab = "Latitude",
-     main = "Not severe")
+plot(NA, xlim = lon_range, ylim = lat_range, asp = map_asp,
+     xlab = "Longitude", ylab = "Latitude", main = "Not severe")
+rect(par("usr")[1], par("usr")[3], par("usr")[2], par("usr")[4],
+     col = "lightsteelblue1", border = NA)
+plot(st_geometry(boroughs), add = TRUE, col = "gray95",
+     border = "gray60")
+points(df$longitude[!df$severe], df$latitude[!df$severe],
+       col = "gray40", pch = 19, cex = 0.45)
+box()
 
-plot(df$longitude[df$severe], df$latitude[df$severe],
-     col = "firebrick",
-     pch = 19,
-     cex = 0.45,
-     asp = map_asp,
-     xlim = lon_range,
-     ylim = lat_range,
-     xlab = "Longitude",
-     ylab = "Latitude",
-     main = "Severe")
+plot(NA, xlim = lon_range, ylim = lat_range, asp = map_asp,
+     xlab = "Longitude", ylab = "Latitude", main = "Severe")
+rect(par("usr")[1], par("usr")[3], par("usr")[2], par("usr")[4],
+     col = "lightsteelblue1", border = NA)
+plot(st_geometry(boroughs), add = TRUE, col = "gray95",
+     border = "gray60")
+points(df$longitude[df$severe], df$latitude[df$severe],
+       col = "firebrick", pch = 19, cex = 0.45)
+box()
 #===end
 
 dev.off()
