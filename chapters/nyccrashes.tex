@@ -51,6 +51,11 @@ with underscores.
 
 \showChunk{R}{Code/nyc_crashes.R}{rename_build}
 
+\lstinline{gsub()} does the replacing: its first argument is a pattern
+to match and its second is the replacement text. A period is a
+special character in these patterns, so we write it as
+\lstinline{"\\."} to match a literal period.
+
 Now we apply the new names to the data frame and inspect the result.
 
 \showChunk{R}{Code/nyc_crashes.R}{rename_apply}
@@ -143,7 +148,9 @@ less than it was before.
 
 \section{Missing Values and Data Quality}
 
-Missing values\index{missing value} are not just empty spaces. They are clues about how the
+With the data imported, renamed, and filtered to the target week, we
+turn next to a closer look at what is missing from it. Missing
+values\index{missing value} are not just empty spaces. They are clues about how the
 data were collected. A missing borough or zip code might mean the crash
 happened on a highway, at an unusual address, or in a record where the
 location was not entered completely.
@@ -192,16 +199,19 @@ present coordinates.
 
 To compare days of the week, we create a weekday variable\index{weekday}. The
 \lstinline{levels} argument puts the days in calendar order instead of
-alphabetical order.
+alphabetical order. We use this same variable again later in the
+chapter, when we compare business days and weekends.
 
 \showChunk{R}{Code/nyc_crashes.R}{weekday}
 
-Now we count fillable zip codes by weekday and calculate the proportion
-for each day.
+Now we count fillable zip codes by weekday and calculate the
+proportion for each day. \lstinline{tapply()} does this in one step:
+it splits \lstinline{fillable_zip} into groups by \lstinline{weekday}
+and applies \lstinline{mean()} within each group.
 
 \showChunk{R}{Code/nyc_crashes.R}{fillable_table}
 
-The output should look like so:
+You should see the following:
 
 \inlnR{```print(table(df$weekday, df$fillable_zip))```}[nyc-fillable][vbox]
 
@@ -210,8 +220,11 @@ prove the data collectors worked differently that day? Why or why not?
 
 \section{Exploring Temporal Patterns}
 
-The dataset stores date and time in separate columns. To study crashes
-across the day, we combine them into one date-time object\index{date-time object}.
+Having cleaned the location, zip code, and identifier fields, we turn
+next to our ``when'' question: when during the day and week do
+crashes happen? The dataset stores date and time in separate columns.
+To study crashes across the day, we combine them into one date-time
+object\index{date-time object}.
 
 \showChunk{R}{Code/nyc_crashes.R}{datetime_make}
 
@@ -219,6 +232,8 @@ From that date-time object, we extract the hour and minute. The hour
 runs from 0 to 23, where 0 means midnight.
 
 \showChunk{R}{Code/nyc_crashes.R}{hour_make}
+
+\subsection{Crashes by Hour}
 
 Now we make a table of crash counts by hour and borough.
 
@@ -237,6 +252,8 @@ came from each borough.
 \caption{Crash counts by hour and borough, showing crashes rising during morning and evening rush hours and falling overnight}
 \label{fig:ch9:hour}
 \end{figure}
+
+\subsection{The Midnight Artifact}
 
 There is also a data quality question hiding in the time values. Many
 crashes are recorded exactly at midnight or exactly on the hour. That
@@ -285,8 +302,10 @@ choice.
 
 Figure~\ref{fig:ch9:hourcorrected} compares the original hourly counts
 by borough with the counts after the exact-midnight crashes have been
-redistributed within each borough. The midnight spike shrinks
-dramatically.
+redistributed within each borough. The two panels come from a single
+\lstinline{par(mfrow = c(1, 2))} call, which tells R to arrange the
+next two plots side by side instead of one after another. The
+midnight spike shrinks dramatically.
 
 \showChunk{R}{Code/nyc_crashes.R}{hour_corrected_plot}
 
@@ -301,8 +320,14 @@ If many times are rounded or defaulted, we should be cautious about
 making claims that depend on exact minutes or hours. A single default
 value can create a fake peak.
 
-Labor Day week includes weekdays and weekend days. We define a business
-day\index{business day} as Monday through Friday.
+\subsection{Business Days versus Weekends}
+
+Labor Day week includes weekdays and weekend days. Using the
+\lstinline{weekday} variable we created earlier, we define a business
+day\index{business day} as Monday through Friday: \lstinline{%in%}
+checks each row's weekday against \lstinline{c("Saturday", "Sunday")},
+and \lstinline{!} negates that to keep the days that are not in the
+list.
 
 \showChunk{R}{Code/nyc_crashes.R}{business_make}
 
@@ -345,17 +370,22 @@ Why might the number of crashes differ between business days and
 weekend days? Try to come up with one traffic-related reason and one
 data-recording reason.
 
+\subsection{Business Hours}
+
 We can also compare crashes during business hours with crashes outside
 business hours. For a first definition, let business hours be 7 a.m. to
 7 p.m.
 
 \showChunk{R}{Code/nyc_crashes.R}{business_hours_make}
 
-Now we count crashes inside and outside those hours for each borough.
+Now we count crashes inside and outside those hours for each borough,
+then use \lstinline{prop.table()} with \lstinline{margin = 2} to turn
+each column of counts into proportions that add up to 1 within that
+borough.
 
 \showChunk{R}{Code/nyc_crashes.R}{business_hours_table}
 
-The result sshould look like this:
+You should see the following:
 
 \inlnR{```print(round(prop_bh_borough, 3))```}[nyc-bhprop][vbox]
 
@@ -370,10 +400,16 @@ evenly across the day or the week.
 
 \section{Crash Severity}
 
-The dataset records injuries and deaths separately. Before using those
-numbers, we check one internal consistency relationship: the total number
-of persons injured should equal the sum of pedestrians, cyclists, and
-motorists injured. The same should hold for deaths.
+Having looked at when crashes happen, we turn now to how bad they
+are: a first step toward our ``what factors'' question. The dataset
+records injuries and deaths separately.
+
+\subsection{Defining a Severe Crash}
+
+Before using those numbers, we check one internal consistency
+relationship: the total number of persons injured should equal the
+sum of pedestrians, cyclists, and motorists injured. The same should
+hold for deaths.
 
 \showChunk{R}{Code/nyc_crashes.R}{injury_consistency}
 
@@ -404,6 +440,8 @@ rule, a rate of
 \inlnR{```cat(round(100 * mean(df$severe, na.rm = TRUE), 1))```}
 [nyc-severepct]\%.
 
+\subsection{Where Severe Crashes Happen}
+
 We can also draw the crash locations. In
 Figure~\ref{fig:ch9:locations}, each dot is one crash with valid
 coordinates. We split the not-severe and severe crashes into separate
@@ -416,11 +454,20 @@ and coastline instead of a blank grid.
 
 \showChunk{R}{Code/nyc_crashes.R}{severity_map}
 
+This code goes a little beyond base R: the \lstinline{sf} package's
+\lstinline{st_read()} loads the boundary file much like
+\lstinline{read.csv()} loads a table, and \lstinline{st_geometry()}
+pulls out just the shapes so we can plot them as a layer under our
+points. \lstinline{par(mfrow=)} again arranges the two panels side by
+side, as it did for Figure~\ref{fig:ch9:hourcorrected}.
+
 \begin{figure}[H]
 \includegraphics[width=0.95\textwidth]{images/chapter_9/severity_locations.pdf}
 \caption{Crash locations by severity: not-severe crashes (left) and severe crashes (right), showing that both patterns cluster in the city's densest areas}
 \label{fig:ch9:locations}
 \end{figure}
+
+\subsection{Severity by Number of Vehicles}
 
 Crashes can involve different numbers of vehicles. The vehicle type
 columns all begin with \lstinline{vehicle_type_code_}, so we use
@@ -437,7 +484,7 @@ missing. This gives us \lstinline{n_vehicles}.
 
 \showChunk{R}{Code/nyc_crashes.R}{vehicle_count}
 
-You should get the following:
+You should see the following:
 
 \inlnR{```print(table(df$n_vehicles))```}[nyc-nvehicles][vbox]
 
@@ -479,6 +526,8 @@ more likely a data-quality artifact --- severe crashes may get logged
 in a hurry, before every field is filled in --- than a genuine safety
 signal about vehicle count.
 
+\subsection{Severity by Hour}
+
 Severity may also change across the day, so we make the same kind of
 table by hour.
 
@@ -496,11 +545,15 @@ crashes and because some hours have fewer records than others.
 \label{fig:ch9:hourseverity}
 \end{figure}
 
-These tables and plots are useful for finding patterns, but they do 
-not prove causes. For example, if late-night crashes have a higher
-severe-crash proportion, that could involve traffic speed, road 
-conditions, driver behavior, reporting differences, or several of
-these at once.
+These tables and plots --- severity by vehicle count and by hour
+alike --- are useful for finding patterns, but they do not prove
+causes. A higher severe-crash proportion with more vehicles involved
+could reflect crash dynamics, or simply that multi-vehicle crashes are
+harder to under-report. A higher proportion late at night could
+involve traffic speed, road conditions, driver behavior, reporting
+differences, or several of these at once.
+
+\subsection{The Most Serious Crashes}
 
 Sometimes we want to inspect the most serious individual records. We
 create a simple severity score: each injury counts as one point, and each
