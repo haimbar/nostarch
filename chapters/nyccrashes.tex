@@ -171,6 +171,14 @@ so we recode it as missing.
 
 \showChunk{R}{Code/nyc_crashes.R}{zip_clean}
 
+We check \lstinline{is.numeric()} first because \lstinline{read.csv()}
+infers each column's type from its contents. In this week's data
+\lstinline{zip_code} happens to be read as numbers, but a different
+week with blank or non-numeric entries could make R read it as text
+instead, where a zero would show up as the string \lstinline{"0"}
+rather than the number \lstinline{0}. The check keeps this step from
+silently doing nothing in that case.
+
 Now we count missing boroughs, missing zip codes, and rows where both
 are missing.
 
