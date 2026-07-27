@@ -636,12 +636,19 @@ confidence interval to estimate the overall severe-crash rate, and a
 logistic regression model to see how severity relates to several
 predictors at once.
 
-\subsection{Chi-Squared Test of Independence}
+\subsection{Severity on Business Days versus Weekends}
 
-We can compare the 2-by-2 table of severe and non-severe crashes on
-business days and weekends with Pearson's chi-squared test of
-independence\index{chi-squared test of independence}. That test works with counts, which is
-the right scale for this data.
+We have not yet cross-tabulated severity against day type directly,
+so we build that table first. Chapter~\ref{ch:EDA} introduced
+cross-tabulating two categorical variables, and
+Chapter~\ref{ch:hypothesis} introduced the general logic of a
+hypothesis test: state a null hypothesis, compute a test statistic,
+and summarize the evidence with a p-value. The chi-squared test of
+independence\index{chi-squared test of independence} combines both
+ideas for a 2-by-2 table like this one, asking whether severity and
+day type are related. Pearson's chi-squared
+statistic\index{Pearson's chi-squared statistic} works with counts,
+which is the right scale for this data.
 
 \showChunk{R}{Code/nyc_crashes.R}{severity_inference_table}
 \showChunk{R}{Code/nyc_crashes.R}{severity_chisq}
@@ -649,19 +656,23 @@ the right scale for this data.
 The contingency table is
 \inlnR{```tab_business_severe```}[nyc-sev-tab][vbox]
 and the chi-squared test gives a p-value of
-\inlnR{```round(chisq_business_severe$p.value, 4)```}[nyc-sev-p].
+\inlnR{```cat(round(chisq_business_severe$p.value, 4))```}[nyc-sev-p].
 For this week, the evidence is not strong enough to say that severe
 crashes differ by day type.
 
-\subsection{A Confidence Interval for the Severe-Crash Rate}
+\subsection{How Common Are Severe Crashes?}
 
-We can also estimate the overall severe-crash rate for the week. The
-point estimate\index{point estimate} is \inlnR{```round(severe_rate, 3)```}[nyc-sev-rate],
-and the exact 95\% binomial confidence interval\index{confidence interval!binomial} is
-\inlnR{```round(severe_rate_ci$conf.int[1], 3)```}[nyc-sev-lo]
-to \inlnR{```round(severe_rate_ci$conf.int[2], 3)```}[nyc-sev-hi].
-This interval is a direct estimate for a binary response; it does not
-rely on a normal approximation for the raw crash outcomes.
+Chapter~\ref{ch:estimation} built confidence intervals using a normal
+approximation for a sample mean. Severity is a yes-or-no outcome
+rather than a mean, so here we use an exact binomial confidence
+interval\index{confidence interval!binomial} instead: it comes
+directly from the binomial distribution, with no normal approximation
+involved. The point estimate\index{point estimate} for the overall
+severe-crash rate this week is
+\inlnR{```cat(round(severe_rate, 3))```}[nyc-sev-rate], and the exact
+95\% interval is
+\inlnR{```cat(round(severe_rate_ci$conf.int[1], 3))```}[nyc-sev-lo]
+to \inlnR{```cat(round(severe_rate_ci$conf.int[2], 3))```}[nyc-sev-hi].
 
 To make the binomial calculation concrete, here are the raw counts of
 severe and non-severe crashes used by the binomial test:
@@ -669,9 +680,9 @@ severe and non-severe crashes used by the binomial test:
 \showChunk{R}{Code/nyc_crashes.R}{severity_binom_table}
 
 The table shows
-\inlnR{```sum(df$severe, na.rm = TRUE)```}[nyc-sev-count]
+\inlnR{```cat(sum(df$severe, na.rm = TRUE))```}[nyc-sev-count]
 severe crashes and
-\inlnR{```sum(!df$severe, na.rm = TRUE)```}[nyc-nonsev-count]
+\inlnR{```cat(sum(!df$severe, na.rm = TRUE))```}[nyc-nonsev-count]
 non-severe crashes. The point estimate reports the fraction of crashes
 in this sampled week that were classified as severe. The exact binomial
 confidence interval gives a range of plausible values for that
@@ -680,11 +691,18 @@ stable (we observed many crashes); a wide interval means more sampling
 uncertainty (fewer crashes). These values describe the observed week and
 should not be interpreted as causal effects.
 
-\subsection{Logistic Regression}
+\subsection{What Predicts a Severe Crash?}
 
-A logistic regression model\index{logistic regression} lets us relate the binary severity outcome
-to two predictors at once: business-day indicator and number of vehicles
-involved. We interpret the coefficients on the odds-ratio scale.
+Chapter~\ref{ch:regression} introduced linear regression for a
+continuous outcome, fit with \lstinline{lm()}. Severity is binary, not
+continuous, so here we use logistic
+regression\index{logistic regression} instead: fit with
+\lstinline{glm()} and the \lstinline{binomial} family, it relates the
+log-odds of a severe crash to one or more predictors rather than
+predicting a continuous value directly. We use it to relate severity
+to two predictors at once, the business-day indicator and the number
+of vehicles involved, and interpret the coefficients on the
+odds-ratio scale.
 
 First, prepare a clean dataset for modeling and inspect it:
 
@@ -800,28 +818,28 @@ NYC Open Data team.
 \begin{itemize}
 \item
   \textbf{Default crash times.} About
-  \inlnR{```round(100 * prop_on_hour, 1)```}[nyc-prop-on-hour]\% of
+  \inlnR{```cat(round(100 * prop_on_hour, 1))```}[nyc-prop-on-hour]\% of
   records have a time ending in ``:00'', and
-  \inlnR{```n_exact_midnight```}[nyc-exact-midnight] are recorded at
+  \inlnR{```cat(n_exact_midnight)```}[nyc-exact-midnight] are recorded at
   exactly 00:00. Those exact-midnight entries are almost certainly a
   default value for missing times, not real midnight crashes. A missing
   time should be coded as missing rather than as 00:00:00.
 \item
   \textbf{Missing location fields.} In this week,
-  \inlnR{```n_both_missing```}[nyc-both-missing] rows are missing both
+  \inlnR{```cat(n_both_missing)```}[nyc-both-missing] rows are missing both
   borough and zip code, and the two fields are missing together in every
   case. A single missing-location flag would be clearer than separate
   blank columns.
 \item
   \textbf{Internal consistency of injury counts.}
-  \inlnR{```n_injury_mismatch```}[nyc-injury-mismatch] rows report a
+  \inlnR{```cat(n_injury_mismatch)```}[nyc-injury-mismatch] rows report a
   positive total number of persons injured while reporting zero injured
   pedestrians, cyclists, and motorists. Either the total or the
   subtotals are in error; the form or the validation rules should ensure
   they agree.
 \item
   \textbf{Vague contributing factors.} Vehicle 1 has
-  \inlnR{```n_unspecified```}[nyc-n-unspecified]
+  \inlnR{```cat(n_unspecified)```}[nyc-n-unspecified]
   \lstinline{unspecified} entries. This category is too vague to support
   policy decisions. Either removing it from the pick-list or requiring a
   more specific follow-up would improve the data. We keep

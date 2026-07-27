@@ -512,7 +512,11 @@ dev.off()
 ############################################################
 #label===severity_inference_table
 ## 2x2 table of severe crashes by day type
-tab_business_severe <- table(df$business_day, df$severe)
+day_type_label <- factor(df$business_day, levels = c(FALSE, TRUE),
+                         labels = c("Weekend", "Business day"))
+severe_label <- factor(df$severe, levels = c(FALSE, TRUE),
+                       labels = c("Not severe", "Severe"))
+tab_business_severe <- table(day_type_label, severe_label)
 tab_business_severe
 #===end
 
@@ -578,7 +582,11 @@ capture.output(summary(resid_dev), file = "generated/nyc-glm-resid.tex")
 #label===nyc-severity-inference
 ## Master chunk to recompute inference objects for inline R.
 ## Recompute table, chi-squared, rate, exact CI, and model fit.
-tab_business_severe <- table(df$business_day, df$severe)
+day_type_label <- factor(df$business_day, levels = c(FALSE, TRUE),
+                         labels = c("Weekend", "Business day"))
+severe_label <- factor(df$severe, levels = c(FALSE, TRUE),
+                       labels = c("Not severe", "Severe"))
+tab_business_severe <- table(day_type_label, severe_label)
 chisq_business_severe <- chisq.test(tab_business_severe)
 severity_counts <- table(df$severe)
 severe_rate <- mean(df$severe, na.rm = TRUE)
