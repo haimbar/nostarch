@@ -13,7 +13,7 @@ be. In the previous chapter, we focused on deciding whether an observed
 effect could be explained by chance alone. Now we turn to a different
 question: if a quantity exists, how can we estimate its value and how
 confident should we be in our estimate? In this chapter, we will learn how
-to construct estimates, compare different estimati
+to construct and compare different estimates.
 
 
 \section{Introduction}
@@ -49,7 +49,7 @@ When a statistic is used to estimate a population quantity, it is called an
 \emph{mean} (the average of the observed values), the \emph{median} 
 (the middle value when the observed data are sorted), the \emph{range} 
 (the difference between the largest and smallest observations), and the 
-\emph{midrange} (the midpoint between the sample minimum and sample maximum).  
+\emph{midrange} (the average of the maximum and minimum values in the sample).  
 With these tools in place, several natural questions arise:
 \begin{enumerate}
 \item What properties are desirable for an estimator?
@@ -171,6 +171,8 @@ the three.
 
 To make a picture of the estimates, not just their squared errors, we first
 write a more general function. The argument \lstinline{datagen} is a data
+\why{Introduce the \lstinline{datagen} argument to the \lstinline{do1rep}
+  function? Here we focus on normal data.}
 generator, so the same code can be used for normal, Cauchy, and uniform
 hide-and-seek games.
 \showCode{R}{Code/est-hide-norm.R}[24][34]
@@ -185,7 +187,9 @@ Finally, we store the estimate errors from each game and draw the three panels.
 \showCode{R}{Code/est-hide-norm.R}[56][66]
 
 
-Figure~\ref{fig:est:violin-games} shows the same race in a more visual way for
+\why{Separate the figure into three, or make the reference more specific such as
+``The top panel of Figure~\ref{fig:est:violin-games}''}
+ shows the same race in a more visual way for
 three hide-and-seek games. Each shape shows where the estimates landed across
 many simulated samples. The dashed line marks zero error, which means the
 estimate landed exactly on the true value that Nature hid from us. A taller,
@@ -206,6 +210,7 @@ may affect which estimator is the best or most efficient.
 
 
 \begin{example}[Hide-and-seek: Cauchy population]
+  \label{sec:eval-estim}
 \runR{Code/est-hide-cauchy.R}{hide-cauchy}
 Now let us generate data from the Cauchy distribution, which has heavier tails than the
 normal distribution. For a heavier-tailed distribution, we are more likely to
@@ -234,15 +239,17 @@ So, for this experiment, the second estimator, sample median, is the best among
 the three.
 
 The code makes it easy to compare the three estimators for data generated
-from $t$ distributions with other degrees of freedom. One can verify that as the
+from $t$ distributions with other degrees of freedom.
+\why{Remove the following, because we don't have any results indicting this (we
+  can also add a case of t-distrib):} One can verify that as the
 degrees of freedom increases (so the $t$ distribution gets closer to the normal
 distribution), the mean estimator eventually outperforms the median estimator.
 \end{example}
 
 
 The midrange estimator appears poor in both examples. This is intuitive since it
-uses the least amount of information from the observed data, only the two
-extreme observations. Would it ever be a good estimator in some situations?
+uses only the two extreme observations, which are far away from the parameter we
+are trying to estimate. Would it ever be a good estimator in some situations?
 
 \begin{example}[Hide-and-seek: Uniform population]
 \runR{Code/est-hide-unif.R}{hide-unif}
@@ -253,7 +260,7 @@ uniform distribution centered at $\mu$ with a bandwidth of 20.
 The results are
 \inlnR{```print(rowMeans(sim.u))```}[estrowmeans3][vbox]
 So, for this experiment, the third estimator, sample midrange, is the best among
-the three. It uses the least amount of information, but what it uses contains
+the three. It uses only two extreme observations, but what it uses contains
 all the information about the location parameter $\mu$ in this setting.
 \end{example}
 
@@ -262,7 +269,7 @@ It would be nice if one estimator were always the best regardless of the true
 data-generating scheme. Such an estimator may not, however, exist.
 
 \subsection{Maximum Likelihood Estimator}
-To play the hide‑and‑seek game better, pick a strategy that makes the observed
+To play the hide-and-seek game better, pick a strategy that makes the observed
 data plausible. Which strategy is best depends on how the data were
 generated, which we usually do not know. Still, maximum likelihood often
 produces highly efficient estimates under broad conditions.
@@ -365,7 +372,7 @@ plausible values. This range is called a confidence interval. A simple way
 to think about a confidence interval is: it is an interval, computed from the
 sample, that is likely to contain the unknown target value. A confidence
 interval with level $1-\alpha$ aims to capture the true parameter in about
-$100(1-\alpha)\%$ of repeated samples.
+$100(1-\alpha)\%$ of all possible samples.
 
 % Check-in: If you see a 95\% confidence interval for a mean that is wide, what does that tell you about the data or sample size?
 
@@ -444,6 +451,7 @@ Then we make the two sets of intervals and write the figure file.
 
 
 Figure~\ref{fig:est:ci-sizes} shows 50 intervals for $n = 50$ and 50 intervals
+\why{Separate the two figures for better reading flow?}
 for $n = 20$. Each horizontal line is one confidence interval from one
 simulated sample. The dashed vertical line is the true value of $\mu$. Most
 intervals cross the truth, but a few miss it. That is exactly what ``95\%
@@ -476,7 +484,11 @@ Constructing confidence intervals depends on the uncertainty of the
 estimator. Often, a point estimator can be easily obtained, for example,
 through optimizing an objective function or solving some estimating
 equations. The variation of a point estimator, however, can be much more
-difficult to obtain. Asymptotic approximations of the variance of an estimator
+difficult to obtain.
+\why{I suggest to remove the following sentence. The bootstrap also relay on
+  large sample theory, it is not really a solution for small to moderate sample
+  sizes.}
+Asymptotic approximations of the variance of an estimator
 may be derived in some situations, but even in these situations, the asymptotic
 variance approximation may not work well with small to moderate sample sizes.
 
@@ -538,7 +550,8 @@ in one replicate first:
 
 
 Function \lstinline{do1rep()} generates a random sample of size \lstinline{n}
-from the $\Gamma(2, 2)$ distribution, performs a bootstrap procedure with 1000
+from the Gamma distribution with
+shape 2 and scale 2, performs a bootstrap procedure with 1000
 bootstrap samples, and returns a vector of 3 elements: the point estimate and
 the lower and upper bounds of a 95\% confidence interval. We replicate the
 experiment \lstinline{nrep = 200} times and check the performance of the point
@@ -596,10 +609,10 @@ built by resampling from that sample, not by using the normal approximation.
 \section{Summary}
 
 In this chapter we studied how data can be used to estimate unknown
-features of a population and how uncertainty affects these estimates.
+features of a population and \why{did not see this:} how uncertainty affects these estimates.
 Through repeated sampling and simulation, we saw that different
 estimators may behave very differently across samples, leading to
-different levels of bias, variability, and mean squared error. We
+different levels of bias, variability, and mean squared error. \why{did not see this:} We
 learned that a good estimator should not only be close to the truth on
 average, but should also remain reasonably stable from sample to sample.
 We also introduced maximum likelihood estimation, which selects
@@ -608,8 +621,7 @@ point estimate alone does not describe uncertainty, we studied
 confidence intervals and examined their coverage probabilities through
 simulation. Finally, we introduced the bootstrap, a computational method
 that approximates the variability of an estimator by resampling from
-the observed data. Throughout the chapter, simulation played a central
-role in understanding estimation and uncertainty.
+the observed data.
 
 \section{Problems}
 
@@ -622,7 +634,7 @@ estimator improves the most as the sample size grows?
 \end{exercise}
 
 \begin{exercise}
-Use the Cauchy hide-and-seek code, but replace \lstinline{rcauchy} with
+Use the Cauchy hide-and-seek code in Example~\ref{sec:eval-estim}, but replace \lstinline{rcauchy} with
 a $t$ distribution with 2, 5, and 10 degrees of freedom. How does the
 ordering of the sample mean and sample median change as the tails of
 the distribution become less extreme?
