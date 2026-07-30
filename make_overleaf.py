@@ -355,6 +355,7 @@ def compile_pdf() -> bool:
         (("bibtex", "sidsmain"), False),
         (("makeindex", "sidsmain"), False),
         (("xelatex", "-shell-escape", "-interaction=nonstopmode", "sidsmain.tex"), True),
+        (("xelatex", "-shell-escape", "-interaction=nonstopmode", "sidsmain.tex"), True),
     ]
     for cmd, check_pdf in steps:
         print(f"  {' '.join(cmd)}")
