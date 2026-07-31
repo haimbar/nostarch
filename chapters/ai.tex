@@ -1,0 +1,251 @@
+\chapter{Artificial Intelligence: The Future Is Here}
+\label{ch:ai}
+
+By now you have learned to explore data, reason about probability,
+test hypotheses, estimate unknown quantities, collect data responsibly,
+model relationships between variables, and work through a full case
+study from raw data to inference. Along the way, a new kind of
+collaborator has become part of almost every data analyst's toolkit:
+artificial intelligence, or AI. Large language models and related tools
+can now write code, suggest analyses, produce visualizations, and
+explain statistical ideas in plain language. Used well, AI can make you
+faster and help you learn; used carelessly, it can quietly introduce
+errors, invalid conclusions, or hallucinated results into your work. In
+this chapter, we step back from R code and discuss how to work with AI
+as a data analyst: what it tends to do well, where it tends to go
+wrong, and how the judgment you have built up over the previous
+chapters---about representative samples, bias, appropriate methods,
+and the limits of observational data---is exactly what keeps AI useful
+rather than dangerous.
+
+This chapter contains no R code, and that is deliberate, for a few
+reasons. Not everyone has access to the same AI tools: some require a
+paid account, while R itself is free and available to everyone.
+Different AI tools behave differently from one another, and even the
+same tool will rarely produce identical code, text, or analysis twice.
+Most importantly, specific tools and interfaces change quickly, but
+the principles in this chapter---what AI is good at, what it is bad
+at, and how to keep yourself in charge of the analysis---should stay
+relevant regardless of which particular AI you use, now or in a few
+years.
+
+\section{What AI Can Do for You}
+
+Used as a collaborator rather than an oracle, AI can meaningfully
+speed up almost every stage of a data analysis project.
+
+\begin{itemize}
+\item \textbf{Clean, documented code.} AI tools are often good at
+  producing code that is well organized and commented, following
+  common style conventions. This can be a useful model to learn from,
+  especially early on, and can save time on boilerplate code you would
+  otherwise write by hand.
+\item \textbf{Automating data acquisition.} AI can help write scripts
+  to download, parse, and reshape data from application programming
+  interfaces (APIs), websites, or messy file formats, tasks that are
+  often tedious and repetitive.
+\item \textbf{Debugging, testing, and validation.} AI is often good at
+  reading error messages, suggesting likely causes, and proposing
+  fixes. It can also help write small test cases to check that a
+  function behaves as expected on edge cases you might not have
+  thought of.
+\item \textbf{Improving writing.} AI can help you explain a result
+  more clearly, tighten a paragraph, or check that your statistical
+  language is precise (for example, distinguishing an association from
+  a causal effect).
+\item \textbf{Producing visualizations.} AI can quickly generate a
+  first draft of a plot, including plots you have not made before, and
+  suggest alternative ways to display the same data.
+\item \textbf{Borrowing skills from experienced people.} Because AI is
+  trained on an enormous amount of code and writing from many
+  practitioners, asking it for a second opinion is a little like
+  asking a large group of experienced analysts how they would approach
+  a problem.
+\end{itemize}
+
+\section{Where AI Can Lead You Astray}
+
+The same qualities that make AI powerful also make it risky to use
+without care.
+
+\begin{itemize}
+\item \textbf{Hallucination.}\index{hallucination} AI tools sometimes
+  invent function names, arguments, citations, or numerical results
+  that look plausible but do not exist or are simply wrong. A
+  hallucinated result can be stated just as confidently as a correct
+  one, so it is not always obvious which is which.
+\item \textbf{Reproducibility.}\index{reproducibility} An AI
+  assistant is not a substitute for version control or a documented
+  workflow. If you regenerate an analysis with a different prompt, a
+  different tool, or even the same tool on a different day, you may
+  not get the same code or the same answer. You, not the AI, must be
+  the one who saves the final code, tracks changes, and can explain
+  and rerun the whole analysis later.
+\item \textbf{False confidence.} AI tends to state its answers in a
+  fluent, assured tone whether or not the underlying reasoning is
+  correct. This is sometimes called \emph{automation
+  bias}\index{bias!automation bias}: the tendency to trust a
+  computer-generated answer more than it deserves, simply because it
+  is delivered so confidently. Nothing about the tone of a response
+  tells you how reliable it is.
+\item \textbf{Data leakage and privacy.}\index{data leakage} Pasting a
+  dataset, or even a small snippet of one, into a general-purpose AI
+  tool may send that data outside your organization or beyond the
+  scope of what your data-use agreement allows. This is a particular
+  concern for medical records, student data, financial records, or any
+  data covered by a privacy rule, an institutional review board, or a
+  data-sharing agreement.
+\end{itemize}
+
+\section{Putting This Book's Skills to Work with AI}
+
+The most effective way to use AI in a data analysis project is not to
+hand it a dataset and ask for ``the answer.'' It is to bring the
+skills from earlier chapters to the conversation, so that AI's speed
+is guided by your judgment rather than replacing it.
+
+\subsection{Teaching AI Your Data-Cleaning Checklist}
+
+Chapter~\ref{ch:data} introduced the idea of a representative sample
+and the difference between a controlled experiment and an
+observational study, and Chapter~\ref{ch:EDA} introduced the plots and
+tables (boxplots, histograms, cross-tabulations, and so on) that help
+you get to know a new dataset before modeling it. Rather than asking
+an AI tool to ``clean this data'' with no further guidance, give it the
+specific steps you would perform yourself: check for missing values
+and understand why they are missing, look for a plausible source of
+selection or survival bias, produce the diagnostic plots that make
+sense for the variable types involved, and flag any values that look
+like data-entry errors rather than removing them outright. An AI tool
+that is told exactly what to check is far more useful than one that is
+asked to clean data with no criteria at all.
+
+\subsection{Asking AI to Watch for Bias}
+
+Chapter~\ref{ch:data} also cataloged a number of specific biases that
+can silently distort a conclusion: Berkson's bias, survival bias, the
+base-rate fallacy, omitted variables, observation time interval bias,
+confirmation bias, availability bias, arbitrary rejection of
+``outliers,'' self-selection (volunteer) bias, nonresponse bias, and
+the Hawthorne effect. Rather than trusting yourself, or an AI tool, to
+remember all of these while under the pressure of a deadline, give the
+AI this list directly and ask it to point out which of these biases
+could plausibly affect your specific dataset and research question,
+and why. This turns a vague worry (``is something wrong with this
+data?'') into a concrete checklist that both you and the AI can work
+through together.
+
+\subsection{Choosing and Explaining a Method}
+
+Chapter~\ref{ch:hypothesis} showed that the right hypothesis test
+depends on the structure of the data (for example, choosing a
+rank-based test over a t-test when the data have heavy tails), and
+Chapter~\ref{ch:regression} showed that linear regression is not
+always the right model for the outcome at hand. When you ask an AI
+tool to recommend a statistical method, do not simply accept the
+recommendation: ask it to explain why that method fits your data and
+your question, and compare that explanation to what you know about the
+method's assumptions. An explanation you can follow and check is far
+more valuable than a method name alone.
+
+It is just as important to ask AI to flag a limitation you have seen
+throughout this book: association is not causation, and this matters
+most when the data did not come from a designed experiment. The NYC
+crash case study in Chapter~\ref{ch:nyc} used a chi-squared test, a
+binomial confidence interval, and a logistic regression model to
+describe patterns in crash severity, but was careful to note that
+these results describe an observational dataset and should not be read
+as causal effects. Ask AI to add exactly this kind of caveat to its own
+output, and to say explicitly whether your data came from a randomized,
+controlled experiment or an observational study, since the strength of
+the conclusions you are entitled to draw depends on that distinction.
+
+\section{General Principles for Working with AI}
+
+The tools available today will not be the tools available in a few
+years, but a few working habits should remain useful regardless of
+which AI you use.
+
+\begin{itemize}
+\item Treat AI as a fast, well-read, but overconfident collaborator,
+  not as a source of ground truth.
+\item Verify anything that matters: rerun the code yourself, check a
+  cited number against its source, and confirm that a function or
+  argument actually exists before relying on it.
+\item Keep yourself in control of reproducibility: save the code you
+  actually used, in a file or a version-control system, rather than
+  relying on being able to regenerate the same output from AI later.
+\item Never share data covered by a privacy rule, an institutional
+  agreement, or a confidentiality obligation with a general-purpose AI
+  tool unless you know exactly where that data goes.
+\item Bring your own statistical judgment to every step: what makes a
+  sample representative, what could bias a conclusion, and what a
+  method assumes are things you should be checking, not outsourcing.
+\end{itemize}
+
+\section{Summary}
+
+In this chapter we discussed how to work with AI as a data analyst,
+without writing any R code. We surveyed AI's real strengths: producing
+clean and documented code, automating data acquisition, helping with
+debugging and testing, improving writing, generating visualizations,
+and giving access to patterns learned from many experienced
+practitioners. We also discussed its real risks: hallucinated results,
+unclear reproducibility, false confidence, and the danger of data
+leakage when private or sensitive data is shared with a general-purpose
+tool. Finally, we connected AI back to the specific skills built in
+this book: giving AI a concrete data-cleaning checklist and a list of
+named biases to watch for, asking it to justify its choice of
+statistical method, and requiring it to flag when a conclusion rests on
+observational rather than experimental data. These habits, more than
+any specific tool, are what should keep you in charge of your own
+analysis as AI continues to change.
+
+\section{Problems}
+
+\begin{exercise}
+Pick one bias from the catalog in Chapter~\ref{ch:data} (for example,
+  survival bias or self-selection bias). Write a short prompt that you
+  would give an AI assistant, describing a dataset and asking it to
+  assess the risk of that specific bias. Then write, in your own
+  words, what a good answer from the AI should include.
+\end{exercise}
+
+\begin{exercise}
+Take an analysis from an earlier chapter in this book (for example,
+  the logistic regression model in Chapter~\ref{ch:nyc}) and imagine
+  asking an AI tool to critique it. List three questions you would
+  want the AI to answer about the analysis, and explain why each
+  question matters.
+\end{exercise}
+
+\begin{exercise}
+Describe a realistic situation in which pasting a dataset into a
+  general-purpose AI tool would raise a data-leakage or privacy
+  concern. What alternative approach could you use to get help from
+  AI without exposing the sensitive data itself?
+\end{exercise}
+
+\begin{exercise}
+Suppose an AI tool recommends a t-test for a two-group comparison
+  without being asked to justify the choice. Using what you learned in
+  Chapter~\ref{ch:hypothesis}, write the follow-up questions you would
+  ask the AI to confirm whether a t-test is really appropriate for
+  your data.
+\end{exercise}
+
+\begin{exercise}
+AI tools change quickly, but the principles in this chapter are meant
+  to age well. Revisit this chapter's list of strengths and pitfalls a
+  few months from now, after using an AI tool for a real analysis of
+  your own. Which items still ring true? Would you add or remove
+  anything based on your experience?
+\end{exercise}
+
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-command-extra-options: "-shell-escape"
+%%% TeX-engine: xetex
+%%% TeX-master: "../sidsmain.tex"
+%%% End:
