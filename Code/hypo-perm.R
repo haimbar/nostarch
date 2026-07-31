@@ -1,7 +1,7 @@
 #label===HypoPermSetup
 set.seed(20210628)
 delta <- 0
-n1 <- n2 <- n <- 30
+n1 <- n2 <- 30
 x1 <- rnorm(n1)
 x2 <- rnorm(n2) + delta
 xd <- mean(x2) - mean(x1)               
@@ -10,7 +10,9 @@ xd <- mean(x2) - mean(x1)
 #label===HypoPermOnePerm
 xpooled <- c(x1, x2)
 xperm <- sample(xpooled, size = length(xpooled), replace = FALSE)
-xdp <-  mean(xperm[n1 + 1:n2]) - mean(xperm[1:n1])
+x1p <- xperm[1:n1]
+x2p <- xperm[n1 + 1:n2]
+xdp <- mean(x2p) - mean(x1p)
 #===end
 
 ## How many possible permutations are there?
@@ -36,12 +38,18 @@ myPermTest <- function(x1, x2, nperm = 1000) {
 }
 #===end
 
+#label===HypoPermNullDemo
+p_null <- myPermTest(x1, x2)
+p_null
+#===end
+
 
 #label===HypoPermDemo
 delta <- 10
-x1 <- rgamma(n, shape = 2, scale = 2)
-x2 <- rgamma(n, shape = 2, scale = 2) + delta
-myPermTest(x1, x2)
+x1 <- rnorm(n1)
+x2 <- rnorm(n2) + delta
+p_demo <- myPermTest(x1, x2)
+p_demo
 #===end
 
 ## permutation test implemented in R package coin

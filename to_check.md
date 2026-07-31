@@ -12,6 +12,9 @@
 - NSP word list compliance: "data is" (singular), "dataset" (one word), "internet" (lowercase),
   "command line" (noun) vs "command-line" (adjective), "indexes" (book/database) vs "indices" (math/computing)
 - Consistent terminology — "data frame", "variable", "function", "vector" spelled and styled the same throughout
+- Contractions preferred over expanded forms ("it's" not "it is", "let's" not "let us", "there's" not "there is",
+  "don't"/"doesn't" not "do not"/"does not") — matches NSP's own style-guide prose and this book's established
+  convention; check each chapter for consistency and expand only where a contraction reads awkwardly
 
 ### NoStarch Compliance
 - Check NoStarch compliance (see nsp_style_guide.md memory file for full reference)

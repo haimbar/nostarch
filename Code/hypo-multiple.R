@@ -10,7 +10,8 @@ do1screen <- function(m = 20, n = 30) {
 }
 
 set.seed(1)
-do1screen()
+pvals_demo <- do1screen()
+pvals_demo
 #===end
 
 #label===pvalues
@@ -32,9 +33,10 @@ pdf("images/chapter_5/hypo-sigcount.pdf", width = 5, height = 4)
 sig_count <- apply(all_p < 0.05, 2, sum)
 
 hist(sig_count, breaks = seq(-0.5, max(sig_count) + 0.5, by = 1),
-     col = "orange",
-     main = "Number of 'Significant' Drugs (p < 0.05)\nUnder Pure Noise",
-     xlab = "Count per Experiment")
+     freq = FALSE, col = "orange",
+     main = paste0("Relative Frequency of 'Significant' Drugs\n",
+                   "(p < 0.05) Under Pure Noise"),
+     xlab = "Count per Experiment", ylab = "Relative frequency")
 #===end
 dev.off()
 
@@ -98,8 +100,9 @@ for (b in 1:B) {
   FP_bonf[b] <- sum(!(sig_bonf %in% truth))
 }
 
-c("TP_unc"  = mean(TP_unc),
-  "FP_unc"  = mean(FP_unc),
-  "TP_bonf" = mean(TP_bonf),
-  "FP_bonf" = mean(FP_bonf))
+avg_results <- c("TP_unc"  = mean(TP_unc),
+                 "FP_unc"  = mean(FP_unc),
+                 "TP_bonf" = mean(TP_bonf),
+                 "FP_bonf" = mean(FP_bonf))
+avg_results
 #===end
