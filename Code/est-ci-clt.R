@@ -1,17 +1,22 @@
+#label===ciclt
 ciclt <- function(x, alpha = .05) {
     xbar <- mean(x)
     z <- qnorm(1 - alpha / 2)
     dd <- z * sd(x) / sqrt(length(x))
     c(xbar - dd, xbar + dd)
 }
+#===end
 
 
+#label===applyci
 set.seed(626)
 mu <- runif(1, 1, 10)                        # unknown true mu
-x <- rgamma(50, shape = mu/2, scale = 2)
+x <- rgamma(50, shape = mu / 2, scale = 2)
 ci <- ciclt(x)
+#===end
 
 
+#label===coverage50
 do1rep <- function(n, mu, alpha = .05) {
     x <- rgamma(n, shape = mu / 2, scale = 2)
     ciclt(x, alpha)
@@ -19,22 +24,28 @@ do1rep <- function(n, mu, alpha = .05) {
 
 nrep <- 1000
 sim50 <- replicate(nrep, do1rep(50, mu))
-mean(sim50[1, ] < mu & sim50[2,] > mu)
+mean(sim50[1, ] < mu & sim50[2, ] > mu)
+#===end
 
 
 ## smaller sample size
+#label===coverage20
 sim20 <- replicate(nrep, do1rep(20, mu))
-mean(sim20[1, ] < mu & sim20[2,] > mu)
+mean(sim20[1, ] < mu & sim20[2, ] > mu)
+#===end
 
 
 ## Figure: show 50 confidence intervals for two sample sizes
+#label===makecishow
 make_ci_show <- function(n) {
     ci_show <- t(replicate(50, do1rep(n, mu)))
     covered <- ci_show[, 1] < mu & mu < ci_show[, 2]
     ord <- order(rowMeans(ci_show))
     list(ci = ci_show[ord, ], covered = covered[ord])
 }
+#===end
 
+#label===plotcishow
 plot_ci_show <- function(obj, main, xlim) {
     ci_show <- obj$ci
     covered <- obj$covered
@@ -43,11 +54,15 @@ plot_ci_show <- function(obj, main, xlim) {
     abline(v = mu, lwd = 2, lty = 2)
     for (i in seq_len(nrow(ci_show))) {
         col <- if (covered[i]) "gray45" else "firebrick3"
+        lty <- if (covered[i]) 1 else 3
+        lwd <- if (covered[i]) 2 else 3
         segments(ci_show[i, 1], i, ci_show[i, 2], i,
-                 lwd = 2, col = col)
+                 lwd = lwd, lty = lty, col = col)
     }
 }
+#===end
 
+#label===drawci
 set.seed(2027)
 ci_show50 <- make_ci_show(50)
 ci_show20 <- make_ci_show(20)
@@ -60,6 +75,7 @@ plot_ci_show(ci_show50, "n = 50", xlim)
 legend("bottomright",
        legend = c("covered truth", "missed truth", "true mu"),
        col = c("gray45", "firebrick3", "black"),
-       lty = c(1, 1, 2), lwd = c(2, 2, 2), bty = "n")
+       lty = c(1, 3, 2), lwd = c(2, 3, 2), bty = "n")
 plot_ci_show(ci_show20, "n = 20", xlim)
 dev.off()
+#===end

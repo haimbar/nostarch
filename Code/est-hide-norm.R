@@ -1,26 +1,35 @@
+#label===do1est
 do1est <- function(n, mu) {
     x <- rnorm(n, mean = mu, sd = 1)              # generate data
     est <-  c(mu1 = mean(x), mu2 = median(x), mu3 = mean(range(x)))
     return(est)                                   # return estimates
 }
+#===end
 
+#label===do1rep
 do1rep <- function(n, mu) {
     est <- do1est(n, mu)
     return((est - mu)^2)                          # return squared error
 }
+#===end
 
 
+#label===tryonce
 do1est(50, mu)
 do1rep(50, mu)
+#===end
 
 
+#label===manygames
 nrep <- 1000                                  # number of replicates
 n <- 20                                       # sample size
-sim <- replicate(nrep, do1rep(n, mu))         # run the race
+sim <- replicate(nrep, do1rep(n, mu))         # play the game many times
 rowMeans(sim)                                 # summarize the means
+#===end
 
 
 ## Figure: compare estimates from several hide-and-seek games
+#label===gamefuns
 do1est_game <- function(n, mu, datagen) {
     x <- datagen(n, mu)
     c("Mean" = mean(x),
@@ -32,7 +41,9 @@ make_estimates <- function(datagen) {
     estimates <- t(replicate(nrep, do1est_game(n, mu, datagen)))
     estimates - mu
 }
+#===end
 
+#label===plotfun
 plot_estimates <- function(est_sim, main) {
     cols <- c("skyblue3", "seagreen3", "salmon")
     ylim <- quantile(est_sim, c(0.02, 0.98))
@@ -52,7 +63,9 @@ plot_estimates <- function(est_sim, main) {
     }
     axis(1, at = 1:3, labels = colnames(est_sim))
 }
+#===end
 
+#label===violinplot
 set.seed(2026)
 est_norm <- make_estimates(function(n, mu) rnorm(n, mean = mu, sd = 1))
 est_cauchy <- make_estimates(function(n, mu) mu + rt(n, df = 1))
@@ -64,3 +77,4 @@ plot_estimates(est_norm, "Normal data")
 plot_estimates(est_cauchy, "Cauchy data")
 plot_estimates(est_unif, "Uniform data")
 dev.off()
+#===end
