@@ -1,7 +1,7 @@
 \chapter{Artificial Intelligence: The Future Is Here}
 \label{ch:ai}
 
-By now you have learned to explore data, reason about probability,
+By now you've learned to explore data, reason about probability,
 test hypotheses, estimate unknown quantities, collect data responsibly,
 model relationships between variables, and work through a full case
 study from raw data to inference. Along the way, a new kind of
@@ -13,18 +13,18 @@ faster and help you learn; used carelessly, it can quietly introduce
 errors, invalid conclusions, or hallucinated results into your work. In
 this chapter, we step back from R code and discuss how to work with AI
 as a data analyst: what it tends to do well, where it tends to go
-wrong, and how the judgment you have built up over the previous
+wrong, and how the judgment you've built up over the previous
 chapters---about representative samples, bias, appropriate methods,
 and the limits of observational data---is exactly what keeps AI useful
 rather than dangerous.
 
-This chapter contains no R code, and that is deliberate, for a few
+This chapter contains no R code, and that's deliberate, for a few
 reasons. Not everyone has access to the same AI tools: some require a
 paid account, while R itself is free and available to everyone.
 Different AI tools behave differently from one another, and even the
 same tool will rarely produce identical code, text, or analysis twice.
 Most importantly, specific tools and interfaces change quickly, but
-the principles in this chapter---what AI is good at, what it is bad
+the principles in this chapter---what AI is good at, what it's bad
 at, and how to keep yourself in charge of the analysis---should stay
 relevant regardless of which particular AI you use, now or in a few
 years.
@@ -54,7 +54,7 @@ speed up almost every stage of a data analysis project.
   language is precise (for example, distinguishing an association from
   a causal effect).
 \item \textbf{Producing visualizations.} AI can quickly generate a
-  first draft of a plot, including plots you have not made before, and
+  first draft of a plot, including plots you haven't made before, and
   suggest alternative ways to display the same data.
 \item \textbf{Borrowing skills from experienced people.} Because AI is
   trained on an enormous amount of code and writing from many
@@ -71,11 +71,11 @@ without care.
 \begin{itemize}
 \item \textbf{Hallucination.}\index{hallucination} AI tools sometimes
   invent function names, arguments, citations, or numerical results
-  that look plausible but do not exist or are simply wrong. A
+  that look plausible but don't exist or are simply wrong. A
   hallucinated result can be stated just as confidently as a correct
-  one, so it is not always obvious which is which.
+  one, so it's not always obvious which is which.
 \item \textbf{Reproducibility.}\index{reproducibility} An AI
-  assistant is not a substitute for version control or a documented
+  assistant isn't a substitute for version control or a documented
   workflow. If you regenerate an analysis with a different prompt, a
   different tool, or even the same tool on a different day, you may
   not get the same code or the same answer. You, not the AI, must be
@@ -85,8 +85,8 @@ without care.
   fluent, assured tone whether or not the underlying reasoning is
   correct. This is sometimes called \emph{automation
   bias}\index{bias!automation bias}: the tendency to trust a
-  computer-generated answer more than it deserves, simply because it
-  is delivered so confidently. Nothing about the tone of a response
+  computer-generated answer more than it deserves, simply because it's
+  delivered so confidently. Nothing about the tone of a response
   tells you how reliable it is.
 \item \textbf{Data leakage and privacy.}\index{data leakage} Pasting a
   dataset, or even a small snippet of one, into a general-purpose AI
@@ -99,8 +99,8 @@ without care.
 
 \section{Putting This Book's Skills to Work with AI}
 
-The most effective way to use AI in a data analysis project is not to
-hand it a dataset and ask for ``the answer.'' It is to bring the
+The most effective way to use AI in a data analysis project isn't to
+hand it a dataset and ask for ``the answer.'' It's to bring the
 skills from earlier chapters to the conversation, so that AI's speed
 is guided by your judgment rather than replacing it.
 
@@ -113,7 +113,7 @@ tables (boxplots, histograms, cross-tabulations, and so on) that help
 you get to know a new dataset before modeling it. Rather than asking
 an AI tool to ``clean this data'' with no further guidance, give it the
 specific steps you would perform yourself: check for missing values
-and understand why they are missing, look for a plausible source of
+and understand why they're missing, look for a plausible source of
 selection or survival bias, produce the diagnostic plots that make
 sense for the variable types involved, and flag any values that look
 like data-entry errors rather than removing them outright. An AI tool
@@ -140,29 +140,29 @@ through together.
 Chapter~\ref{ch:hypothesis} showed that the right hypothesis test
 depends on the structure of the data (for example, choosing a
 rank-based test over a t-test when the data have heavy tails), and
-Chapter~\ref{ch:regression} showed that linear regression is not
+Chapter~\ref{ch:regression} showed that linear regression isn't
 always the right model for the outcome at hand. When you ask an AI
-tool to recommend a statistical method, do not simply accept the
+tool to recommend a statistical method, don't simply accept the
 recommendation: ask it to explain why that method fits your data and
 your question, and compare that explanation to what you know about the
 method's assumptions. An explanation you can follow and check is far
 more valuable than a method name alone.
 
-It is just as important to ask AI to flag a limitation you have seen
-throughout this book: association is not causation, and this matters
-most when the data did not come from a designed experiment. The NYC
+It's just as important to ask AI to flag a limitation you've seen
+throughout this book: association isn't causation, and this matters
+most when the data didn't come from a designed experiment. The NYC
 crash case study in Chapter~\ref{ch:nyc} used a chi-squared test, a
 binomial confidence interval, and a logistic regression model to
 describe patterns in crash severity, but was careful to note that
-these results describe an observational dataset and should not be read
+these results describe an observational dataset and shouldn't be read
 as causal effects. Ask AI to add exactly this kind of caveat to its own
 output, and to say explicitly whether your data came from a randomized,
 controlled experiment or an observational study, since the strength of
-the conclusions you are entitled to draw depends on that distinction.
+the conclusions you're entitled to draw depends on that distinction.
 
 \section{General Principles for Working with AI}
 
-The tools available today will not be the tools available in a few
+The tools available today won't be the tools available in a few
 years, but a few working habits should remain useful regardless of
 which AI you use.
 

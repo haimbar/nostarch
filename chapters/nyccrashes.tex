@@ -6,7 +6,7 @@ Every day, New Yorkers travel across the city in countless ways:
 walking to school, biking to work, driving across town, or riding
 buses and subways. Most of these journeys end safely, but some result
 in crashes that cause injuries, delays, and sometimes fatalities. Can
-data help us understand when crashes occur, where they are most
+data help us understand when crashes occur, where they're most
 common, and what factors are associated with them? In this chapter, we
 investigate these questions using a real dataset from NYC Open Data,
 applying ideas from throughout this book: importing and cleaning data,
@@ -42,7 +42,7 @@ names look like this:
 
 This quick check tells us what kind of object we have. It also helps us
 catch problems early. For example, if the row count were zero, or if
-we had just one column, we would know the file did not load correctly.
+we had just one column, we would know the file didn't load correctly.
 
 The original variable names use capital letters and spaces; R replaces
 each space with a period when it reads them from the file. The
@@ -65,7 +65,7 @@ You should see the following:
 
 \inlnR{```print(renamed_head)```}[nyc-rename][vbox]
 
-This step does not change the data values. It only changes the labels on
+This step doesn't change the data values. It only changes the labels on
 the columns. A name such as \lstinline{NUMBER.OF.PERSONS.INJURED} becomes
 \lstinline{number_of_persons_injured}, which is easier to type and less
 likely to cause mistakes.
@@ -86,7 +86,7 @@ with the following counts by date:
 
 \inlnR{```print(raw_date_table)```}[nyc-datecheck][vbox]
 
-This is a small step, but it is one of the most useful habits in data
+This is a small step, but it's one of the most useful habits in data
 analysis: check whether the data matches the story you were told. The raw
 file spans eight dates. We want the Sunday--Saturday week around Labor
 Day, so we define that target window.
@@ -155,20 +155,21 @@ less than it was before.
 
 With the data imported, renamed, and filtered to the target week, we
 turn next to a closer look at what is missing from it. Missing
-values\index{missing value} are not just empty spaces. They are clues about how the
-data were collected. A missing borough or zip code might mean the crash
-happened on a highway, at an unusual address, or in a record where the
-location was not entered completely.
+values\index{missing value} aren't just empty spaces. They're clues
+about how the data were collected. A missing borough or zip code might
+mean the crash happened on a highway, at an unusual address, or in a
+record where the location wasn't entered completely.
 
-We start with the borough\index{borough} column. The function \lstinline{trimws()} removes
-extra spaces at the beginning and end of each entry. Then we convert
-blank borough names into \lstinline{NA}, R's missing-value marker\index{missing value!NA@\lstinline{NA}}.
+We start with the borough\index{borough} column. The function
+\lstinline{trimws()} removes extra spaces at the beginning and end of
+each entry. Then we convert blank borough names into \lstinline{NA},
+R's missing-value marker\index{missing value!NA@\lstinline{NA}}.
 
 \showChunk{R}{Code/nyc_crashes.R}{borough_clean}
 
-Zip codes\index{zip code} can also have impossible values. If the zip code column is
-numeric, a zero should not be treated as a real New York City zip code,
-so we recode it as missing.
+Zip codes\index{zip code} can also have impossible values. If the zip
+code column is numeric, a zero shouldn't be treated as a real New York
+City zip code, so we recode it as missing.
 
 \showChunk{R}{Code/nyc_crashes.R}{zip_clean}
 
@@ -189,13 +190,14 @@ Try the code above. What do you see? How many rows have a missing
 borough, a missing zip code, or both?
 The cross-tabulation shows that missing boroughs and missing zip codes
 go together perfectly in this week: every row with a missing borough
-also has a missing zip code. That pattern suggests the location was not
+also has a missing zip code. That pattern suggests the location wasn't
 entered at all, not that one piece was forgotten.
 
-Location coordinates need their own check. New York City latitudes\index{latitude} are
-around 40 degrees north, and longitudes\index{longitude} are around 74 degrees west.
-Coordinates such as \lstinline{(0,0)} are not in New York City. We mark
-coordinates as bad if they are zero-like or outside a broad box around
+Location coordinates need their own check. New York City
+latitudes\index{latitude} are around 40 degrees north, and
+longitudes\index{longitude} are around 74 degrees west.
+Coordinates such as \lstinline{(0,0)} aren't in New York City. We mark
+coordinates as bad if they're zero-like or outside a broad box around
 the city.
 
 \showChunk{R}{Code/nyc_crashes.R}{geo_bad}
@@ -264,7 +266,8 @@ came from each borough.
 
 \begin{figure}[H]
 \includegraphics[width=0.85\textwidth]{images/chapter_9/crashes_by_hour.pdf}
-\caption{Crash counts by hour and borough, showing crashes rising during morning and evening rush hours and falling overnight}
+\caption{Crash counts by hour and borough, showing crashes rising
+during morning and evening rush hours and falling overnight}
 \label{fig:ch9:hour}
 \end{figure}
 
@@ -287,13 +290,13 @@ crashes are recorded there, and
 \inlnR{```cat(sum(df$hour == 0 & df$minute == 0,
 na.rm = TRUE))```}[nyc-midnight-count]
 of those are recorded at exactly 00:00. That pattern is hard to explain
-with real traffic: it is much more likely that a missing or unknown
+with real traffic: it's much more likely that a missing or unknown
 crash time was entered as the default value 00:00:00. If we ignored
 this, we might conclude that midnight is one of the most dangerous
 hours of the day, when the truth is that many of those crashes simply
 happened at some unknown time.
 
-The exact-midnight rate is not the same in every borough. A higher rate
+The exact-midnight rate isn't the same in every borough. A higher rate
 in one borough could mean weaker data-quality control there, or simply
 that small boroughs have more variable rates because they have fewer
 crashes.
@@ -311,8 +314,8 @@ across a longer time window.
 
 To see how misleading the default entries can be, we can reassign the
 crashes recorded at exactly 00:00 uniformly at random within each
-borough. This is not a claim about when those crashes really happened;
-it is a way to show how much the midnight peak depends on a data-entry
+borough. This isn't a claim about when those crashes really happened;
+it's a way to show how much the midnight peak depends on a data-entry
 choice.
 
 \showChunk{R}{Code/nyc_crashes.R}{hour_corrected_make}
@@ -327,12 +330,16 @@ midnight spike shrinks dramatically.
 \showChunk{R}{Code/nyc_crashes.R}{hour_corrected_plot}
 
 \begin{figure}[H]
-\includegraphics[width=0.95\textwidth]{images/chapter_9/crashes_by_hour_corrected.pdf}
-\caption{Original crash counts by hour and borough (left) and counts after reassigning crashes recorded at exactly 00:00 uniformly within each borough (right), showing that the midnight peak in the left panel is largely a data-entry artifact}
+\includegraphics[width=0.95\textwidth]%
+{images/chapter_9/crashes_by_hour_corrected.pdf}
+\caption{Original crash counts by hour and borough (left) and counts
+after reassigning crashes recorded at exactly 00:00 uniformly within
+each borough (right), showing that the midnight peak in the left panel
+is largely a data-entry artifact}
 \label{fig:ch9:hourcorrected}
 \end{figure}
 
-Rounding is not automatically bad, but it changes what we should say.
+Rounding isn't automatically bad, but it changes what we should say.
 If many times are rounded or defaulted, we should be cautious about
 making claims that depend on exact minutes or hours. A single default
 value can create a fake peak.
@@ -343,7 +350,7 @@ Labor Day week includes weekdays and weekend days. Using the
 \lstinline{weekday} variable we created earlier, we define a business
 day\index{business day} as Monday through Friday: \lstinline{%in%}
 checks each row's weekday against \lstinline{c("Saturday", "Sunday")},
-and \lstinline{!} negates that to keep the days that are not in the
+and \lstinline{!} negates that to keep the days that aren't in the
 list.
 
 \showChunk{R}{Code/nyc_crashes.R}{business_make}
@@ -358,7 +365,7 @@ Here is the matching plotting code.
 
 Figure~\ref{fig:ch9:daytype} makes the business-day comparison easier
 to scan. Remember that there are more business days than weekend days in
-this week, so the taller business-day bars are not surprising by
+this week, so the taller business-day bars aren't surprising by
 themselves. To compare boroughs directly, we calculate the ratio of
 business-day crashes to weekend crashes for each borough.
 
@@ -371,7 +378,7 @@ The ratio ranges from
 Queens to
 \inlnR{```cat(round(max(ratio_bd_weekend), 2))```}[nyc-bdratio-max] in
 Staten Island.
-The Staten Island ratio should be read with caution: it is based on
+The Staten Island ratio should be read with caution: it's based on
 just
 \inlnR{```cat(tab_bd_borough["Weekend", "STATEN ISLAND"])```}[nyc-si-weekend]
 weekend crashes, so a single extra or missing crash would move it a
@@ -379,7 +386,9 @@ lot.
 
 \begin{figure}[H]
 \includegraphics[width=0.8\textwidth]{images/chapter_9/crashes_by_day_type.pdf}
-\caption{Crash counts by day type and borough, showing more crashes on business days than weekend days in every borough, partly because there are more business days in the week}
+\caption{Crash counts by day type and borough, showing more crashes on
+business days than weekend days in every borough, partly because there
+are more business days in the week}
 \label{fig:ch9:daytype}
 \end{figure}
 
@@ -412,7 +421,7 @@ tell us what fraction of each borough's crashes happened during those
 hours.
 
 Taken together, the hourly, business-day, and business-hours comparisons
-give a first answer to our ``when'' question: crashes are not spread
+give a first answer to our ``when'' question: crashes aren't spread
 evenly across the day or the week.
 
 \section{Crash Severity}
@@ -441,8 +450,9 @@ not always match, which is a reminder that real data can contain
 internal inconsistencies. For our severity rule we use the total
 counts, because those are the broadest measure available.
 
-For a first look, we call a crash severe\index{severe crash} if at least one person was
-injured or killed. This is a simple rule, not the only possible rule.
+For a first look, we call a crash severe\index{severe crash} if at
+least one person was injured or killed. This is a simple rule, not the
+only possible rule.
 
 \showChunk{R}{Code/nyc_crashes.R}{severity_make}
 
@@ -463,7 +473,7 @@ We can also draw the crash locations. In
 Figure~\ref{fig:ch9:locations}, each dot is one crash with valid
 coordinates. We split the not-severe and severe crashes into separate
 panels, on the same longitude and latitude scale, so that the more
-numerous not-severe points do not visually bury the severe ones. We
+numerous not-severe points don't visually bury the severe ones. We
 also draw the outlines of the five boroughs, using the
 \lstinline{sf} package and NYC Open Data's official Borough
 Boundaries, so the points can be read against the city's actual shape
@@ -480,7 +490,9 @@ side, as it did for Figure~\ref{fig:ch9:hourcorrected}.
 
 \begin{figure}[H]
 \includegraphics[width=0.95\textwidth]{images/chapter_9/severity_locations.pdf}
-\caption{Crash locations by severity: not-severe crashes (left) and severe crashes (right), showing that both patterns cluster in the city's densest areas}
+\caption{Crash locations by severity: not-severe crashes (left) and
+severe crashes (right), showing that both patterns cluster in the
+city's densest areas}
 \label{fig:ch9:locations}
 \end{figure}
 
@@ -496,7 +508,7 @@ The vehicle type columns are:
 
 \inlnR{```print(veh_cols)```}[nyc-vehcols][vbox]
 
-For each row, we count how many of those vehicle type fields are not
+For each row, we count how many of those vehicle type fields aren't
 missing. This gives us \lstinline{n_vehicles}.
 
 \showChunk{R}{Code/nyc_crashes.R}{vehicle_count}
@@ -522,7 +534,8 @@ And the proportions table should look like this:
 With the exception of the zero-vehicle group, the proportion of severe crashes
 tends to rise as the number of vehicles involved rises. That pattern
 makes sense: more vehicles in a crash can mean more energy, more
-damage, and more people involved. The zero-vehicle group is a data-quality artifact, as we discuss below.
+damage, and more people involved. The zero-vehicle group is a
+data-quality artifact, as we discuss below.
 
 The plot in Figure~\ref{fig:ch9:vehseverity} shows the severe-crash
 proportion for each vehicle count, with the overall severe-crash
@@ -531,8 +544,11 @@ proportion marked by a dashed line.
 \showChunk{R}{Code/nyc_crashes.R}{severity_by_vehicle_plot}
 
 \begin{figure}[H]
-\includegraphics[width=0.75\textwidth]{images/chapter_9/severity_by_vehicle_count.pdf}
-\caption{Severe-crash proportion by number of vehicles, showing a higher proportion of injuries or deaths as more vehicles are involved, though counts with many vehicles are small}
+\includegraphics[width=0.75\textwidth]%
+{images/chapter_9/severity_by_vehicle_count.pdf}
+\caption{Severe-crash proportion by number of vehicles, showing a
+higher proportion of injuries or deaths as more vehicles are involved,
+though counts with many vehicles are small}
 \label{fig:ch9:vehseverity}
 \end{figure}
 
@@ -541,7 +557,7 @@ The proportion severe for zero vehicles stands out:
 [nyc-vehzero-pct]\% of the
 \inlnR{```cat(sum(tab_severe_veh[, "0"]))```}[nyc-vehzero-n]
 crashes with zero vehicles recorded are severe, the highest rate in
-the table. This should not be read as ``crashes with no vehicles are
+the table. This shouldn't be read as ``crashes with no vehicles are
 the most dangerous.'' Every row in this dataset comes from a motor
 vehicle collision report, so \lstinline{n_vehicles == 0} means the
 report's vehicle type fields were left blank, not that no vehicle was
@@ -563,21 +579,23 @@ Figure~\ref{fig:ch9:hourseverity} shows the hourly severe-crash
 proportions. The line moves around because each hour has its own mix of
 crashes and because some hours have fewer records than others.
 Overall, the proportion of severe crashes is higher in some overnight
-hours than during the day, but the pattern is not as clear as the
+hours than during the day, but the pattern isn't as clear as the
 vehicle-count pattern. The overnight hours have fewer crashes, so the
-proportions are more variable. The zero-vehicle group is not shown in
-this plot because it is a data-quality artifact, as discussed above.
+proportions are more variable. The zero-vehicle group isn't shown in
+this plot because it's a data-quality artifact, as discussed above.
 
 \showChunk{R}{Code/nyc_crashes.R}{severe_by_hour_plot}
 
 \begin{figure}[H]
 \includegraphics[width=0.85\textwidth]{images/chapter_9/severity_by_hour.pdf}
-\caption{Severe-crash proportion by hour, showing that the proportion of crashes with injuries or deaths varies across the day, with higher values in some overnight hours}
+\caption{Severe-crash proportion by hour, showing that the proportion
+of crashes with injuries or deaths varies across the day, with higher
+values in some overnight hours}
 \label{fig:ch9:hourseverity}
 \end{figure}
 
 These tables and plots --- severity by vehicle count and by hour
-alike --- are useful for finding patterns, but they do not prove
+alike --- are useful for finding patterns, but they don't prove
 causes. A higher severe-crash proportion with more vehicles involved
 could reflect crash dynamics, or simply that multi-vehicle crashes are
 harder to under-report. A higher proportion late at night could
@@ -593,7 +611,7 @@ formulate questions for further study.
 Sometimes we want to inspect the most serious individual records. We
 create a simple severity score: each injury counts as one point, and each
 death counts as five points. This score is a choice we make to help sort
-the rows. It is not an official measurement.
+the rows. It's not an official measurement.
 
 \showChunk{R}{Code/nyc_crashes.R}{severity_score}
 
@@ -610,7 +628,7 @@ Why might two analysts choose different severity scores, and what
 should they explain before comparing their results?
 
 Together, these results give a first answer to all three questions
-from the start of the chapter. Crashes are not spread evenly across
+from the start of the chapter. Crashes aren't spread evenly across
 the day or week --- they cluster in the late morning and evening, and
 are more common on business days and during business hours. They are
 not spread evenly across the city either: crash counts differ sharply
@@ -639,7 +657,7 @@ predictors at once.
 
 \subsection{Severity on Business Days versus Weekends}
 
-We have not yet cross-tabulated severity against day type directly,
+We haven't yet cross-tabulated severity against day type directly,
 so we build that table first. Chapter~\ref{ch:EDA} introduced
 cross-tabulating two categorical variables, and
 Chapter~\ref{ch:hypothesis} introduced the general logic of a
@@ -658,7 +676,7 @@ The contingency table is
 \inlnR{```tab_business_severe```}[nyc-sev-tab][vbox]
 and the chi-squared test gives a p-value of
 \inlnR{```cat(round(chisq_business_severe$p.value, 4))```}[nyc-sev-p].
-For this week, the evidence is not strong enough to say that severe
+For this week, the evidence isn't strong enough to say that severe
 crashes differ by day type.
 
 \subsection{How Common Are Severe Crashes?}
@@ -694,7 +712,7 @@ confidence interval gives a range of plausible values for that
 underlying proportion. A narrow interval means the estimate is relatively
 stable (we observed many crashes); a wide interval means more sampling
 uncertainty (fewer crashes). These values describe the observed week and
-should not be interpreted as causal effects.
+shouldn't be interpreted as causal effects.
 
 \subsection{What Predicts a Severe Crash?}
 
@@ -738,7 +756,7 @@ the odds on a weekend, about
 higher --- but the 95\% interval,
 \inlnR{```cat(round(wald_ci["business_dayTRUE", 1], 2))```}[nyc-or-bd-lo]
 to \inlnR{```cat(round(wald_ci["business_dayTRUE", 2], 2))```}[nyc-or-bd-hi],
-includes 1, so this alone is not strong evidence of a real difference,
+includes 1, so this alone isn't strong evidence of a real difference,
 matching the chi-squared test earlier in this section. Holding day
 type fixed, each additional vehicle involved is associated with an
 estimated
@@ -767,14 +785,14 @@ are not very informative.}
 
 These steps separate modeling into preparation, fitting, interpretation,
 and validation. The logistic model gives an interpretable summary via
-odds ratios, but remember the usual caveats: association is not
+odds ratios, but remember the usual caveats: association isn't
 causation, and omitted variables or reporting differences can affect
 estimates.
 
 \section{Lessons for Better Data}
 
 Working through this case study surfaced several patterns worth
-flagging for whoever maintains this dataset. Some we have already
+flagging for whoever maintains this dataset. Some we've already
 seen in detail: the \lstinline{location} column duplicates latitude
 and longitude as text (``Importing and Inspecting the Data'');
 \inlnR{```cat(n_both_missing)```}[nyc-both-missing] rows are missing
@@ -786,19 +804,20 @@ crash times end in ``:00'', with
 exactly 00:00 --- almost certainly a default value rather than real
 midnight crashes (``The Midnight Artifact''); and
 \inlnR{```cat(n_injury_mismatch)```}[nyc-injury-mismatch] rows report
-injury totals that do not match their pedestrian, cyclist, and
+injury totals that don't match their pedestrian, cyclist, and
 motorist subtotals (``Defining a Severe Crash''). Two more lessons
-come from fields we have not yet examined closely: how the
+come from fields we haven't yet examined closely: how the
 contributing factor and vehicle type for vehicle 1 were recorded.
 
 \subsection{Contributing Factors}
 
-Each crash record can list up to five contributing factors\index{contributing factor}. We begin
-with the factor for vehicle 1 because it is the most often filled in.
+Each crash record can list up to five contributing
+factors\index{contributing factor}. We begin with the factor for
+vehicle 1 because it's the most often filled in.
 First we clean the text by trimming spaces and changing letters to lower
 case. Then we treat blank entries and \lstinline{unspecified} as missing,
-because they do not tell us what actually happened. We keep
-\lstinline{other vehicular} as a separate category: it is vague, but it
+because they don't tell us what actually happened. We keep
+\lstinline{other vehicular} as a separate category: it's vague, but it
 still signals that the factor was vehicular rather than, say, a road
 condition or a pedestrian action.
 
@@ -815,8 +834,11 @@ contributing factors for vehicle 1.
 \showChunk{R}{Code/nyc_crashes.R}{factor_plot}
 
 \begin{figure}[H]
-\includegraphics[width=0.85\textwidth]{images/chapter_9/top_contributing_factors.pdf}
-\caption{Most common contributing factors for vehicle 1, with driver inattention and following too closely as the most frequently recorded factors this week}
+\includegraphics[width=0.85\textwidth]%
+{images/chapter_9/top_contributing_factors.pdf}
+\caption{Most common contributing factors for vehicle 1, with driver
+inattention and following too closely as the most frequently recorded
+factors this week}
 \label{fig:ch9:factors}
 \end{figure}
 
@@ -830,10 +852,11 @@ cause is unclear, would make this field more useful.
 
 \subsection{Vehicle Types}
 
-We look next at vehicle types\index{vehicle type} for vehicles 1 and 2. We trim extra
-spaces and turn blank entries or the literal value \lstinline{unknown}
+We look next at vehicle types\index{vehicle type} for vehicles 1 and
+2. We trim extra spaces and turn blank entries or the literal value
+\lstinline{unknown}
 into \lstinline{NA}. Those are the only missing-value patterns that
-appear in this week, but it is good practice to look for them because
+appear in this week, but it's good practice to look for them because
 free-form entry fields can contain several spellings of ``unknown.''
 
 \showChunk{R}{Code/nyc_crashes.R}{vehicle_type_clean}
@@ -844,13 +867,14 @@ Then we count the most common vehicle categories.
 
 Figure~\ref{fig:ch9:vehicles} shows the most common vehicle 1 types.
 The long sport utility vehicle label is a good reminder that real
-categories are not always short or tidy.
+categories aren't always short or tidy.
 
 \showChunk{R}{Code/nyc_crashes.R}{vehicle_type_plot}
 
 \begin{figure}[H]
 \includegraphics[width=0.85\textwidth]{images/chapter_9/top_vehicle_types.pdf}
-\caption{Most common vehicle 1 types, with sedans, sport utility vehicles, and taxis accounting for the largest shares of crashes}
+\caption{Most common vehicle 1 types, with sedans, sport utility
+vehicles, and taxis accounting for the largest shares of crashes}
 \label{fig:ch9:vehicles}
 \end{figure}
 
@@ -872,12 +896,12 @@ data easier for analysts, journalists, and citizens to use correctly.
 
 \section{Summary}
 
-This case study used the same habits we have practiced throughout the
+This case study used the same habits we've practiced throughout the
 book. We loaded a dataset, checked its shape, cleaned names, converted
 dates, filtered rows, looked for missing values, created new variables,
 and compared groups with tables and proportions.
 
-The biggest lesson is not a single fact about New York City traffic. The
+The biggest lesson isn't a single fact about New York City traffic. The
 lesson is the workflow. Real datasets need careful questions at every
 step: Did the file load? Are the dates right? Are missing values coded
 consistently? Do the variables mean what their names suggest? Are we
@@ -937,8 +961,8 @@ the severity rate by number of vehicles. What changes?
 
 \begin{exercise}
 Look at the plot of contributing factors. Pick one factor that appears
-often. Write two sentences that describe what the data show, and one
-sentence that explains what the data do not prove.
+often. Write two sentences that describe what the data shows, and one
+sentence that explains what the data doesn't prove.
 \end{exercise}
 
 \begin{exercise}
