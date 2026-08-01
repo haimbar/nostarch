@@ -1,7 +1,7 @@
 #label===ciclt
 ciclt <- function(x, alpha = .05) {
     xbar <- mean(x)
-    z <- qnorm(1 - alpha / 2)
+    z <- qnorm(1 - alpha / 2)                    # z_(alpha/2) quantile
     dd <- z * sd(x) / sqrt(length(x))
     c(xbar - dd, xbar + dd)
 }

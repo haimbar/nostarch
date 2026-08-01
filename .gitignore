@@ -298,7 +298,8 @@ images/chapter_2/
 images/chapter_3/
 images/chapter_4/
 images/chapter_5/
-images/chapter_6/
+images/chapter_6/*
+!images/chapter_6/jars.pdf
 images/chapter_7/
 images/chapter_8/
 images/chapter_9/

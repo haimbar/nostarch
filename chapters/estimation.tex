@@ -23,7 +23,7 @@ falls short.
 \section{Introduction}
 \label{sec:intro}
 
-Let us set up a simple hide-and-seek game in a concrete setting. 
+Let's set up a simple hide-and-seek game in a concrete setting. 
 Suppose a population is modeled by a normal distribution with an 
 unknown location parameter~$\mu$, which we may think of as the true 
 average height of all 12-year-old boys in the United States. To keep the 
@@ -69,27 +69,20 @@ For a normal distribution, the location parameter $\mu$ equals the mean and
 median. Two natural ways to estimate the center are the sample mean and the
 sample median. A third possibility is the midrange, the average of the smallest
 and largest observations. Each estimator uses different parts of the data,
-so they can behave differently in practice. Here are the three candidate
-estimators we'll compare:
-\begin{itemize}
-\item Sample mean
-\item Sample median
-\item Midrange
-\end{itemize}
-
-% Check-in: which estimator uses the most information from the data?
-
+so they can behave differently in practice. 
 
 When an estimator is computed for a given sample, its value is called an
 estimate\index{estimate}. That is, an estimator is a strategy and an estimate is
-its realization given a dataset.
+its realization given a dataset. (Note that the term \emph{point estimate} is
+often used to emphasize that the estimate is a single number, as opposed to a
+range of plausible values.)
 
 
 The three estimates based on the observed sample are obtained by:
 \showChunk{R}{Code/est-hide.R}{estimates}
-Their values are \inlnR{```cat(estimates[1])```}[est1],
-\inlnR{```cat(estimates[2])```}[est2], and
-\inlnR{```cat(estimates[3])```}[est3], respectively.
+Their values are \inlnR{```cat(round(estimates[1], 3))```}[est1],
+\inlnR{```cat(round(estimates[2], 3))```}[est2], and
+\inlnR{```cat(round(estimates[3], 3))```}[est3], respectively.
 
 % Check-in: Which estimator would you expect to perform well if the
 % data can include extreme outliers? Explain briefly.
@@ -100,12 +93,12 @@ value of $\mu$, so it can compare the estimation errors across the three
 estimates. Compared with the true $\mu$, the squared errors of the three
 estimates are obtained by:
 \showChunk{R}{Code/est-hide.R}{error}
-Their values are \inlnR{```cat(err[1])```}[esterr1],
-\inlnR{```cat(err[2])```}[esterr3], and
-\inlnR{```cat(err[3])```}[esterr3], respectively.
+Their values are \inlnR{```cat(round(err[1], 3))```}[esterr1],
+\inlnR{```cat(round(err[2], 3))```}[esterr2], and
+\inlnR{```cat(round(err[3], 3))```}[esterr3], respectively.
 
 
-When we compare different methods of estimating the $\mu$, the comparison only
+When we compare different methods of estimating $\mu$, the comparison only
 applies to the specific data sample we're looking at. A method that is usually
 good might give worse results than a ``bad'' method just by chance for that
 specific sample.  To assess the quality of an estimator, we can investigate its
@@ -173,7 +166,7 @@ size \lstinline{n = 20} and see which estimator performs best on
 average.
 \showChunk{R}{Code/est-hide-norm.R}{manygames}
 The results are
-\inlnR{```print(rowMeans(sim))```}[estrowmeans1][vbox]
+\inlnR{```print(round(rowMeans(sim), 3))```}[estrowmeans1][vbox]
 The first estimator, the sample mean, is a clear winner: it has the
 smallest MSE of the three. This makes sense for normally distributed
 data, since the sample mean uses every observation, while the median
@@ -181,52 +174,6 @@ only uses the middle value's rank and the midrange only uses the two
 most extreme observations, throwing away most of the sample. The
 sample median comes next, and the third estimator, the sample
 midrange, is the poorest among the three.
-
-To visualize the estimates themselves, not just their squared errors,
-we first write a more general function. Earlier, \lstinline{do1est} and
-\lstinline{do1rep} were hard-coded to sample from a normal distribution.
-Here we generalize that idea by adding a \lstinline{datagen} argument: a
-data generator function, so the same code can be used for normal,
-Cauchy, and uniform hide-and-seek games.
-\showChunk{R}{Code/est-hide-norm.R}{gamefuns}
-
-A \lstinline{datagen} function takes a sample size \lstinline{n} and a
-location parameter \lstinline{mu}, and returns a random sample. For
-normal data, for example, \lstinline{datagen} could be
-\lstinline{function(n, mu) rnorm(n, mean = mu, sd = 1)}; we'll see the
-Cauchy and uniform versions shortly.
-
-The plotting function draws one shape for each estimator. At any given
-height (error value), the width of the shape shows how many estimates
-landed near that value: wider means more estimates landed there,
-narrower means fewer.
-\showChunk{R}{Code/est-hide-norm.R}{plotfun}
-
-
-Finally, we define the three concrete \lstinline{datagen} functions
-(one each for normal, Cauchy, and uniform data), store the estimate
-errors from each game, and draw the three panels.
-\showChunk{R}{Code/est-hide-norm.R}{violinplot}
-
-
-Figure~\ref{fig:ch6:violin-games} shows the same comparison in a more
-visual way, using what's called a \emph{violin plot}\index{violin plot}:
-a mirrored density shape showing where values are concentrated, with
-the individual simulated estimates jittered underneath as small dots.
-The figure shows three hide-and-seek games: the top panel is normal
-data, the middle panel is Cauchy data, and the bottom panel is uniform
-data. Each shape shows where the estimates landed across many simulated
-samples. The dashed line marks zero error, which means the estimate
-landed exactly on the true value that Nature hid from us. A taller,
-wider shape means the estimates moved around more.
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.85\textwidth]%
-{images/chapter_6/estimator_violin_by_game.pdf}
-\caption{Estimation errors from repeated hide-and-seek games}
-\label{fig:ch6:violin-games}
-\end{figure}
 \end{example}
 
 
@@ -237,7 +184,7 @@ may affect which estimator is the best or most efficient.
 
 
 \begin{example}[Hide-and-seek: Cauchy population]
-  \label{sec:eval-estim}
+\label{ex:hs:cauchy}
 \runR{Code/est-hide-cauchy.R}{hide-cauchy}
 Now let's generate data from the Cauchy distribution, which has
 heavier tails than the normal distribution. For a heavier-tailed
@@ -262,7 +209,7 @@ Then we play the game 1000 times again and check the MSE of three
 estimators from the 1000 replicates.
 \showChunk{R}{Code/est-hide-cauchy.R}{manygames}
 The results are
-\inlnR{```print(rowMeans(sim.t))```}[estrowmeans2][vbox]
+\inlnR{```print(round(rowMeans(sim.t), 3))```}[estrowmeans2][vbox]
 So, for this experiment, the second estimator, sample median, is the best among
 the three.
 
@@ -283,11 +230,58 @@ estimators in any data generation scheme. This time we generate data from a
 uniform distribution centered at $\mu$ with a bandwidth of 20.
 \showChunk{R}{Code/est-hide-unif.R}{manygames}
 The results are
-\inlnR{```print(rowMeans(sim.u))```}[estrowmeans3][vbox]
+\inlnR{```print(round(rowMeans(sim.u), 3))```}[estrowmeans3][vbox]
 So, for this experiment, the third estimator, sample midrange, is the best among
 the three. It uses only two extreme observations, but what it uses contains
 all the information about the location parameter $\mu$ in this setting.
 \end{example}
+
+
+We've now compared mean squared error across all three games. To visualize
+the estimates themselves, not just their squared errors, we write a more
+general function. Earlier, \lstinline{do1est} and \lstinline{do1rep} were
+hard-coded to sample from a normal distribution. Here we generalize that
+idea by adding a \lstinline{datagen} argument: a data generator function,
+so the same code can replay any of the three games.
+\showChunk{R}{Code/est-hide-norm.R}{gamefuns}
+
+A \lstinline{datagen} function takes a sample size \lstinline{n} and a
+location parameter \lstinline{mu}, and returns a random sample. For
+normal data, for example, \lstinline{datagen} could be
+\lstinline{function(n, mu) rnorm(n, mean = mu, sd = 1)}; the Cauchy and
+uniform games above each used their own version of the same idea.
+
+The plotting function draws one shape for each estimator. At any given
+height (error value), the width of the shape shows how many estimates
+landed near that value: wider means more estimates landed there,
+narrower means fewer.
+\showChunk{R}{Code/est-hide-norm.R}{plotfun}
+
+
+Finally, we define the three concrete \lstinline{datagen} functions
+(one each for normal, Cauchy, and uniform data), store the estimate
+errors from each game, and draw the three panels.
+\showChunk{R}{Code/est-hide-norm.R}{violinplot}
+
+
+Figure~\ref{fig:ch6:violin-games} puts all three games side by side,
+using what's called a \emph{violin plot}\index{violin plot}: a mirrored
+density shape showing where values are concentrated, with the individual
+simulated estimates jittered underneath as small dots. The top panel is
+normal data, the middle panel is Cauchy data, and the bottom panel is
+uniform data. Note that the vertical scale of each panel is different!
+Each shape shows where the estimates landed across many simulated
+samples. The dashed line marks zero error, which means the estimate
+landed exactly on the true value that Nature hid from us. A taller,
+wider shape means the estimates moved around more.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]%
+{images/chapter_6/estimator_violin_by_game.pdf}
+\caption{Estimation errors from repeated hide-and-seek games}
+\label{fig:ch6:violin-games}
+\end{figure}
 
 
 It would be nice if one estimator were always the best regardless of the true
@@ -305,17 +299,32 @@ highly efficient estimates under broad conditions.
 Let's start with a simple example.
 \begin{example}[Likelihood in guessing jars]
 \label{ex:has-jars}
-There are 9 jars. The first jar has 9 red and 1 green balls; the second jar has
-8 red and 2 green balls; $\cdots\cdots$; the 9th jar has 1 red and 9 green
-balls. A jar is selected uniformly at random, and then one ball
+There are nine jars. The first jar has nine red balls and one green ball; the
+second jar has eight red balls and two green balls; $\cdots\cdots$; the ninth
+jar has one red ball and nine green balls. A jar is selected uniformly at
+random, and then one ball
 is drawn uniformly at random from that jar. Suppose the ball drawn is red.
 Which jar is the most likely to have been selected?
 
 
+Figure~\ref{fig:ch6:jars} shows the nine jars. Each jar is a candidate
+explanation for the red ball we observed: it tells us the probability of
+drawing red if that jar were the one selected. In other words, the nine jars
+are the nine possible likelihoods, and our job is to find the jar (the
+probability) under which the observed color is most likely.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{images/chapter_6/jars.pdf}
+\caption{The nine jars, each with a different mix of red and green balls;
+red squares represent red balls and green squares represent green balls.}
+\label{fig:ch6:jars}
+\end{figure}
+
 There are nine possibilities. If the selected jar were the first one, the
 probability that a randomly selected ball is red is 9/10. If the selected jar
 were the second one, the probability that a randomly selected ball is red is
-8/10. Continue until the 9th jar. With this calculation, which jar should we
+8/10. Continue until the ninth jar. With this calculation, which jar should we
 guess?
 
 
@@ -325,9 +334,9 @@ The first one!
 
 The principle that we use here is the so-called \emph{maximum likelihood
 estimation}\index{maximum likelihood estimation}. The \emph{parameter
-space}\index{parameter space}, that is, the collection of all possible values of
-the parameter, consists of only 9 jars. We choose the one that gives the highest
-likelihood of observing a randomly selected ball being red.
+space}\index{parameter space}, that is, the collection of all possible
+values of the parameter, consists of only nine jars. We choose the one that
+gives the highest likelihood of observing a randomly selected ball being red.
 
 
 For problems with continuous parameter spaces, the principle remains the
@@ -420,7 +429,7 @@ $100(1-\alpha)\%$ of all possible samples.
 % wide, what does that tell you about the data or sample size?
 
 
-\subsection{Large sample approximation}
+\subsection{Large Sample Approximation}
 One way to construct confidence intervals is to lean on the large-sample
 guarantees from Chapter~\ref{ch:llnclt}. The law of large numbers tells
 us that as the sample size grows, the sample mean gets closer and
@@ -448,22 +457,60 @@ following interval
 \]
 where $z_{\alpha/2}$ is the number so that the area between
 $-z_{\alpha/2}$ and $z_{\alpha/2}$ under the standard normal density
-curve is $100(1-\alpha)\%$. This is a confidence interval for $\mu$
-with confidence level
-asymptotically $1 - \alpha$. A 95\% confidence interval means $\alpha = 0.05$.
+curve is $100(1-\alpha)\%$. In R, this quantile is computed with
+\lstinline{qnorm(1 - alpha / 2)}; for a 95\% interval ($\alpha = 0.05$),
+this gives the familiar $z_{\alpha/2} \approx 1.96$. This is a confidence
+interval for $\mu$ whose confidence level is asymptotically $1 - \alpha$.
+A 95\% confidence interval means $\alpha = 0.05$.
 
 
 When the population variance $\sigma^2$ is unknown, we can use the sample
-variance $S_n^2$ to substitute it, and the resulting confidence interval is
-still asymptotically valid.
+variance $S_n^2$ in its place. For a finite sample, this substitution is
+more precise if we also replace $z_{\alpha/2}$ with $t_{n-1,\alpha/2}$, the
+corresponding quantile of the \emph{$t$-distribution}\index{$t$-distribution}
+with $n-1$ degrees of freedom, whose heavier tails account for the extra
+uncertainty introduced by estimating $\sigma$ from the data rather than
+knowing it. As $n$ grows, $t_{n-1,\alpha/2}$ converges to $z_{\alpha/2}$, so
+using $z_{\alpha/2}$ with $S_n$ in place of $\sigma$---the approach we take
+in the rest of this section---still gives an interval that is asymptotically
+valid, even though it's not exact for small $n$.
 
 
 The \emph{coverage probability}\index{coverage probability} of a confidence
-interval is the probability that the target is covered by the confidence
-interval. Ideally, a confidence interval with confidence level~$1-\alpha$
-should have coverage probability~$1-\alpha$. In practice, this may not be the
-case, especially when the confidence intervals are constructed based on
-asymptotic results but applied to finite sample sizes.
+interval \emph{procedure} is the long-run fraction of intervals, built the
+same way from repeated samples, that actually contain the true parameter.
+Imagine drawing a new sample of size $n$, computing a new interval from it,
+and repeating this many times: the coverage probability is the fraction of
+those intervals that capture the true value. A confidence interval with
+confidence level~$1-\alpha$ is constructed so that, ideally, its coverage
+probability equals~$1-\alpha$. In practice this may not hold exactly,
+especially when the interval relies on an asymptotic approximation---like
+the CLT-based interval above---that has not yet kicked in at the sample
+size we have.
+
+
+It's worth being precise about what coverage probability is not. Once a
+particular interval has been computed from one particular sample, that
+interval either does or doesn't contain the true parameter---there's no
+probability left to speak of. The $100(1-\alpha)\%$ describes the
+procedure, evaluated over hypothetical repeated samples, not our certainty
+about this one interval. This is the same distinction we drew for p-values
+in Chapter~\ref{ch:hypothesis}: a p-value describes how surprising the data
+is under $H_0$, not the probability that $H_0$ is true; a confidence
+interval describes how often the procedure succeeds, not the chance that
+this particular interval succeeded.
+
+
+The next example draws data from the \emph{gamma
+distribution}\index{gamma distribution}, so it helps to have a quick
+picture of it first. It's a continuous distribution for positive-valued
+data---think waiting times, amounts, or other quantities that can't go
+below zero and tend to have a long right tail. It's controlled by a
+\emph{shape} parameter and a \emph{scale} parameter, and its mean is
+simply their product: shape~$\times$~scale. A small shape value gives a
+sharp peak near zero with a long tail; a large shape value makes the
+distribution look more symmetric and bell-shaped. R's \lstinline{rgamma()}
+function generates gamma-distributed data from a given shape and scale.
 
 
 Now let's play a game to see why uncertainty matters in
@@ -479,7 +526,8 @@ distribution with mean~$\mu$. For simplicity, let's set the scale parameter
 of the gamma distribution to be known as~$2$.
 \showChunk{R}{Code/est-ci-clt.R}{applyci}
 The resulting 95\% confidence interval is
-$($\inlnR{```cat(ci[1])```}[estci1], \inlnR{```cat(ci[2])```}[estci2]$)$.
+$($\inlnR{```cat(round(ci[1], 3))```}[estci1],
+\inlnR{```cat(round(ci[2], 3))```}[estci2]$)$.
 
 
 Does a 95\% confidence interval constructed this way really give 95\%
@@ -511,7 +559,10 @@ panel. Each horizontal line is one confidence interval from one
 simulated sample. The dashed vertical line is the true value of $\mu$. Most
 intervals cross the truth, but a few miss it. That is exactly what ``95\%
 confidence'' allows: the method should work most of the time, not every single
-time.
+time. Notice also that the $n = 50$ intervals are visibly narrower than the
+$n = 20$ intervals---this follows directly from the CLT-based formula, where
+the margin of error $z_{\alpha/2}\sigma/\sqrt{n}$ shrinks in proportion to
+$1/\sqrt{n}$ as the sample size grows.
 
 \begin{figure}[H]
 \centering
@@ -533,6 +584,28 @@ The simulation shows that the confidence intervals constructed from
 the large sample theory works well for sample size $n = 50$ but not so
 well for $n = 20$.
 \end{example}
+
+
+\subsection{Connection to Hypothesis Testing}
+Confidence intervals and hypothesis tests answer the same underlying
+question from two directions, and either one can be built from the other.
+Consider testing $H_0: \mu = \mu_0$ against $H_1: \mu \ne \mu_0$
+(Chapter~\ref{ch:hypothesis}) with the test statistic
+\[
+  T = \frac{\bar{X}_n - \mu_0}{S_n / \sqrt{n}}.
+\]
+At significance level $\alpha$, this test rejects $H_0$ exactly when
+$|T| > z_{\alpha/2}$---which happens exactly when $\mu_0$ falls outside the
+interval $\bar{X}_n \pm z_{\alpha/2} S_n/\sqrt{n}$, the very confidence
+interval constructed above. So a hypothesized value $\mu_0$ is rejected by
+the level-$\alpha$ test if and only if it lies outside the
+$100(1-\alpha)\%$ confidence interval; equivalently, the confidence
+interval is exactly the set of null values $\mu_0$ that the test would
+\emph{fail} to reject. This is why reporting a confidence interval is often
+more informative than reporting a single test's outcome: instead of
+answering one yes-or-no question about one $\mu_0$, the interval answers
+that question for every possible $\mu_0$ at once.
+
 
 \subsection{Resampling}
 
@@ -564,7 +637,7 @@ statistic from a sample \lstinline{x} is implemented in the following function
 \showChunk{R}{Code/est-ci-boot.R}{myboot}
 
 
-Function \lstinline{myboot} returns a list with two components. The first
+The function \lstinline{myboot} returns a list with two components. The first
 component \lstinline{t0} is the scalar statistic computed from the observed
 sample \lstinline{x}; the second component \lstinline{t} is a vector
 of dimension \lstinline{R}, each element of which is a scalar
@@ -587,11 +660,11 @@ size~50.
 
 %% Tried putting cat(medBoot$t0) in math mode; not working
 For this sample, our point estimate is
-\inlnR{```cat(medBoot[["t0"]])```}[estmedboot], with 95\% confidence
+\inlnR{```cat(round(medBoot[["t0"]], 3))```}[estmedboot], with 95\% confidence
 interval \lstinline{medCI}, which is
-$($\inlnR{```cat(medCI[1])```}[estmedci1],
-\inlnR{```cat(medCI[2])```}[estmedci2]$)$.
-The true value \inlnR{```cat(target)```}[esttarget] is nicely captured
+$($\inlnR{```cat(round(medCI[1], 3))```}[estmedci1],
+\inlnR{```cat(round(medCI[2], 3))```}[estmedci2]$)$.
+The true value \inlnR{```cat(round(target, 3))```}[esttarget] is nicely captured
 by the interval from this sample.
 
 
@@ -601,25 +674,26 @@ need to do in one replicate first:
 \showChunk{R}{Code/est-ci-boot.R}{do1rep}
 
 
-Function \lstinline{do1rep()} generates a random sample of size \lstinline{n}
-from the Gamma distribution with
-shape 2 and scale 2, performs a bootstrap procedure with 1000
-bootstrap samples, and returns a vector of 3 elements: the point estimate and
+The function \lstinline{do1rep()} generates a random sample of size
+\lstinline{n} from the Gamma distribution with shape 2 and scale 2,
+performs a bootstrap procedure with 1000 bootstrap samples, and returns
+a vector of three elements: the point estimate and
 the lower and upper bounds of a 95\% confidence interval. We replicate the
-experiment \lstinline{nrep = 200} times and check the performance of the point
+experiment \lstinline{nrep = 1000} times and check the performance of the point
 estimate and the empirical coverage rate of the 95\% confidence interval.
 \showChunk{R}{Code/est-ci-boot.R}{coverage50}
 
 
 The mean of the point estimate \lstinline{mean(sim50[1,])} from the
 \inlnR{```cat(nrep)```}[estnrep1] replicates is
-\inlnR{```cat(mean(sim50[1,]))```}[estmeansim50], which is very close
-to the true target \inlnR{```cat(target)```}[esttarget2].
+\inlnR{```cat(round(mean(sim50[1,]), 3))```}[estmeansim50], which is very close
+to the true target \inlnR{```cat(round(target, 3))```}[esttarget2].
 
 
 The empirical coverage rate of the 95\% confidence interval from the
 \inlnR{```cat(nrep)```}[estnrep2] replicates is
-\inlnR{```cat(mean(sim50[2,] < target & target < sim50[3,]))```}[estmeansim50ci],
+\inlnR{```cat(mean(sim50[2,] < target & target < sim50[3,]))```}%
+[estmeansim50ci],
 which is reasonably close to the nominal level 95\%.
 
 
@@ -649,6 +723,11 @@ Figure~\ref{fig:ch6:boot-ci-sizes} shows 50 percentile bootstrap intervals for
 each sample size. The dashed vertical line is the true population median. As
 before, each line comes from one simulated sample. The bootstrap interval is
 built by resampling from that sample, not by using the normal approximation.
+As with the large-sample intervals in Figure~\ref{fig:ch6:ci-sizes}, the
+$n = 50$ intervals here are visibly narrower than the $n = 20$ intervals.
+The bootstrap doesn't rely on the CLT formula directly, but the same
+underlying force is at work: the sample median's own sampling variability
+shrinks as $n$ grows, so the resampled intervals shrink along with it.
 
 \begin{figure}[H]
 \centering
@@ -691,11 +770,12 @@ estimator improves the most as the sample size grows?
 \end{exercise}
 
 \begin{exercise}
-Use the Cauchy hide-and-seek code in Example~\ref{sec:eval-estim}, but
-replace \lstinline{rcauchy} with a $t$ distribution with 2, 5, and 10
-degrees of freedom. How does the
-ordering of the sample mean and sample median change as the tails of
-the distribution become less extreme?
+The Cauchy hide-and-seek code in Example~\ref{ex:hs:cauchy} generates
+data with \lstinline{mu + rt(n, df = 1)}---recall that a $t$ distribution
+with 1 degree of freedom is the Cauchy distribution. Change
+\lstinline{df = 1} to \lstinline{df = 2}, \lstinline{df = 5}, and
+\lstinline{df = 10}. How does the ordering of the sample mean and sample
+median change as the tails of the distribution become less extreme?
 \end{exercise}
 
 \begin{exercise}
@@ -718,6 +798,16 @@ In the gamma confidence interval simulation, try sample sizes
 \lstinline{n = 100}. Estimate the coverage rate for each sample size.
 At what sample size does the large-sample confidence interval begin to
 look reliable?
+\end{exercise}
+
+\begin{exercise}
+Using the 95\% confidence interval computed in
+Example~\ref{ex:ci-clt} (interval estimation for a gamma mean), pick
+three candidate values of $\mu_0$: one below the interval, one inside
+it, and one above it. Without running a separate hypothesis test, use
+the duality from ``Connection to Hypothesis Testing'' to say which of
+these $\mu_0$ values a level-$\alpha = 0.05$ test of $H_0: \mu = \mu_0$
+would reject, and which it would fail to reject.
 \end{exercise}
 
 \begin{exercise}
