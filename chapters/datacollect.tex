@@ -1,37 +1,49 @@
 \chapter{Data Collection: Catching the Right Data in the Wild}\label{ch:data}
-You can't make bricks without straw. In the previous chapters we built tools---the
-law of large numbers, the central limit theorem, and probability theory---that let
+You can't make bricks without straw. In the previous chapters we built
+tools---probabilities, law of large numbers, the central limit
+theorem, and statistical inferences---that let
 us reason carefully from a sample to a population. All of those guarantees rest on
 one crucial assumption: the sample must be \emph{representative} of the population.
 This chapter examines what representativeness means, what can go wrong when a sample
 is not representative, and how to recognize the most common pitfalls in data
 collection.
 
+\jy{Is `hypertarget` necessary? Seems not. Could do a global
+  cleaning.}
+
 \hypertarget{representative}{%
 \section{Representative Sample}\label{representative}}
 \hypertarget{keyterms}{%
 \subsection{Definitions of Key Terms}\label{keyterms}}
+\jy{We've used sample and population many times in earlier
+  chapters. Should we say now a formal definition? Or define them
+  somewhere earlier.}
+
 First, let's introduce some terminology. A \emph{population}\index{\emph{population}} is the set of 
 individuals (\emph{subjects}\index{\emph{population}}) which we're interested in studying. Subjects may be 
 people, mice, or devices produced in a factory, just to name a few examples. 
 
+
 A \emph{sample}\index{\emph{sample}} is a subset of the population. The sample is said to be
 \emph{representative}\index{\emph{sample}!\emph{representative}} if it reflects the characteristics of the population.
 For example, if in the United States the proportion of females is approximately 50\%,
-then a sample taken from this population should also have approximately 50\% females
+then a reasonably big sample taken from this population should also
+have approximately 50\% females
 in order to be considered representative.
 This is important because a main goal of statistical data science is to use the
 smaller sample to draw conclusions on the population.
 We saw in Chapter~\ref{ch:llnclt} that the law of large numbers and the central limit
-theorem guarantee that if the sample is representative of the entire population,
-then our estimates can be trusted with a certain degree of confidence,
-and the larger the sample, the more confident we are about the estimate
+theorem guarantee that, if the sample is representative of the entire population,
+then our estimates of population features can be trusted with a certain degree of confidence,
+and the larger the sample, the more confident we are about the
+estimate based on the sample
 and the conclusions that we can draw from it.
 
-However, if the sample doesn't faithfully represent the population, then no matter
+However, if the sample doesn't faithfully represent the population of interest, then no matter
 how large the sample is, the results can't be trusted. When the quantity we want
 to estimate and reason about is estimated based on a non-representative sample,
 we get a \emph{biased}\index{estimator!\emph{biased}} estimator. By bias\index{estimator!bias} we mean that the obtained estimate
+\jy{This does not define bias}
 is not a good approximation of the true value, and it doesn't improve when we
 take a larger sample.
 
@@ -47,7 +59,8 @@ However, because people have different activity levels and different diets, each
 person's weight is a little different from the one predicted by Equation (\ref{eq:weightheight}).
 We write the weight as a function of height using an equation that includes this 
 random `noise', by adding
-a non-deterministic (\emph{stochastic}) term, denoted by $\text{Error}$:
+a non-deterministic (\emph{stochastic}) term, denoted by `$\text{Error}$':
+\jy{lower case error?}
 \begin{equation}
   \label{eq:weightheight-stochastic}
   \text{weight} = -194.49 + 5.30 \times \text{height} + \text{Error},
@@ -86,13 +99,18 @@ using R's \code{lm()} function (we will cover \code{lm()} in detail in the next 
 for now, think of it as finding the best-fit line through the data);
 \wingding{2} uses the model's residuals---the differences between each person's actual weight
 and the fitted value---to build a sampling weight \code{w}; and
+\jy{I feel this might more complicated than necessary. How about
+  setting up a sample obtained from subjects who ...}
 \wingding{3} uses \code{w} to decide the probability of including a person in the sample. The larger the value of \code{w}, the higher the
 probability of including the person in the sample. The exact way we 
+\jy{could we make the example easier without invoking the residuals?
+  such as a sample selected from those at the gym?}
 obtain \code{w} in this example is not important. What's important is
 that the selection of an individual into the sample is \emph{not random}. 
 When the probability of drawing a subject into the sample depends on their
-height, weight, or both, then the sample is no longer representative and
-as such, it doesn't retain the properties of the population. 
+height, weight, or both, then the sample is no longer representative
+of the population and as such, estimates of population features based
+on it will be biased.
 \showChunk{R}{Code/datacollect-goodbadsample.R}{BIASgbs3}
 
 In Figure~\ref{fig:ch7:representativesample} (c) you can see that the relationship
@@ -129,7 +147,9 @@ in the population, and in the two samples. We can use the following code:
 
 The variance in the population is called \code{var0} in the code and it's equal to
 \inlnR{```cat(var0)```}[var0]. In the first (simple random) sample the
-variance is called \code{var1} and is equal to \inlnR{```cat(var1)```}[var1], which is very close to the
+variance is called \code{var1} and is equal to
+\inlnR{```cat(var1)```}[var1], which is very close to the
+\jy{the two variances being so close could be misleading. Change seed?}
 actual variance in the population (the difference is \inlnR{```cat(var1-var0)```} [diff01]),
 but in the second (biased) sample, the variance of height is much smaller: \code{var2}
 is
@@ -142,7 +162,7 @@ the spread or diversity of the population would be seriously misleading.
 \hypertarget{representative-size}{%
 \subsection{A Representative Sample Is More Important Than a Larger Sample}\label{representative-size}}
 
-\begin{example}[The 1936 Literary Digest Poll, \citep{darkdata_ch2}]
+\begin{example}[The 1936 Literary Digest Poll \citep{darkdata_ch2}]
  For the 1936 presidential election, the Literary Digest poll was one of the
 largest and most expensive polls with a sample size of around 2.4 million
 people. Based on every telephone directory in the United States, lists of
@@ -164,7 +184,7 @@ would return the ballot to the magazine, so the resulting sample is a
 ``volunteer'' sample.
 
 As a result, the data collection method of Literary Digest
-did not produce a representative sample of the U.S. population and thus 
+did not produce a representative sample of the U.S.\ population and thus 
 resulted in a biased estimate and a misleading conclusion.  In the next section,
 we elaborate on different types and sources of bias. While preventing
 all sources of bias may be challenging, the only chance we have if we want
@@ -182,40 +202,60 @@ feasibility and ethics of the research question.
 
 \subsubsection{Randomized Controlled Trials (RCTs)}
 
-A typical example of a controlled experiment is a \emph{randomized controlled
-  trial} \index{\emph{randomized controlled
-  trial}} (RCT), which is considered the gold standard in data collection. 
-RCTs are possible when we can pre-plan an experiment and determine in advance
-what data needs to be collected. This approach is frequently used in medical
-research, where we wish to evaluate the effectiveness of a new treatment (for example,
-a new drug) on an outcome (for example, blood pressure).
-There may be multiple factors affecting the outcome (or at least, that could affect it).
-For example, we may have a reason to think that age, sex, body mass index (BMI),
-or other things are related to one's blood pressure.
-In a randomized controlled trial we can get a representative sample of the population,
-and randomly assign each individual to one of the treatments. With randomization
-we end up with comparable groups of individuals. For example, if we are testing
-two new drugs, and one old drug, then there are three treatment groups and in each one
-we have approximately the same age distribution, the same proportions of females,
-the same distribution of BMI, and so on.
+A typical example of a controlled experiment is a \emph{randomized
+  controlled trial} (RCT)\index{\emph{randomized controlled
+    trial}}. RCTs are often considered the gold standard for studying
+cause and effect. Researchers plan the experiment in advance and
+decide what data to collect. RCTs are common in medical research,
+where researchers may want to measure how well a new treatment, such
+as a new drug, changes an outcome, such as blood pressure.
 
-Then, the comparison between the three types of treatments is meaningful,
-and we can use it to draw conclusions about the effect of the treatment (drug, in our
-example) on the outcome (blood pressure). If, apart from the treatment, the
-subpopulations in all groups are identical, then any difference in the outcome between
-the groups must be due to the one thing that separates them: the treatment itself.
 
-The \emph{control} \index{\emph{randomized controlled
-  trial!control}} part in RCT means that one of the treatment groups is our baseline,
-and we compare all the other types of treatments to it. In our example, the old drug's
-effect on blood pressure is known, and we want to know if the new drugs give better
-results in controlling blood pressure.
+Many factors besides the treatment may affect the outcome. For
+example, age, sex, and body mass index (BMI) may all be related to
+blood pressure. In an RCT, researchers randomly assign each
+participant to a treatment group. Random assignment tends to produce
+comparable groups, so differences in these other factors are less
+likely to explain differences in the outcome.
 
-Similarly, suppose that we have a number of workout regimes and we want to
-see which one gives the best results in, say, body weight, or endurance. Then
-we could randomize the subjects in our sample, and divide them into treatment
-groups, one of which is `no training'. This is then our baseline level---we can check
-which (if any) of the training regimes is better than the inactive group.
+
+For example, suppose
+researchers compare two new drugs with an existing drug. The trial has
+three treatment groups. If the groups are large enough, they will
+usually have similar age distributions, proportions of females, BMI
+distributions, and distributions of other characteristics. The groups
+will not be exactly alike, but random assignment helps prevent
+systematic differences among them.
+
+
+This makes comparisons among the three treatments more reliable. If
+the groups are similar except for the treatments they receive,
+differences in blood pressure are less likely to be explained by age,
+sex, BMI, or other characteristics. We can therefore use the
+comparison to estimate whether the treatments caused the differences
+in blood pressure. Random assignment does not eliminate chance
+differences among the groups, but it makes systematic differences less
+likely.
+
+
+The \emph{control} in a randomized controlled trial (RCT)
+\index{\emph{randomized controlled trial!control}} is the treatment group
+that serves as the baseline for comparison. The control group may receive an
+existing treatment, a placebo, or no treatment. In our example, the control
+group receives the existing drug. We compare the new drugs with this existing
+treatment to see whether they control blood pressure more effectively.
+
+As another example, suppose we want to compare several workout programs. We
+could randomly assign participants to different groups and use a ``no
+training'' group as the control group. We could then compare changes in body
+weight or endurance across the groups. These comparisons would help us
+determine whether any of the workout programs works better than no
+training.
+
+
+\jy{Randomization does not require researchers to balance every factor
+  themselves, and an unmeasured factor does not automatically prevent
+  an RCT from supporting causal conclusions.}
 
 Unfortunately, running an RCT is not always possible. First, it may be hard or expensive
 to gather the sample. For example, drug development is expensive, because
@@ -306,6 +346,8 @@ and it's called \emph{Berkson's bias}. Let's start with an example to explain.
   are either pretty or rare to your friends. Based on what your friends
   observe, will they conclude that a rare stamp is more likely to be pretty?
 \end{example}
+\jy{Styles: the example environment needs an ending indicator; the
+  closing of the example could include the solution in addition to the problem?}
 
 Let's calculate some numbers to see the answer. For all the stamps, the
 probability that a stamp is pretty is 300/1000=0.3; for rare stamps, the
@@ -348,12 +390,18 @@ large proportion (0.81) of the area of the colored region (the biased sample).
   \label{fig:ch7:stamps}
 \end{figure}
 
+\jy{use example env?}
 Now let's simulate some data to further illustrate the problem. In this simulation,
 we use the ``popular books whose movie adaptations were not-so-good'' example.
+
+\jy{How about removing the pdf and dev.off lines from showcode?}
 
 \showCode{R}{Code/datacollect-berkson.R} %
 \runR{Code/datacollect-berkson.R}{datacollect-berkson} %
 
+\jy{avoid starting a sentence with a symbol (line number)?}
+\jy{highlight the implication of independently drawn: no true good
+  book bad movie relationship.}
 In the above code, the goodness of books and movies are drawn independently from a
 standard normal distribution (\wingding{1} and \wingding{2}). \wingding{3}
 checks if a book is good (better than 90\% of all books) and \wingding{4} checks
