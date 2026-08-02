@@ -1,0 +1,29 @@
+#label===iq-sample
+set.seed(95473)
+n <- 200
+samp1 <- rnorm(n, 100, 15)
+cat("Mean=",mean(samp1), ", SD=",sd(samp1),"\n")
+#===end
+
+pdf("images/chapter_4/qqplot1.pdf")
+#label===iq-qqplot
+qqnorm(samp1, cex=0.9, pch=18, col="purple")
+abline(100, 15, col="orange", lwd=3)
+#===end
+dev.off()
+
+pdf("images/chapter_4/LLNIQ.pdf")
+#label===iq-lln-sim
+set.seed(95473)
+ns <- rep(10 * 2^(0:11), each=10) # (@\wingding{1}@)
+L <- length(ns)
+allMeans <- rep(0, L)           # (@\wingding{2}@)
+for (i in 1:L) {                # (@\wingding{3}@)
+  samp <- rnorm(ns[i], 100, 15)
+  allMeans[i] <- mean(samp)     # (@\wingding{4}@)
+}
+plot(ns, allMeans, pch=19, cex=0.9, col=3, axes=FALSE, log="x")
+axis(1); axis(2)
+abline(h=100, lwd=3,col=2)
+#===end
+dev.off()

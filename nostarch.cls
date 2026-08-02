@@ -1018,7 +1018,7 @@
     }
 
 \DefineVerbatimEnvironment{Code}{Verbatim}{frame=lines,framerule=0.25pt, commandchars=\\\{\}}
-\FV@AddToHook\FV@ListParameterHook{\vspace{-6pt}}
+% \FV@AddToHook\FV@ListParameterHook{\vspace{-6pt}}
 \VerbatimFootnotes
 
 % ===== BOX =====

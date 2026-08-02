@@ -1,19 +1,857 @@
-\hypertarget{ch:hypothesis}{%
-\chapter{Hypothesis Testing}\label{ch:hypothesis}}
+\chapter{Hypothesis Testing: Chance or Real Effect?}
+\label{ch:hypothesis}
 
-Hypothesis testing can be thought of as a stochastic analog of proof by
-contradiction.
+Life is full of situations where we must decide whether an observed
+result reflects a real effect or simply random chance. Is that coin
+you're flipping really unfair, or did it just happen to land heads
+several times in a row? Did a new medicine help patients recover, or
+would they have improved anyway? Is one website design better than
+another, or did it get lucky in a single experiment? In the previous
+two chapters, we learned how probability describes uncertainty and how
+randomness behaves when we collect data. Now we can use those ideas to
+answer a new question: when should we attribute an observed result to
+chance, and when should we view it as evidence of a real effect? In
+this chapter, we learn how statisticians answer questions like these
+using hypothesis testing. Rather than trying to prove something with
+absolute certainty, hypothesis testing weighs the evidence in the data
+against a baseline explanation and asks whether the observed result
+would be unusual if only chance were operating. Along the way, we'll
+introduce null and alternative hypotheses, explore p-values and
+permutation tests through simulation, study the possibility of making
+incorrect decisions, and examine what happens when many hypotheses
+are tested at the same time.
 
-``To understand the essence of statistical hypothesis testing properly, it is
-necessary to compare intentionally hypothesis testing with proof by
-contradiction and characterize the former as not the same as the latter.''
-\citep{otani2019comparing}.
 
-It should be relatively clear, then, why a failure to reject H , does not
-constitute a verification of its truth. It simply means that the researcher has
-failed to provide evidence suflcient to cast serious doubt on the truth of
-\(H_0\). \citep{reeves1980hypothesis}
+\section{Basic Concepts}
 
-Misconception \citep{falk1995significance}.
+Every hypothesis test begins with two competing explanations. The
+\emph{null hypothesis}\index{\emph{null hypothesis}}, written $H_0$,
+is the baseline explanation. It often says that there's no real
+difference, no effect, or no pattern beyond random variation. The
+\emph{alternative hypothesis}\index{\emph{alternative hypothesis}},
+written $H_1$, is the explanation we consider when the data look too
+surprising \emph{if the null hypothesis is true} (or, as you
+would see in many textbooks we can say \emph{under the null}).
 
-\input{Rnw/hypo-twosample.tex}
+For example, suppose researchers are studying a new drug. The null
+hypothesis might say that the drug has no effect compared with a
+placebo. The alternative hypothesis might say that the drug does have
+an effect. In an A/B test for a website, the null might say that two
+page designs lead to the same sales rate, while the alternative says
+that one design changes the sales rate.
+
+The same setup appears in many other settings. Scientists might ask
+whether the observed increase in global temperature could be explained
+without human activity. A hospital might ask whether its 30-day
+readmission rate is higher for one group of patients than for another.
+A school might ask whether a new tutoring program improved test scores.
+The details change, but the structure is the same: start with a
+baseline explanation, then ask whether the data is too surprising for
+that explanation.
+
+The logic of a hypothesis test is:
+\begin{enumerate}
+\item Assume the null hypothesis is true.
+\item Work out what kinds of data would be common under that assumption.
+\item Compare the observed data with those possibilities.
+\item If the observed data is very unusual under $H_0$, reject $H_0$.
+\end{enumerate}
+
+\subsection{Assume the Baseline, Then Check the Data}
+
+Hypothesis testing is a little like proof by contradiction
+\citep{reeves1980hypothesis}. In a mathematical proof by
+contradiction, we start by assuming the opposite of what we want to
+show. If that assumption leads to an impossibility, then the original
+statement must be true.
+
+In hypothesis testing, we also start with an assumption: the null
+hypothesis. Then we ask what kinds of data we would expect if that
+assumption were true. If the observed data is very far from what the
+null hypothesis predicts, we reject $H_0$.
+
+The difference is that statistics doesn't give the certainty of a
+mathematical proof. Random events can produce surprising results. A
+fair coin can land heads 8 times in 10 flips. A useless drug can look
+helpful in one small experiment. So rejecting $H_0$ doesn't prove
+$H_1$ beyond all doubt. It means that the observed data is unusual
+enough under $H_0$ that we decide to reject the baseline explanation.
+Similarly, failing to reject $H_0$ doesn't prove that $H_0$ is true.
+It only means that the data didn't give enough evidence against it.
+
+As a warm-up, imagine flipping a fair coin 20 times and seeing 16
+heads. One way to judge this result is to build a pretend world where
+the coin is fair. We could simulate many sets of 20 fair-coin flips and
+count how often 16 or more heads appear:
+\runR{Code/hypo-warmup.R}{hypo-warmup}
+\showChunk{R}{Code/hypo-warmup.R}{coinflip}
+Out of 100,000 simulated sets of 20 flips, only about
+\inlnR{```cat(round(p_coin * 100, 1))```}[coinwarmup]\% of them
+produced 16 or more heads, suggesting that 16 heads would be a fairly
+surprising result for a fair coin. 
+%The Lady Tasting Tea example below
+%uses the same logic, but with cups instead of coins and with an exact
+%count of all possible arrangements.
+
+\subsection{Type~I and Type~II Errors}
+
+Because data is random, hypothesis tests can make mistakes. A
+\emph{Type~I error}\index{\emph{Type~I error}} occurs when we reject
+the null hypothesis even though it's true. This is also called a false
+positive. For example, we might conclude that a drug works when it
+doesn't.
+
+The probability of making a Type~I error is controlled by the
+\emph{significance level}\index{\emph{significance level}}, denoted by
+$\alpha$. A common choice is $\alpha = 0.05$, which means that if
+$H_0$ is true, the test is designed to reject it (incorrectly) no more than 5\% of
+the time.
+
+A \emph{Type~II error}\index{\emph{Type~II error}} occurs when we fail
+to reject $H_0$ even though there really is an effect. This is also
+called a false negative. If the probability of a Type~II error is
+$\beta$, then $1 - \beta$ is called the \emph{power}\index{\emph{power}}
+of the test. Power measures how well the test detects a real effect.
+
+
+\begin{example}[Lady tasting tea]
+R. A. Fisher's ``Lady Tasting Tea'' experiment, described in his 1935 
+book \emph{The Design of Experiments}~\citep{fisher1935design},
+became one of the earliest and 
+most elegant demonstrations of formal hypothesis testing 
+\citep{salsburg2002lady}. Fisher recounted an event at Rothamsted 
+Experimental Station, where a colleague claimed she could tell by 
+taste whether milk or tea had been poured first into a cup. To test 
+this claim, Fisher designed an experiment involving eight cups of tea: 
+four prepared with milk poured first, and four with tea poured first. 
+The cups were presented in random order, and the lady was told that 
+there were four of each kind. Her task was to identify the four cups 
+with milk poured first. Assuming the null hypothesis, $H_0$, that she 
+was guessing, Fisher calculated the probability of her achieving a 
+result as good as the observed one purely by chance.
+
+
+If her performance was highly unlikely under $H_0$, the null hypothesis 
+would be rejected in favor of the alternative, $H_1$, suggesting she 
+may truly have the claimed ability. This decision, however, carried the 
+risk of a Type~I error---concluding she had the ability when she did 
+not. Conversely, failing to reject $H_0$ could result in a Type~II 
+error---overlooking a genuine ability due to insufficient evidence. The 
+experiment highlighted how statistical decisions are made under 
+uncertainty and how error probabilities---Type~I and Type~II---must be 
+considered in the design and interpretation of hypothesis tests.
+\end{example}
+
+
+\subsection{Test Statistic and P-Value}
+
+In hypothesis testing, a \emph{test statistic}\index{\emph{test statistic}}
+is a numerical summary of the data used to evaluate the null hypothesis,
+$H_0$. It captures the relevant aspects of the observed data under
+$H_0$ and quantifies the evidence against it. The choice of test
+statistic depends on the specific hypothesis and the structure of the
+data. A test rejects $H_0$ if its test statistic, denoted by $T$,
+falls into a designated
+\emph{rejection region}\index{\emph{rejection region}}. The
+probability that $T$ falls in this region when $H_0$ is true
+(a Type~I error) is controlled by the \emph{significance level},
+typically denoted by $\alpha$. This threshold is usually chosen to be
+small, such as 0.05 or 0.01, to limit the chance of making a
+Type~I error.
+
+
+The \emph{p-value} provides an alternative way to summarize results. 
+It is defined as the probability, under $H_0$, of obtaining a test 
+statistic as extreme as or more extreme than the observed one. A small 
+p-value indicates that the observed result would be rare under $H_0$, 
+thus providing evidence against it. The decision rule is simple: 
+if the p-value is less than $\alpha$, we reject $H_0$; otherwise, we 
+fail to reject it. This offers flexibility, because the same p-value
+can be compared with different significance levels depending on the
+situation.
+
+
+The p-value is often misunderstood as the probability that $H_0$ is 
+true given the data. This is incorrect. The p-value assumes that 
+$H_0$ is true and measures how surprising the observed data is under
+that assumption. As shown in empirical studies, this misinterpretation 
+is widespread, even among statistically trained researchers 
+\citep{falk1995significance}. Understanding that the p-value reflects 
+compatibility between the data and the null hypothesis---not the truth of 
+the hypothesis---is essential for proper statistical reasoning.
+
+Here is a useful check: if a p-value is 0.03, it doesn't mean there's
+a 3\% chance that $H_0$ is true. It means that results at least this
+extreme would be 3\% among all possible results if $H_0$ were true.
+
+
+\begin{example}[Lady tasting tea -- continued]
+
+In the Lady Tasting Tea experiment, the test statistic $T$ is the 
+number of cups the lady correctly identifies as having been prepared 
+with milk poured first. The total number of cups is an even number $n$, 
+with exactly $n/2$ prepared milk-first and $n/2$ tea-first. Importantly, 
+the lady is told in advance that there are exactly $n/2$ of each type, 
+and she is required to label exactly $n/2$ cups as milk-first. Under the 
+null hypothesis $H_0$, she is assumed to be guessing. In this setup, 
+it can be shown that the distribution of $T$ under $H_0$ follows a 
+\emph{hypergeometric distribution}\index{distribution!\emph{hypergeometric}}, 
+and large values of $T$ provide stronger evidence against $H_0$.
+
+To carry out the test, we fix a significance level $\alpha$, such as
+$0.05$, representing the maximum tolerable probability of a Type~I
+error. We then define the \emph{rejection region}, consisting of
+values of $T$ that are considered too extreme to plausibly occur under
+$H_0$. Suppose we reject $H_0$ only when $T = n/2$—that is, only if
+the lady achieves a perfect classification. The probability of this
+outcome under $H_0$ is $\Pr(T = n/2) = 1 / \binom{n}{n/2}$.
+
+
+For example, suppose $n = 8$ and the lady correctly identifies all 
+$4$ milk-first cups. The observed test statistic is 
+$T_{\text{obs}} = 4$, and the p-value is 
+\[
+  \Pr(T \ge T_{\text{obs}} \mid H_0) = 1 / \binom{8}{4}
+  = 1/70 \approx  0.0143.
+\]
+Since this p-value is smaller than the commonly used significance
+level $\alpha = 0.05$, we would reject $H_0$ and conclude that her
+performance is unlikely to be due to guessing.
+
+We can check this exact calculation with a simulation: let a guesser
+pick 4 cups at random out of 8 and see how often all 4 match the true
+milk-first cups.
+\showChunk{R}{Code/hypo-warmup.R}{teacheck}
+This empirical proportion, \inlnR{```cat(p_tea)```}[teasim], is close
+to the exact value $1/70 \approx 0.0143$, confirming that random
+guessing produces a perfect classification about as often as the
+hypergeometric formula predicts.
+
+
+Now increase the number of cups to $n = 10$, with the lady again
+achieving a perfect identification of the $5$ milk-first cups. The 
+p-value is
+\[
+  \Pr(T \ge 5 \mid H_0) = 1 / \binom{10}{5}
+  = 1 / 252 \approx 0.0040.
+\]
+This smaller p-value gives even stronger evidence
+against~$H_0$---suggesting that her performance is highly unlikely to
+be the result of chance guessing and that she may indeed have the 
+ability to tell the difference.
+\end{example}
+
+\section{Permutation Tests}
+
+The Lady Tasting Tea example belongs to a general family of tests known
+as \emph{permutation tests}\index{test!permutation}. A permutation test
+asks a simple question: if the labels in the data were shuffled at
+random, how unusual would our observed result look?
+
+\subsection{Permutation under Exchangeability}
+
+A permutation test relies on \emph{exchangeability}. This means that
+under the null hypothesis, the labels attached to the data could have
+been swapped without changing the story. 
+For example, if we test a drug on two groups, and if treatment and control
+labels are exchangeable under $H_0$, then any difference between the
+groups is treated as random variation rather than a real treatment
+effect.
+
+We can always shuffle the labels many times, whether or not $H_0$ is
+true; shuffling is just a mechanical operation. What exchangeability
+gives us is the right way to interpret the result: if $H_0$ is true,
+every shuffled arrangement is just as likely as the original one, so
+most shuffled datasets won't produce as extreme a test statistic as
+we would see if there were a real effect. For each shuffled dataset,
+we calculate the same test statistic that we calculated from the real
+data. This gives us a picture of what the test statistic would look
+like if $H_0$ were true.
+
+
+By pooling all the data and randomly reassigning the group labels, we 
+simulate what the data might look like if $H_0$ were true. Each 
+permutation represents a potential arrangement of the data
+under~$H_0$, and the distribution of the test statistic across these
+permutations forms the \emph{sampling distribution under
+  $H_0$}\index{sampling distribution!under $H_0$}. Comparing the
+observed test statistic to this distribution allows us to calculate its
+p-value, which quantifies how extreme the observed result is
+under~$H_0$.
+
+
+For instance, in the Lady Tasting Tea experiment, the null hypothesis
+$H_0$ says that the lady is guessing. Under this assumption, all
+possible arrangements of the cups are equally likely. Shuffling the
+labels gives an exact picture of chance guessing.
+
+Similarly, suppose we compare the mean outcome in a treatment group
+with the mean outcome in a placebo group. If the treatment has no
+effect, then the treatment and placebo labels are exchangeable. The
+distribution of the shuffled differences in means shows what kinds of
+differences we could see by chance.
+
+
+Sometimes the total number of possible shuffles is too large to list.
+In that case, we use a random sample of shuffles.
+
+
+\subsection{Monte Carlo Approximation}
+
+When it's not practical to use every possible permutation, we can use
+a \emph{Monte Carlo approximation}\index{Monte Carlo approximation}.
+That means we draw many random permutations and use them to approximate
+the sampling distribution under $H_0$.
+
+\begin{example}[Permutation test for two-group comparison]
+Suppose we have two
+groups of data, $x_1$ and $x_2$, with sample sizes $n_1 = n_2 = 30$. 
+If $H_0$ is true, there's no real difference between the groups, so
+the observed difference in the sample means, $\bar{x}_1 - \bar{x}_2$,
+where $\bar{x}_1$ and $\bar{x}_2$ are, respectively, the sample means of
+the 1st and 2nd groups, is simply due to chance.
+
+\runR{Code/hypo-perm.R}{hypo-perm}
+\showChunk{R}{Code/hypo-perm.R}{HypoPermSetup}
+
+Here, \code{delta} is the true difference between the population means
+of $x_1$ and $x_2$: it's added to \code{x2} when the data is
+generated, so it controls how different the two groups really are. We
+set \code{delta <- 0}, so $H_0$ (no real difference) is true in this
+setup, and \code{xd} is the observed difference in means between $x_1$
+and $x_2$. Under $H_0$, any observed difference is due to random
+variation.
+
+
+When we randomly shuffle the pooled data \code{c(x1, x2)} 
+and split it into new groups of size $n_1$ and $n_2$, the resulting 
+groupings represent plausible outcomes under $H_0$. Repeating this 
+permutation many times allows us to build the sampling distribution 
+of the test statistic under the assumption of no group differences.
+
+
+To compute the p-value of the observed test statistic \code{xd},
+we need the \emph{sampling distribution} of the test 
+statistic under $H_0$. Permutation testing constructs this distribution 
+by repeatedly shuffling the data to simulate the null hypothesis. For a 
+single permutation, we shuffle the combined data, split it into two groups, 
+and compute the test statistic:
+\showChunk{R}{Code/hypo-perm.R}{HypoPermOnePerm}
+
+
+Each permutation represents a possible arrangement of the data
+under~$H_0$. The total number of permutations is:
+\showChunk{R}{Code/hypo-perm.R}{HypoPermFullCount}
+
+This total number of permutations is about $1.18 \times 10^{17}$,
+which is too large to exhaust. So we approximate the sampling
+distribution using a subset of random permutations.
+This is implemented in the following function:
+\showChunk{R}{Code/hypo-perm.R}{HypoPermMyPermTest}
+
+This function simulates \code{nperm} permutations, calculates the test
+statistic for each, and compares them to the observed test statistic to
+compute the p-value.
+
+Let's first apply this function to the original \code{x1} and
+\code{x2} from the setup above, where \code{delta <- 0} and $H_0$ is
+therefore true.
+\showChunk{R}{Code/hypo-perm.R}{HypoPermNullDemo}
+The resulting p-value is
+\inlnR{```cat(round(p_null, 3))```}[permnull_p]. Because $H_0$ is
+actually true here, there's no real difference for the test to
+detect, so a p-value this large is exactly what we should expect: it's
+far above any usual significance level, and we correctly fail to
+reject $H_0$. A small p-value would still be possible by chance (about
+5\% of the time, if $\alpha = 0.05$), but it's not the typical
+outcome when the null hypothesis holds.
+
+Now let's apply the permutation test again, using the same normal
+population as before, but now with a real difference between the
+groups: \code{delta <- 10}, so \code{x2} is generated with a mean 10
+units higher than \code{x1}'s.
+\showChunk{R}{Code/hypo-perm.R}{HypoPermDemo}
+
+
+The resulting p-value is
+\inlnR{```cat(p_demo)```}[permdemo_p], which quantifies the probability
+of observing a test statistic as extreme as or more extreme than the
+observed statistic under $H_0$. Because $\delta = 10$ is a large true
+difference between the groups, almost none of the 1,000 permuted
+datasets produce a difference in means as large as the observed one,
+so the p-value is near the smallest value the permutation test can
+report. Since this p-value is far below any usual significance level,
+we would reject $H_0$ and conclude that the means of the two groups are
+different.
+\end{example}
+
+
+\begin{example}[Familial clustering of certain diseases]
+\runR{Code/hypo-familial.R}{hypo-familial}
+
+Consider a study of 10 families, each with 4 relatives participating.
+Each person either shows a certain symptom (coded 1) or not (coded 0).
+We want to test whether the symptom tends to appear in clusters within
+families. In other words, do relatives share the symptom more often
+than would occur by chance?
+
+To create clustering in the simulated data, each family is given its
+own probability of the symptom, so relatives (who share a family
+probability) tend to share the symptom outcome more than unrelated
+individuals do:
+\showChunk{R}{Code/hypo-familial.R}{datagen}
+
+Here is what the data looks like:
+\inlnR{```print(head(dat))```}[dataheadout][vbox]
+
+Consider a test statistic $T$ defined as the total number of 
+within-family affected pairs. Here, an ``affected pair'' means two 
+relatives in the same family who both have symptom value 1. If a 
+family has $k$ affected members, there are $k(k-1)/2$ such pairs. We 
+sum these counts across all families to get $T$. If the symptom 
+clusters within families, $T$ will be larger than expected by chance.
+
+The code below implements the calculation of $T$:
+
+\showChunk{R}{Code/hypo-familial.R}{familyStat}
+
+Under the null hypothesis, there's no family clustering of this
+symptom, so family membership is exchangeable with the symptom
+outcome: knowing which family someone belongs to gives no information
+about whether they have the symptom. This is the same exchangeability
+idea from before, generalized from two groups to many groups, so the
+symptom labels can be randomly shuffled across all individuals
+regardless of family. For each permutation, we compute the total
+number of within-family affected pairs. The empirical distribution of
+these counts gives us a way to judge whether the observed $T$ is
+unusually large. The p-value is approximated by the proportion of
+permuted test statistics that are at least as large as the observed
+test statistic.
+
+\showChunk{R}{Code/hypo-familial.R}{familyPvalue}
+
+
+We apply the functions to the example dataset and get the observed test
+statistic and its p-value.
+
+\showChunk{R}{Code/hypo-familial.R}{application}
+
+The observed statistic is
+\inlnR{```cat(result["statistic"])```}[famobs] within-family affected
+pairs, and the permutation p-value is
+\inlnR{```cat(result["pvalue"])```}[famp]. Since this p-value is small,
+the data give evidence that the symptom clusters within families more
+than would be expected by chance.
+\end{example}
+
+
+Permutation tests rely on minimal assumptions, so they're useful when
+we don't want to assume a particular population distribution. A small
+p-value means that the observed statistic is unusual among the shuffled
+versions of the data. That gives evidence against $H_0$.
+
+The key idea isn't the shuffling itself, but what the shuffling
+represents. Under $H_0$, the labels are supposed to be arbitrary. If
+that is true, then the shuffled datasets are reasonable versions of the
+world where the null hypothesis holds. The observed dataset is then
+compared with this collection of null-world datasets. If the observed
+test statistic is near the edge of that collection, the data is
+telling us that the null explanation may not be true.
+
+
+\section{Properties of Hypothesis Tests}
+
+\subsection{Size and Power}
+
+Hypothesis tests are often judged by two properties: size and power.
+Size controls false positives. Power measures how well the test detects
+real effects.
+
+Recall that $\alpha$, the significance level, is the probability of a
+Type~I error when $H_0$ is true; this probability is also called the
+\emph{size} of the test. For instance, if $\alpha = 0.05$, then a
+valid test should falsely reject $H_0$ about 5\% of the time when
+$H_0$ is true.
+
+As before, if $\beta$ is the probability of a Type~II error, the
+\emph{power} of the test is $1 - \beta$: the probability of correctly
+rejecting $H_0$ when there's a real effect. Larger samples, larger
+true effects, and less variable data usually lead to higher power.
+
+When two tests have the same size, the test with higher power is
+usually preferred. But there's a trade-off. Reducing $\alpha$ lowers
+the chance of a false positive, but it can also make real effects
+harder to detect. Increasing the sample size is one of the most direct
+ways to gain power without raising the false positive rate, but it's
+not the only way: as the next example shows, choosing a test better
+suited to the data can also increase power at the same $\alpha$ and
+sample size.
+
+Here is another way to remember the difference. Size describes how the
+test behaves when there's nothing to find. If $H_0$ is true and
+$\alpha = 0.05$, a valid test shouldn't cry wolf too often. Power
+describes how the test behaves when there's something to find. A test
+with low power may miss a real effect, especially when the sample is
+small or the data is noisy.
+
+This is why designing a study matters before the data is collected.
+If the sample size is too small, even a real effect may be hard to
+detect. If the significance level is too strict, false positives become
+less likely, but the test may also miss more real effects. Good testing
+is therefore not only about choosing a formula. It's also about
+understanding the errors we're willing to risk.
+
+In the next example, we'll illustrate these
+concepts by comparing two common methods for two-sample comparison:
+the t-test and the Wilcoxon test (which is based on the ranks of the
+data and can be viewed as a permutation test on those ranks). Using
+simulations, we'll examine their size and power under different
+conditions and demonstrate how their performance varies.
+
+
+\begin{example}[Two-sample comparison]
+First, let's see how we can perform the tests for one pair of datasets:
+\runR{Code/hypo-2samp.R}{hypo-2samp}
+\showChunk{R}{Code/hypo-2samp.R}{demo1pair}
+
+
+Here, \code{x1} and \code{x2} represent two groups of data. The t-test assumes
+the data is normally distributed, while the Wilcoxon test is
+distribution-free, meaning it works for a wider range of data
+distributions.
+
+
+Next, we create a function \code{do1rep()} that simulates one
+experiment. This generates two groups of data, applies both tests, and
+records their p-values.
+\showChunk{R}{Code/hypo-2samp.R}{do1rep}
+
+Here, \code{delta} represents the true difference between the means
+of the two groups. When \code{delta = 0}, there's no real difference
+(null hypothesis is true). For each test, we calculate the p-value to
+assess whether to reject the null hypothesis. Running
+\code{do1rep(30, rnorm, 0)} with \code{delta = 0} gives a t-test
+p-value of \inlnR{```cat(round(demo_rep["t"], 3))```}[demoreptp] and a
+Wilcoxon p-value of
+\inlnR{```cat(round(demo_rep["wilcox"], 3))```}[demorepwp]. Both are
+well above 0.05, so neither test rejects $H_0$ here---exactly what we
+would hope for, since \code{delta = 0} means there's no real
+difference for either test to detect.
+
+To evaluate the sizes (false positive rates) of the tests, we simulate
+multiple experiments where \code{delta = 0} and calculate the proportions of
+times the tests reject $H_0$.
+\showChunk{R}{Code/hypo-2samp.R}{checkrejrate}
+
+The function \code{rowMeans(sim < 0.05)} calculates the fraction of
+times the p-value is below 0.05, representing the rejection rate for
+each test.
+
+
+We wrap the simulation into a function \code{empRejRate()} to
+compute rejection rates for different sample sizes, distributions, and
+effect sizes:
+\showChunk{R}{Code/hypo-2samp.R}{emprejratefun}
+
+Now, we compare the performance of the t-test and Wilcoxon test for
+data from different distributions (normal and Cauchy):
+\showChunk{R}{Code/hypo-2samp.R}{comparepops}
+
+Under the normal population, both tests have a size close to the
+nominal level: about \inlnR{```cat(size_normal["t"])```}[sizenormalt]
+for the t-test and \inlnR{```cat(size_normal["wilcox"])```}[sizenormalw]
+for Wilcoxon, confirming both are valid tests here. The Cauchy
+distribution has heavier tails than the normal distribution and, unlike
+the normal, has no defined mean or variance (as we saw in
+Chapter~\ref{ch:llnclt}). This hurts a mean-based test like the t-test
+much more than a rank-based test like Wilcoxon: at $\delta = 0.5$, the
+t-test's power drops to about
+\inlnR{```cat(power_cauchy["t"])```}[powercauchyt], while the Wilcoxon
+test still detects the difference about
+\inlnR{```cat(power_cauchy["wilcox"])```}[powercauchyw] of the time.
+
+
+Finally, we compute and plot the power of the tests as the effect size
+(\code{delta}) increases. We first define a sequence of effect sizes to
+try, from no difference up to a difference of one standard deviation:
+\showChunk{R}{Code/hypo-2samp.R}{deltaseq}
+
+For each effect size in this sequence, we compute the empirical
+rejection rate of both tests under the normal distribution, using
+\code{empRejRate()} from before, and plot the two resulting power
+curves together:
+\showChunk{R}{Code/hypo-2samp.R}{power-normal}
+
+We repeat the same calculation under the Cauchy distribution, so we can
+compare how the power of each test changes once the normality
+assumption no longer holds:
+\showChunk{R}{Code/hypo-2samp.R}{power-cauchy}
+
+Figures~\ref{fig:ch5:power-normal} and~\ref{fig:ch5:power-cauchy}
+show the empirical rejection rates (power) as \code{delta} increases.
+For the t-test, performance depends on the assumption of normality,
+while the Wilcoxon test is more robust under non-normal distributions
+like the Cauchy.
+
+Each figure's legend identifies the solid line as the t-test and the
+dashed blue line as the Wilcoxon test.
+\begin{figure}[H]
+\includegraphics[width=0.6\textwidth]{images/chapter_5/hypo-power-normal.pdf}
+\caption{Empirical rejection rates for normal data}
+\label{fig:ch5:power-normal}
+\end{figure}
+
+\begin{figure}[H]
+\includegraphics[width=0.6\textwidth]{images/chapter_5/hypo-power-cauchy.pdf}
+\caption{Empirical rejection rates for Cauchy data}
+\label{fig:ch5:power-cauchy}
+\end{figure}
+\end{example}
+
+\section{Multiple Testing}
+
+When we test one idea, we usually know what a ``significant result''
+means. But what happens if we test many ideas at once? Does a small
+p-value still carry the same meaning? Let us find out by running our own
+simulations.
+
+\begin{example}[20 Ineffective Drugs]
+We begin with a simple story: a laboratory screens 20 new drugs to
+see whether any of them improves a health score compared with a
+placebo. Unknown to us, none of the drugs actually works. By
+simulating this world, we can watch what happens when we run many
+independent tests in parallel.
+
+
+We first write a function that performs one full screening round,
+returning 20 p-values from 20 two-sample t-tests.
+\runR{Code/hypo-multiple.R}{hypo-multiple}
+\showChunk{R}{Code/hypo-multiple.R}{do1screen}
+
+
+Even though all drugs are useless, some p-values will be surprisingly
+small: in this one run, the smallest of the 20 p-values is
+\inlnR{```cat(round(min(pvals_demo), 3))```}[minpvaldemo], and
+\inlnR{```cat(sum(pvals_demo < 0.05))```}[countbelowdemo] of the 20
+fall below 0.05, purely by chance. To understand this more
+systematically, let's repeat the entire screening many times.
+\showChunk{R}{Code/hypo-multiple.R}{pvalues}
+
+
+A histogram provides a clear view of the behavior of p-values under pure
+noise:
+\showChunk{R}{Code/hypo-multiple.R}{hist}
+
+The shape in Figure~\ref{fig:ch5:pvalues} is roughly flat, as expected
+when every null hypothesis is true. But the more interesting question
+is: How many significant drugs appear in each experiment?
+
+\begin{figure}[H]
+\includegraphics[width=0.6\textwidth]{images/chapter_5/hypo-pvalues.pdf}
+\caption{P-values from 40,000 tests where every null hypothesis is true}
+\label{fig:ch5:pvalues}
+\end{figure}
+
+Let us count how many of the 20 p-values fall below 0.05 in each
+experiment.
+\showChunk{R}{Code/hypo-multiple.R}{sigcount}
+
+Figure~\ref{fig:ch5:sigcount} shows that although all 20 drugs are
+useless, many experiments still produce one or two ``significant''
+hits. In fact, the chance of seeing at least one false discovery is
+high:
+
+\begin{figure}[H]
+\includegraphics[width=0.6\textwidth]{images/chapter_5/hypo-sigcount.pdf}
+\caption{Relative frequency of the number of significant results in each
+20-drug experiment under pure noise}
+\label{fig:ch5:sigcount}
+\end{figure}
+
+\showChunk{R}{Code/hypo-multiple.R}{meansig}
+
+Across the 2,000 simulated screenings, the fraction with at least one
+significant drug is
+\inlnR{```cat(mean(sig_count >= 1))```}[meansigval], which closely
+matches the theoretical probability that at least one out of 20
+independent tests is significant at the 0.05 level when all null
+hypotheses are true. Under $H_0$, each test independently avoids being
+significant with probability $1 - 0.05 = 0.95$, so all 20 tests avoid
+significance with probability $0.95^{20}$, and at least one test is
+significant with probability $1 - 0.95^{20} \approx 0.6415$.
+
+This is one of the core issues of multiple testing: even when nothing
+is real, running many tests makes a false discovery likely.
+\end{example}
+
+\subsection{The Smallest P-Value}
+
+
+Every experiment has a ``best'' drug, the one with the smallest p-value.
+Let us look at that distribution.
+\showChunk{R}{Code/hypo-multiple.R}{minp}
+
+Figure~\ref{fig:ch5:minp} shows that tiny p-values (like 0.01 or
+0.005) appear quite often---even though nothing is real. This doesn't
+mean the minimum p-value is useless; indeed, there's a long history of
+using extreme values such as the smallest p-value as a valid test
+statistic, provided we take into account how many tests were performed.
+
+\begin{figure}[H]
+\includegraphics[width=0.6\textwidth]{images/chapter_5/hypo-minp.pdf}
+\caption{Smallest p-value from each 20-drug experiment under pure noise}
+\label{fig:ch5:minp}
+\end{figure}
+
+
+The problem arises when we look at many tests, take the smallest
+p-value, and then interpret it as if it came from a single test. In
+that naive view, we're ignoring the fact that we gave ourselves many
+chances to see something ``exciting.'' One way to correct for this is
+the Bonferroni method, which we try next.
+
+
+\subsection{When Some Effects Are Real}
+
+Now let's simulate a world where 4 out of the 20 drugs truly have an
+effect: their health score has a true mean of \code{effect = 0.5}
+(with \code{sd = 1}, this is a moderate, half-standard-deviation
+shift), while the other 16 drugs remain useless, as before.
+
+\showChunk{R}{Code/hypo-multiple.R}{do1screen_alt}
+
+We compare two strategies:
+
+\begin{enumerate}
+\item Uncorrected testing: p-value $< 0.05$
+\item Bonferroni correction: p-value $< 0.05/20$
+\end{enumerate}
+
+Bonferroni correction divides the significance level by the number of
+tests (20 here), so each individual test needs a much smaller p-value
+to be declared significant. We simulate many experiments and count
+true positives (TP) and false positives (FP).
+
+\showChunk{R}{Code/hypo-multiple.R}{altresults}
+
+Averaged over the 1,000 simulated experiments, uncorrected testing
+finds about
+\inlnR{```cat(avg_results["TP_unc"])```}[avgtpunc] of the 4 real
+effects but also picks up about
+\inlnR{```cat(avg_results["FP_unc"])```}[avgfpunc] false positives
+among the 16 useless drugs. Bonferroni correction finds only about
+\inlnR{```cat(avg_results["TP_bonf"])```}[avgtpbonf] of the real
+effects, but nearly eliminates false positives, with about
+\inlnR{```cat(avg_results["FP_bonf"])```}[avgfpbonf] on average.
+Uncorrected tests find many real effects but also many fake ones.
+Bonferroni greatly reduces false positives, but also misses some real
+drugs. The simulation reveals a simple trade-off:
+
+Reducing false discoveries often reduces real discoveries too.
+
+
+
+From these experiments, we discovered:
+\begin{itemize}
+\item A p-value only behaves as expected when we test one hypothesis.
+\item When we test many hypotheses, small p-values appear even if nothing is
+  true.
+\item The question ``What is the chance that at least one test shows
+  significance?'' becomes central.
+\item Adjustments like Bonferroni reduce false discoveries but make true
+  effects harder to detect.
+\end{itemize}
+
+\section{Summary}
+
+In this chapter we introduced the logic of hypothesis testing: state a
+null hypothesis, work out what the data would look like if that null
+were true, and check whether the observed data is unusual enough to
+reject it. We defined test statistics and p-values, and clarified a
+common misunderstanding---a p-value measures how surprising the data
+is under $H_0$, not the probability that $H_0$ is true. We also
+introduced Type~I and Type~II errors and the related notions of size
+and power, which describe how often a test is wrong in each direction.
+The t-test and Wilcoxon comparison showed that power depends not just
+on sample size but on how well a test matches the data: the rank-based
+Wilcoxon test kept much more power than the t-test when the data had
+heavy tails. Through the Lady Tasting Tea, permutation-based two-group
+comparison, and familial clustering examples, we saw how permutation
+tests use shuffling or simulation to build the sampling distribution of
+a test statistic under $H_0$, without relying on strong distributional
+assumptions.
+Finally, the multiple testing examples showed that when many
+hypotheses are tested at once, small p-values appear even when nothing
+is real, and that corrections such as Bonferroni trade fewer false
+discoveries for fewer true ones. In the next chapter, we shift our
+attention to estimation---how to infer unknown quantities from data
+and measure how accurate these estimates are.
+
+\section{Problems}
+
+\begin{exercise}
+Suppose you flip a coin 20 times and observe 16 heads. Build a
+simulation in R where the coin is fair, using \lstinline{rbinom()} or
+\lstinline{sample()}. Estimate the probability of seeing 16 or more
+heads by chance. Then repeat the experiment with 14, 15, 17, and 18
+heads. How does the simulated p-value change?
+\end{exercise}
+
+\begin{exercise}
+Modify \lstinline{myPermTest()} from the two-group permutation example
+  to test whether two groups have the same variance rather than the
+  same mean (hint: use a statistic based on the ratio or difference of
+  sample variances). Apply it to two samples with equal means but
+  different variances.
+\end{exercise}
+
+\begin{exercise}
+Repeat the t-test-vs-Wilcoxon power comparison, but generate the data
+  from a $t$-distribution with 3 degrees of freedom instead of Cauchy.
+  Is the power gap between the two tests as large as it was for
+  Cauchy? Why might that be?
+\end{exercise}
+
+\begin{exercise}
+Repeat the pure-noise screening simulation from the ``20 Ineffective
+  Drugs'' example (function \lstinline{do1screen()}), but with
+  $m = 100$ independent t-tests per experiment instead of 20. What is
+  the probability that at least one test is significant at the 0.05
+  level? Compare with $m = 20$. What do you notice?
+\end{exercise}
+
+\begin{exercise}
+In the pure-noise screening simulation from the ``20 Ineffective
+  Drugs'' example, modify \lstinline{do1screen()} to record the
+  t-statistic (\lstinline{t.test(...)$statistic}) instead of the
+  p-value, and record the largest one (in absolute value) from each
+  experiment. Plot its distribution. Why does the largest value tend
+  to be quite large even when nothing is happening?
+\end{exercise}
+
+\begin{exercise}
+Modify the ``When Some Effects Are Real'' simulation (function
+  \lstinline{do1screen_alt()}) by changing the effect size to 0.2,
+  0.5, and 1.0. How do these affect true and false discoveries under
+  the uncorrected and Bonferroni approaches?
+\end{exercise}
+
+\begin{exercise}
+Create your own ``multiple testing world.'' Choose a number of tests
+  $m$ (for example, 50), decide how many will have a true effect (for
+  example, 5 out of 50), and pick a way to generate the data, such as
+  many regressions, many correlations, or many group comparisons.
+  Simulate the data, run all $m$ tests, and record which ones are
+  declared significant, both without correction and with a Bonferroni
+  correction. Repeat the whole experiment many times and study the
+  distribution of the number of true and false discoveries. What is
+  the biggest surprise you observe?
+\end{exercise}
+
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-command-extra-options: "-shell-escape"
+%%% TeX-engine: xetex
+%%% TeX-master: "../sidsmain.tex"
+%%% End:

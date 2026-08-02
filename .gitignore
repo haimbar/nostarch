@@ -1,3 +1,5 @@
+ToDo.md
+
 ## Core latex/pdflatex auxiliary files:
 *.aux
 *.lof
@@ -24,6 +26,7 @@
 
 ## Generated if empty string is given at "Please type another file name for output:"
 sidsmain.pdf
+sidsmain-overleaf.pdf
 
 ## Bibliography auxiliary files (bibtex/biblatex/biber):
 *.bbl
@@ -280,5 +283,46 @@ TSWLatexianTemp*
 *.config
 *debug.txt
 serverPID*.txt
+serverslist.txt
 
+# specific folders and files
 tmp/
+tmpoverleaf/
+old/
+images/probability-Simpson-plots.pdf
+proposal/proposal.pdf
+.hidden
+generated/
+images/chapter_1/
+images/chapter_2/
+images/chapter_3/
+images/chapter_4/
+images/chapter_5/
+images/chapter_6/*
+!images/chapter_6/jars.pdf
+images/chapter_7/
+images/chapter_8/
+images/chapter_9/
+images/chapter_regression/
+uconn-pcs/syllabus.pdf
+cclt/syllabus-23.pdf
+uconn-pcs/projects.pdf
+
+.RData
+**/.Rhistory
+others/
+*.Rproj
+uconn-pcs/slides/Probability/.hide.sh
+uconn-pcs/slides/Probability/Probability.pdf
+uconn-pcs/slides/Probability/probability_code.R
+uconn-pcs/slides/Probability/project/Project_probability.pdf
+uconn-pcs/slides/Probability/homework/hw.pdf
+
+__pycache__/
+
+ForceCache
+
+uconn-pcs/
+.vscode/
+inst.txt
+
