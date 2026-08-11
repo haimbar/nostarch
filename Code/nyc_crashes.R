@@ -424,8 +424,12 @@ pdf("images/chapter_9/severity_locations.pdf",
 #label===severity_map
 ## Load the city's official borough boundaries (NYC Open Data) so the
 ## crash locations can be read against real coastlines, not a blank
-## grid.
+## grid. The official file has ~75,000 coastline vertices, far more
+## detail than is visible at print size, which bloats the PDF and
+## makes it slow to typeset; simplify before plotting.
 boroughs <- st_read("Data/nyc_borough_boundaries.geojson", quiet = TRUE)
+sf_use_s2(FALSE)
+boroughs <- st_simplify(boroughs, dTolerance = 0.0005, preserveTopology = TRUE)
 
 ## Correct for the longitude/latitude scale mismatch at this latitude,
 ## so the maps are not visibly stretched.
