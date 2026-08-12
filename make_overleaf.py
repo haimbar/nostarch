@@ -323,12 +323,12 @@ def transform_all_tex_files() -> None:
 # ── \showChunk pre-extraction ───────────────────────────────────────────────
 #
 # \showChunk's underlying \writeChunk macro re-scans its whole source file,
-# line by line, via a slow TeX-native loop, and (unlike every other command
-# in runcode.sty) skips the scan if generated/<file>-<label>.txt already
-# exists. Pre-extracting every chunk here means that file is already in
-# place before xelatex ever runs \writeChunk, both for our own local
-# compile check and for every future "Recompile" an editor clicks on
-# Overleaf itself.
+# line by line, via a slow TeX-native loop, unless generated/<file>-<label>.txt
+# is already cached. In the "cache" mode this project's runcode.sty loads
+# under (see patch_sidsmain), writeChunk trusts an existing generated/ file
+# outright with no subprocess call at all — so pre-extracting every chunk
+# here means the Overleaf compile (and our own local compile check) never
+# spends time re-scanning, and never spawns python3 to check staleness.
 
 
 def find_show_chunk_calls(text: str) -> list:
