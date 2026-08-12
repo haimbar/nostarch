@@ -322,6 +322,13 @@
 
 \NewDocumentCommand{\writeChunk}{m m O{label===} O{===end}} {
   \IfFileExists{#1}{
+    % Skip the scan below if this chunk was already extracted earlier in
+    % this compile run (writeChunk has no way to tell whether #1 changed
+    % since generated/*.txt was written, but make clean / make build
+    % already remove generated/*.txt at the start of every build, so
+    % reusing it here only avoids rescanning #1 on repeated xelatex
+    % passes within the same run, not across builds).
+    \IfFileExists{\generated/#1-#2.txt}{}{
     \immediate\write18{python3 -c "import os; os.makedirs(os.path.join('\generated', os.path.dirname('#1')), exist_ok=True)"}%
     \endlinechar=-1
     \def\printcode{0} % don't print until we see the begin-block string
@@ -345,6 +352,7 @@
     \ifnum\printcode=0
       \textcolor{red}{\textbf{Label $#2$ not found in #1}}
     \fi
+    }
   }{\textcolor{red}{\textbf{Source file $#1$ not found}}}
 }
 

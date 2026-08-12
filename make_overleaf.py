@@ -320,6 +320,114 @@ def transform_all_tex_files() -> None:
                 print(f"  chapters/{tex_file.name}")
 
 
+# ── \showChunk pre-extraction ───────────────────────────────────────────────
+#
+# \showChunk's underlying \writeChunk macro re-scans its whole source file,
+# line by line, via a slow TeX-native loop, and (unlike every other command
+# in runcode.sty) skips the scan if generated/<file>-<label>.txt already
+# exists. Pre-extracting every chunk here means that file is already in
+# place before xelatex ever runs \writeChunk, both for our own local
+# compile check and for every future "Recompile" an editor clicks on
+# Overleaf itself.
+
+
+def find_show_chunk_calls(text: str) -> list:
+    """Find all \\showChunk{lang}{file}{label}[begin][end] calls.
+
+    Returns a list of (file, label, begin_marker, end_marker) tuples.
+    """
+    calls = []
+    cmd = "\\showChunk{"
+    i = 0
+    n = len(text)
+    while True:
+        idx = text.find(cmd, i)
+        if idx == -1:
+            break
+        j = idx + len(cmd) - 1  # points to the opening '{' of arg 1
+        end1 = find_closing_brace(text, j)
+        if end1 == -1:
+            i = idx + 1
+            continue
+        after = end1 + 1
+        if after >= n or text[after] != "{":
+            i = idx + 1
+            continue
+        end2 = find_closing_brace(text, after)
+        if end2 == -1:
+            i = idx + 1
+            continue
+        fname = text[after + 1 : end2]
+        after = end2 + 1
+        if after >= n or text[after] != "{":
+            i = idx + 1
+            continue
+        end3 = find_closing_brace(text, after)
+        if end3 == -1:
+            i = idx + 1
+            continue
+        label = text[after + 1 : end3]
+        after = end3 + 1
+        begin_marker, after = read_optional_arg(text, after)
+        end_marker, after = read_optional_arg(text, after)
+        begin_marker = (begin_marker or "label===").strip()
+        end_marker = (end_marker or "===end").strip()
+        calls.append((fname, label, begin_marker, end_marker))
+        i = after
+    return calls
+
+
+def extract_chunk(source_path: Path, label: str, begin_marker: str, end_marker: str) -> str:
+    """Python re-implementation of writeChunk's line-scan logic."""
+    lines_out: list[str] = []
+    printcode = 0
+    with source_path.open(encoding="utf-8", errors="replace") as f:
+        for raw_line in f:
+            line = raw_line.rstrip("\n")
+            if printcode == 1:
+                if end_marker in line:
+                    printcode = -1
+                else:
+                    lines_out.append(line)
+            if begin_marker in line:
+                chunkname = line.split(begin_marker, 1)[1].strip()
+                if chunkname == label:
+                    printcode = 1
+    return "\n".join(lines_out) + ("\n" if lines_out else "")
+
+
+def pre_extract_chunks() -> None:
+    """Extract every \\showChunk target into generated/<file>-<label>.txt."""
+    calls = []
+    sidsmain = TMPOVERLEAF / "sidsmain.tex"
+    if sidsmain.exists():
+        calls += find_show_chunk_calls(sidsmain.read_text(encoding="utf-8"))
+    chapters_dir = TMPOVERLEAF / "chapters"
+    if chapters_dir.exists():
+        for tex_file in sorted(chapters_dir.glob("*.tex")):
+            calls += find_show_chunk_calls(tex_file.read_text(encoding="utf-8"))
+
+    seen = set()
+    n_written = 0
+    for fname, label, begin_marker, end_marker in calls:
+        key = (fname, label)
+        if key in seen:
+            continue
+        seen.add(key)
+        source_path = TMPOVERLEAF / fname
+        if not source_path.exists():
+            print(f"  [skip] {fname} not found (chunk {label!r})")
+            continue
+        out_path = TMPOVERLEAF / "generated" / f"{fname}-{label}.txt"
+        out_path.parent.mkdir(parents=True, exist_ok=True)
+        out_path.write_text(
+            extract_chunk(source_path, label, begin_marker, end_marker),
+            encoding="utf-8",
+        )
+        n_written += 1
+    print(f"  pre-extracted {n_written} showChunk targets ({len(calls)} calls, {len(calls) - n_written} duplicates)")
+
+
 # ── Compilation ────────────────────────────────────────────────────────────────
 
 
@@ -426,12 +534,15 @@ def main() -> None:
     print("\n── Step 2: inline cached outputs ─────────────────────────────────────")
     transform_all_tex_files()
 
-    print("\n── Step 3: compile PDF ───────────────────────────────────────────────")
+    print("\n── Step 3: pre-extract showChunk targets ─────────────────────────────")
+    pre_extract_chunks()
+
+    print("\n── Step 4: compile PDF ───────────────────────────────────────────────")
     if not compile_pdf():
         sys.exit("Compilation failed — aborting.")
 
     if args.dest:
-        print("\n── Step 4: rsync to Overleaf ─────────────────────────────────────────")
+        print("\n── Step 5: rsync to Overleaf ─────────────────────────────────────────")
         if not rsync_to_overleaf(args.dest, dry_run=args.dry_run):
             sys.exit("rsync failed.")
     else:
