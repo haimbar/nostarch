@@ -9,7 +9,7 @@
 pad <- 0.02
 xlim <- c(0.6 - pad, 9.1 + pad)
 ylim <- c(-0.1 - pad, 1.05 + pad)
-pdf("images/chapter_6/jars.pdf", width = 7.4,
+pdf("images/static/jars.pdf", width = 7.4,
     height = 7.4 * diff(ylim) / diff(xlim))
 par(mar = c(0, 0, 0, 0))
 plot(0, 0, xlim = xlim, ylim = ylim, xlab = "",
