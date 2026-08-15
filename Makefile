@@ -33,8 +33,8 @@ build: clean
 	# Sync barrier: block until R has finished all queued work before caching results
 	python3 -c 'from talk2stat.talk2stat import client; client("./","R","``` invisible(NULL) ```")'
 	touch ForceCache
-	bibtex sidsmain
-	makeindex sidsmain
+	-bibtex sidsmain
+	-makeindex sidsmain
 	xelatex -shell-escape sidsmain.tex
 	xelatex -shell-escape sidsmain.tex
 
