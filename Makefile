@@ -29,7 +29,7 @@ build: clean
 	python3 -c 'from talk2stat.talk2stat import server,client; server("./","R") if not client("./","R","``` ```") else print("server already running")'
 	python3 wait_for_rserver.py
 #	latexmk -pdflatex='xelatex -shell-escape %O %S' -pdf sidsmain.tex
-	xelatex -shell-escape --no-pdf sidsmain.tex
+	xelatex -interaction=nonstopmode -shell-escape --no-pdf sidsmain.tex
 	# Sync barrier: block until R has finished all queued work before caching results
 	python3 -c 'from talk2stat.talk2stat import client; client("./","R","``` invisible(NULL) ```")'
 	touch ForceCache
