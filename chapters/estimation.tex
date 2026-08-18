@@ -1,54 +1,825 @@
-\hypertarget{ch:estimation}{%
-\chapter{Estimation: A Hide-and-Seek Game with the Nature}\label{ch:estimation}}
+\chapter{Estimation: A Hide-and-Seek Game}
+\label{ch:estimation}
 
-First paragraph needs to be something highlighting ...
-(test edits on overleaf).
+Imagine trying to guess the average height of all 12-year-old boys in the
+United States. You could measure a few hundred children, but you could
+never measure them all. Yet governments, scientists, businesses, and sports
+analysts make this kind of guess every day. They use limited data to learn
+about quantities that are hidden from view, such as averages, percentages,
+or relationships between variables. This challenge is the heart of
+estimation. It's a hide-and-seek game that we play with nature: the
+answers we want are hidden, and the sample provides clues about where
+they might be. In the previous chapter, we focused on deciding whether
+an observed effect could be explained by chance alone. Now we turn to a
+different question: if a quantity exists, how can we estimate its value
+and how confident should we be in our estimate? In this chapter, we'll
+learn how to construct estimators and judge their quality using bias
+and mean squared error, use maximum likelihood to pick good estimates,
+build confidence intervals to quantify our uncertainty, and use the
+bootstrap to approximate that uncertainty when large-sample theory
+falls short.
+
 
 \section{Introduction}
-Consider this game setup. We have a random sample of size \(n\) from a normal
-distribution \(N(\mu, 1)\), where \(\mu\) is unknown, and we want to estimate \(\mu\)
-with this sample. An estimator is a quantity constructed from the observed
-sample, that is, it is a statistic. What estimators can we construct? How do we
-assess which is better?
+\label{sec:intro}
 
-\input{Rnw/est-hide}
-
-The location parameter of a distribution controls the location of the
-distribution.
-
-
-\section{Seeking strategies}
-
-To play the hide-and-seek game better, we need to select a good strategy. From
-the examples in the last section, it seems that which strategy is better depends
-on the underlying truth, which is unknown.
+Let's set up a simple hide-and-seek game in a concrete setting. 
+Suppose a population is modeled by a normal distribution with an 
+unknown location parameter~$\mu$, which we may think of as the true 
+average height of all 12-year-old boys in the United States. To keep the 
+focus on the core ideas of estimation rather than algebraic details, we 
+work with a simplified version of this model and assume the population 
+variance~$\sigma^2$
+is known; without loss of generality, we set $\sigma^2 = 1$. We 
+observe a random sample of size $n$ and use it to learn about the hidden 
+value of~$\mu$.
 
 
-Let's start with an example.
-\begin{illustration}[Likelihood in guessing jars]
-  % \indexExSix{Computing ranks in the presence of ties}
-\label{example:has-jars}
-There are 9 jars. The first jar has 9 red and 1 green balls; the second jar has
-8 red and 2 green balls; $\cdots\cdots$; the 9th jar has 1 red and 9 green
-balls. Now, one jar is randomly selected, from which one ball is randomly
-selected, and the ball is red. Which jar was the one that was selected?
+The following code generates such a sample:
+
+\showChunk{R}{Code/est-hide.R}{setup}
+
+\runR{Code/est-hide.R}{hide}
+
+The summary statistics for the observed sample are:
+\inlnR{```print(summary(x))```}[estsummx][vbox]
+
+
+An estimator of $\mu$ is required to be computable from the observed data and
+shouldn't depend on any unknown quantities. Any number that can be computed
+solely from the sample is called a \emph{statistic}. \index{statistic}
+When a statistic is used to estimate a population quantity, it's called an
+\emph{estimator}. \index{estimator} Common examples include the 
+\emph{mean} (the average of the observed values), the \emph{median} 
+(the middle value when the observed data is sorted), the \emph{range}
+(the difference between the largest and smallest observations), and the 
+\emph{midrange} (the average of the maximum and minimum values in the sample).  
+With these tools in place, several natural questions arise:
+\begin{enumerate}
+\item What properties are desirable for an estimator?
+\item When multiple estimators are available for the same target, how do we 
+      assess which one is better?
+\item How do we assess the uncertainty of an estimator?
+\end{enumerate}
+
+
+\section{Point Estimation: Seeking Strategies}
+
+For a normal distribution, the location parameter $\mu$ equals the mean and
+median. Two natural ways to estimate the center are the sample mean and the
+sample median. A third possibility is the midrange, the average of the smallest
+and largest observations. Each estimator uses different parts of the data,
+so they can behave differently in practice. 
+
+When an estimator is computed for a given sample, its value is called an
+estimate\index{estimate}. That is, an estimator is a strategy and an estimate is
+its realization given a dataset. (Note that the term \emph{point estimate} is
+often used to emphasize that the estimate is a single number, as opposed to a
+range of plausible values.)
+
+
+The three estimates based on the observed sample are obtained by:
+\showChunk{R}{Code/est-hide.R}{estimates}
+Their values are \inlnR{```cat(round(estimates[1], 3))```}[est1],
+\inlnR{```cat(round(estimates[2], 3))```}[est2], and
+\inlnR{```cat(round(estimates[3], 3))```}[est3], respectively.
+
+% Check-in: Which estimator would you expect to perform well if the
+% data can include extreme outliers? Explain briefly.
+
+
+Which of the three estimators is the best? In this game, Nature knows the true
+value of $\mu$, so it can compare the estimation errors across the three
+estimates. Compared with the true $\mu$, the squared errors of the three
+estimates are obtained by:
+\showChunk{R}{Code/est-hide.R}{error}
+Their values are \inlnR{```cat(round(err[1], 3))```}[esterr1],
+\inlnR{```cat(round(err[2], 3))```}[esterr2], and
+\inlnR{```cat(round(err[3], 3))```}[esterr3], respectively.
+
+
+When we compare different methods of estimating $\mu$, the comparison only
+applies to the specific data sample we're looking at. A method that is usually
+good might give worse results than a ``bad'' method just by chance for that
+specific sample.  To assess the quality of an estimator, we can investigate its
+properties; after all, an estimator is just a formula or rule that uses a random
+sample to estimate something. Because the estimator depends on random data, it's
+also random. Here are some properties about estimators:
+\begin{enumerate}
+\item If the average result of an estimator (over many random samples) is equal
+  to the true value we're trying to estimate, then this estimator is
+  \emph{unbiased}\index{estimator!unbiased}.  Mathematically, this is often
+  written as $\operatorname{E}(\hat\mu) = \mu$, where
+  $\operatorname{E}(\cdot)$ is the mean operator, which returns the
+  mean of the random quantities in the parentheses. Here
+  $\operatorname{E}(\hat\mu)$ gives the mean of $\hat\mu$ over all
+  possible random samples.
+\item The \emph{mean squared error (MSE)}\index{mean squared error} measures how
+  far, on average, the estimator's result is from the true target in
+  squared distance. It combines
+  both the error (or bias) and how spread out the estimates are. The formula is
+  $\operatorname{E}[(\hat\mu - \mu)^2]$.
+  An estimator with a smaller MSE than another estimator is more
+  \emph{efficient}\index{estimator!efficient} than the other one, because it
+  is closer to the truth in squared distance on average.
+\end{enumerate}
+
+Most of the theoretical properties of an estimator are studied asymptotically,
+that is, assuming that the sample size goes to infinity. For finite
+sample sizes, their properties are easily investigated via
+hide-and-seek games, or simulations. In
+each simulation setting, we set up the hide-and-seek game and play the game
+repeatedly for a large number of replicates. The bias and the MSE of an
+estimator can be approximated by the sample averages from the
+simulated replicates.
+
+
+\subsection{Evaluating Estimators}
+
+Now we play the game many times in a row. In each repetition, we play
+hide-and-seek and obtain the squared errors of all candidate estimators.
+
+\begin{example}[Hide-and-seek: Normal population]
+\label{ex:hs:norm}
+\runR{Code/est-hide-norm.R}{hide-norm}
+We first set up the game where the data in each replication are generated from a
+normal distribution with location $\mu$ and variance~1.
+\showChunk{R}{Code/est-hide-norm.R}{do1est}
+
+
+The function \lstinline{do1est} generates one sample of size \lstinline{n} from
+the normal distribution with location parameter~$\mu$ and collects three
+estimates of $\mu$. Keeping the estimates themselves is useful because we can
+use them later for plots. To compare estimators, we also need squared
+errors, so we wrap \lstinline{do1est} inside \lstinline{do1rep}.
+\showChunk{R}{Code/est-hide-norm.R}{do1rep}
+
+
+Try both functions a few times, for example, with sample size
+\lstinline{n = 50}, to see what they return.
+\showChunk{R}{Code/est-hide-norm.R}{tryonce}
+(Recall the R uses vectorized code, so \lstinline{(est-mu)} subtracts
+$\mu$ from each of the three estimators, in one step.)
+
+Now we play the game repeatedly for 1000 times, each with sample
+size \lstinline{n = 20} and see which estimator performs best on
+average.
+\showChunk{R}{Code/est-hide-norm.R}{manygames}
+The results are
+\inlnR{```print(round(rowMeans(sim), 3))```}[estrowmeans1][vbox]
+The first estimator, the sample mean, is a clear winner: it has the
+smallest MSE of the three. This makes sense for normally distributed
+data, since the sample mean uses every observation, while the median
+only uses the middle value's rank and the midrange only uses the two
+most extreme observations, throwing away most of the sample. The
+sample median comes next, and the third estimator, the sample
+midrange, is the poorest among the three.
+\end{example}
+
+
+Would the ordering be always like this? Recall that the game here had
+data generated from a normal distribution. One would guess that the
+true data generating scheme
+may affect which estimator is the best or most efficient.
+
+
+\begin{example}[Hide-and-seek: Cauchy population]
+\label{ex:hs:cauchy}
+\runR{Code/est-hide-cauchy.R}{hide-cauchy}
+Now let's generate data from the Cauchy distribution, which has
+heavier tails than the normal distribution. For a heavier-tailed
+distribution, we're more likely to
+observe extreme-valued observations.
+
+
+It is useful to adapt the \lstinline{do1rep} function so that it can take an
+arbitrary distribution as input to generate data.
+\showChunk{R}{Code/est-hide-cauchy.R}{do1rep}
+The argument \lstinline{datagen} is assumed to be a function with two inputs:
+\lstinline{n} for sample size and \lstinline{mu} for a location parameter. When
+\lstinline{datagen} is \lstinline{rnorm}, this function reduces to the version
+in the last Example~\ref{ex:hs:norm}.
+
+
+Now we can try the updated \lstinline{do1rep} function out with data from a
+Cauchy distribution, which is the same as the $t$ distribution with~1 degree of
+freedom.
+\showChunk{R}{Code/est-hide-cauchy.R}{tryonce}
+Then we play the game 1000 times again and check the MSE of three
+estimators from the 1000 replicates.
+\showChunk{R}{Code/est-hide-cauchy.R}{manygames}
+The results are
+\inlnR{```print(round(rowMeans(sim.t), 3))```}[estrowmeans2][vbox]
+So, for this experiment, the second estimator, sample median, is the best among
+the three.
+
+The code makes it easy to compare the three estimators for data generated
+from $t$ distributions with other degrees of freedom, as you'll explore
+in the problems at the end of this chapter.
+\end{example}
+
+
+The midrange estimator appears poor in both examples. This is intuitive since it
+uses only the two extreme observations, which are far away from the parameter we
+are trying to estimate. Would it ever be a good estimator in some situations?
+
+\begin{example}[Hide-and-seek: Uniform population]
+\runR{Code/est-hide-unif.R}{hide-unif}
+The \lstinline{do1rep} is so general that we can easily run the comparison of
+estimators in any data generation scheme. This time we generate data from a
+uniform distribution centered at $\mu$ with a bandwidth of 20.
+\showChunk{R}{Code/est-hide-unif.R}{manygames}
+The results are
+\inlnR{```print(round(rowMeans(sim.u), 3))```}[estrowmeans3][vbox]
+So, for this experiment, the third estimator, sample midrange, is the best among
+the three. It uses only two extreme observations, but what it uses contains
+all the information about the location parameter $\mu$ in this setting.
+\end{example}
+
+
+We've now compared mean squared error across all three games. To visualize
+the estimates themselves, not just their squared errors, we write a more
+general function. Earlier, \lstinline{do1est} and \lstinline{do1rep} were
+hard-coded to sample from a normal distribution. Here we generalize that
+idea by adding a \lstinline{datagen} argument: a data generator function,
+so the same code can replay any of the three games.
+\showChunk{R}{Code/est-hide-norm.R}{gamefuns}
+
+A \lstinline{datagen} function takes a sample size \lstinline{n} and a
+location parameter \lstinline{mu}, and returns a random sample. For
+normal data, for example, \lstinline{datagen} could be
+\lstinline{function(n, mu) rnorm(n, mean = mu, sd = 1)}; the Cauchy and
+uniform games above each used their own version of the same idea.
+
+The plotting function draws one shape for each estimator. At any given
+height (error value), the width of the shape shows how many estimates
+landed near that value: wider means more estimates landed there,
+narrower means fewer.
+\showChunk{R}{Code/est-hide-norm.R}{plotfun}
+
+
+Finally, we define the three concrete \lstinline{datagen} functions
+(one each for normal, Cauchy, and uniform data), store the estimate
+errors from each game, and draw the three panels.
+\showChunk{R}{Code/est-hide-norm.R}{violinplot}
+
+
+Figure~\ref{fig:ch6:violin-games} puts all three games side by side,
+using what's called a \emph{violin plot}\index{violin plot}: a mirrored
+density shape showing where values are concentrated, with the individual
+simulated estimates jittered underneath as small dots. The top panel is
+normal data, the middle panel is Cauchy data, and the bottom panel is
+uniform data. Note that the vertical scale of each panel is different!
+Each shape shows where the estimates landed across many simulated
+samples. The dashed line marks zero error, which means the estimate
+landed exactly on the true value that Nature hid from us. A taller,
+wider shape means the estimates moved around more.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]%
+{images/chapter_6/estimator_violin_by_game.pdf}
+\caption{Estimation errors from repeated hide-and-seek games}
+\label{fig:ch6:violin-games}
+\end{figure}
+
+
+It would be nice if one estimator were always the best regardless of the true
+data-generating scheme. Such an estimator may not, however, exist.
+
+\subsection{Maximum Likelihood Estimator}
+To play the hide-and-seek game better, pick a strategy that makes the
+observed data plausible. The idea of maximum likelihood estimation is
+simple: choose the parameter value that makes the observed data most
+likely. Which strategy is best depends on how the data was generated,
+which we usually don't know, but maximum likelihood often produces
+highly efficient estimates under broad conditions.
+
+
+Let's start with a simple example.
+\begin{example}[Likelihood in guessing jars]
+\label{ex:has-jars}
+There are nine jars. The first jar has nine red balls and one green ball; the
+second jar has eight red balls and two green balls; $\cdots\cdots$; the ninth
+jar has one red ball and nine green balls. A jar is selected uniformly at
+random, and then one ball
+is drawn uniformly at random from that jar. Suppose the ball drawn is red.
+Which jar is the most likely to have been selected?
+
+
+Figure~\ref{fig:ch6:jars} shows the nine jars. Each jar is a candidate
+explanation for the red ball we observed: it tells us the probability of
+drawing red if that jar were the one selected. In other words, the nine jars
+are the nine possible likelihoods, and our job is to find the jar (the
+probability) under which the observed color is most likely.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{images/static/jars.pdf}
+\caption{The nine jars, each with a different mix of red and green balls;
+red squares represent red balls and green squares represent green balls.}
+\label{fig:ch6:jars}
+\end{figure}
 
 There are nine possibilities. If the selected jar were the first one, the
 probability that a randomly selected ball is red is 9/10. If the selected jar
 were the second one, the probability that a randomly selected ball is red is
-8/10. Continue until the 9th jar. With this calculation, which jar should we
+8/10. Continue until the ninth jar. With this calculation, which jar should we
 guess?
 
-The first one!
-\end{illustration}
 
-The principle we use here is the so-called maximum likelihood estimation. The
-unknown true has 9 possibilities. We choose the one that gives the highest
-likelihood of observing a randomly selected ball being red.
+The first one!
+\end{example}
+
+
+The principle that we use here is the so-called \emph{maximum likelihood
+estimation}\index{maximum likelihood estimation}. The \emph{parameter
+space}\index{parameter space}, that is, the collection of all possible
+values of the parameter, consists of only nine jars. We choose the one that
+gives the highest likelihood of observing a randomly selected ball being red.
+
+
+For problems with continuous parameter spaces, the principle remains the
+same. We compute the joint density of the observed sample as a function of the
+parameters, and call this function the \emph{likelihood}\index{likelihood}
+function. Then we maximize the likelihood with respect to the parameters. The
+resulting maximizer is the \emph{maximum likelihood estimator (MLE)} of the
+parameters. In R, a convenient function for finding MLE for univariate
+distributions is \lstinline{fitdistr} in package \lstinline{MASS}.
+
+
+\begin{example}[Maximum likelihood estimator]
+\label{ex:mle}
+\runR{Code/est-mle-binom.R}{mle-binom}
+Suppose a basketball player takes $20$ free throws during practice and
+makes $16$ of them. We would like to estimate the player's true free-throw
+success probability $p$.
+
+One possible guess is $p = 0.50$, meaning that the player makes about half
+of all free throws. Another possibility is $p = 0.80$. Which value is more
+believable given the observed data?
+
+The idea of maximum likelihood estimation is simple: choose the parameter
+value that makes the observed data most likely. For a binomial model, the
+likelihood of observing $16$ successful shots out of $20$ attempts is
+\[
+  L(p) = \binom{20}{16} p^{16}(1-p)^4 .
+\]
+
+We can evaluate this expression for many possible values of $p$ between
+$0$ and $1$ and see which one gives the largest likelihood. Because
+the log transformation is monotonically increasing, the solution is the
+same when we maximize the log-likelihood instead:
+\[
+  \log L(p) = \log\binom{20}{16} + 16\log(p) + 4\log(1-p).
+\]
+\showChunk{R}{Code/est-mle-binom.R}{loglik}
+
+Finally, we plot the log-likelihood curve and mark the
+maximum-likelihood estimate with a dashed vertical line.
+\showChunk{R}{Code/est-mle-binom.R}{plotloglik}
+
+Figure~\ref{fig:ch6:loglik-binom} shows the log-likelihood as a function of
+$p$ for the observed data (16 successes out of 20). The dashed vertical line
+marks the maximum-likelihood estimate.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.7\textwidth]{images/chapter_6/loglik_binom.pdf}
+\caption{Log-likelihood for the binomial example (16/20), with the
+maximum-likelihood estimate at $\hat p = 0.80$ marked by a dashed line}
+\label{fig:ch6:loglik-binom}
+\end{figure}
+
+% Check-in: Which value of $p$ makes the observed data most likely?
+% (Hint: compare likelihood values at a few candidate p's.)
+% Answer: The likelihood is highest near $p=0.80$, which is the
+% observed proportion of successes.
+
+The largest likelihood occurs when $p$ is near
+\inlnR{```cat(phat[1])```}[phat]. In fact, for this problem, the
+MLE is exactly $\hat p = 16/20 = 0.80$.
+
+
+This result matches our intuition. A player who made $16$ out of $20$ shots
+is much more likely to have a true success probability near $80\%$ than near
+$50\%$. This example illustrates a central idea in estimation: good parameter
+estimates are values that make the observed data look plausible.
+\end{example}
+
+In more advanced texts, you'll learn that the MLE is often the most
+efficient estimator under fairly general regularity conditions. However,
+this also means that when these regularity conditions are violated, the
+MLE may no longer be the most efficient estimator.
 
 \section{Uncertainty}
+So far, every estimate we've computed---the sample mean, the MLE, and
+so on---has been a single number called a \emph{point
+estimate}\index{point estimate}: our best single guess at the unknown
+parameter. A point estimate on its own doesn't say how far off it
+might be, so to answer how sure we should be about an estimate, we
+build a range of plausible values instead. This range is called a
+confidence interval. A simple way to think about a confidence interval
+is: it's an interval, computed from the sample, that is likely to
+contain the unknown target value. A confidence interval with level
+$1-\alpha$ aims to capture the true parameter in about
+$100(1-\alpha)\%$ of all possible samples.
 
-\input{Rnw/est-ci-clt}
+% Check-in: If you see a 95\% confidence interval for a mean that is
+% wide, what does that tell you about the data or sample size?
 
-\input{Rnw/est-ci-boot}
 
+\subsection{Large Sample Approximation}
+One way to construct confidence intervals is to lean on the large-sample
+guarantees from Chapter~\ref{ch:llnclt}. The law of large numbers tells
+us that as the sample size grows, the sample mean gets closer and
+closer to the true population mean~$\mu$---this is why the sample mean
+is a sensible point estimate in the first place. The central limit
+theorem goes further: it describes the shape of the sample mean's own
+distribution around~$\mu$ for large samples. In practice we only ever
+collect one sample, not many, so we never actually see that
+distribution directly---but knowing its shape is exactly what lets us
+build an interval around the single sample mean we do observe and
+attach a confidence level to it.
+
+In the simple situation of estimating the population mean of a
+distribution, for example, we can use the sample mean and the central
+limit theorem to construct an interval centered at the sample mean.
+Suppose that we have a sample mean $\bar{X}_n$ based on a sample of
+size~$n$ from a population with mean $\mu$ and variance $\sigma^2$. As
+we just discussed, $\bar{X}_n$'s behavior can be approximated by a
+normal distribution with mean $\mu$ and variance $\sigma^2/n$, if the
+sample size $n$ is large. Using this fact, we can construct the
+following interval
+\[
+\left(\bar{X}_n - z_{\alpha/2} \frac{\sigma}{\sqrt{n}}, \quad
+\bar{X}_n + z_{\alpha/2} \frac{\sigma}{\sqrt{n}}\right),
+\]
+where $z_{\alpha/2}$ is the number so that the area between
+$-z_{\alpha/2}$ and $z_{\alpha/2}$ under the standard normal density
+curve is $100(1-\alpha)\%$. In R, this quantile is computed with
+\lstinline{qnorm(1 - alpha / 2)}; for a 95\% interval ($\alpha = 0.05$),
+this gives the familiar $z_{\alpha/2} \approx 1.96$. This is a confidence
+interval for $\mu$ whose confidence level is asymptotically $1 - \alpha$.
+A 95\% confidence interval means $\alpha = 0.05$.
+
+
+When the population variance $\sigma^2$ is unknown, we can use the sample
+variance $S_n^2$ in its place. For a finite sample, this substitution is
+more precise if we also replace $z_{\alpha/2}$ with $t_{n-1,\alpha/2}$, the
+corresponding quantile of the \emph{$t$-distribution}\index{$t$-distribution}
+with $n-1$ degrees of freedom, whose heavier tails account for the extra
+uncertainty introduced by estimating $\sigma$ from the data rather than
+knowing it. As $n$ grows, $t_{n-1,\alpha/2}$ converges to $z_{\alpha/2}$, so
+using $z_{\alpha/2}$ with $S_n$ in place of $\sigma$---the approach we take
+in the rest of this section---still gives an interval that is asymptotically
+valid, even though it's not exact for small $n$.
+
+
+The \emph{coverage probability}\index{coverage probability} of a confidence
+interval \emph{procedure} is the long-run fraction of intervals, built the
+same way from repeated samples, that actually contain the true parameter.
+Imagine drawing a new sample of size $n$, computing a new interval from it,
+and repeating this many times: the coverage probability is the fraction of
+those intervals that capture the true value. A confidence interval with
+confidence level~$1-\alpha$ is constructed so that, ideally, its coverage
+probability equals~$1-\alpha$. In practice this may not hold exactly,
+especially when the interval relies on an asymptotic approximation---like
+the CLT-based interval above---that has not yet kicked in at the sample
+size we have.
+
+
+It's worth being precise about what coverage probability is not. Once a
+particular interval has been computed from one particular sample, that
+interval either does or doesn't contain the true parameter---there's no
+probability left to speak of. The $100(1-\alpha)\%$ describes the
+procedure, evaluated over hypothetical repeated samples, not our certainty
+about this one interval. This is the same distinction we drew for p-values
+in Chapter~\ref{ch:hypothesis}: a p-value describes how surprising the data
+is under $H_0$, not the probability that $H_0$ is true; a confidence
+interval describes how often the procedure succeeds, not the chance that
+this particular interval succeeded.
+
+
+The next example draws data from the \emph{gamma
+distribution}\index{gamma distribution}, so it helps to have a quick
+picture of it first. It's a continuous distribution for positive-valued
+data---think waiting times, amounts, or other quantities that can't go
+below zero and tend to have a long right tail. It's controlled by a
+\emph{shape} parameter and a \emph{scale} parameter, and its mean is
+simply their product: shape~$\times$~scale. A small shape value gives a
+sharp peak near zero with a long tail; a large shape value makes the
+distribution look more symmetric and bell-shaped. R's \lstinline{rgamma()}
+function generates gamma-distributed data from a given shape and scale.
+
+
+Now let's play a game to see why uncertainty matters in
+estimation.
+\begin{example}[Interval estimation for a gamma mean]
+\label{ex:ci-clt}
+\runR{Code/est-ci-clt.R}{ci-clt}
+We write a function to construct a confidence interval with level $1 - \alpha$
+for a population mean $\mu$ given an observed sample vector.
+\showChunk{R}{Code/est-ci-clt.R}{ciclt}
+Let's apply this to a random sample of size $n$ from a gamma
+distribution with mean~$\mu$. For simplicity, let's set the scale parameter
+of the gamma distribution to be known as~$2$.
+\showChunk{R}{Code/est-ci-clt.R}{applyci}
+The resulting 95\% confidence interval is
+$($\inlnR{```cat(round(ci[1], 3))```}[estci1],
+\inlnR{```cat(round(ci[2], 3))```}[estci2]$)$.
+
+
+Does a 95\% confidence interval constructed this way really give 95\%
+probability of covering the truth? By theory, it should when the
+sample size is large. Is $n = 50$ large enough for this to be good?
+We can check the actual coverage rate in a simulation study.
+\showChunk{R}{Code/est-ci-clt.R}{coverage50}
+The empirical coverage rate from the 1000 replicates is
+\inlnR{```cat(mean(sim50[1, ] < mu & sim50[2,] > mu))```}[estsim50].
+
+For the figure, we keep 50 intervals for each sample size. We also record
+whether each interval covered the true value, because missed intervals will be
+colored differently.
+\showChunk{R}{Code/est-ci-clt.R}{makecishow}
+
+
+The next function draws the stored intervals. Each interval is one horizontal
+line, and the dashed vertical line marks the true value of \(\mu\).
+\showChunk{R}{Code/est-ci-clt.R}{plotcishow}
+
+
+Then we make the two sets of intervals and write the figure file.
+\showChunk{R}{Code/est-ci-clt.R}{drawci}
+
+
+Figure~\ref{fig:ch6:ci-sizes} shows 50 confidence intervals for
+$n = 50$ in the top panel and 50 intervals for $n = 20$ in the bottom
+panel. Each horizontal line is one confidence interval from one
+simulated sample. The dashed vertical line is the true value of $\mu$. Most
+intervals cross the truth, but a few miss it. That is exactly what ``95\%
+confidence'' allows: the method should work most of the time, not every single
+time. Notice also that the $n = 50$ intervals are visibly narrower than the
+$n = 20$ intervals---this follows directly from the CLT-based formula, where
+the margin of error $z_{\alpha/2}\sigma/\sqrt{n}$ shrinks in proportion to
+$1/\sqrt{n}$ as the sample size grows.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]%
+{images/chapter_6/confidence_intervals_by_sample_size.pdf}
+\caption{Fifty simulated confidence intervals for two sample sizes}
+\label{fig:ch6:ci-sizes}
+\end{figure}
+
+
+What if the sample size is smaller, say 20?
+\showChunk{R}{Code/est-ci-clt.R}{coverage20}
+The empirical coverage now is
+% the following causes a problem
+\inlnR{```cat(mean(sim20[1, ] < mu & sim20[2,] > mu))```}[estsim20].
+
+
+The simulation shows that the confidence intervals constructed from
+the large sample theory works well for sample size $n = 50$ but not so
+well for $n = 20$.
+\end{example}
+
+
+\subsection{Connection to Hypothesis Testing}
+Confidence intervals and hypothesis tests answer the same underlying
+question from two directions, and either one can be built from the other.
+Consider testing $H_0: \mu = \mu_0$ against $H_1: \mu \ne \mu_0$
+(Chapter~\ref{ch:hypothesis}) with the test statistic
+\[
+  T = \frac{\bar{X}_n - \mu_0}{S_n / \sqrt{n}}.
+\]
+At significance level $\alpha$, this test rejects $H_0$ exactly when
+$|T| > z_{\alpha/2}$---which happens exactly when $\mu_0$ falls outside the
+interval $\bar{X}_n \pm z_{\alpha/2} S_n/\sqrt{n}$, the very confidence
+interval constructed above. So a hypothesized value $\mu_0$ is rejected by
+the level-$\alpha$ test if and only if it lies outside the
+$100(1-\alpha)\%$ confidence interval; equivalently, the confidence
+interval is exactly the set of null values $\mu_0$ that the test would
+\emph{fail} to reject. This is why reporting a confidence interval is often
+more informative than reporting a single test's outcome: instead of
+answering one yes-or-no question about one $\mu_0$, the interval answers
+that question for every possible $\mu_0$ at once.
+
+
+\subsection{Resampling}
+
+Constructing confidence intervals depends on the uncertainty of the
+estimator. Often, a point estimator can be easily obtained, for example,
+through optimizing an objective function or solving some estimating
+equations. The variation of a point estimator, however, can be much more
+difficult to obtain.
+
+
+\emph{Bootstrap}\index{bootstrap}
+is a powerful tool to approximate the uncertainty of an estimator.
+As a self-assisted approach, it approximates the variation of the estimator by
+treating the sample as a population and resampling repeatedly from it with
+replacement, each time forming a so-called bootstrap sample of the same size as
+the original sample. For each bootstrap sample, we can obtain the point
+estimator. The variation of the original point estimator can be approximated by
+the empirical variation of a collection of the point estimators obtained from
+the bootstrap samples.
+
+
+
+Here we demonstrate how well the bootstrap can approximate the variance of some
+simple statistics. Suppose that \lstinline{statistic} is a function that takes a
+random sample \lstinline{x} as input and returns a scalar statistic. A bootstrap
+procedure to obtain a large number \lstinline{R} of bootstrap copies of the
+statistic from a sample \lstinline{x} is implemented in the following function
+\lstinline{myboot}.
+\showChunk{R}{Code/est-ci-boot.R}{myboot}
+
+
+The function \lstinline{myboot} returns a list with two components. The first
+component \lstinline{t0} is the scalar statistic computed from the observed
+sample \lstinline{x}; the second component \lstinline{t} is a vector
+of dimension \lstinline{R}, each element of which is a scalar
+statistic computed from a
+bootstrap sample. We use the empirical variation of \lstinline{t} to approximate
+the variation of \lstinline{t0}. A 95\% confidence interval can be constructed
+simply by the 2.5 and 97.5 percentiles of \lstinline{t}. This type of confidence
+interval is known as \emph{percentile bootstrap confidence
+interval}\index{bootstrap!percentile confidence interval}.
+
+
+\begin{example}[Bootstrap approximation of variance of sample median]
+\runR{Code/est-ci-boot.R}{ci-boot}
+Consider estimating the population median of a Gamma distribution with
+shape 2 and scale 2 using the sample median. The population median can be
+obtained from the \lstinline{qgamma()} function evaluated at 0.5 with the
+specified parameters. Let's see how this works in action for a sample of
+size~50.
+\showChunk{R}{Code/est-ci-boot.R}{medianboot}
+
+%% Tried putting cat(medBoot$t0) in math mode; not working
+For this sample, our point estimate is
+\inlnR{```cat(round(medBoot[["t0"]], 3))```}[estmedboot], with 95\% confidence
+interval \lstinline{medCI}, which is
+$($\inlnR{```cat(round(medCI[1], 3))```}[estmedci1],
+\inlnR{```cat(round(medCI[2], 3))```}[estmedci2]$)$.
+The true value \inlnR{```cat(round(target, 3))```}[esttarget] is nicely captured
+by the interval from this sample.
+
+
+To investigate the coverage rate of the percentile bootstrap confidence
+interval, we need to run a simulation study. Again, we lay out what we
+need to do in one replicate first:
+\showChunk{R}{Code/est-ci-boot.R}{do1rep}
+
+
+The function \lstinline{do1rep()} generates a random sample of size
+\lstinline{n} from the Gamma distribution with shape 2 and scale 2,
+performs a bootstrap procedure with 1000 bootstrap samples, and returns
+a vector of three elements: the point estimate and
+the lower and upper bounds of a 95\% confidence interval. We replicate the
+experiment \lstinline{nrep = 1000} times and check the performance of the point
+estimate and the empirical coverage rate of the 95\% confidence interval.
+\showChunk{R}{Code/est-ci-boot.R}{coverage50}
+
+
+The mean of the point estimate \lstinline{mean(sim50[1,])} from the
+\inlnR{```cat(nrep)```}[estnrep1] replicates is
+\inlnR{```cat(round(mean(sim50[1,]), 3))```}[estmeansim50], which is very close
+to the true target \inlnR{```cat(round(target, 3))```}[esttarget2].
+
+
+The empirical coverage rate of the 95\% confidence interval from the
+\inlnR{```cat(nrep)```}[estnrep2] replicates is
+\inlnR{```cat(mean(sim50[2,] < target & target < sim50[3,]))```}%
+[estmeansim50ci],
+which is reasonably close to the nominal level 95\%.
+
+
+We repeat the process for a smaller sample size~20:
+\showChunk{R}{Code/est-ci-boot.R}{coverage20}
+The empirical coverage rate of the 95\% confidence interval from the
+\inlnR{```cat(nrep)```}[estnrep3]  replicates is
+%\inlnR{```cat(mean(sim20[2,] < target & target < sim20[3,]))```},
+which is still reasonably close to the nominal level 95\%.
+
+The bootstrap figure uses the same idea as the previous interval figure, but
+now each stored row contains the sample median and the two ends of its
+percentile bootstrap interval.
+\showChunk{R}{Code/est-ci-boot.R}{makebootshow}
+
+
+The plotting function again draws stored intervals as horizontal lines. The
+dashed vertical line now marks the true population median.
+\showChunk{R}{Code/est-ci-boot.R}{plotbootshow}
+
+
+Finally, we draw the two panels for the bootstrap intervals.
+\showChunk{R}{Code/est-ci-boot.R}{drawboot}
+
+
+Figure~\ref{fig:ch6:boot-ci-sizes} shows 50 percentile bootstrap intervals for
+each sample size. The dashed vertical line is the true population median. As
+before, each line comes from one simulated sample. The bootstrap interval is
+built by resampling from that sample, not by using the normal approximation.
+As with the large-sample intervals in Figure~\ref{fig:ch6:ci-sizes}, the
+$n = 50$ intervals here are visibly narrower than the $n = 20$ intervals.
+The bootstrap doesn't rely on the CLT formula directly, but the same
+underlying force is at work: the sample median's own sampling variability
+shrinks as $n$ grows, so the resampled intervals shrink along with it.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]%
+{images/chapter_6/bootstrap_intervals_by_sample_size.pdf}
+\caption{Fifty simulated bootstrap confidence intervals for two sample sizes}
+\label{fig:ch6:boot-ci-sizes}
+\end{figure}
+\end{example}
+
+\section{Summary}
+
+In this chapter we studied how data can be used to estimate unknown
+features of a population. Through the hide-and-seek games, we saw that
+different estimators---the sample mean, median, and midrange---can
+behave very differently depending on the underlying distribution, and
+we used bias and mean squared error, estimated from many simulated
+replicates, to compare them. We also introduced maximum likelihood
+estimation, which selects parameter values that make the observed data
+most plausible. Because a single point estimate doesn't convey how
+confident we should be, we studied confidence intervals built from
+large-sample theory and examined their coverage probabilities through
+simulation.
+Finally, we introduced the bootstrap, a computational method that
+approximates the variability of an estimator by resampling from the
+observed data, which is useful when the large-sample approximation is
+not reliable. Everything in this chapter assumed that our sample was
+trustworthy to begin with. In the next chapter, we turn to data
+collection itself: what makes a sample representative of the
+population we care about, and what can go wrong when it isn't.
+
+\section{Problems}
+
+\begin{exercise}
+In the normal hide-and-seek game, change the sample size in
+\lstinline{Code/est-hide-norm.R} from \lstinline{n = 20} to \lstinline{n = 5},
+\lstinline{n = 50}, and \lstinline{n = 200}. For each sample size,
+compare the MSE of the sample mean, sample median, and midrange. Which
+estimator improves the most as the sample size grows?
+\end{exercise}
+
+\begin{exercise}
+The Cauchy hide-and-seek code in Example~\ref{ex:hs:cauchy} generates
+data with \lstinline{mu + rt(n, df = 1)}---recall that a $t$ distribution
+with 1 degree of freedom is the Cauchy distribution. Change
+\lstinline{df = 1} to \lstinline{df = 2}, \lstinline{df = 5}, and
+\lstinline{df = 10}. How does the ordering of the sample mean and sample
+median change as the tails of the distribution become less extreme?
+\end{exercise}
+
+\begin{exercise}
+In the uniform population example, change the bandwidth from 20 to 5
+and then to 50. Does the midrange still perform well? Explain why the
+largest and smallest observations are especially informative for a
+uniform distribution.
+\end{exercise}
+
+\begin{exercise}
+In the free-throw MLE example, change the observed data from 16 made
+shots out of 20 to 8 out of 20, 12 out of 20, and 19 out of 20. For
+each case, plot the likelihood over possible values of $p$. Where does
+the likelihood reach its maximum?
+\end{exercise}
+
+\begin{exercise}
+In the gamma confidence interval simulation, try sample sizes
+\lstinline{n = 10}, \lstinline{n = 20}, \lstinline{n = 50}, and
+\lstinline{n = 100}. Estimate the coverage rate for each sample size.
+At what sample size does the large-sample confidence interval begin to
+look reliable?
+\end{exercise}
+
+\begin{exercise}
+Using the 95\% confidence interval computed in
+Example~\ref{ex:ci-clt} (interval estimation for a gamma mean), pick
+three candidate values of $\mu_0$: one below the interval, one inside
+it, and one above it. Without running a separate hypothesis test, use
+the duality from ``Connection to Hypothesis Testing'' to say which of
+these $\mu_0$ values a level-$\alpha = 0.05$ test of $H_0: \mu = \mu_0$
+would reject, and which it would fail to reject.
+\end{exercise}
+
+\begin{exercise}
+Modify the bootstrap example by estimating the population mean instead
+of the population median. Compare the bootstrap confidence interval for
+the mean with the large-sample confidence interval from the previous
+section. When do the two intervals look similar, and when do they differ?
+\end{exercise}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-command-extra-options: "-shell-escape"
+%%% TeX-engine: xetex
+%%% TeX-master: "../sidsmain.tex"
+%%% End:

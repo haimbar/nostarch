@@ -1,0 +1,614 @@
+\hypertarget{ch:regression}{%
+  \chapter{Correlation and Regression: When Two Variables Dance}
+  \label{ch:regression}}
+
+\hypertarget{regression}{A single variable is seldom sufficient to account for
+  real-world phenomena. When several variables are involved, we need ways to
+  describe and measure their relationships. A variable that interests us may
+  also be difficult or expensive to observe, while related variables are easier
+  to measure. We can use those variables to help predict the one we care about.}
+
+\hypertarget{correlation}{%
+\section{Sample Correlation}\label{correlation}}
+
+Suppose we want to study the relationship between systolic blood pressure ($y$)
+and age ($x$). The data below contain measurements of 30 individuals.
+Figure~\ref{fig:agesbp} plots the systolic blood pressure against age for
+thirty individuals. It's created with the following code:
+
+\showChunk{R}{Code/regression-AgeSBP.R}{REGagesbp1}
+
+The overall increase in systolic blood pressure as age increases is evident.
+How can we describe this relationship quantitatively? The sample Pearson
+correlation coefficient\index{Pearson correlation coefficient}, denoted by $r$,
+measures the direction and strength of the linear association between two
+variables.  The value of $r$ always lies between $-1$ and 1. Its sign gives the
+direction of the association, and its magnitude describes how closely the points
+follow a straight line. Correlation is unitless and symmetric: changing
+measurement units does not change it, and the correlation of $x$ with $y$ equals
+the correlation of $y$ with $x$. Because it is based on deviations from the
+means, it can be strongly affected by outliers.
+
+
+\runR{Code/regression-AgeSBP.R}{regression-AgeSBP}
+\begin{figure}[htp]
+  \includegraphics[width=0.7\textwidth]{images/chapter_8/agesbp.pdf}
+  \caption{Scatter plot for systolic blood pressure against age}
+  \label{fig:agesbp}
+\end{figure}
+
+Let's use simulated data to see how correlation behaves. The following code
+generates a variable $x$, a random error term, and five response variables
+$y_1$ through $y_5$. The variables have linear associations with $x$ ranging
+from strongly positive to strongly negative. The middle response, $y_3$, is
+independent of $x$. In \R, \code{cor(x, y1)} calculates the sample correlation
+between \code{x} and \code{y1}.
+
+\showChunk{R}{Code/regression-corrLinear.R}{REGcorrlinear1} %
+\runR{Code/regression-corrLinear.R}{regression-corrLinear} %
+
+In the code, \code{x} (\wingding{1}) and the random error \code{err}
+(\wingding{2}) are independent. The variables \code{y1} through \code{y5}
+have different linear associations with \code{x}: strong positive, moderate
+positive, none, moderate negative, and strong negative, respectively. Running
+the code produces Figure~\ref{fig:corrLinear}. For the blood pressure data in
+Figure~\ref{fig:agesbp}, the correlation between age and systolic blood pressure
+is
+\inlnR{```cat(cor(sbp$AGE, sbp$SBP))```}[corr-AgeSBP].
+
+
+
+\begin{figure}[htp]
+  \includegraphics[width=\textwidth]{images/chapter_8/corrLinear.pdf}
+  \caption{Sample correlation measures direction and strength of linear
+    association.}
+  \label{fig:corrLinear}
+\end{figure}
+
+Pearson correlation measures only linear association.  A value near zero does
+not mean that two variables are unrelated. They may have a strong curved
+relationship. The following code generates an example.
+
+\showChunk{R}{Code/regression-nonLinear.R}{REGnonlinear1}
+\runR{Code/regression-nonLinear.R}{regression-nonLinear} %
+
+In the code, \wingding{1} makes \code{x} symmetric around zero. The large
+coefficient 10 in \wingding{2} makes \code{y} depend strongly on $x^2$.
+Although $y$ depends on $x$, their Pearson correlation is only
+\inlnR{```cat(round(cor(x,y),2))```}[corr-quadratic]. Figure~\Ref{fig:nonLinear}
+shows the strong quadratic relationship that correlation fails to summarize.
+
+\begin{figure}[htp]
+  \includegraphics[width=0.6\textwidth]{images/chapter_8/nonLinear.pdf}
+  \caption{A sample correlation close to zero does not mean there is no
+    association between the two variables}
+  \label{fig:nonLinear}
+\end{figure}
+
+\subsection{Association Is Not Causation}
+
+A strong correlation does not show that changing one variable will cause the
+other to change. For example, ice cream sales and drowning incidents both tend
+to increase in hot weather. Their association does not mean that ice cream
+causes drowning; temperature affects both and is a confounding
+variable\index{confounding variable}. Reverse causation and selection effects
+can create similar problems. Regression can describe an association and make
+useful predictions, but neither correlation nor regression alone establishes a
+causal relationship\index{causation}.
+
+\section{Regression}
+Correlation treats two variables symmetrically: the correlation between $x$ and
+$y$ is the same as the correlation between $y$ and $x$. Regression gives the
+variables different roles. The outcome we want to explain or predict is the
+response variable\index{response variable}, usually denoted by $y$. Variables
+used to model the response are called predictors\index{predictor}, explanatory
+variables, or covariates\index{covariate}.
+
+Consider body fat percentage. Figure~\ref{fig:underwater} shows an accurate
+method that weighs a person underwater.
+
+This procedure, called hydrostatic weighing\index{hydrostatic weighing}, is
+expensive, inconvenient, and uncomfortable. Age, weight, and body
+circumferences are easier to obtain. Although none determines body fat
+perfectly, a model can combine them to estimate body fat percentage.
+
+\begin{figure}[H]
+    \includegraphics[width=0.5\textwidth]{images/static/huw.png}
+    \caption{Hydrostatic underwater weighing. Source:
+    \href{https://www.measurement-toolkit.org/anthropometry/%
+    objective-methods/hydrostatic-underwater-weighing}{Measurement Toolkit}.}
+    \label{fig:underwater}
+\end{figure}
+
+We begin with one predictor. The simple linear regression
+model\index{simple linear regression} is
+\begin{equation*}
+  y=\beta_0+\beta_1x+\varepsilon,
+\end{equation*}
+where $\varepsilon$ is an unobserved error\index{error term} representing
+variation not captured by the line. The coefficient $\beta_0$ is the
+intercept\index{intercept}: the mean response when $x=0$. The coefficient
+$\beta_1$ is the slope\index{slope}: the change in the mean response associated
+with a one-unit increase in $x$. The intercept may have no practical meaning if
+$x=0$ is outside the observed range. A slope describes association, not
+necessarily a causal effect.
+
+The usual simple linear regression assumptions are:
+\begin{itemize}
+\item The line $\beta_0+\beta_1x$ correctly describes the mean of $y$ at each
+value of $x$, so the errors have mean zero.
+\item The errors have roughly the same variance for all values of $x$.
+\item The errors from different observations are independent.
+\item For exact small-sample confidence intervals and tests, the errors are
+approximately normally distributed.
+\end{itemize}
+Normality is not required merely to calculate a least squares line. The first
+three assumptions matter most for interpreting the model and its uncertainty.
+
+Let's use the blood pressure data in Figure~\ref{fig:agesbp} to illustrate least
+squares\index{least squares}. Estimates are marked with a hat, as in
+$\hat\beta_0$ and $\hat\beta_1$.
+
+\begin{figure}[h]
+  \includegraphics[width=0.45\textwidth,page=3]{images/static/LeastSquares.pdf}
+  \includegraphics[width=0.45\textwidth,page=5]{images/static/LeastSquares.pdf}
+  \caption{Idea of least squares}
+  \label{fig:fittingLS}
+\end{figure}
+
+Any values of $\hat\beta_0$ and $\hat\beta_1$ define a fitted line
+$\hat y=\hat\beta_0+\hat\beta_1x$. The vertical difference between an observed
+response $y_i$ and its fitted value $\hat y_i$ is the residual
+$e_i=y_i-\hat y_i$. Unlike the unobserved error $\varepsilon_i$, a residual can
+be calculated from the data. Residuals are positive above the line and negative
+below it. The shaded squares on the right of Figure~\ref{fig:fittingLS}
+represent squared residuals. Least squares chooses the line that minimizes the
+residual sum of squares\index{residual sum of squares},
+\begin{equation*}
+  \sum_{i=1}^n(y_i - \hat y_i)^2.
+\end{equation*}
+For simple linear regression, the resulting estimates are
+\begin{equation}\label{eq:1}
+  \hat{\beta}_1 =
+  \frac{\sum_{i=1}^n (x_i - \bar x)(y_i - \bar y)}
+  {\sum_{i=1}^n (x_i - \bar x)^2},
+  \text{ and }
+  \hat{\beta}_0 = \bar y - \hat{\beta}_1 \bar x.
+\end{equation}
+
+Equation~(\ref{eq:1}) is tedious to calculate by hand but easy to evaluate in
+\R. Under the regression assumptions, standard errors describe how much the
+coefficient estimates would vary across repeated samples. They are the basis
+for confidence intervals and statistical tests.
+% \showChunk{R}{Code/regression-AgeSBP.R}{REGagesbp2}
+\showCode{R}{Code/regression-AgeSBP.R}[12][12]
+The \code{lm()} function in \wingding{1} fits a linear model using
+\code{AGE} as the $x$ variable and \code{SBP} as the $y$ variable.
+The code gives
+\includeOutput{regression-AgeSBP}
+The estimated intercept is
+$\hat{\beta}_0=\inlnR{```cat(b[1])```}[sbp-beta0]$, and the estimated slope is
+$\hat{\beta}_1=\inlnR{```cat(b[2])```}[sbp-beta1]$. Thus, each additional year
+of age is associated with about 0.97 mmHg higher mean systolic blood pressure.
+The intercept predicts blood pressure at age zero, far outside the ages in the
+data, so it has little practical meaning. The command \code{confint(fitsbp)}
+gives a 95\% confidence interval of about 0.54 to 1.40 mmHg per year for the
+slope. This interval quantifies uncertainty about the mean age--blood pressure
+association in the population.
+
+Now let's return to body fat measurement. The file \code{bodyfat.csv} contains
+body fat percentages measured by underwater weighing for 252 adult men, along
+with measurements that are easier to obtain. We use \code{Age}, \code{Weight},
+\code{Chest}, \code{Wrist}, and \code{BMI} as predictors:
+% \showChunk{R}{Code/regression-fitbodyfat.R}{REGfitbodyfat1}
+\showCode{R}{Code/regression-fitbodyfat.R}[2][4]
+The fitted model is: %
+{\lstset{basicstyle=\scriptsize} %
+\runRIncOut{Code/regression-fitbodyfat.R}[][regression-fitbodyfat]} %
+
+\begin{equation}\label{eq:2}
+\text{BodyFat} \approx -6.22 + 0.18\text{Age} + 0.10\text{Weight}
+  + 0.51\text{Chest} - 3.02\text{Wrist} + 0.07\text{BMI}
+\end{equation}
+Each coefficient is interpreted while holding the other predictors fixed. For
+example, an additional centimeter of chest circumference is associated with
+0.51 percentage points higher predicted body fat among people with the same
+age, weight, wrist circumference, and BMI. This is an association, not evidence
+that changing chest circumference would cause body fat to change.
+
+Figure~\ref{fig:fitbodyfat} from the code below compares the fitted values with
+the measured body fat percentages for the 252 men used to estimate the model. %
+
+\showChunk{R}{Code/regression-fitbodyfat.R}{REGfitbodyfat2} %
+
+\begin{figure}[htp]
+  \centering
+  \includegraphics[width=0.7\textwidth]{images/chapter_8/fitbodyfat.pdf}
+  \caption{Fitted versus measured body fat. The dashed identity line represents
+  perfect agreement.}
+  \label{fig:fitbodyfat}
+\end{figure}
+
+The points do not fall exactly on the identity line, so the model's fitted body
+fat values differ from the measurements.
+
+This comparison is optimistic because the same observations were used both to
+fit and evaluate the model. To assess prediction, we should reserve a test
+set\index{test set} that plays no role in fitting. The following code shows the
+core of that procedure:
+
+\showChunk{R}{Code/regression-bodyfat-validation.R}{REGbodyfatvalidation1}
+\runR{Code/regression-bodyfat-validation.R}{regression-bodyfat-validation} %
+
+The above code produces Figure~\ref{fig:bodyfat-validation}, which compares the
+training results with predictions for the held-out observations. The test error
+is usually larger because it more honestly represents performance on new
+people. Repeated splits or cross-validation\index{cross-validation} give a more
+stable assessment than one split.
+
+\begin{figure}[htp]
+  \centering
+  \includegraphics[width=0.9\textwidth]{images/chapter_8/bodyfat-validation.pdf}
+  \caption{Body fat results for the training data and a held-out test set. The
+  dashed identity line represents perfect agreement.}
+  \label{fig:bodyfat-validation}
+\end{figure}
+
+The model also has limits beyond predictive accuracy. It was built from adult
+men, so it may not generalize to children or women. Predictions remain subject
+to individual variation and uncertainty. A model is a simplified description,
+not the true biological mechanism. As George E. P. Box observed, ``All models
+are wrong, but some are useful.''
+
+\subsection{Outliers and Influential Points}\label{sec:outliers}
+
+What happens if a single data point is way off from the rest? Because the least
+squares method squares each vertical distance $(y - \hat{y})^2$, a large
+residual contributes disproportionately to the quantity being minimized. In
+Figure~\ref{fig:fittingLS}, for example, the patient with a systolic blood
+pressure near 220 has a much larger squared residual than the other patients.
+Such a point can act like a heavy weight on a seesaw and pull the fitted line
+toward itself, although how much it does so also depends on its $x$-value.
+
+Figure~\ref{fig:outliers} illustrates how unusual points can differ:
+\begin{itemize}
+\item Outliers\index{outlier} in $y$: A point whose $y$-value is far from the
+  fitted line and therefore has a large residual. For example, suppose a house
+  has 2,000 square feet. Its expected sale price is \$400,000, but it sells for
+  \$700,000 instead, making it an outlier in sale price.
+\item High-leverage\index{leverage} points in $x$: A point whose $x$-value is
+  far from the other $x$-values. For example, a house with 5,000 square feet has
+  high leverage in a dataset in which all the other houses range from 1,000 to
+  3,000 square feet. If it sells for \$850,000, it follows the overall
+  relationship between size and price and is not an outlier in $y$.
+\item Influential points\index{influential point}: A point that noticeably
+  changes the fitted line when it is included or removed. For example, if the
+  house with 5,000 square feet sells for only \$400,000, it pulls the right end
+  of the line downward and substantially reduces the estimated slope. Such a
+  point is both high-leverage and influential.
+\end{itemize}
+
+\runR{Code/regression-outliers.R}{regression-outliers} %
+\begin{figure}[htp]
+  \centering
+  \includegraphics[width=\textwidth]{images/chapter_8/outliers.pdf}
+  \caption{A response outlier, a high-leverage point that follows the trend,
+  and a high-leverage point that changes the fitted line. The dashed line omits
+  the unusual point; the solid line includes it.}
+  \label{fig:outliers}
+\end{figure}
+
+A common beginner mistake is to immediately delete any unusual point to make
+the line fit the rest of the data better. Don't do this! An outlier might be a
+simple typo (like entering a height of 700 inches instead of 70 inches), but it
+could also be a genuine, exciting discovery or a distinct subpopulation that
+reveals how the real world behaves.
+
+The body fat data contain one recorded height of 29.5 inches, which warrants
+checking against the original source. We should investigate a suspicious value
+before correcting or removing it. In \R, \code{rstandard(fit)} finds large
+standardized residuals, \code{hatvalues(fit)} measures leverage, and
+\code{cooks.distance(fit)} calculates Cook's distance\index{Cook's distance},
+which summarizes how strongly each observation affects the fitted model. These
+diagnostics identify observations to investigate, not observations to delete
+automatically.
+
+
+\subsection{How Good Is the Line? Model Diagnostics and
+  \texorpdfstring{$R^2$}{R-squared}}
+\label{sec:diagnostics}
+
+The \code{lm()} function will fit a line to any dataset, even if the points form
+a circle or show only random scatter.
+
+How do we know whether the fitted line is appropriate?
+
+\subsubsection{The $R^2$ Statistic}
+A common summary statistic is the coefficient of determination, written
+as $R^2$\index{R-squared@$R^2$}. It is the proportion of the variation in the
+observed $y$-values that is accounted for by the fitted model.
+\begin{itemize}
+\item An $R^2 = 1$ (or 100\%) means that every observed $y$-value equals its
+  fitted value, so all the points lie on the fitted line.
+\item An $R^2 = 0$ means that the fitted model accounts for none of the
+  variation in $y$. In simple linear regression with an intercept, the fitted
+  line is then horizontal. This does not rule out a nonlinear relationship
+  between $x$ and $y$.
+\item In simple linear regression with one predictor and an intercept, $R^2$ is
+  the square of the sample correlation coefficient $r$. Thus, if $r = 0.8$, then
+  $R^2 = 0.64$, meaning that the fitted line accounts for 64\% of the variation
+  in $y$.
+\end{itemize}
+
+In multiple regression, ordinary $R^2$ never decreases when another predictor
+is added, even if that predictor has little value. Adjusted
+$R^2$\index{adjusted R-squared@adjusted $R^2$} imposes a penalty for adding
+predictors, but neither version measures performance on new data. A test set or
+cross-validation is more direct for that purpose.
+
+A high $R^2$ does not guarantee that a straight line has the right shape. A
+mild curve can have a high $R^2$ while leaving a pattern in the residuals.
+Conversely, Figure~\ref{fig:nonLinear} shows a strong quadratic relationship
+whose straight-line $R^2$ is near zero.
+
+\subsubsection{Checking the Residuals}
+A residual\index{residual} is the difference between an observed value and its
+fitted value, $y - \hat{y}$. A residual plot\index{residual plot} graphs the
+residuals against the fitted values and can reveal patterns that $R^2$ misses.
+If a straight-line model with constant variance is appropriate, the points
+should form a roughly patternless band centered at zero:
+\begin{enumerate}
+\item No curves: A U-shaped or arched pattern suggests that a straight line has
+missed curvature in the relationship.
+\item Even spread: The residual spread should remain roughly constant. A fan or
+megaphone shape suggests that the variability changes with the fitted value.
+\end{enumerate}
+
+Figure~\ref{fig:residual-diagnostics} contrasts these patterns. A residual plot
+does not directly establish independence, which must be considered from the way
+the data were collected. A normal quantile--quantile plot can assess whether
+the residual distribution is approximately normal when small-sample inference
+depends on that assumption. The command \code{plot(fit)} produces several
+standard diagnostic plots in \R.
+
+\runR{Code/regression-residual-diagnostics.R}{regression-residual-diagnostics} %
+\begin{figure}[htp]
+  \centering
+  \includegraphics[width=\textwidth]{images/chapter_8/residual-diagnostics.pdf}
+  \caption{Residual plots for an appropriate linear model, an unmodeled curve,
+  and error variation that increases with the fitted value.}
+  \label{fig:residual-diagnostics}
+\end{figure}
+
+
+\subsection{Estimating an Average vs. Predicting a Single Person}
+\label{sec:pred_interval}
+
+Suppose we build a regression model to predict student heights from their ages.
+For a 15-year-old student, the regression line might give a fitted height of 66
+inches. But there are two different questions we could ask:
+\begin{enumerate}
+\item What is the average height of all 15-year-olds in the population?
+\item How tall will one particular 15-year-old be?
+\end{enumerate}
+
+Estimating a population average is more precise than predicting the value for
+one individual:
+\begin{itemize}
+\item A confidence interval\index{confidence interval!in regression} gives a
+range of plausible values for the population's mean height at a given age. As
+the amount of data increases, this interval generally becomes narrower.
+\item A prediction interval\index{prediction interval} gives a range of
+plausible values for the height of one new student at a given age. It accounts
+for both uncertainty in the mean height and natural person-to-person variation.
+At the same confidence level, it is therefore wider than the corresponding
+confidence interval for the mean.
+\end{itemize}
+
+Both intervals are available from \R's \code{predict()} function. For a
+confidence interval, use \code{interval = "confidence"}; for a prediction
+interval, use \code{interval = "prediction"}.
+
+\showChunk{R}{Code/regression-intervals.R}{REGintervals1}
+\runR{Code/regression-intervals.R}{regression-intervals} %
+
+Figure~\ref{fig:regression-intervals} shows why the distinction matters. The
+confidence band for the mean is narrow, while the prediction band must cover
+the natural variation among individual students.
+
+\begin{figure}[htp]
+  \centering
+  \includegraphics
+    [width=0.9\textwidth]{images/chapter_8/regression-intervals.pdf}
+  \caption{A 95\% confidence band for mean height and a 95\% prediction band
+  for one new student, based on simulated data.}
+  \label{fig:regression-intervals}
+\end{figure}
+
+
+\subsection{Linear Models Aren't Just Straight Lines}
+\label{sec:linear_not_straight}
+
+It is easy to assume that because the method is called ``linear regression'',
+it can fit only one straight line relating one predictor to one response. The
+body fat model in Equation~(\ref{eq:2}) shows that linear models are more
+general.
+
+That model uses five predictors---age, weight, chest circumference, wrist
+circumference, and BMI---to estimate body fat percentage. A model with more
+than one predictor is called multiple linear
+regression\index{multiple linear regression}. The word ``linear'' refers to how
+the coefficients enter the model: each predictor is multiplied by a
+coefficient, and the resulting terms are added together.
+
+Here BMI is derived from weight and height rather than measured directly. In
+this dataset, weight is in pounds and height is in inches. BMI is defined as
+\begin{equation*}
+  \text{BMI} = 703\frac{\text{Weight}}{\text{Height}^2}.
+\end{equation*}
+The model is linear in its coefficients and in the columns supplied to
+\code{lm()}, including BMI. When written in terms of the raw measurements, it
+contains $\text{Weight}/\text{Height}^2$ and is nonlinear in height. Thus, a
+linear model can describe a nonlinear relationship\index{nonlinear relationship}
+in the raw measurements.
+
+This example also illustrates a potential complication. Weight appears both as
+a predictor and inside BMI, so the two predictors contain overlapping
+information. Strong overlap among predictors is called
+multicollinearity\index{multicollinearity}. It can make individual coefficient
+estimates unstable even when the model predicts reasonably well. This is one
+reason to interpret coefficients in a multiple regression cautiously.
+
+\subsection{Don't Step off the Cliff: The Danger of Extrapolation}
+\label{sec:extrapolation}
+
+Imagine tracking a baby's growth during the first year of life. Suppose the baby
+is 20 inches long at birth and grows 10 inches by age 1. If we extend that rate
+to age 25, the predicted height is 270 inches, or 22.5 feet.
+
+This use of a model outside the observed range of $x$-values is called
+extrapolation\index{extrapolation}. The farther we move beyond the data, the
+less reason we have to expect the fitted pattern to continue.
+
+By contrast, interpolation\index{interpolation} means predicting within the
+observed range. A straight line might approximate the relationship well within
+that range even when the pattern changes beyond it. Growth may slow or stop, a
+trend may reverse or reach a physical boundary, and practical constraints such
+as fuel, battery capacity, or daylight may begin to matter.
+
+Plugging an extreme $x$-value into a formula is easy, but the result may be
+meaningless or physically impossible. Always ask: \emph{``Is this prediction
+within the range of the data we actually collected?''}
+
+\section{Summary}
+
+This chapter introduced two complementary tools for studying relationships.
+Scatterplots reveal the form, direction, and unusual features of an
+association, while correlation summarizes the direction and strength of a
+linear association. Correlation does not establish causation. Regression goes
+further by distinguishing a response from its predictors and describing how
+the mean response changes as the predictors change.
+
+We used least squares to fit linear models and residual plots to check their
+assumptions and identify unusual observations. We also examined $R^2$, model
+validation, confidence and prediction intervals, multiple and categorical
+predictors, and interactions. These tools make linear models flexible, but no
+summary or fitted equation replaces careful diagnostics. Predictions are most
+trustworthy for populations and predictor ranges represented by the data, so
+extrapolation requires particular caution.
+
+\section{Problems}
+
+\begin{exercise}
+Use the blood pressure data and code in
+\lstinline{Code/regression-AgeSBP.R}.
+\begin{enumerate}
+  \item Look at the scatterplot. Does blood pressure generally rise or fall as
+    age increases? Is the pattern roughly linear?
+  \item Run \code{summary(fitsbp)}. The coefficient beside \code{AGE} is the
+    slope. Explain in words what it says about age and mean blood pressure.
+  \item Calculate the correlation with \code{cor(sbp$AGE, sbp$SBP)}. Square
+    it and compare the result with the $R^2$ reported by \code{summary()}.
+  \item Does this study prove that aging causes blood pressure to rise? Explain
+    why an association alone is not enough to prove cause and effect.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}
+Return to the nonlinear simulation in this chapter. Modify
+\lstinline{Code/regression-nonLinear.R} as follows.
+\begin{enumerate}
+  \item In the formula for \code{y}, change \code{10 * x^2} to
+    \code{2 * x^2}. Run the code and describe the shape of the scatterplot.
+  \item Change it to \code{20 * x^2} and run the code again. How does the shape
+    change? What happens to the correlation?
+  \item The correlation may be close to zero in both cases. Explain why zero
+    correlation does not mean that there is no relationship between $x$ and
+    $y$.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}
+Return to the three unusual-house datasets in
+\lstinline{Code/regression-outliers.R}. The orange dot is the unusual house,
+the dashed line leaves it out, and the solid line includes it.
+\begin{enumerate}
+  \item In which panel is the orange dot far above or below the other prices at
+    a similar house size? This point is a response outlier.
+  \item In which panels does the orange dot have an unusual house size? These
+    points have high leverage.
+  \item In which panel does the orange dot move the fitted line the most? This
+    point is influential.
+  \item In the \code{influential} dataset, change the unusual sale price from
+    400 to 500, 600, and then 700. Rerun the script each time. Describe what
+    happens to the solid line as the point moves closer to the general trend.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}
+The body fat analysis in \lstinline{Code/regression-bodyfat-validation.R} uses
+some people to train the model and holds back the rest to test it.
+\begin{enumerate}
+  \item Run the script and record the training and test RMSE. Which is larger?
+    Remember that a smaller RMSE means more accurate predictions.
+  \item Change \code{set.seed(2)} to 3, 4, 5, and 6. Record the two RMSE values
+    after each run. Do your conclusions depend strongly on the random split?
+  \item Remove \code{+ BMI} from the model formula and repeat the experiment
+    with \code{set.seed(2)}. Does BMI improve the test RMSE?
+  \item Why is test RMSE a fairer measure of performance on new people than
+    training RMSE?
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}
+Use \lstinline{Code/regression-residual-diagnostics.R} to study violations of
+the linear model assumptions.
+\begin{enumerate}
+  \item Which panel shows residuals scattered randomly around zero? This is the
+    pattern we hope to see.
+  \item Which panel shows a curved pattern? Explain why a straight line misses
+    part of the relationship in this dataset.
+  \item Which panel has a fan shape, with residuals spreading out from left to
+    right? Which assumption does this pattern violate?
+  \item Change \code{0.35} in the \code{curved} dataset to 0 and rerun the
+    script. What happens to its residual plot, and why?
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}
+Use \lstinline{Code/regression-intervals.R} to compare two kinds of intervals.
+\begin{enumerate}
+  \item Change the age in \code{new_student} from 15 to 12 and then to 18. For
+    each age, record the confidence interval and prediction interval.
+  \item Why is the prediction interval wider? Think about why predicting one
+    student is harder than estimating the mean for all students of that age.
+  \item Try age 25. The data include only ages 12 through 18. Explain why the
+    interval produced by R does not make this extrapolation trustworthy.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}
+Return to the simulated student example relating test score to study time and
+tutoring. Fit the additive and interaction models in
+\lstinline{Code/regression-categorical-interactions.R}.
+\begin{enumerate}
+  \item Run \code{summary(score_fit)}. In this additive model, how much does the
+    predicted score change for one more hour of study? At the same study time,
+    how do the predicted scores of tutored and untutored students differ?
+  \item Run \code{summary(score_interaction_fit)}. The interaction coefficient
+    tells us how much the study-time slope changes for tutored students. Find
+    the slope for each group.
+  \item Run \code{anova(score_fit, score_interaction_fit)}. A small p-value is
+    evidence that the two groups have different slopes. What do you conclude?
+  \item Does this regression prove that tutoring causes higher scores? Explain
+    what information about the study design you would need before making that
+    claim.
+\end{enumerate}
+\end{exercise}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-command-extra-options: "-shell-escape"
+%%% TeX-engine: xetex
+%%% TeX-master: "../sidsmain.tex"
+%%% End:
