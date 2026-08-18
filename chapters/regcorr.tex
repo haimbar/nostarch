@@ -235,21 +235,170 @@ relationship between body fat percentage and other variables; it can't be the
 true relationship. Yet, it could provide some useful information. Remember that
 ``All models are wrong, but some are useful.'' -- George E. P. Box
 
-\why{More topics to add:}
-\subsection{Outliers}
-\subsection{model diagnostics, R squared, etc.}
-\subsection{Prediction Interval}
-When we use a linear regression model to predict the value of $y$ for a given
-\subsection{Linear models is not always linear}
-Linearity means linear in parameters
-\subsection{Be careful of extrapolation}
-Extrapolation is the process of using a linear regression model to predict
-values outside the range of the original data, which can be unreliable because
-the linear trend may not hold true for those new values. While you can find a
-predicted y-value by plugging an x-value outside the original range into the
-model's equation, the results are often inaccurate and can lead to nonsensical
-conclusions, especially as the prediction moves further from the original data.
+\subsection{Outliers and Influential Points}\label{sec:outliers}
 
+What happens if a single data point is way off from the rest? Because the least
+squares method squares each vertical distance $(y - \hat{y})^2$, a large
+residual contributes disproportionately to the quantity being minimized. In
+Figure~\ref{fig:fittingLS}, for example, the patient with a systolic blood
+pressure near 220 has a much larger squared residual than the other patients.
+Such a point can act like a heavy weight on a seesaw and pull the fitted line
+toward itself, although how much it does so also depends on its $x$-value.
+
+Figure~\ref{fig:outliers} illustrates how unusual points can differ:
+\begin{itemize}
+\item Outliers\index{outlier} in $y$: A point whose $y$-value is far from the
+  fitted line and therefore has a large residual. For example, suppose a house
+  has 2,000 square feet. Its expected sale price is \$400,000, but it sells for
+  \$700,000 instead, making it an outlier in sale price.
+\item High-leverage\index{leverage} points in $x$: A point whose $x$-value is
+  far from the other $x$-values. For example, a house with 5,000 square feet has
+  high leverage in a dataset in which all the other houses range from 1,000 to
+  3,000 square feet. If it sells for \$850,000, it follows the overall
+  relationship between size and price and is not an outlier in $y$.
+\item Influential points\index{influential point}: A point that noticeably
+  changes the fitted line when it is included or removed. For example, if the
+  house with 5,000 square feet sells for only \$400,000, it pulls the right end
+  of the line downward and substantially reduces the estimated slope. Such a
+  point is both high-leverage and influential.
+\end{itemize}
+
+\begin{figure}[htp]
+  \centering
+  \includegraphics[width=\textwidth]{images/static/outliers.pdf}
+  \caption{A response outlier, a high-leverage point that follows the trend,
+  and a high-leverage point that changes the fitted line. The dashed line omits
+  the unusual point; the solid line includes it.}
+  \label{fig:outliers}
+\end{figure}
+
+A common beginner mistake is to immediately delete any unusual point to make
+the line fit the rest of the data better. Don't do this! An outlier might be a
+simple typo (like entering a height of 700 inches instead of 70 inches), but it
+could also be a genuine, exciting discovery or a distinct subpopulation that
+reveals how the real world behaves.
+
+
+\subsection{How Good Is the Line? Model Diagnostics and $R^2$}\label{sec:diagnostics}
+\index{R-squared@$R^2$}
+\index{residual plot}
+
+When we run \code{lm()} in \R, it will happily draw a best-fit line through
+\emph{any} dataset we give it---even if the points look like a circle, a smiley
+face, or random static. How do we know whether our line is actually doing a good
+job?
+
+\subsubsection{The $R^2$ Statistic}
+A common summary statistic is the \textbf{coefficient of determination}, written
+as $R^2$. It is the proportion of the variation in the observed $y$-values that
+is accounted for by the fitted model.
+\begin{itemize}
+\item An $R^2 = 1$ (or 100\%) means that every observed $y$-value equals its
+  fitted value, so all the points lie on the fitted line.
+\item An $R^2 = 0$ means that the fitted model accounts for none of the
+  variation in $y$. In simple linear regression with an intercept, the fitted
+  line is then horizontal. This does not rule out a nonlinear relationship
+  between $x$ and $y$.
+\item In simple linear regression with one predictor and an intercept, $R^2$ is
+  the square of the sample correlation coefficient $r$. Thus, if $r = 0.8$, then
+  $R^2 = 0.64$, meaning that the fitted line accounts for 64\% of the variation
+  in $y$.
+\end{itemize}
+
+However, a high $R^2$ doesn't automatically mean a straight line is the right
+shape. A curved relationship can still produce a high $R^2$, even though a
+straight line misses the real pattern entirely(e.g., the data in
+Figure~\ref{fig:nonLinear})!
+
+\subsubsection{Checking the Residuals}
+A residual\index{residual} is the difference between an observed value and its
+fitted value, $y - \hat{y}$. Plotting the residuals against the fitted values
+can reveal patterns that $R^2$ does not. If a straight-line model is
+appropriate, the points should form a roughly patternless band centered at zero:
+\begin{enumerate}
+\item No curves: A U-shape or an arch indicates that the straight-line model has
+  failed to capture curvature in the relationship.
+\item Even spread: The vertical spread of the residuals should remain roughly
+  constant across the fitted values. A fan or megaphone shape indicates that the
+  variability changes with the fitted value.
+\end{enumerate}
+
+
+\subsection{Estimating an Average vs. Predicting a Single Person}
+\label{sec:pred_interval}
+
+Suppose we build a regression model to predict student heights from their ages.
+For a 15-year-old student, the regression line might give a fitted height of 66
+inches. But there are two different questions we could ask:
+\begin{enumerate}
+\item What is the average height of all 15-year-olds in the population?
+\item How tall will one particular 15-year-old be?
+\end{enumerate}
+
+Estimating a population average is more precise than predicting the value for
+one individual:
+\begin{itemize}
+\item A confidence interval\index{confidence interval!in regression} gives a
+range of plausible values for the population's mean height at a given age. As
+the amount of data increases, this interval generally becomes narrower.
+\item A prediction interval\index{prediction interval} gives a range of
+plausible values for the height of one new student at a given age. It accounts
+for both uncertainty in the mean height and natural person-to-person variation.
+At the same confidence level, it is therefore wider than the corresponding
+confidence interval for the mean.
+\end{itemize}
+
+Both intervals are available from \R's \code{predict()} function. For a
+confidence interval, use \code{interval = "confidence"}; for a prediction
+interval, use \code{interval = "prediction"}.
+
+
+\subsection{Linear Models Aren't Just Straight Lines}
+\label{sec:linear_not_straight}
+
+It is easy to assume that because the method is called ``linear regression'',
+it can fit only one straight line relating one predictor to one response. The
+body fat model in Equation~(\ref{eq:2}) shows that linear models are more
+general.
+
+That model uses five predictors---age, weight, chest circumference, wrist
+circumference, and BMI---to estimate body fat percentage. A model with more
+than one predictor is called multiple linear
+regression\index{multiple linear regression}. The word ``linear'' refers to how
+the coefficients enter the model: each predictor is multiplied by a
+coefficient, and the resulting terms are added together.
+
+Here BMI is derived from weight and height rather than measured directly. In
+this dataset, weight is in pounds and height is in inches. BMI is defined as
+\begin{equation*}
+  \text{BMI} = 703\frac{\text{Weight}}{\text{Height}^2}.
+\end{equation*}
+The model is linear in its coefficients and in the predictor columns supplied to
+\code{lm()}, including the BMI column. However as a function of the underlying
+raw measurements, it is a nonlinear function of the Height through the term
+$\text{Weight}/\text{Height}^2$. Therefore, a linear model can describe a
+nonlinear relationship\index{nonlinear relationship} in the raw measurements.
+
+\subsection{Don't Step off the Cliff: The Danger of Extrapolation}
+\label{sec:extrapolation}
+
+Imagine tracking a baby's growth during the first year of life. Suppose the baby
+is 20 inches long at birth and grows 10 inches by age 1. If we extend that rate
+to age 25, the predicted height is 270 inches, or 22.5 feet.
+
+This use of a model outside the observed range of $x$-values is called
+extrapolation\index{extrapolation}. The farther we move beyond the data, the
+less reason we have to expect the fitted pattern to continue.
+
+By contrast, interpolation\index{interpolation} means predicting within the
+observed range. A straight line might approximate the relationship well within
+that range even when the pattern changes beyond it. Growth may slow or stop, a
+trend may reverse or reach a physical boundary, and practical constraints such
+as fuel, battery capacity, or daylight may begin to matter.
+
+Plugging an extreme $x$-value into a formula is easy, but the result may be
+meaningless or physically impossible. Always ask: \emph{``Is this prediction
+within the range of the data we actually collected?''}
 
 \section{Summary}
 
