@@ -62,7 +62,7 @@ plot_case <- function(data, title, limits, show_legend = FALSE) {
   }
 }
 
-pdf("images/static/outliers.pdf", width = 10, height = 4)
+pdf("images/chapter_8/outliers.pdf", width = 10, height = 4)
 par(mfrow = c(1, 3), mar = c(4.5, 4.6, 3.5, 0.7))
 
 plot_case(
