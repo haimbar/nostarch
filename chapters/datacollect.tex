@@ -39,7 +39,7 @@ how large the sample is, the results can't be trusted. When the quantity we want
 to estimate and reason about is estimated based on a non-representative sample,
 we get a \emph{biased}\index{estimator!\emph{biased}} estimator. By bias\index{estimator!bias} we mean that the obtained estimate
 \jy{This does not define bias}
-is not a good approximation of the true value, and it doesn't improve when we
+is systematically off from the true value, and it doesn't improve when we
 take a larger sample.
 
 
@@ -53,7 +53,7 @@ Assume that for a group of people,  weight and height have a linear relationship
 However, because people have different activity levels and different diets, each
 person's weight is a little different from the one predicted by Equation (\ref{eq:weightheight}).
 We write the weight as a function of height using an equation that includes this 
-random `noise', by adding
+random noise, by adding
 a non-deterministic (\emph{stochastic}) term, denoted by `$\text{error}$':
 \jy{lower case error?}
 \begin{equation}
@@ -104,7 +104,7 @@ obtain \code{w} in this example is not important. What's important is
 that the selection of an individual into the sample is \emph{not random}. 
 When the probability of drawing a subject into the sample depends on their
 height, weight, or both, then the sample is no longer representative
-of the population and as such, estimates of population features based
+of the population, and estimates of population features based
 on it will be biased.
 \showChunk{R}{Code/datacollect-goodbadsample.R}{BIASgbs3}
 
@@ -278,7 +278,7 @@ missing factors!
 
 \subsubsection{Observational Studies}
 
-Most of the time, the data that's available for analysis is not from RCTs, but from
+Most of the time, the available data is not from RCTs, but from
 \emph{observational studies} \index{\emph{observational studies}}. These are typically much easier to collect, but they don't
 guarantee proper randomization, and that may lead to biased results. 
 For example, we may want to look at the effect of education on future income.
@@ -297,9 +297,9 @@ but rather, they can \emph{select} their own group.
 Whenever we analyze data, we must know how it was collected. Was it through a
 controlled experiment, or is it just data that came from an observational study?
 Conclusions from the former can be much stronger, in the sense that they allow
-us to establish cause and effect relationship. But, as we said, most of the data
+us to establish a cause-and-effect relationship. But, as we said, most of the data
 that we encounter doesn't come from a controlled experiment. In these cases, we
-must be careful when we draw conclusions.  Usually, we can only make statements
+must be careful when we draw conclusions. Usually, we can only make statements
 about \emph{associations} between variables, but not much (if at all) about
 causality.
 
@@ -308,7 +308,7 @@ In this section we introduce a few types of data collection problems that lead t
 biased samples. 
 David Hand, in his book \emph{Dark Data} \citep{darkdata_ch2} discusses 15 different
 types of `dark data' -- data that we don't observe, and by ignoring its existence we 
-are lead to wrong (potentially disastrous) conclusions. 
+are led to wrong (potentially disastrous) conclusions. 
 We will demonstrate some of these data problems in this chapter.
 
 \subsection{Berkson's Bias\index{bias!Berkson's bias}}\label{berkson-bias}
@@ -317,7 +317,7 @@ Jordan Ellenberg poses the question:
  `\textit{Why are handsome men such jerks?}' \citep{ellenberg2015not}.
 %https://medium.com/@penguinpress/why-are-handsome-men-such-jerks-f385a46d314f
 
-Are they? Similarly, you may have seen articles which focus on ``popular books whose 
+Are they? Similarly, you may have seen articles that focus on ``popular books whose 
 movie adaptations were not-so-good'', and you may get the impression that 
 Hollywood ruins good books. But, is it true?
  % (e.g., \href{https://www.yardbarker.com/entertainment/articles/popular_books_that_were_made_into_terrible_movies/s1__29971472}{here})
@@ -326,7 +326,7 @@ Hollywood ruins good books. But, is it true?
 You may have heard similar common impressions, such as
 that pretty girls are meaner, and more talented people are less attractive.
 
-What is the source of these (false) impressions? The answer is that 
+Where do these false impressions come from? The answer is that 
 they usually result from a type of \emph{selection bias}, where the data
 is not collected at random and some items have a higher or lower probability
 of being included in the sample. The particular form of bias in this case has a name,
@@ -355,7 +355,7 @@ to be pretty!
 
 The reason for their incorrect conclusion is that the 370 stamps are not a
 representative sample of all the stamps you have. They were picked
-specifically to impress, so the stamps that were neither rare, nor pretty
+specifically to impress, so the stamps that were neither rare nor pretty
 are not represented in the sample. This means that this sample is biased.
 As shown in the Venn diagram in Figure~\ref{fig:ch7:stamps}, the area of the red
 circle is a small proportion (0.3) of the area of the rectangle, while it is a
@@ -429,7 +429,7 @@ Figure~\ref{fig:ch7:berkson} (b).
 \end{figure}
 
 People typically only recommend good books or good movies to other
-people, so what we see are only those with the best reviews. If a book is
+people, so what we see are mostly those with the best reviews. If a book is
 bad and the movie based on it is terrible, it's very unlikely you'll ever have
 a chance to hear about them. Thus, the impression that Hollywood ruins good books is
 false. It's just an impression based on a biased sample. 
@@ -578,7 +578,7 @@ with observational data, and we have to remember the risk of confirmation bias.
 \subsection{Extrapolations}\label{extrapolations}
 
 One of the main reasons to collect data is so that we can make predictions.
-It allows us to use historical data to, for example, decide whether to take 
+It lets us use historical data to, for example, decide whether to take 
 an umbrella when we leave the house, or how long it would take us to
 get to our destination, given the traffic and our speed.
 
@@ -597,7 +597,7 @@ How about  when \code{x}=2?
 
 Did you guess that when  \code{x}=0.5, \code{y} will be approximately 0.5, 
 and when  \code{x}=2, \code{y} will be approximately 2?
-This is a reasonable guess based on the data that we have, but is it true?
+This is a reasonable guess based on the data we have, but is it true?
 
 Let's see how to answer it with the following simulation.
 In \wingding{1}, we generate 500 values for \code{x}, equally spaced 
@@ -617,7 +617,7 @@ The right panel enlarges that rectangle, showing that all three functions are
 nearly indistinguishable there: this is exactly why Figure~\ref{fig:ch7:ext1} alone
 gives no clue which function generated the data.
 However, beyond 0.4, the three functions become very different. While \code{y1}
-continues along a straight line, \code{y2} starts to `bend' and although it continues to
+continues along a straight line, \code{y2} starts to `bend' and, although it continues to
 increase, it does so at a slower rate. The function \code{y3} increases at an exponential
 rate at first, but then has a change-point where the trend reverses and it starts to decrease.
 
@@ -643,7 +643,7 @@ to values that were not observed in our sample, we may be way off! There's no
 way to tell how the function we try to predict behaves outside the range
 of observed \code{x}.
 
-It is possible to perform a follow-up experiment, and check if our prediction is
+It is possible to perform a follow-up experiment and check whether our prediction is
 correct. For example, suppose that \code{y} in Figure~\ref{fig:ch7:ext1} represents
 the average monthly amount spent on online shopping, measured in thousands of dollars
 (so \code{y}~$= 0.25$ means \$250 per month), and \code{x} represents annual income,
@@ -664,19 +664,19 @@ fits better when we look at an extended range of \code{x} values.
 Suppose that we have data that we know consists of periodic functions.
 This is very common in time series data for temperatures, for example.
 It is also very common in signal processing. For example, music that
-we hear on the radio or some streaming service is transmitted as combination
+we hear on the radio or some streaming service is transmitted as a combination
 of frequencies, which can be represented with the sine or cosine functions.
 The higher the frequency, the more high-pitch the sound. People can hear
 a range of frequencies, up to a few thousand oscillations per second.
 
-Let's generate some data, and try to estimate the true function from it
+Let's generate some data and try to estimate the true function from it
 using the following code. Don't worry for now about  \wingding{1}, where
 we initialize the parameter \code{f}. We'll get back to it later.
 We start by choosing a small time interval and 
 divide the interval $[0, 3]$ into equal parts in \wingding{2}.
 In  \wingding{3}, we get the sample (for example, by measuring the temperature,
 or the frequency of some sound).
-We show a  plot of the data in the left panel
+We show a plot of the data in the left panel
 of Figure~\ref{fig:ch7:aliasing1}. 
 
 \showChunk{R}{Code/datacollect-aliasing.R}{aliasing1}
