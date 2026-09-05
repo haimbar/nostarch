@@ -2,14 +2,14 @@
 \label{ch:nyc}
 
 
-Every day, New Yorkers travel across the city in countless ways:
+Every day, New Yorkers travel across the city in many ways:
 walking to school, biking to work, driving across town, or riding
-buses and subways. Most of these journeys end safely, but some result
+buses and subways. Most of these trips end safely, but some result
 in crashes that cause injuries, delays, and sometimes fatalities. Can
 data help us understand when crashes occur, where they're most
 common, and what factors are associated with them? In this chapter, we
 investigate these questions using a real dataset from NYC Open Data,
-applying ideas from throughout this book: importing and cleaning data,
+using the ideas from throughout this book: importing and cleaning data,
 exploring patterns with tables and graphs, working with dates and
 times, handling missing values, and interpreting results carefully.
 
@@ -298,8 +298,7 @@ happened at some unknown time.
 
 The exact-midnight rate isn't the same in every borough. A higher rate
 in one borough could mean weaker data-quality control there, or simply
-that small boroughs have more variable rates because they have fewer
-crashes.
+more noise because that borough has fewer crashes.
 
 \showChunk{R}{Code/nyc_crashes.R}{midnight_by_borough}
 
@@ -535,7 +534,7 @@ With the exception of the zero-vehicle group, the proportion of severe crashes
 tends to rise as the number of vehicles involved rises. That pattern
 makes sense: more vehicles in a crash can mean more energy, more
 damage, and more people involved. The zero-vehicle group is a
-data-quality artifact, as we discuss below.
+data-quality artifact, as we explain below.
 
 The plot in Figure~\ref{fig:ch9:vehseverity} shows the severe-crash
 proportion for each vehicle count, with the overall severe-crash
@@ -595,7 +594,7 @@ values in some overnight hours}
 \end{figure}
 
 These tables and plots --- severity by vehicle count and by hour
-alike --- are useful for finding patterns, but they don't prove
+alike --- are useful for finding patterns, but they do not prove
 causes. A higher severe-crash proportion with more vehicles involved
 could reflect crash dynamics, or simply that multi-vehicle crashes are
 harder to under-report. A higher proportion late at night could
@@ -648,12 +647,12 @@ up to formal statistical scrutiny.
 \section{From Description to Inference}
 
 The descriptive tables above invite a few simple inferential checks.
-Because severity is a yes-or-no outcome, the appropriate comparison is
-not a t-test. In this section we use three tools: a chi-squared test
-to compare severe and non-severe crashes across day types, a binomial
-confidence interval to estimate the overall severe-crash rate, and a
-logistic regression model to see how severity relates to several
-predictors at once.
+Because severity is a yes-or-no outcome, we use tools made for counts
+and proportions instead of a t-test. In this section we use three
+tools: a chi-squared test to compare severe and non-severe crashes
+across day types, a binomial confidence interval to estimate the
+overall severe-crash rate, and a logistic regression model to see how
+severity relates to several predictors at once.
 
 \subsection{Severity on Business Days versus Weekends}
 
@@ -780,8 +779,20 @@ The summaries are shown below.
 \includeOutput{nyc-glm-fitted}[vbox]
 \includeOutput{nyc-glm-resid}[vbox]
 
-\hyb{The plot is not shown, and the summaries
-are not very informative.}
+\begin{figure}[H]
+\includegraphics[width=0.9\textwidth]{images/chapter_9/severity_diagnostics.pdf}
+\caption{Logistic regression diagnostics: fitted probabilities and
+deviance residuals}
+\label{fig:ch9:severitydiag}
+\end{figure}
+
+The plot below gives a quick visual check. The fitted probabilities
+should spread across a sensible range, not collapse to almost all
+zeros or almost all ones. The residual plot should also look roughly
+centered around zero, with no obvious curve or other strong pattern.
+
+\hyb{The plot should be shown here, and the summaries alone are not
+very informative.}
 
 These steps separate modeling into preparation, fitting, interpretation,
 and validation. The logistic model gives an interpretable summary via
@@ -907,7 +918,7 @@ step: Did the file load? Are the dates right? Are missing values coded
 consistently? Do the variables mean what their names suggest? Are we
 describing a pattern, or are we claiming a cause?
 
-Open data makes these questions available to anyone with patience and a
+Open data lets anyone ask these questions with patience and a
 computer. City agencies, federal agencies, scientific groups, sports
 leagues, and many other organizations share data that students can
 explore. NYC Open Data is a good place to look for more examples. In

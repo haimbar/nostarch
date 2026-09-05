@@ -580,6 +580,25 @@ fitted_prob <- predict(fit_severe, type = "response")
 resid_dev <- residuals(fit_severe, type = "deviance")
 capture.output(summary(fitted_prob), file = "generated/nyc-glm-fitted.tex")
 capture.output(summary(resid_dev), file = "generated/nyc-glm-resid.tex")
+
+pdf("images/chapter_9/severity_diagnostics.pdf",
+    width = 8, height = 4)
+par(mfrow = c(1, 2))
+plot(fitted_prob,
+     pch = 19,
+     col = rgb(0.2, 0.4, 0.7, 0.5),
+     xlab = "Observation",
+     ylab = "Fitted probability",
+     main = "Fitted probabilities")
+plot(fitted_prob,
+     resid_dev,
+     pch = 19,
+     col = rgb(0.8, 0.2, 0.2, 0.5),
+     xlab = "Fitted probability",
+     ylab = "Deviance residual",
+     main = "Residuals vs fitted")
+abline(h = 0, lty = 2, col = "gray40")
+dev.off()
 #===end
 
 ############################################################
