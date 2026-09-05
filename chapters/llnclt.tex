@@ -10,27 +10,14 @@
 \chapter{Large Samples: From Chaos to Order}\label{ch:llnclt}
 The previous chapter gave us probability as a language for describing
 uncertainty. Now we ask a practical question: when we collect data from a
-random process, what can we expect to see, and how does our confidence grow as
-we collect more observations?
-Benjamin Franklin once said `In this world nothing can be said to be certain,
-except death and taxes'. Still, for all the uncertain things in life, and
-especially in science where most theories cannot be proven correct, we would
-like to be able to say something about how confident we are about a conclusion
-we draw. To do that, scientists conduct an experiment in which they collect
-data and check if it provides evidence in favor or against a proposed theory.
-This chapter describes two of the most important results in probability and
-statistics --- the law of large numbers and the central limit theorem. These
-theorems explain why statistics works and is useful in so many situations! They
-tell us that, if we collect enough data (and conduct a sensible experiment)
-we'll be able to say to what extent we can trust our results, and also tell us
-how much data we need in order to draw conclusions with a certain degree of
-confidence. Without these results, conducting experiments would be meaningless,
-no matter how many samples are collected.
-We'll demonstrate both theorems through simulation across normal, binomial,
-and Poisson distributions. You'll see why the sample mean converges to
-the population mean (LLN), why the spread of that average shrinks with the
-square root of the sample size (CLT), and how these ideas apply to IQ scores
-and birth-ratio problems.
+random process, what should we expect to see, and how much can we trust what
+we see? This chapter answers that question with two of the most important
+results in statistics, the law of large numbers and the central limit theorem.
+Together, they show why sample averages settle down as sample size grows and
+why larger samples give more stable estimates. We will see these ideas through
+simulations with normal, binomial, and Poisson data, and then apply them to IQ
+scores, roulette, and text messages. Together, they also explain why statistics
+can turn noisy data into useful answers about the population we care about.
 
 Let's start with a few motivating examples that will run through the chapter:
 \begin{enumerate}
@@ -38,9 +25,9 @@ Let's start with a few motivating examples that will run through the chapter:
 the distribution of the scores in this sample? How close is it to the true
 distribution of the whole population?\\ How likely is it that we find a person
 with IQ greater than 150?\\
-In order to be accepted to the Mensa club a person has to be in the top 2\% of
-the IQ distribution. What is the minimum score required in order to be a Mensa
-member?  \item The pockets of the roulette wheel are numbered from 0 to 36. In
+To join Mensa, a person has to be in the top 2\% of the IQ distribution. What
+is the minimum score required to be a Mensa member?  \item The pockets of the
+roulette wheel are numbered from 0 to 36. In
 number ranges from 1 to 10 and 19 to 28, odd numbers are red and even are
 black. In ranges from 11 to 18 and 29 to 36, odd numbers are black and even are
 red. There is a green pocket numbered 0 (zero). Suppose you want to bet on a
@@ -57,24 +44,19 @@ average day, between 8am and 8pm?
 %If he takes 3pt 10 shots per game over the next 10 games, how many three-point shots do you expect him to make?
 \end{enumerate}
 
-The main paradigm in statistical inference and prediction in order to answer
-such questions is to take a sample from the population we're interested in, and
-choose a mathematical model which we believe represents the whole population.
-Then we check if our model appears to be reasonable, in the sense that it fits the
-data well. If it does, we can use the mathematical properties of the model to
-draw conclusions about the population. By representing the sample using a
-mathematical (probabilistic) formula, we essentially augment a finite sample to
-an infinite one. Working with a formula/model for the data allows us to use the
-`heavy artillery' of math, like finding maximum/minimum, computing areas under
-the curve of the function, and so on. 
+The main idea in statistical inference and prediction is to start with a sample
+from the population we care about and then choose a mathematical model that
+seems to describe the whole population. We then check whether the model fits
+the data well. If it does, we can use the model's properties to draw
+conclusions about the population. Thinking of the sample in probabilistic
+terms lets us use the tools of mathematics, such as finding maxima and minima
+or computing areas under a curve.
 
-This chapter deals with inference which can be derived from the mean of a
-population, and we show the (arguably) two most important results in statistics
---- the \emph{law of large numbers} (\emph{LLN}) and the \emph{central limit
-theorem} (\emph{CLT}). Together, these two very general theorems make it
-possible to draw conclusions about the whole population, from a single sample!
-(as long as the sample represents the whole population and the sample
-size is large enough).
+This chapter focuses on inference from the mean of a population. We show the
+two results that make that possible: the \emph{law of large numbers}
+(\emph{LLN}) and the \emph{central limit theorem} (\emph{CLT}). Together,
+they let us draw conclusions about a whole population from a single sample,
+as long as the sample is representative and large enough.
 
 
 \section{The Law of Large Numbers\index{Law of Large Numbers}}
@@ -84,7 +66,7 @@ size is large enough).
 
 Suppose that the IQ in the general population has a normal distribution\index{normal distribution} with
 mean of 100 and  standard deviation of 15, and from this population we draw 200
-people and calculate the sample mean and standard deviation, like so:
+people and calculate the sample mean and standard deviation, as follows:
 
 \showChunk{R}{Code/llnclt_IQ.R}{iq-sample}
 %\runR{Code/llnclt_IQ.R}{llnclt_IQ}
@@ -93,10 +75,10 @@ Run this code. You should get that the sample mean is
 \inlnR{```cat(mean(samp1))```}[llnmsamp1] and the standard deviation is
 \inlnR{```cat(sd(samp1))```}[llnssamp1]. Both are very close to the true values.
 
-Let's pretend that just like in real life, we don't know the true distribution.
-We propose a certain distribution and check if it fits. In the current
-example, which we called \lstinline{samp1}, we want to check if the normal
-distribution is a good model for our data.
+In real life we usually don't know the true distribution. So we propose a
+distribution and check whether it fits. In this example, which we called
+\lstinline{samp1}, we want to see whether the normal distribution is a good
+model for our data.
 
 One way to check if a distribution fits our data is with a graphical tool
 called the \emph{Q-Q plot}\index{Q-Q plot}. A Q-Q plot is based on the simple (and very
@@ -117,14 +99,13 @@ When it's assumed that the data comes from a normal distribution, we can use the
 \lstinline{qqnorm()} function to check if the assumption is reasonable:
 \showChunk{R}{Code/llnclt_IQ.R}{iq-qqplot}
 
-The points in the Q-Q plot in Figure~\ref{fig:ch4:qqplot1} show the actual quantiles
-(from the data, \lstinline{samp1}) versus the theoretical quantiles (those that
-would be obtained if we drew a sample from a normal distribution). The points in
-the graph lie very close to a straight line, indicating that the sample was
-likely drawn from a normal distribution. (This is not surprising here because we
-generated the sample this way. However, when we get a random sample and do not
-know the true distribution, this plot is useful for checking whether our
-mathematical model is reasonable.)
+The points in the Q-Q plot in Figure~\ref{fig:ch4:qqplot1} show the actual
+quantiles from the data, \lstinline{samp1}, versus the theoretical quantiles
+that we would get from a normal distribution. The points in the graph lie very
+close to a straight line, which tells us that the sample was likely drawn from
+a normal distribution. This is not surprising here because we generated the
+sample that way. But when we do not know the true distribution, this plot is a
+useful check on whether our model is reasonable.
 
 \begin{figure}[H]
 \includegraphics[width=0.6\textwidth]{images/chapter_4/qqplot1.pdf}
@@ -141,13 +122,14 @@ simulation but vary the sample size ($n$) and see what happens to the
 \showChunk{R}{Code/llnclt_IQ.R}{iq-lln-sim}
 
 In \wingding{1} we create a vector of sample sizes on a log scale, covering
-several orders of magnitude so the convergence\index{convergence} is easy to see. We'll generate
-a random sample for each of these \lstinline{ns}. In \wingding{2} we initialize a vector
-which will hold all the sample means (at first, they're set to zero). The
-\lstinline{for} loop in \wingding{3} is the same as the previous demonstration,
-but in each iteration we increase the sample size, which is the first argument
-of the function \lstinline{rnorm()}. The mean from the $i$-th sample is stored
-in the $i$-th position of the vector \lstinline{allMeans} (in \wingding{4}.)
+several orders of magnitude so the convergence\index{convergence} is easy to see. We
+then generate a random sample for each of these \lstinline{ns}. In
+\wingding{2} we initialize a vector that will hold all the sample means, starting
+with zeroes. The \lstinline{for} loop in \wingding{3} is the same as the previous
+demonstration, but now each iteration uses a different sample size, which is
+the first argument of the function \lstinline{rnorm()}. The mean from the
+$i$-th sample is stored in the $i$-th position of the vector \lstinline{allMeans}
+(in \wingding{4}.)
 
 Figure~\ref{fig:ch4:LLNdemo} shows the results. We can see that as $n$ increases, the
 sample mean gets closer to the true mean (100, in our simulation), which is
@@ -159,13 +141,13 @@ shown as a horizontal line.
 \label{fig:ch4:LLNdemo}
 \end{figure}
 
-We also see in Figure~\ref{fig:ch4:LLNdemo} that the dispersion of the sample means
-gets smaller as the sample size gets larger, but this is the result of the
-\emph{Central Limit Theorem}, which will be discussed later in this chapter.
+We also see in Figure~\ref{fig:ch4:LLNdemo} that the sample means become less
+spread out as the sample size gets larger. That change is explained by the
+\emph{Central Limit Theorem}, which we will discuss later in this chapter.
 
 \subsection{The Roulette Wheel}
 Here, the outcome is binary --- we either win or lose a bet. The probability of
-winning if we choose the red color, is $18/37$.  Let's simulate 40 bets at the
+winning if we choose red is $18/37$. Let's simulate 40 bets at the
 roulette wheel, where, in each we put a dollar on red. Each bet follows a \emph{Bernoulli distribution}\index{Bernoulli distribution},
 $Ber(p)$, which takes the value 1 (win) with probability $p$ and 0 (loss) with
 probability $1-p$. Here $p=18/37$, and we repeat it 40 times. Equivalently,
@@ -174,8 +156,8 @@ we can look at it as a single binomial sample, with $n=40$ and $p=18/37$.
 %\runR{Code/llnclt_roulette.R}{roulette}
 \showChunk{R}{Code/llnclt_roulette.R}{roulette-sample}
 
-Run this code. You should get in this particular sample of 40 bets, that the
-probability of winning (the mean of \lstinline{samp2}) is
+Run this code. In this particular sample of 40 bets, the probability of
+winning (the mean of \lstinline{samp2}) is
 \inlnR{```cat(mean(samp2))```}[llnsamp2m] (greater than 0.5.) This seems great --- if we
 keep going we might get rich! However, let's see what happens to the sample
 mean (which is the probability of winning) as we increase $n$. The following
@@ -211,20 +193,20 @@ means that we lost  \inlnR{```cat(prettyNum(10000-2*sum(roulette), big.mark = ",
 To the casino it doesn't matter if one person bets \$1,000,000 or if 1,000
 people each bets on \$1,000 --- in both cases the casino will win with
 probability 19/37 and will have a positive net gain (you can't beat the house).
-Casinos know that, and use the law of large numbers in order to ensure that in
-the long run, they will win.
+Casinos know that, and they use the law of large numbers to make sure that in
+the long run they will win.
 
 
 \subsection{Receiving Text Messages}
-Let's simulate $n$ days, and in each one count the number of messages, assuming
-they arrive independently from a Poisson distribution with rate=10. To do that,
-run the following code:
+Let's simulate $n$ days, and on each day count the number of messages,
+assuming they arrive independently from a Poisson distribution with rate 10.
+To do that, run the following code:
 
 %\runR{Code/llnclt_texts.R}{texts}
 \showChunk{R}{Code/llnclt_texts.R}{texts-lln-sim}
 
-In each day we count messages over 12 hours, so in \wingding{1} we multiply the
-(hourly) random sample from the Poisson distribution by 12. Figure~\ref{fig:ch4:LLNdemoPoisson} shows the results.
+For each day we count messages over 12 hours, so in \wingding{1} we multiply the
+hourly random sample from the Poisson distribution by 12. Figure~\ref{fig:ch4:LLNdemoPoisson} shows the results.
 
 \begin{figure}[H]
 \includegraphics[width=0.5\textwidth]{images/chapter_4/LLNtexts.pdf}
@@ -239,24 +221,22 @@ the average converges to $12 \times 10 = 120$ messages per day.
 
 
 \subsection{The LLN\index{LLN}: An Informal Statement}
-Informally, the law of large numbers states that the results of an experiment
-tend to settle down to a fixed average when the experiment is repeated many
-times. In other words, as the sample size increases, the sample mean will get
-closer to the true population mean.
+Informally, the law of large numbers says that repeated experiments settle
+down to a fixed average. In other words, as the sample size increases, the
+sample mean gets closer to the true population mean.
 
-The LLN is very general --- it doesn't matter if the question is about how many
-boy-births we expect to see (\emph{binomial distribution}\index{binomial distribution}), the number of
-received text messages (\emph{Poisson distribution}\index{Poisson distribution}), or if we measure IQ
+The LLN is very general. It applies whether we're asking about boy births
+(\emph{binomial distribution}\index{binomial distribution}), received text messages
+(\emph{Poisson distribution}\index{Poisson distribution}), or IQ scores
 (\emph{normal distribution}). The only requirements are that the samples are
-independent, and identically distributed, and that the true distribution
-actually has a mean. (We'll see an example where this is not the case.)
+independent and identically distributed, and that the true distribution has a
+mean. (We'll see an example where this is not the case.)
 
-It's important to emphasize that the LLN doesn't imply that the results of
-future experiments will balance out what already happened! If we bet 100 times
-at the roulette wheel and lost each time, this doesn't mean that we have a
-better chance of winning the next bet. All the LLN is saying is that if we
-continue to play many times, the overall probability that we win in each round
-will converge to 18/37.
+A key point is that the LLN does not mean future experiments will somehow
+balance out what already happened. If we bet 100 times at the roulette wheel
+and lost each time, that does not mean we have a better chance of winning the
+next bet. The LLN says only that if we keep playing many times, the overall
+probability of winning will move toward 18/37.
 
 \medskip
 \noindent\textbf{Law of Large Numbers.} Let $X_1, X_2, \ldots, X_n$ be
@@ -354,18 +334,19 @@ each time calculate the sample mean. Then, we'll plot a histogram of the
 10,000 sample means.
 
 \subsubsection{Exponential Distribution}
-First, let's draw one sample from Exp(5.5) with $n$=100 random i.i.d. draws,
-and see that the distribution of the sample is very different from normal. In
-the following code, we plot a histogram from one sample (with n=100) and
-overlay the graph of the probability distribution function of Exp(5.5), in
-order to show that the sample is representative of the true distribution:
+First, let's draw one sample from Exp(5.5) with $n=100$ random i.i.d. draws
+and see that the sample itself looks very different from a normal sample. In
+the following code, we plot a histogram from one sample (with $n=100$) and
+overlay the probability density function of Exp(5.5) to show that the sample
+is representative of the true distribution:
 
 \showChunk{R}{Code/llnclt_CLTexp.R}{clt-exp-sample}
 %\runR{Code/llnclt_CLTexp.R}{cltsimexp}
 
-Notice that the distribution in Figure~\ref{fig:ch4:CLTexp} is very skewed, and doesn't
-look at all like a normal distribution. Try running \lstinline{mean(expsamp1)}. you
-should get \inlnR{```cat(mean(expsamp1))```}[llnmeansampexp], which is approximately
+Notice that the distribution in Figure~\ref{fig:ch4:CLTexp} is very skewed and
+doesn't look at all like a normal distribution. Try running
+\lstinline{mean(expsamp1)}. You should get
+\inlnR{```cat(mean(expsamp1))```}[llnmeansampexp], which is approximately
 1/5.5, the theoretical mean of the Exp(5.5) distribution.
 
 \begin{figure}[H]
@@ -377,15 +358,15 @@ with rate 5.5}
 
 To understand the CLT, we'll draw 10,000 samples, calculate the mean of each
 sample, and plot a histogram of those 10,000 sample means. We'll first do it
-with $n$=50, like so:
+with $n=50$, as follows:
 
 \showChunk{R}{Code/llnclt_CLTexp.R}{clt-exp-sim}
 
-In \wingding{1} we prepare a vector which will hold the sample mean from 10,000
+In \wingding{1} we prepare a vector that will hold the sample mean from 10,000
 simulated datasets. In \wingding{2} we get the sample mean for the $i$th random
-sample, and update the vector \lstinline{allMeans}. Then, we plot the histogram
-and use \lstinline{abline} to show the true mean of the population (which is
-1/5.5).
+sample and update the vector \lstinline{allMeans}. Then we plot the histogram
+and use \lstinline{abline} to show the true mean of the population, which is
+1/5.5.
 
 Repeat the same code, but change the first line to \lstinline{n <- 500}.
 Figure~\ref{fig:ch4:CLTexp2} shows the results for $n=50$ (left) and $n=500$ (right).
@@ -397,30 +378,28 @@ exponential distribution. Left: $n=50$, right: $n=500$} \label{fig:ch4:CLTexp2}
 \end{figure}
 
 We can see that the mean is estimated quite accurately in both cases, and the
-overall shape of the 10,000 sample means has the shape of a normal
-distribution. However, the spread (variance) of the distribution decreases as
-the sample size increases. This is the essence of the CLT!  It tells us that
-the \emph{single} sample mean that we actually have is most likely not exactly
-the true mean in the population, but if we can get a larger sample size ($n$)
-then we'll know that the range in which we can expect to find the true mean is
-getting smaller.
+10,000 sample means have a histogram that is close to normal. However, the
+spread of that histogram decreases as the sample size increases. That is the
+point of the CLT: the \emph{single} sample mean that we actually have is most
+likely not exactly the true mean in the population, but a larger sample gives
+us a tighter range in which to look for the truth.
 
 \subsubsection{Binomial Distribution}
-In order to see the generality of the CLT, we demonstrate it again with
-another, very different distribution. This time our data comes from a discrete
-and skewed distribution (the binomial).
+To show how general the CLT is, we demonstrate it again with another very
+different distribution. This time our data comes from a discrete and skewed
+distribution, the binomial.
 
 The following code is very similar to the previous one, except that we use
-\lstinline{rbinom} to generate the data. Try it, and then change the first line
-to \lstinline{n <- 500}, and run it again.
+\lstinline{rbinom} to generate the data. Try it, then change the first line to
+\lstinline{n <- 500}, and run it again.
 
 \showChunk{R}{Code/llnclt_CLTbinom.R}{clt-binom-sim}
 %\runR{Code/llnclt_CLTbinom.R}{cltsimbinom}
 
-You should get the plot in Figure~\ref{fig:ch4:CLTbinom}. Notice that because we've
-simulated data with a relatively small probability of getting a success
-($p$=0.15), when $n$=50 the shape of the distribution of sample means is still
-a bit skewed, but when $n$ is large the bell shape appears!
+You should get the plot in Figure~\ref{fig:ch4:CLTbinom}. Notice that because
+we've simulated data with a relatively small probability of success
+($p=0.15$), the shape of the distribution of sample means is still a bit
+skewed when $n=50$, but the bell shape appears when $n$ is large.
 
 \begin{figure}[H]
 \includegraphics[width=0.9\textwidth]{images/chapter_4/CLTbinom.pdf}
@@ -429,13 +408,12 @@ binomial distribution. Left: $n=50$, right: $n=500$} \label{fig:ch4:CLTbinom}
 \end{figure}
 
 Once again, in both cases the mean of 10,000 simulated sample means is very
-close to the true value (0.15), but as $n$ gets larger, we are more confident
-that the \emph{only} value that we got from \emph{a single} experiment is close
-to the true value, because the range in which we can find the true value is
-narrower.
+close to the true value (0.15). As $n$ gets larger, we are more confident that
+the one value we got from a single experiment is close to the true value,
+because the range in which the true value can hide is narrower.
 
 \subsubsection{Application: Boy/Girl Birth Ratio}
-In 2021 the boy to girl birth ratio in the USA is estimated to be 1.05. If we
+In 2021 the boy-to-girl birth ratio in the USA is estimated to be 1.05. If we
 took a random sample of 300 newborns across the USA, how many do you expect to
 be boys? Run the following code:
 
@@ -446,26 +424,24 @@ This should give the following:
 \includeOutput{boygirl}%[inline]
 
 Would it be very surprising if we actually saw 148 in the random sample?
-Suppose we took a sample of 3,000, instead. Would it be surprising if we
-observed 1,480 boys?  How about if we took a sample of 30,000, instead. Would
-it be surprising if we observed 14,800 boys?
+Suppose we took a sample of 3,000 instead. Would it be surprising if we
+observed 1,480 boys? How about if we took a sample of 30,000 instead? Would it
+be surprising if we observed 14,800 boys?
 
-The probability of a boy birth doesn't depend on the sample size, and we
+The probability of a boy birth does not depend on the sample size, and we
 calculated it to be 0.512, so the expected number of boys when the sample size
-is 300, 3,000, and 30,000 is 151, 1,510, and 15,100, respectively. So, it may
-appear that actually observing 148 instead of 151 is as likely as observing
-1,480 instead of 1,510, or 14,800 instead of 15,100, but that is not true!  The
-CLT tells us that when the sample size increases, the dispersion of the sample
-means around the true mean gets smaller and smaller. This is demonstrated in
-the code below. 
+is 300, 3,000, and 30,000 is 151, 1,510, and 15,100, respectively. It may
+seem that observing 148 instead of 151 is just as likely as observing 1,480
+instead of 1,510, or 14,800 instead of 15,100, but that is not true. The CLT
+tells us that when the sample size increases, the sample means cluster more
+tightly around the true mean. The code below shows this.
 \showChunk{R}{Code/llnclt_boygirl.R}{boygirl-clt-demo}
 
-The result is shown in Figure~\ref{fig:ch4:CLTboygirl}.
-The green vertical line represents the expected number of boys, and the red one
-represents the observed ones. Notice that as we increase the sample size, the
-likelihood of the observed number of boys (148, 1,480, 14,800) gets smaller.
-When $n=30,000$ the red line is well outside the range of the simulated sample
-means.
+The result is shown in Figure~\ref{fig:ch4:CLTboygirl}. The green vertical line
+represents the expected number of boys, and the red one represents the observed
+value. Notice that as we increase the sample size, the observed number of boys
+(148, 1,480, 14,800) becomes less typical. When $n=30,000$, the red line is
+well outside the range of the simulated sample means.
 
 \begin{figure}[H]
 \includegraphics[width=\textwidth]{images/chapter_4/CLTboygirl.pdf}
@@ -505,14 +481,14 @@ sample mean and sample standard deviation:
 \showChunk{R}{Code/llnclt_IQ2.R}{iq-fit-plot}
 %\runR{Code/llnclt_IQ2.R}{cltiq2}
 
-Figure~\ref{fig:ch4:CLTIQfit} shows the result. The red curve shows the true density
-function, and the dashed green one shows the one estimated from the sample of
-200 people. They are very close. The LLN tells us that as we increase our
-sample size, the sample mean will be closer to the true mean.  The CLT tells us
-how close to the true mean we can expect that our sample mean to be. As the
+Figure~\ref{fig:ch4:CLTIQfit} shows the result. The red curve shows the true
+density function, and the dashed green curve shows the one estimated from the
+sample of 200 people. They are very close. The LLN tells us that as we
+increase our sample size, the sample mean will be closer to the true mean. The
+CLT tells us how much variation we should expect around that mean. As the
 sample size gets larger, our confidence in how close we are to the true value
-increases (because the range of the values we can get from random sampling
-becomes narrower.)
+increases because the range of values we can get from random sampling becomes
+narrower.
 
 \begin{figure}[H]
 \includegraphics[width=0.6\textwidth]{images/chapter_4/IQfit.pdf}
@@ -521,35 +497,35 @@ becomes narrower.)
 \end{figure}
 
 
-In order to answer the question how likely  it is to find a person with IQ
-greater than 150, we can calculate the area of the right tail of the
-distribution. We can do it with the following code:
+To answer the question of how likely it is to find a person with IQ greater
+than 150, we can calculate the area of the right tail of the distribution. We
+can do it with the following code:
 \showChunk{R}{Code/llnclt_IQ2.R}{iq-tail-prob}
-Try it. You should get that the probability to get a score of 150 or more is
-only \inlnR{```cat(1-pnorm(150, mean=mean(samp), sd=sd(samp)))```}[llnIQtail]. A
-very select group, indeed.
+Try it. You should get that the probability of a score of 150 or more is only
+\inlnR{```cat(1-pnorm(150, mean=mean(samp), sd=sd(samp)))```}[llnIQtail]. That
+is a very select group.
 
-In the introduction to this chapter we also asked what has to be the minimum IQ
-score required in order to be a Mensa member (the top 2\% in the IQ
-distributions.) In the following code we use the \lstinline{quantile} function,
-if we want to use the sample of 200 people and not make any assumption about
-the shape of the distribution of IQ scores, or the \lstinline{qnorm} function
-if we want to calculate the threshold based on the assumption that the scores
-in the entire population follow a normal distribution. We can do it like so:
+In the introduction to this chapter we also asked what minimum IQ score is
+required to be a Mensa member, that is, to be in the top 2\% of the
+distribution. In the following code we use the \lstinline{quantile} function if
+we want to use the sample of 200 people and make no assumption about the shape
+of the IQ distribution, or the \lstinline{qnorm} function if we want to
+calculate the threshold based on the assumption that the scores in the entire
+population follow a normal distribution. We can do it as follows:
  
 \showChunk{R}{Code/llnclt_IQ2.R}{iq-mensa-cutoff}
 Try it. You should get that the Mensa threshold is approximately
-\inlnR{```cat(mensacutoff)```}[llnmensa].  We can show this threshold graphically.
-In the following code we draw the density function of the normal distribution,
-and fill the 2\% right tail of it 
+\inlnR{```cat(mensacutoff)```}[llnmensa]. We can show this threshold graphically.
+In the following code we draw the density function of the normal distribution
+and fill the 2\% right tail of it:
 \showChunk{R}{Code/llnclt_IQ2.R}{iq-tail-plot}
 
-Figure~\ref{fig:ch4:CLTIQMensa} shows the result. The shaded area covers exactly 2\% of
-the area under the curve.
+Figure~\ref{fig:ch4:CLTIQMensa} shows the result. The shaded area covers
+exactly 2\% of the area under the curve.
 
 \begin{figure}[H]
 \includegraphics[width=0.6\textwidth]{images/chapter_4/IQtail.pdf}
-\caption{The distribution of IQs and the acceptance range to the Mensa club}
+\caption{The distribution of IQs and the Mensa cutoff}
 \label{fig:ch4:CLTIQMensa}
 \end{figure}
 
