@@ -8,13 +8,8 @@ This chapter examines what representativeness means, what can go wrong when a sa
 is not representative, and how to recognize the most common pitfalls in data
 collection.
 
-\jy{Is `hypertarget` necessary? Seems not. Could do a global
-  cleaning.}
-
-\hypertarget{representative}{%
-\section{Representative Sample}\label{representative}}
-\hypertarget{keyterms}{%
-\subsection{Definitions of Key Terms}\label{keyterms}}
+\section{Representative Sample}\label{representative}
+\subsection{Definitions of Key Terms}\label{keyterms}
 \jy{We've used sample and population many times in earlier
   chapters. Should we say now a formal definition? Or define them
   somewhere earlier.}
@@ -159,8 +154,7 @@ mean---it distorts the entire distribution, making the population appear far mor
 homogeneous than it actually is. Any conclusion drawn from such a sample about
 the spread or diversity of the population would be seriously misleading.
 
-\hypertarget{representative-size}{%
-\subsection{A Representative Sample Is More Important Than a Larger Sample}\label{representative-size}}
+\subsection{A Representative Sample Is More Important Than a Larger Sample}\label{representative-size}
 
 \begin{example}[The 1936 Literary Digest Poll \citep{darkdata_ch2}]
  For the 1936 presidential election, the Literary Digest poll was one of the
@@ -309,8 +303,7 @@ must be careful when we draw conclusions.  Usually, we can only make statements
 about \emph{associations} between variables, but not much (if at all) about
 causality.
 
-\hypertarget{types-data-problems}{%
-\section{Types of Data Problems}\label{types-data-problems}}
+\section{Types of Data Problems}\label{types-data-problems}
 In this section we introduce a few types of data collection problems that lead to
 biased samples. 
 David Hand, in his book \emph{Dark Data} \citep{darkdata_ch2} discusses 15 different
@@ -455,8 +448,7 @@ an impact on our analysis. Only when the selection of the subset is \emph{indepe
 of the characteristics of subjects in the population, can we trust the results obtained
 from a sample.
 
-\hypertarget{survival-bias}{%
-\subsection{Survival Bias\index{bias!Survival Bias}}\label{survival-bias}}
+\subsection{Survival Bias\index{bias!Survival Bias}}\label{survival-bias}
 
 Survival bias arises when observations are limited to subjects or objects that
 have ``survived'' or successfully completed a particular process, while those
@@ -494,8 +486,7 @@ results from a biased sample.
   \label{fig:ch7:survival-bias}
 \end{figure}
 
-\hypertarget{omitted-vars}{%
-\subsection{Omitted Variables}\label{omitted-vars}}
+\subsection{Omitted Variables}\label{omitted-vars}
 Sometimes we just don't know that we're missing critical data. It can be
 in the form of the base-rate fallacy (Chapter~\ref{ch:probability}, Section~\ref{sec:base-rate}),
 where the data we may be ignoring (unless we're careful) is the prevalence of something
@@ -584,8 +575,7 @@ possibility that ours is wrong. Establishing causality is generally impossible
 with observational data, and we have to remember the risk of confirmation bias.
 
 
-\hypertarget{extrapolations}{%
-\subsection{Extrapolations}\label{extrapolations}}
+\subsection{Extrapolations}\label{extrapolations}
 
 One of the main reasons to collect data is so that we can make predictions.
 It allows us to use historical data to, for example, decide whether to take 
@@ -669,8 +659,7 @@ and see whether the linear trend continues, or whether a different function
 fits better when we look at an extended range of \code{x} values.
 
 
-\hypertarget{aliasing}{%
-\subsection{Aliasing}\label{aliasing}}
+\subsection{Aliasing}\label{aliasing}
 \runR{Code/datacollect-aliasing.R}{datacollect-aliasing}
 Suppose that we have data that we know consists of periodic functions.
 This is very common in time series data for temperatures, for example.
@@ -760,8 +749,7 @@ the correct function, and prevent the problem of aliasing.
 
 
 
-\hypertarget{sources-bias}{%
-  \section{Common Biases}\label{sources-bias}}
+\section{Common Biases}\label{sources-bias}
 We've seen a number of sources of bias above, including Berkson's bias---where
 we only get to observe data based on some selection rule,
 the related survival bias---where we never see the outcome from the worst case 
@@ -813,8 +801,7 @@ Related to this is the ``Hawthorne effect'', which is when people tend to behave
 differently if they know they're being observed.
 This one is particularly hard to detect or to prevent.
 
-\hypertarget{sampling-designs}{%
-  \section{Basic Sampling Designs}\label{sampling-designs}}
+\section{Basic Sampling Designs}\label{sampling-designs}
 
 Sampling can be conducted with or without replacement. Sampling with replacement
 may produce duplicate selections (for example, the birthday problem in
@@ -858,28 +845,6 @@ foundational designs in various ways.
   population information and appropriate weights, which may not always be
   available.
 \end{itemize}
-
-
-
-
-% \hypertarget{ch:data}{%
-%   \section{Different sampling approaches}\label{sampling-approaches}}
-% %%%%----------------------------------------------------------
-%   \begin{itemize}
-%   \item Sampling with replacement: An element may be included in a sample more than once. It is possible to have replicates in the sample.
-%   \item Sampling without replacement: An element can be included in a sample at most once. There is no replicates in the sample.
-%   \item Poisson sampling: determines if each element of the population is selected in the sample independently. The sample size is random.
-%   \item Between Sampling with replacement and without replacement, which is more efficient?
-%   \end{itemize}
-
-% %%%%----------------------------------------------------------
-% \begin{example}[Numerical comparisons]
-%   \begin{itemize}
-%   \item To simulation hosehold incomes, generate a population P of size $N$ from a $P\sim\chi^2$ distribution with degrees of freedom one.
-%   \item Take samples of size $n$ from P to estimator the population mean, say $\mu$, using simple random sampling both with and without replacement. Compare their efficiency.
-%   \item Assume another variable $A=P+Unif(0,2)$ is available to define informative sampling weights. Evaluate the efficiency of weighted sampling both with and without replacement. 
-%   \end{itemize}
-% \end{example}
 
 \section{Summary}
 In this chapter we discussed the importance of proper sampling and the risk of
