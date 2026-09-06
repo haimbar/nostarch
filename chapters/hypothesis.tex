@@ -94,6 +94,8 @@ Out of 100,000 simulated sets of 20 flips, only about
 \inlnR{```cat(round(p_coin * 100, 1))```}[coinwarmup]\% of them
 produced 16 or more heads, suggesting that 16 heads would be a fairly
 surprising result for a fair coin. 
+In this game, the claim is that the coin is fair, and the simulated
+flips show what results are possible when that claim is true.
 %The Lady Tasting Tea example below
 %uses the same logic, but with cups instead of coins and with an exact
 %count of all possible arrangements.
@@ -138,6 +140,9 @@ with milk poured first. Under the null hypothesis, $H_0$, she was
 guessing. Fisher then calculated how often a guesser could do as well
 as she did purely by chance.
 
+Here the claim is that the lady can tell the difference. The null-world
+replay is a set of guesses, and her number of correct answers is the
+result we compare with those guesses.
 
 If her performance was highly unlikely under $H_0$, we would reject it
 in favor of the alternative, $H_1$, and say that the data give evidence
@@ -356,6 +361,9 @@ setup, and \code{xd} is the observed difference in means between $x_1$
 and $x_2$. Under $H_0$, any observed difference is due to random
 variation.
 
+In this version of the game, the claim is that group 2 has a larger
+mean. We keep the observed difference, then replay the experiment by
+shuffling the group labels to see what differences chance can produce.
 
 When we randomly shuffle the pooled data \code{c(x1, x2)} 
 and split it into new groups of size $n_1$ and $n_2$, the resulting 
@@ -409,10 +417,8 @@ units higher than \code{x1}'s.
 
 
 The resulting p-value is
-\inlnR{```cat(p_demo)```}[permdemo_p], which quantifies the probability
-of observing a test statistic as extreme as or more extreme than the
-observed statistic under $H_0$. Because $\delta = 10$ is a large true
-difference between the groups, almost none of the 1,000 permuted
+\inlnR{```cat(p_demo)```}[permdemo_p]. Because $\delta = 10$ is a large
+true difference between the groups, almost none of the 1,000 permuted
 datasets produce a difference in means as large as the observed one,
 so the p-value is near the smallest value the permutation test can
 report. Since this p-value is far below any usual significance level,
@@ -825,11 +831,10 @@ effects.
 
 
 These experiments show the main trap of multiple testing: once we give
-ourselves many chances, a small p-value is no longer unusual. A p-value
-is easy to interpret when we test one hypothesis at a time, but when we
-test many hypotheses, small p-values appear even if nothing is true.
-Adjustments like Bonferroni reduce false discoveries, but they also make
-true effects harder to detect.
+ourselves many chances, a small p-value is no longer unusual. We must
+judge each result in the context of all the tests we ran, rather than
+in isolation. Adjustments like Bonferroni reduce false discoveries, but
+they also make true effects harder to detect.
 
 Hypothesis testing and estimation answer different parts of the same
 question. A test asks whether the data are difficult to explain under a
