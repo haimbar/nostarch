@@ -294,6 +294,13 @@ drug on two groups, and if treatment and control labels are exchangeable
 under $H_0$, then any difference between the groups is treated as
 random variation rather than a real treatment effect.
 
+Shuffling is not automatically valid just because a computer can do it.
+In a simple two-group test, exchangeability usually means that the two
+groups have the same distribution under $H_0$, not merely the same mean.
+If the groups have different spreads or other important differences,
+unrestricted shuffling may create the wrong null world. The study
+design tells us which labels can legitimately be shuffled.
+
 We can always shuffle the labels many times, whether or not $H_0$ is
 true; shuffling is just a mechanical operation. What exchangeability
 gives us is the right way to interpret the result. If $H_0$ is true,
@@ -486,9 +493,10 @@ than would be expected by chance.
 \end{example}
 
 
-Permutation tests rely on fewer distributional assumptions than many
-formula-based tests, so they're useful when we don't want to assume a
-particular population distribution. A small
+Permutation tests use different assumptions from many formula-based
+tests. They can be useful when we don't want to assume a particular
+population distribution, such as a normal distribution, but we still
+need a valid exchangeability argument. A small
 p-value means that the observed statistic is unusual among the shuffled
 versions of the data. That gives evidence against $H_0$.
 
