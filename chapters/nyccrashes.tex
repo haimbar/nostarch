@@ -1,4 +1,4 @@
-\chapter{A Case Study: NYC Crashes}
+\chapter{A Case Study: Crashes in NYC}
 \label{ch:nyc}
 
 
@@ -8,8 +8,8 @@ buses and subways. Most of these trips end safely, but some result
 in crashes that cause injuries, delays, and sometimes fatalities. Can
 data help us understand when crashes occur, where they're most
 common, and what factors are associated with them? In this chapter, we
-investigate these questions using a real dataset from NYC Open Data,
-using the ideas from throughout this book: importing and cleaning data,
+investigate these questions with a real dataset from NYC Open Data,
+using ideas from throughout this book: importing and cleaning data,
 exploring patterns with tables and graphs, working with dates and
 times, handling missing values, and interpreting results carefully.
 
@@ -156,7 +156,7 @@ less than it was before.
 With the data imported, renamed, and filtered to the target week, we
 turn next to a closer look at what is missing from it. Missing
 values\index{missing value} aren't just empty spaces. They're clues
-about how the data were collected. A missing borough or zip code might
+about how the data was collected. A missing borough or zip code might
 mean the crash happened on a highway, at an unusual address, or in a
 record where the location wasn't entered completely.
 
@@ -621,7 +621,8 @@ Now we sort the crashes by that score and print the top 10 rows.
 The 10 rows with the highest scores are shown below, with only the
 most useful columns kept so the table fits on the page.
 
-\inlnR{```print(top10[, c("borough", "injured", "killed", "score")])```}[nyc-top10][vbox]
+\inlnR{```print(top10[, c("borough", "injured", "killed",
+"score")])```}[nyc-top10][vbox]
 
 Why might two analysts choose different severity scores, and what
 should they explain before comparing their results?
@@ -664,7 +665,9 @@ hypothesis test: state a null hypothesis, compute a test statistic,
 and summarize the evidence with a p-value. The chi-squared test of
 independence\index{chi-squared test of independence} combines both
 ideas for a 2-by-2 table like this one, asking whether severity and
-day type are related. Pearson's chi-squared
+day type are related. It compares the counts we observed with the
+counts we would expect if the two variables had no connection.
+Pearson's chi-squared
 statistic\index{Pearson's chi-squared statistic} works with counts,
 which is the right scale for this data.
 
@@ -697,7 +700,7 @@ repeated many times, about 95\% of the resulting intervals would
 contain the true severe-crash rate for weeks like this one.
 
 To make the binomial calculation concrete, here are the raw counts of
-severe and non-severe crashes used by the binomial test:
+severe and non-severe crashes used to build the interval:
 
 \showChunk{R}{Code/nyc_crashes.R}{severity_binom_table}
 
@@ -718,13 +721,14 @@ shouldn't be interpreted as causal effects.
 Chapter~\ref{ch:regression} introduced linear regression for a
 continuous outcome, fit with \lstinline{lm()}. Severity is binary, not
 continuous, so here we use logistic
-regression\index{logistic regression} instead: fit with
-\lstinline{glm()} and the \lstinline{binomial} family, it relates the
-log-odds of a severe crash to one or more predictors rather than
-predicting a continuous value directly. We use it to relate severity
-to two predictors at once, the business-day indicator and the number
-of vehicles involved, and interpret the coefficients on the
-odds-ratio scale.
+regression\index{logistic regression} instead. We fit it with
+\lstinline{glm()} and the \lstinline{binomial} family. The model relates
+the log-odds of a severe crash to one or more predictors rather than
+predicting a continuous value directly. Odds compare the chance of a
+severe crash with the chance of a non-severe crash. We use the model
+to relate severity to two predictors at once, the business-day
+indicator and the number of vehicles involved, and interpret the
+coefficients on the odds-ratio scale.
 
 First, prepare a clean dataset for modeling and inspect it:
 
@@ -755,7 +759,8 @@ the odds on a weekend, about
 higher --- but the 95\% interval,
 \inlnR{```cat(round(wald_ci["business_dayTRUE", 1], 2))```}[nyc-or-bd-lo]
 to \inlnR{```cat(round(wald_ci["business_dayTRUE", 2], 2))```}[nyc-or-bd-hi],
-includes 1, so this alone isn't strong evidence of a real difference,
+includes 1 (the value meaning no change in odds), so this alone isn't
+strong evidence of a real difference,
 matching the chi-squared test earlier in this section. Holding day
 type fixed, each additional vehicle involved is associated with an
 estimated
@@ -770,7 +775,7 @@ statistical significance in this model, though both point in the
 direction the earlier descriptive tables suggested.
 
 Finally, inspect simple diagnostics: fitted probabilities and deviance
-residuals to check for gross model misfit.
+residuals to check for obvious model problems.
 
 \showChunk{R}{Code/nyc_crashes.R}{severity_glm_diag}
 
@@ -786,9 +791,9 @@ deviance residuals}
 \label{fig:ch9:severitydiag}
 \end{figure}
 
-The plot below gives a quick visual check. The fitted probabilities
-should spread across a sensible range, not collapse to almost all
-zeros or almost all ones. The residual plot should also look roughly
+The diagnostic figure above gives a quick visual check. The fitted
+probabilities should spread across a sensible range, not collapse to
+almost all zeros or almost all ones. The residual plot should also look roughly
 centered around zero, with no obvious curve or other strong pattern.
 
 \hyb{The plot should be shown here, and the summaries alone are not
