@@ -429,8 +429,10 @@ true difference between the groups, almost none of the 1,000 permuted
 datasets produce a difference in means as large as the observed one,
 so the p-value is near the smallest value the permutation test can
 report. Since this p-value is far below any usual significance level,
-we would reject $H_0$ and conclude that the means of the two groups are
-different.
+we would reject $H_0$ and conclude that the groups show evidence of
+different values. In this simulation, where one group is made by adding
+the same amount to the other, that is also evidence of the difference
+in means set by \code{delta}.
 \end{example}
 
 
@@ -583,6 +585,13 @@ not use that normal model, but it still requires independent groups and
 an exchangeability assumption under its null hypothesis. It can work
 well across a wider range of shapes, especially when the data has
 heavy tails.
+
+The Wilcoxon test uses the order of the observations rather than their
+exact values. It asks whether one group tends to have larger values
+than the other. In our simulations, one group is made by adding the
+same shift to the other, so this is also a test for a difference in
+their means. In other situations, however, a Wilcoxon result does not
+automatically tell us that the means are different.
 
 
 Next, we create a function \code{do1rep()} that simulates one
@@ -812,6 +821,12 @@ plain language, we raise the bar for each test so that the total risk
 across all tests stays under control. The price of being stricter is
 that we may also miss some real effects. We simulate many experiments
 and count true positives (TP) and false positives (FP).
+
+This is a bound, not usually the exact probability. If several tests
+produce false alarms in the same experiment, adding their probabilities
+can count the same experiment more than once. That can make the sum
+larger than the true chance of at least one false alarm. The bound still
+works when the tests are related to one another.
 
 \showChunk{R}{Code/hypo-multiple.R}{altresults}
 
