@@ -75,7 +75,7 @@ hypothesis. Then we ask what kinds of data we would expect if that
 assumption were true. If the observed data is very far from what the
 null hypothesis predicts, we reject $H_0$.
 
-The difference is that statistics doesn't give the certainty of a
+The difference is that statistics cannot give us the certainty of a
 mathematical proof. Random events can produce surprising results. A
 fair coin can land heads 8 times in 10 flips. A useless drug can look
 helpful in one small experiment. So rejecting $H_0$ doesn't prove
@@ -165,15 +165,15 @@ hypothesis and the structure of the data. Before looking at the data,
 we choose a \emph{rejection region}\index{\emph{rejection region}}:
 values of the test statistic that will count as unusually extreme. A
 test rejects $H_0$ if its test statistic, denoted by $T$, falls into
-this region. The
-probability that $T$ falls in this region when $H_0$ is true
-(a Type~I error) is controlled by the \emph{significance level},
+this region. The chance that $T$ falls in this region when $H_0$ is
+true is the Type~I error rate. We control this chance with the
+\emph{significance level},
 typically denoted by $\alpha$. This threshold is usually chosen to be
 small, such as 0.05 or 0.01, to limit the chance of making a
 Type~I error.
 
 
-The \emph{p-value} gives the same information in a different form. It
+The \emph{p-value} gives a graded version of this idea. It
 is the probability, under $H_0$, of getting a test statistic as extreme
 as or more extreme than the one we observed. A small p-value means the
 observed result would be rare under $H_0$, so it gives evidence against
@@ -184,8 +184,8 @@ fail to reject it.
 The p-value is often misunderstood as the probability that $H_0$ is
 true given the data. This is incorrect. The p-value assumes that
 $H_0$ is true and measures how surprising the observed data is under
-that assumption. As shown in empirical studies, this misinterpretation 
-is widespread, even among statistically trained researchers 
+that assumption. This mistake is widespread, even among statistically
+trained researchers
 \citep{falk1995significance}. Understanding that the p-value reflects 
 compatibility between the data and the null hypothesis---not the truth of 
 the hypothesis---is essential for proper statistical reasoning.
@@ -274,7 +274,7 @@ ability to tell the difference.
 
 \section{Permutation Tests}
 
-The Lady Tasting Tea example is one instance of a general family of
+The Lady Tasting Tea example is one example of a general family of
 tests known as \emph{permutation tests}\index{test!permutation}. The
 basic idea is simple: if the labels in the data could be shuffled
 without changing the meaning of the problem, then those shuffled
@@ -323,7 +323,7 @@ its p-value, which quantifies how extreme the observed result is
 under~$H_0$.
 
 
-For instance, in the Lady Tasting Tea experiment, the null hypothesis
+In the Lady Tasting Tea experiment, the null hypothesis
 $H_0$ says that the lady is guessing. Under this assumption, all
 possible arrangements of the cups are equally likely. Shuffling the
 labels gives an exact picture of chance guessing.
@@ -379,12 +379,12 @@ permutation many times allows us to build the sampling distribution
 of the test statistic under the assumption of no group differences.
 
 
-To compute the p-value of the observed test statistic \code{xd},
-we need the \emph{sampling distribution} of the test 
-statistic under $H_0$. Permutation testing constructs this distribution 
-by repeatedly shuffling the data to simulate the null hypothesis. For a 
-single permutation, we shuffle the combined data, split it into two groups, 
-and compute the test statistic:
+To get the p-value for the observed test statistic \code{xd}, we
+compare it with the sampling distribution under $H_0$. Permutation
+testing constructs this distribution by repeatedly shuffling the data
+to simulate the null hypothesis. For a single permutation, we shuffle
+the combined data, split it into two groups, and compute the test
+statistic:
 \showChunk{R}{Code/hypo-perm.R}{HypoPermOnePerm}
 
 
@@ -393,7 +393,7 @@ under~$H_0$. The total number of permutations is:
 \showChunk{R}{Code/hypo-perm.R}{HypoPermFullCount}
 
 This total number of permutations is about $1.18 \times 10^{17}$,
-which is too large to exhaust. So we approximate the sampling
+which is too large to enumerate. So we approximate the sampling
 distribution using a subset of random permutations.
 This is implemented in the following function:
 \showChunk{R}{Code/hypo-perm.R}{HypoPermMyPermTest}
@@ -435,6 +435,9 @@ the same amount to the other, that is also evidence of the difference
 in means set by \code{delta}.
 \end{example}
 
+
+The same claim-testing game can study whether observations are related,
+not just whether two group means differ.
 
 \begin{example}[Familial clustering of certain diseases]
 \runR{Code/hypo-familial.R}{hypo-familial}
@@ -573,7 +576,7 @@ conditions and demonstrate how their performance varies.
 
 
 \begin{example}[Two-sample comparison]
-First, let's see how we can perform the tests for one pair of datasets:
+First, let's perform both tests on one pair of groups:
 \runR{Code/hypo-2samp.R}{hypo-2samp}
 \showChunk{R}{Code/hypo-2samp.R}{demo1pair}
 
@@ -588,8 +591,8 @@ heavy tails.
 
 The Wilcoxon test uses the order of the observations rather than their
 exact values. It asks whether one group tends to have larger values
-than the other. In our simulations, one group is made by adding the
-same shift to the other, so this is also a test for a difference in
+than the other. In our simulations, we generate one group by adding
+the same shift to the other, so this is also a test for a difference in
 their means. In other situations, however, a Wilcoxon result does not
 automatically tell us that the means are different.
 
@@ -894,11 +897,11 @@ two-sample comparison showed that a test works best when it matches
 the data. With heavy tails, the rank-based Wilcoxon test kept much
 more power than the t-test.
 
-The Lady Tasting Tea, permutation-test, and family-clustering examples
-showed how shuffling or random relabeling can build the null world
-directly from the data, giving us a way to test without relying on
-strong distributional assumptions. Finally, the multiple-testing
-examples showed that when we test many hypotheses at once, small
+The Lady Tasting Tea, two-group permutation, and family-clustering
+examples showed how shuffling or random relabeling can build the null
+world directly from the data. These tests avoid a normality model, but
+they still depend on a valid exchangeability argument. The multiple-
+testing examples showed that when we test many hypotheses at once, small
 p-values appear even when nothing is real. Corrections such as
 Bonferroni reduce false discoveries, but they also make true effects
 harder to detect. In the next chapter, we shift our attention to
