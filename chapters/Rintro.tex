@@ -9,12 +9,13 @@ of the book we'll provide some essential ``recipes'' for data scientists.
 
 % for this book, and we hope that this book will be your basic guide into data science. In order to get started, you must first get the necessary software and get acquainted with it, and this is what this chapter is about.
  
-We'll begin with instructions for how to install the necessary software, and
-then demonstrate some basic usage. We'll then introduce some fundamental 
-concepts such as working directories, variables, and functions, and we'll show 
-how to generate random data. You will also learn how to write your own
-functions.  We'll conclude with a brief hands-on introduction to summary
-statistics.
+The chapter has four stages. We begin by installing the software and learning
+how an R session works. Next, we use variables, functions, and files to carry
+out small data tasks, including creating a deck of cards. Then we learn three
+programming tools---loops, conditional processing, and our own functions---so
+that R can repeat work for us. We finish by generating random data and using
+summary statistics to describe it. These skills will support every simulation
+and data analysis later in the book.
 \section{Installing \R and RStudio}\label{installing-r-and-RStudio}
 To install \R go to the Comprehensive R Archive Network \index{CRAN, the 
 Comprehensive R Archive Network} website: 
@@ -159,6 +160,10 @@ to get the documentation for \lstinline{date()}, try either line of the followin
 
 %\showCode{R}{Code/ch1sec1.R}[1][2]
 \showChunk{R}{Code/ch1sec1.R}{ch1sec1-1}
+
+The goal is not to memorize every R function. It is to learn how to inspect a
+function, store its result, and build a new command from a small example. We
+will use those habits throughout the rest of the chapter.
 
 \subsection{Changing Your Working Directory}
 When we start an \R session, it's important to determine the \emph{working directory}.
@@ -419,6 +424,11 @@ Mastering these tools will not only open up many possibilities when using \R,
 but the same principles will be transferable to virtually any programming language
 that you may end up using. Let's begin with loops.
 
+Programming becomes more useful when we can repeat a task, make decisions, and
+package commands for reuse. We will learn those ideas in that order, so each
+step gives us a little more control without asking us to write a large program
+all at once.
+
 \subsection{Loops}
 The story about Johann Carl Friedrich Gauss (one of the most famous mathematicians
 in history) says that when he was six years old and already a math prodigy, one
@@ -612,8 +622,9 @@ and shows an error message to the user.  Checking the validity of the input is v
 important and helpful to the user.
 
 \section{Generating Random Numbers}
-We'll work a lot with simulated data in this book, so let's learn how to make it. The
-basic function to generate random data is \lstinline{runif()}, and it's used to draw
+Simulation is a central tool in this book, so we need to learn how to generate
+random data. The basic function to generate random data is \lstinline{runif()},
+and it's used to draw
 random numbers uniformly between 0 and 1. In the following example we create
 10,000 random draws from a uniform distribution, we keep these numbers in a
 variable called \lstinline{simData}, and then plot a histogram to show the distribution
@@ -722,8 +733,11 @@ the following, which uses the \lstinline{rbinom()} function:\index{R command!\ls
 
 \section{Summary Statistics}\index{Summary Statistics}
 
-To wrap up this introduction to \R, let's introduce some statistical functions to
-summarize data. 
+Summary statistics give us a first description of a dataset before we move on
+to more formal analysis. We will generate a dataset, examine its center and
+spread, and then summarize categorical values. The purpose is not just to
+calculate numbers, but to use those numbers to understand what the data look
+like.
 
 \subsection{Generating Our Data}
 First we need to generate some data:
@@ -779,7 +793,7 @@ random number from the so-called \emph{exponential distribution} with rate
 Many time-to-event situations are modeled as coming from this distribution.
 For example, the time between two consecutive text messages that you get
 from different (unrelated) friends. The rate is the number of events
-that occur in some time unit (e.g., per hour, day, etc.)
+that occur in some time unit (for example, per hour or per day)
 The \emph{expected value} of this distribution is the (weighted) average time
 between text messages.
 For example, suppose that you are receiving messages
@@ -855,7 +869,7 @@ skewed data such as income.
 A more detailed summary of a sample can be obtained by calculating its
 quantiles (also called percentiles). \index{Quantiles}
 The $q$-th quantile is a number $t$, such that
-$q\times 100\%$ of the data are less than or equal to $t$.
+$q\times 100\%$ of the data is less than or equal to $t$.
 The code below will calculate the deciles (the 10, 20,.\,.\,., 90 percentiles):
 
 \showChunk{R}{Code/ch1sec3.R}{ch1sec3-4}
