@@ -1,4 +1,5 @@
 pdf("images/chapter_4/LLNtexts.pdf")
+par(mar = c(2.5, 2.5, 0, 0), mgp = c(1.5, 0.5, 0))
 #label===texts-lln-sim
 ssize <- c(5, seq(10, 1000, by=10))
 myMsg <- rep(0, length(ssize))

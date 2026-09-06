@@ -43,7 +43,7 @@ plot_interval <- function(interval, title) {
 }
 
 pdf("images/chapter_8/regression-intervals.pdf", width = 8, height = 4)
-par(mfrow = c(1, 2), mar = c(4.5, 4.5, 3, 1))
+par(mfrow = c(1, 2), mar = c(2.5, 2.5, 1.5, 0), mgp = c(1.5, 0.5, 0))
 plot_interval(mean_interval, "Mean height")
 plot_interval(person_interval, "One new student")
 dev.off()

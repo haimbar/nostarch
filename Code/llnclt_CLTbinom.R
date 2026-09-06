@@ -1,5 +1,5 @@
 pdf("images/chapter_4/CLTbinom.pdf", width=8, height=5)
-par(mfrow=c(1, 2))
+par(mfrow=c(1, 2), mar = c(2.5, 2.5, 0, 0), mgp = c(1.5, 0.5, 0))
 
 #label===clt-binom-sim
 n <- 50

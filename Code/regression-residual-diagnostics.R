@@ -28,7 +28,7 @@ plot_residuals <- function(data, title) {
 }
 
 pdf("images/chapter_8/residual-diagnostics.pdf", width = 10, height = 3.8)
-par(mfrow = c(1, 3), mar = c(4.5, 4.5, 3, 0.7))
+par(mfrow = c(1, 3), mar = c(2.5, 2.5, 1.5, 0), mgp = c(1.5, 0.5, 0))
 plot_residuals(good, "Patternless")
 plot_residuals(curved, "Curvature")
 plot_residuals(fan, "Changing spread")

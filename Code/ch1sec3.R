@@ -13,6 +13,7 @@ median(x)
 #===end
 
 pdf("images/chapter_1/expdistbp.pdf", width=6, height=4)
+par(mar = c(2.5, 2.5, 0, 0), mgp = c(1.5, 0.5, 0))
 #label===ch1sec3-3
 boxplot(x, cex=0.5, col=4, border="grey66", horizontal=TRUE, axes=FALSE,
         at=0.25)
@@ -23,6 +24,7 @@ points(mean(x, trim=0.1), 0.25, col="brown", pch=18)
 dev.off()
 
 pdf("images/chapter_1/expdisthist.pdf", width=6, height=4)
+par(mar = c(2.5, 2.5, 0, 0), mgp = c(1.5, 0.5, 0))
 #label===ch1sec3-4
 hist(x, breaks=50, border="white", col="lightblue", freq=FALSE,
      xlim=c(0, 0.6), main="")
@@ -41,6 +43,7 @@ IQR(x)
 
 
 pdf("images/chapter_1/normdisthist.pdf", width=6, height=4)
+par(mar = c(2.5, 2.5, 0, 0), mgp = c(1.5, 0.5, 0))
 #label===ch1sec3-6
 y <- rnorm(10000, mean=2.5, sd=0.5)
 hist(y, breaks=30, border="white", col="navyblue", freq=FALSE, main="")

@@ -6,6 +6,7 @@ cat("Mean=",mean(samp1), ", SD=",sd(samp1),"\n")
 #===end
 
 pdf("images/chapter_4/qqplot1.pdf")
+par(mar = c(2.5, 2.5, 0, 0), mgp = c(1.5, 0.5, 0))
 #label===iq-qqplot
 qqnorm(samp1, cex=0.9, pch=18, col="purple")
 abline(100, 15, col="orange", lwd=3)
@@ -13,6 +14,7 @@ abline(100, 15, col="orange", lwd=3)
 dev.off()
 
 pdf("images/chapter_4/LLNIQ.pdf")
+par(mar = c(2.5, 2.5, 0, 0), mgp = c(1.5, 0.5, 0))
 #label===iq-lln-sim
 set.seed(95473)
 ns <- rep(10 * 2^(0:11), each=10) # (@\wingding{1}@)

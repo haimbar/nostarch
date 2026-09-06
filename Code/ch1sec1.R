@@ -91,6 +91,7 @@ bwplot(voice.part ~ height, data=singer, xlab="Height (inches)")
 #===end
 
 pdf("images/chapter_1/operaheight.pdf", height=5, width=8)
+par(mar = c(2.5, 2.5, 0, 0), mgp = c(1.5, 0.5, 0))
 library("lattice")
 plot(bwplot(voice.part ~ height, data=singer, xlab="Height (inches)"), asp=1/1.6)
 dev.off()

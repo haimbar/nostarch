@@ -23,7 +23,7 @@ dim(all_p)  # 20 x 2000 matrix: 40,000 p-values in total
 pdf("images/chapter_5/hypo-pvalues.pdf", width = 5, height = 4)
 #label===hist
 hist(all_p, breaks = 30, col = "skyblue",
-     main = "Histogram of 40,000 p-values from Pure Noise",
+     main = "",
      xlab = "p-value")
 #===end
 dev.off()
@@ -34,8 +34,7 @@ sig_count <- apply(all_p < 0.05, 2, sum)
 
 hist(sig_count, breaks = seq(-0.5, max(sig_count) + 0.5, by = 1),
      freq = FALSE, col = "orange",
-     main = paste0("Relative Frequency of 'Significant' Drugs\n",
-                   "(p < 0.05) Under Pure Noise"),
+     main = "",
      xlab = "Count per Experiment", ylab = "Relative frequency")
 #===end
 dev.off()
@@ -49,7 +48,7 @@ pdf("images/chapter_5/hypo-minp.pdf", width = 5, height = 4)
 #label===minp
 min_p <- apply(all_p, 2, min)
 hist(min_p, breaks = 30, col = "lightgreen",
-     main = "Smallest p-value from Each Experiment",
+     main = "",
      xlab = "Minimum p-value")
 #===end
 dev.off()

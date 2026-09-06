@@ -6,6 +6,7 @@ cat("Mean=",mean(samp2), ", SD=",sd(samp2),"\n")
 #===end
 
 pdf("images/chapter_4/LLNroulette.pdf")
+par(mar = c(2.5, 2.5, 0, 0), mgp = c(1.5, 0.5, 0))
 #label===roulette-lln-sim
 set.seed(95473)
 ns <- seq(10, 2000, by=10)

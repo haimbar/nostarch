@@ -1,4 +1,5 @@
 pdf("images/chapter_1/simunif1.pdf",width=5, height=3)
+par(mar = c(2.5, 2.5, 0, 0), mgp = c(1.5, 0.5, 0))
 #label===ch1sec2-1
 # Generate 10,000 points from a uniform distribution
 set.seed(210313)
@@ -7,6 +8,7 @@ simData <- runif(n)
 hist(simData, main="")
 #===end
 dev.off()
+
  
 #label===ch1sec2-2
 n <- 10000
@@ -21,6 +23,7 @@ cat("Number of Heads is: ", sum(runif(ntrials) < 0.5), "\n")
 #===end
 
 pdf("images/chapter_1/simunif2.pdf", width=5, height=3)
+par(mar = c(2.5, 2.5, 0, 0), mgp = c(1.5, 0.5, 0))
 #label===ch1sec2-4
 set.seed(442886)
 ntrials <- 200  # the number of coin-tosses in each experiment
@@ -34,6 +37,7 @@ hist(Heads, breaks=20, main="")
 dev.off()
 
 pdf("images/chapter_1/simunif3.pdf", width=5, height=3)
+par(mar = c(2.5, 2.5, 0, 0), mgp = c(1.5, 0.5, 0))
 #label===ch1sec2-5
 set.seed(442886)
 nreps <- 100
@@ -42,5 +46,3 @@ Heads <- rbinom(nreps, ntrials, 0.5)
 hist(Heads, breaks=20, main="")
 #===end
 dev.off()
-
-

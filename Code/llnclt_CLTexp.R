@@ -1,4 +1,5 @@
 pdf("images/chapter_4/CLTexp.pdf", width=5, height=5)
+par(mar = c(2.5, 2.5, 0, 0), mgp = c(1.5, 0.5, 0))
 #label===clt-exp-sample
 set.seed(230630)
 n <- 100
@@ -18,7 +19,7 @@ for (i in 1:10000) {
   expsamp <- rexp(n,5.5)
   allMeans[i] <- mean(expsamp) # (@\wingding{2}@)
 }
-par(mfrow=c(1,2))
+par(mfrow=c(1,2), mar = c(2.5, 2.5, 0, 0), mgp = c(1.5, 0.5, 0))
 m <- min(allMeans)
 M <- max(allMeans)
 hist(allMeans, freq = F, breaks=40, xlim=c(m, M), main="", xlab="Sample mean", border="white", col="orchid")
@@ -37,4 +38,3 @@ abline(v=1/5.5, lwd=3, col="green")
 par(mfrow=c(1,1))
 #===end
 dev.off()
-

@@ -11,7 +11,7 @@ cat("Prob. boy:", pboy, ". Simulated number of boys in a sample of 300 is:", mea
 
 
 pdf("images/chapter_4/CLTboygirl.pdf", width=10, height=4)
-par(mfrow=c(1, 3))
+par(mfrow=c(1, 3), mar=c(2.5, 2.5, 1.5, 0), mgp=c(1.5, 0.5, 0))
 
 #label===boygirl-clt-demo
 n <- 300

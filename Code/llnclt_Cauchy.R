@@ -12,7 +12,7 @@ for (i in 1:length(n)) {
   allDiffs[i] <- mean(dAB)   # (@\wingding{5}@)
   allRatios[i] <- mean(rAB)  # (@\wingding{6}@)
 }
-par(mfrow=c(1, 2))
+par(mfrow=c(1, 2), mar=c(2.5, 2.5, 0, 0), mgp=c(1.5, 0.5, 0))
 plot(n, allDiffs, pch=19, col=3, xlab="n", ylab="Diff.", cex=0.5)
 abline(h=10, col=2, lwd=2)
 plot(n, allRatios, pch=19, col="orange", xlab="n", ylab="Ratio", cex=0.5)
@@ -20,4 +20,3 @@ abline(h=70/60, col=2, lwd=2)
 par(mfrow=c(1, 1))
 #===end
 dev.off()
-

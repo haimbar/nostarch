@@ -1,4 +1,5 @@
 pdf("images/chapter_8/nonLinear.pdf", height=3.6, width=6)
+par(mar = c(2.5, 2.5, 1.5, 0), mgp = c(1.5, 0.5, 0))
 #label===REGnonlinear1
 set.seed(1)
 n <- 200

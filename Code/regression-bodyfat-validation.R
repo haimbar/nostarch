@@ -22,7 +22,7 @@ plot_limits <- range(
 )
 
 pdf("images/chapter_8/bodyfat-validation.pdf", width = 8, height = 4)
-par(mfrow = c(1, 2), mar = c(4.5, 4.5, 3, 1))
+par(mfrow = c(1, 2), mar = c(2.5, 2.5, 1.5, 0), mgp = c(1.5, 0.5, 0))
 
 plot(
   train$BodyFat, train$fitted,

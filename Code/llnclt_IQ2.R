@@ -1,4 +1,5 @@
 pdf("images/chapter_4/IQfit.pdf", width=5, height=5)
+par(mar = c(2.5, 2.5, 0, 0), mgp = c(1.5, 0.5, 0))
 #label===iq-fit-plot
 set.seed(95473)
 n <- 200
@@ -21,6 +22,7 @@ cat("Population quantile:", qnorm(0.98, mean=mean(samp), sd=sd(samp)), "\n")
 #===end
 
 pdf("images/chapter_4/IQtail.pdf", width=5, height=4)
+par(mar = c(2.5, 2.5, 0, 0), mgp = c(1.5, 0.5, 0))
 #label===iq-tail-plot
 xs <- seq(40,180, length=1000)
 plot(xs, dnorm(xs, 100, 15), col=2, lwd=2, type='l', axes=F, ylab="", xlab="IQ")
@@ -37,4 +39,3 @@ sigma <- 15
 for (E in c(5, 3, 2, 1))
     cat(sprintf("E = %d  =>  n = %d\n", E, ceiling((sigma / E)^2)))
 #===end
-
