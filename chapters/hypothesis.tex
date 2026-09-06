@@ -287,8 +287,8 @@ shuffling the data instead of listing every possible outcome.
 
 \subsection{Permutation under Exchangeability}
 
-A permutation test relies on \emph{exchangeability}. This means that
-under the null hypothesis, the labels attached to the data could have
+First, \emph{exchangeability} tells us what we are allowed to shuffle.
+Under the null hypothesis, the labels attached to the data could have
 been swapped without changing the story. For example, if we test a
 drug on two groups, and if treatment and control labels are exchangeable
 under $H_0$, then any difference between the groups is treated as
@@ -301,18 +301,18 @@ If the groups have different spreads or other important differences,
 unrestricted shuffling may create the wrong null world. The study
 design tells us which labels can legitimately be shuffled.
 
-We can always shuffle the labels many times, whether or not $H_0$ is
-true; shuffling is just a mechanical operation. What exchangeability
-gives us is the right way to interpret the result. If $H_0$ is true,
-every shuffled arrangement is just as likely as the original one, so
-most shuffled datasets will not look as extreme as the observed data.
-For each shuffled dataset, we
-calculate the same test statistic that we calculated from the real
-data. This gives us a picture of what the test statistic would look
-like if $H_0$ were true.
+Shuffling is just a mechanical operation, so we can do it whether or
+not $H_0$ is true. Exchangeability is what gives the shuffle its
+meaning. If $H_0$ is true, every shuffled arrangement is just as likely
+as the original one, so most shuffled datasets will not look as
+extreme as the observed data. For each shuffled dataset, we calculate
+the same test statistic that we calculated from the real data. This
+gives us a picture of what the test statistic would look like if
+$H_0$ were true.
 
 
-By pooling all the data and randomly reassigning the group labels, we
+Second, the shuffle gives us a collection of null-world outcomes. By
+pooling all the data and randomly reassigning the group labels, we
 simulate what the data might look like if $H_0$ were true. Each
 permutation represents a possible null-world arrangement of the data,
 and the distribution of the test statistic across these permutations
@@ -339,6 +339,15 @@ shows what kinds of differences we could see by chance.
 Sometimes the total number of possible shuffles is too large to list.
 In that case, we use a random sample of shuffles and let those sampled
 arrangements stand in for the full set.
+
+The replay has four steps:
+\begin{enumerate}
+\item Keep the observed data values.
+\item Shuffle the group labels.
+\item Recalculate the test statistic.
+\item Count how often the shuffled statistic is at least as extreme as
+      the observed statistic.
+\end{enumerate}
 
 
 \subsection{Monte Carlo Approximation}
