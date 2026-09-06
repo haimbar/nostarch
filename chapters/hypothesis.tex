@@ -507,6 +507,13 @@ At this point, we have a way to play the testing game. We now ask how
 well the game works over many repetitions: does it raise false alarms
 too often, and does it find real effects when they exist?
 
+Imagine testing a new tutoring program. We could first simulate many
+studies in which the program has no effect and record how often the
+test rejects the null hypothesis. Then we could simulate many studies
+in which the program really does help and record how often the test
+detects that effect. These two repeated games describe different parts
+of the test's behavior.
+
 Recall that $\alpha$, the significance level, sets the allowed
 probability of a Type~I error when $H_0$ is true. The actual long-run
 false-positive rate is called the \emph{size} of the test. For
