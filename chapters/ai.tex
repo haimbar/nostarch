@@ -21,13 +21,37 @@ rather than dangerous.
 This chapter contains no R code, and that's deliberate, for a few
 reasons. Not everyone has access to the same AI tools: some require a
 paid account, while R itself is free and available to everyone.
-Different AI tools behave differently from one another, and even the
+In this chapter, the word AI mainly means generative AI tools, especially
+large language models that can produce text, code, and other content.
+Different tools behave differently from one another, and even the
 same tool will rarely produce identical code, text, or analysis twice.
 Most importantly, specific tools and interfaces change quickly, but
 the principles in this chapter---what AI is good at, what it's bad
 at, and how to keep yourself in charge of the analysis---should stay
 relevant regardless of which particular AI you use, now or in a few
 years.
+
+\section{Why Learn Data Science in the AI Era}
+
+Learning data science still matters because AI can carry out steps without
+understanding whether those steps make sense. An AI tool can write a command,
+fit a model, or describe a graph, but it does not reliably know what question
+you should ask or what the variables in your dataset really measure. It can
+also miss an important source of bias or use a method whose assumptions do not
+fit the data.
+
+Your first responsibility is to define the question and understand the data
+before asking AI to help. You need to decide who the population is, what the
+sample represents, how each variable was measured, and what outcome would
+actually answer the question. These decisions come from the subject matter and
+the way the dataset was collected, not from fluent wording or a clever prompt.
+
+Your second responsibility is to check the analysis and judge the conclusion.
+The ideas in this book give you a way to do that: examine the data, check the
+assumptions, verify the calculations, and distinguish an association from a
+causal claim. AI can make the work faster, but learning these ideas is what
+lets you recognize a plausible-looking mistake and explain why an answer can
+or cannot be trusted.
 
 \section{What AI Can Do for You}
 
@@ -69,12 +93,12 @@ The same qualities that make AI powerful also make it risky to use
 without care.
 
 \begin{itemize}
-\item \textbf{Hallucination.}\index{hallucination} AI tools sometimes
+\item \textbf{Hallucinated output.}\index{hallucination} AI tools sometimes
   invent function names, arguments, citations, or numerical results
   that look plausible but don't exist or are simply wrong. A
   hallucinated result can be stated just as confidently as a correct
   one, so it's not always obvious which is which.
-\item \textbf{Reproducibility.}\index{reproducibility} An AI
+\item \textbf{Unreproducible workflows.}\index{reproducibility} An AI
   assistant isn't a substitute for version control or a documented
   workflow. If you regenerate an analysis with a different prompt, a
   different tool, or even the same tool on a different day, you may
@@ -83,12 +107,14 @@ without care.
   and rerun the whole analysis later.
 \item \textbf{False confidence.} AI tends to state its answers in a
   fluent, assured tone whether or not the underlying reasoning is
-  correct. This is sometimes called \emph{automation
+  correct. Hallucinated output is a problem with what the tool says;
+  false confidence is a problem with how easily we trust it. This is
+  sometimes called \emph{automation
   bias}\index{bias!automation bias}: the tendency to trust a
   computer-generated answer more than it deserves, simply because it's
   delivered so confidently. Nothing about the tone of a response
   tells you how reliable it is.
-\item \textbf{Data leakage and privacy.}\index{data leakage} Pasting a
+\item \textbf{Data leakage.}\index{data leakage} Pasting a
   dataset, or even a small snippet of one, into a general-purpose AI
   tool may send that data outside your organization or beyond the
   scope of what your data-use agreement allows. This is a particular
@@ -169,18 +195,21 @@ which AI you use.
 \begin{itemize}
 \item Treat AI as a fast, well-read, but overconfident collaborator,
   not as a source of ground truth.
-\item Verify anything that matters: rerun the code yourself, check a
-  cited number against its source, and confirm that a function or
-  argument actually exists before relying on it.
-\item Keep yourself in control of reproducibility: save the code you
-  actually used, in a file or a version-control system, rather than
-  relying on being able to regenerate the same output from AI later.
-\item Never share data covered by a privacy rule, an institutional
-  agreement, or a confidentiality obligation with a general-purpose AI
-  tool unless you know exactly where that data goes.
-\item Bring your own statistical judgment to every step: what makes a
-  sample representative, what could bias a conclusion, and what a
-  method assumes are things you should be checking, not outsourcing.
+\item Start with the question and the data, not with a method name. Explain
+  the population, sample, variables, and outcome to the AI, and ask it to say
+  what information is still missing before it recommends an analysis.
+\item Ask the AI to explain its reasoning and assumptions. Then check whether
+  those assumptions fit the way the dataset was collected and the variables
+  being analyzed.
+\item Verify anything that matters: rerun the code yourself, check a cited
+  number against its source, and confirm that a function or argument actually
+  exists before relying on it.
+\item Keep a reproducible record of the work. Save the data description, the
+  prompts that mattered, the code you actually used, and the final results in
+  files or a version-control system.
+\item Never share data covered by a privacy rule, an institutional agreement,
+  or a confidentiality obligation with a general-purpose AI tool unless you
+  know exactly where that data goes.
 \end{itemize}
 
 \section{Summary}
@@ -190,8 +219,8 @@ without writing any R code. We surveyed AI's real strengths: producing
 clean and documented code, automating data acquisition, helping with
 debugging and testing, improving writing, generating visualizations,
 and giving access to patterns learned from many experienced
-practitioners. We also discussed its real risks: hallucinated results,
-unclear reproducibility, false confidence, and the danger of data
+practitioners. We also discussed its real risks: hallucinated output,
+unreproducible workflows, false confidence, and data
 leakage when private or sensitive data is shared with a general-purpose
 tool. Finally, we connected AI back to the specific skills built in
 this book: giving AI a concrete data-cleaning checklist and a list of
@@ -199,7 +228,9 @@ named biases to watch for, asking it to justify its choice of
 statistical method, and requiring it to flag when a conclusion rests on
 observational rather than experimental data. These habits, more than
 any specific tool, are what should keep you in charge of your own
-analysis as AI continues to change.
+analysis as AI continues to change. AI can make technical steps faster,
+but the statistical judgment needed to choose a question, understand a
+dataset, and decide what the evidence supports is still yours to learn.
 
 \section{Problems}
 
