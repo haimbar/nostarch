@@ -233,6 +233,27 @@ to the exact value $1/70 \approx 0.0143$, confirming that random
 guessing produces a perfect classification about as often as the
 hypergeometric formula predicts.
 
+The same simulation can record the number of correct guesses in every
+trial, not just whether all four guesses are correct:
+\showChunk{R}{Code/hypo-warmup.R}{teadist}
+Figure~\ref{fig:ch5:tea-null} shows the resulting null distribution.
+The bars show the exact hypergeometric probabilities, while the dark
+points show the simulated frequencies. Most guesses get two or three
+cups right. The observed result, four correct guesses, is in the
+far-right tail. Because four is the largest possible score, its exact
+bar height is the exact p-value for a perfect classification. The
+simulation lands very close to that truth.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.6\textwidth]{images/chapter_5/hypo-tea-null.pdf}
+\caption{Exact null probabilities (bars) and simulated frequencies
+(points) for the number of correct guesses in the Lady Tasting Tea
+experiment; the observed score of four is in the far-right tail}
+\label{fig:ch5:tea-null}
+\end{figure}
+
+
 Now increase the number of cups to $n = 10$, with the lady again
 achieving a perfect identification of the $5$ milk-first cups. The 
 p-value is
