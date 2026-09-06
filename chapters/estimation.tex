@@ -107,16 +107,16 @@ also random. Here are some properties about estimators:
 \item If the average result of an estimator (over many random samples) is equal
   to the true value we're trying to estimate, then this estimator is
   \emph{unbiased}\index{estimator!unbiased}.  Mathematically, this is often
-  written as $\operatorname{E}(\hat\mu) = \mu$, where
+  written as $\operatorname{E}(\hat{\mu}) = \mu$, where
   $\operatorname{E}(\cdot)$ is the mean operator, which returns the
   mean of the random quantities in the parentheses. Here
-  $\operatorname{E}(\hat\mu)$ gives the mean of $\hat\mu$ over all
+  $\operatorname{E}(\hat{\mu})$ gives the mean of $\hat{\mu}$ over all
   possible random samples.
 \item The \emph{mean squared error (MSE)}\index{mean squared error} measures how
   far, on average, the estimator's result is from the true target in
   squared distance. It combines
   both the error (or bias) and how spread out the estimates are. The formula is
-  $\operatorname{E}[(\hat\mu - \mu)^2]$.
+  $\operatorname{E}[(\hat{\mu} - \mu)^2]$.
   An estimator with a smaller MSE than another estimator is more
   \emph{efficient}\index{estimator!efficient} than the other one, because it
   is closer to the truth in squared distance on average.
@@ -385,7 +385,7 @@ marks the maximum-likelihood estimate.
 \centering
 \includegraphics[width=0.7\textwidth]{images/chapter_6/loglik_binom.pdf}
 \caption{Log-likelihood for the binomial example (16/20), with the
-maximum-likelihood estimate at $\hat p = 0.80$ marked by a dashed line}
+maximum-likelihood estimate at $\hat{p} = 0.80$ marked by a dashed line}
 \label{fig:ch6:loglik-binom}
 \end{figure}
 
@@ -396,7 +396,7 @@ maximum-likelihood estimate at $\hat p = 0.80$ marked by a dashed line}
 
 The largest likelihood occurs when $p$ is near
 \inlnR{```cat(phat[1])```}[phat]. In fact, for this problem, the
-MLE is exactly $\hat p = 16/20 = 0.80$.
+MLE is exactly $\hat{p} = 16/20 = 0.80$.
 
 
 This result matches our intuition. A player who made $16$ out of $20$

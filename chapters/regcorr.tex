@@ -144,7 +144,7 @@ three assumptions matter most for interpreting the model and its uncertainty.
 
 Let's use the blood pressure data in Figure~\ref{fig:agesbp} to illustrate least
 squares\index{least squares}. Estimates are marked with a hat, as in
-$\hat\beta_0$ and $\hat\beta_1$.
+$\hat{\beta}_0$ and $\hat{\beta}_1$.
 
 \begin{figure}[h]
   \includegraphics[width=0.45\textwidth,page=3]{images/static/LeastSquares.pdf}
@@ -153,24 +153,24 @@ $\hat\beta_0$ and $\hat\beta_1$.
   \label{fig:fittingLS}
 \end{figure}
 
-Any values of $\hat\beta_0$ and $\hat\beta_1$ define a fitted line
-$\hat y=\hat\beta_0+\hat\beta_1x$. The vertical difference between an observed
-response $y_i$ and its fitted value $\hat y_i$ is the residual
-$e_i=y_i-\hat y_i$. Unlike the unobserved error $\varepsilon_i$, a residual can
+Any values of $\hat{\beta}_0$ and $\hat{\beta}_1$ define a fitted line
+$\hat{y}=\hat{\beta}_0+\hat{\beta}_1x$. The vertical difference between an observed
+response $y_i$ and its fitted value $\hat{y}_i$ is the residual
+$e_i=y_i-\hat{y}_i$. Unlike the unobserved error $\varepsilon_i$, a residual can
 be calculated from the data. Residuals are positive above the line and negative
 below it. The shaded squares on the right of Figure~\ref{fig:fittingLS}
 represent squared residuals. Least squares chooses the line that minimizes the
 residual sum of squares\index{residual sum of squares},
 \begin{equation*}
-  \sum_{i=1}^n(y_i - \hat y_i)^2.
+  \sum_{i=1}^n(y_i - \hat{y}_i)^2.
 \end{equation*}
 For simple linear regression, the resulting estimates are
 \begin{equation}\label{eq:1}
   \hat{\beta}_1 =
-  \frac{\sum_{i=1}^n (x_i - \bar x)(y_i - \bar y)}
-  {\sum_{i=1}^n (x_i - \bar x)^2},
+  \frac{\sum_{i=1}^n (x_i - \bar{x})(y_i - \bar{y})}
+  {\sum_{i=1}^n (x_i - \bar{x})^2},
   \text{ and }
-  \hat{\beta}_0 = \bar y - \hat{\beta}_1 \bar x.
+  \hat{\beta}_0 = \bar{y} - \hat{\beta}_1 \bar{x}.
 \end{equation}
 
 Equation~(\ref{eq:1}) is tedious to calculate by hand but easy to evaluate in
