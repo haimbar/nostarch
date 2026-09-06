@@ -1,3 +1,15 @@
+#label===one-replay
+demo_values <- c(2, 4, 6, 8, 10, 12)
+demo_group2 <- c(4, 5, 6)
+demo_observed <- mean(demo_values[demo_group2]) -
+  mean(demo_values[-demo_group2])
+demo_shuffled_group2 <- c(1, 3, 6)
+demo_shuffled <- mean(demo_values[demo_shuffled_group2]) -
+  mean(demo_values[-demo_shuffled_group2])
+demo_observed
+demo_shuffled
+#===end
+
 #label===HypoPermSetup
 set.seed(20210628)
 delta <- 0

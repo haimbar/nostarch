@@ -359,14 +359,29 @@ the sampling distribution under $H_0$. The more permutations we draw,
 the closer the approximation gets to the exact permutation test.
 
 \begin{example}[Permutation test for two-group comparison]
-Suppose we have two groups of data, $x_1$ and $x_2$, with sample sizes
+Before asking R to carry out thousands of shuffles, let's look at one
+replay with small groups. Suppose the observed values in group 1 are
+$2$, $4$, and $6$, while the values in group 2 are $8$, $10$, and
+$12$. The observed difference in group means is $6$. If we keep the
+six values but give group 2 the values $2$, $6$, and $12$, the new
+difference in means is different because the group labels have changed.
+
+\runR{Code/hypo-perm.R}{hypo-perm}
+\showChunk{R}{Code/hypo-perm.R}{one-replay}
+The two numbers printed by this code are the observed difference and
+the difference after one shuffle. They are $6$ and $-2/3$, respectively:
+the shuffled group 2 has values $2$, $6$, and $12$, while group 1 has
+values $4$, $8$, and $10$. A permutation test repeats this replay many
+times and compares all the shuffled differences with the observed one.
+
+Now suppose we have two groups of data, $x_1$ and $x_2$, with
+sample sizes
 $n_1 = n_2 = 30$. We will look for evidence that group 2 has a larger
 mean than group 1. If $H_0$ is true, there's no real difference between
 the groups, so the observed difference in the sample means,
 $\bar{x}_2 - \bar{x}_1$, is simply due to chance. Here $\bar{x}_1$ and
 $\bar{x}_2$ are the sample means of the first and second groups.
 
-\runR{Code/hypo-perm.R}{hypo-perm}
 \showChunk{R}{Code/hypo-perm.R}{HypoPermSetup}
 
 Here, \code{delta} is the true difference between the population means
