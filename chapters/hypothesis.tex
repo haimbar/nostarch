@@ -623,7 +623,7 @@ each test.
 
 We wrap the simulation into a function \code{empRejRate()} to
 compute rejection rates for different sample sizes, distributions, and
-effect sizes:
+\emph{effect sizes}\index{effect size}:
 \showChunk{R}{Code/hypo-2samp.R}{emprejratefun}
 
 Chapter~\ref{ch:llnclt} introduced Student's $t$ distributions as a
@@ -741,8 +741,11 @@ experiment.
 Figure~\ref{fig:ch5:sigcount} shows that although all 20 drugs are
 useless, many experiments still produce one or two ``significant''
 hits. That is the tricky part: once we give ourselves 20 chances, a
-small p-value in one of them is no longer surprising. In fact, the
-chance of seeing at least one false discovery is high:
+small p-value in one of them is no longer surprising. A \emph{false
+discovery}\index{false discovery} is a result we call significant even
+though its null hypothesis is actually true. In this example, every
+significant drug is a false discovery, and the chance of seeing at least
+one is high:
 
 \begin{figure}[H]
 \includegraphics[width=0.6\textwidth]{images/chapter_5/hypo-sigcount.pdf}
@@ -862,9 +865,11 @@ they also make true effects harder to detect.
 Hypothesis testing and estimation answer different parts of the same
 question. A test asks whether the data are difficult to explain under a
 baseline claim. It does not tell us how large the effect is or whether
-the effect is large enough to matter. Estimation addresses those next
-questions by giving us a plausible value for the effect and a measure
-of how uncertain that estimate is.
+the effect is large enough to matter. This distinction is the difference
+between \emph{statistical significance}\index{statistical significance}
+and \emph{practical significance}\index{practical significance}.
+Estimation addresses those next questions by giving us a plausible
+value for the effect and a measure of how uncertain that estimate is.
 
 \section{Summary}
 
