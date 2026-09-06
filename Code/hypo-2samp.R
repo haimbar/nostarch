@@ -6,7 +6,7 @@ x2 <- rnorm(30)           # Group 2, no difference in means
 
 ## test based on normal assumption
 t.test(x1, x2)
-## rank-based; distribution free (nonparametric) test
+## rank-based test that does not use a normal-population model
 wilcox.test(x1, x2)
 #===end
 

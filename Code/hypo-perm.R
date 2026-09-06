@@ -11,7 +11,7 @@ xd <- mean(x2) - mean(x1)
 xpooled <- c(x1, x2)
 xperm <- sample(xpooled, size = length(xpooled), replace = FALSE)
 x1p <- xperm[1:n1]
-x2p <- xperm[n1 + 1:n2]
+x2p <- xperm[n1 + seq_len(n2)]
 xdp <- mean(x2p) - mean(x1p)
 #===end
 
@@ -31,7 +31,7 @@ myPermTest <- function(x1, x2, nperm = 1000) {
     xpl <- c(x1, x2)
     stat.sim <- replicate(nperm, {
         xperm <- sample(xpl, size = length(xpl), replace = FALSE)
-        xd <- mean(xperm[n1 + 1:n2]) - mean(xperm[1:n1])
+        xd <- mean(xperm[n1 + seq_len(n2)]) - mean(xperm[seq_len(n1)])
     })
     p.value <- mean(c(stat.sim, stat) >= stat)  # one-sided test
     p.value
