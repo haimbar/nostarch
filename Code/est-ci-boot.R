@@ -77,7 +77,6 @@ plot_boot_show <- function(obj, main, xlim) {
 }
 #===end
 
-#label===drawboot
 set.seed(2028)
 boot_show50 <- make_boot_show(50)
 boot_show20 <- make_boot_show(20)
@@ -85,6 +84,7 @@ xlim <- range(boot_show50$ci, boot_show20$ci, target)
 
 pdf("images/chapter_6/bootstrap_intervals_by_sample_size.pdf",
     width = 7, height = 6)
+#label===drawboot
 par(mfrow = c(2, 1), mar = c(3, 4, 2, 1))
 plot_boot_show(boot_show50, "n = 50", xlim)
 legend("bottomright",
@@ -92,5 +92,5 @@ legend("bottomright",
        col = c("gray45", "firebrick3", "black"),
        lty = c(1, 3, 2), lwd = c(2, 3, 2), bty = "n")
 plot_boot_show(boot_show20, "n = 20", xlim)
-dev.off()
 #===end
+dev.off()

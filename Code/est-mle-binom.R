@@ -8,12 +8,12 @@ phat <- pgrid[which.max(loglike)]
 #===end
 
 ## Save figure for the book build
-#label===plotloglik
 pdf("images/chapter_6/loglik_binom.pdf", width = 6, height = 4)
+#label===plotloglik
 plot(pgrid, loglike, type = "l", xlab = "Free-throw probability p",
      ylab = "Log Likelihood")
 abline(v = phat, lty = 2, col = "red")
 text(phat, min(loglike), labels = paste0("MLE = ", round(phat, 2)),
      pos = 4, col = "red")
-dev.off()
 #===end
+dev.off()

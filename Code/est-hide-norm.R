@@ -65,16 +65,16 @@ plot_estimates <- function(est_sim, main) {
 }
 #===end
 
-#label===violinplot
 set.seed(2026)
 est_norm <- make_estimates(function(n, mu) rnorm(n, mean = mu, sd = 1))
 est_cauchy <- make_estimates(function(n, mu) mu + rt(n, df = 1))
 est_unif <- make_estimates(function(n, mu) runif(n, mu - 10, mu + 10))
 
 pdf("images/chapter_6/estimator_violin_by_game.pdf", width = 7, height = 6)
+#label===violinplot
 par(mfrow = c(3, 1), mar = c(2.4, 4, 2, 1))
 plot_estimates(est_norm, "Normal data")
 plot_estimates(est_cauchy, "Cauchy data")
 plot_estimates(est_unif, "Uniform data")
-dev.off()
 #===end
+dev.off()

@@ -62,7 +62,6 @@ plot_ci_show <- function(obj, main, xlim) {
 }
 #===end
 
-#label===drawci
 set.seed(2027)
 ci_show50 <- make_ci_show(50)
 ci_show20 <- make_ci_show(20)
@@ -70,6 +69,7 @@ xlim <- range(ci_show50$ci, ci_show20$ci, mu)
 
 pdf("images/chapter_6/confidence_intervals_by_sample_size.pdf",
     width = 7, height = 6)
+#label===drawci
 par(mfrow = c(2, 1), mar = c(3, 4, 2, 1))
 plot_ci_show(ci_show50, "n = 50", xlim)
 legend("bottomright",
@@ -77,5 +77,5 @@ legend("bottomright",
        col = c("gray45", "firebrick3", "black"),
        lty = c(1, 3, 2), lwd = c(2, 3, 2), bty = "n")
 plot_ci_show(ci_show20, "n = 20", xlim)
-dev.off()
 #===end
+dev.off()

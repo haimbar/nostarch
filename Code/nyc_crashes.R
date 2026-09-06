@@ -574,7 +574,6 @@ capture.output(
 #===end
 
 ############################################################
-#label===severity_glm_diag
 ## Simple diagnostics: fitted probabilities and deviance residuals
 fitted_prob <- predict(fit_severe, type = "response")
 resid_dev <- residuals(fit_severe, type = "deviance")
@@ -583,6 +582,7 @@ capture.output(summary(resid_dev), file = "generated/nyc-glm-resid.tex")
 
 pdf("images/chapter_9/severity_diagnostics.pdf",
     width = 8, height = 4)
+#label===severity_glm_diag
 par(mfrow = c(1, 2))
 plot(fitted_prob,
      pch = 19,
@@ -598,8 +598,8 @@ plot(fitted_prob,
      ylab = "Deviance residual",
      main = "Residuals vs fitted")
 abline(h = 0, lty = 2, col = "gray40")
-dev.off()
 #===end
+dev.off()
 
 ############################################################
 #label===nyc-severity-inference
