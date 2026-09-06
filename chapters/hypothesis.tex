@@ -229,25 +229,21 @@ Since this p-value is smaller than the commonly used significance
 level $\alpha = 0.05$, we would reject $H_0$ and conclude that her
 performance is unlikely to be due to guessing.
 
-We can check this exact calculation with a simulation: let a guesser
-pick 4 cups at random out of 8 and see how often all 4 match the true
-milk-first cups.
-\showChunk{R}{Code/hypo-warmup.R}{teacheck}
-This empirical proportion, \inlnR{```cat(p_tea)```}[teasim], is close
-to the exact value $1/70 \approx 0.0143$, confirming that random
-guessing produces a perfect classification about as often as the
-hypergeometric formula predicts.
-
-The same simulation can record the number of correct guesses in every
-trial, not just whether all four guesses are correct:
+Because this example is small, we can calculate the entire null
+distribution exactly. We can also simulate random guesses and record
+the number correct in every trial:
 \showChunk{R}{Code/hypo-warmup.R}{teadist}
+The simulated proportion of perfect classifications is
+\inlnR{```cat(p_tea)```}[teasim], close to the exact value
+$1/70 \approx 0.0143$. The simulation is not needed to find the
+answer here. It shows how repeated random assignments approximate the
+known probabilities and prepares us for larger problems.
 Figure~\ref{fig:ch5:tea-null} shows the resulting null distribution.
 The bars show the exact hypergeometric probabilities, while the dark
 points show the simulated frequencies. Most guesses get two or three
 cups right. The observed result, four correct guesses, is in the
 far-right tail. Because four is the largest possible score, its exact
-bar height is the exact p-value for a perfect classification. The
-simulation lands very close to that truth.
+bar height is the exact p-value for a perfect classification.
 
 \begin{figure}[H]
 \centering
