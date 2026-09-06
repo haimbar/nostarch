@@ -599,7 +599,7 @@ We should get the following when we run the code:
 Using arguments in function definitions is useful because you can use the
 same function to perform a similar operation on different objects. For example,
 the argument may be a sequence, like in the following two examples:
-\showCode{R}{Code/ch1sec1-defFuncUsage.R}
+\showChunk{R}{Code/ch1sec1-defFuncUsage.R}{function-usage-examples}
 
 
 Functions can take more than one argument, or they can take no arguments at all.
@@ -607,7 +607,7 @@ The arguments can also be given a default value, so that if the user does not
 specify the argument, it will not cause an error. For example, we can create a
 function to deal poker hands to varying number of players, and we can also
 choose the number of cards each player gets:
-\showCode{R}{Code/ch1sec1-PokerHand.R}
+\showChunk{R}{Code/ch1sec1-PokerHand.R}{poker-hand-function}
 % AF: in the code, put wingdings directly in front of what they describe. In the text, put them after, like so.
 We declared the default number of cards is 5 \wingding{1}, and the default number
 of players is 4. So, calling the function \lstinline{drawPokerHands()} without any
@@ -1009,7 +1009,7 @@ This code produces the following output:
 
 We can use the \lstinline{max()} and \lstinline{which.max()} functions
 to find the \emph{mode} of the data (the most frequent value):\index{Mode}
-\showCode{R}{Code/ch1sec3b.R}
+\showChunk{R}{Code/ch1sec3b.R}{mode-output}
 The hotel with the largest number of guests is
 \inlnR{```cat(levels(hotelrooms)[which.max(hoteltbl)])```}[introhotellevel] with
 \inlnR{```cat(max(hoteltbl))```}[introhotelguests] guests, and
