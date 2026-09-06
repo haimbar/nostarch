@@ -523,7 +523,7 @@ First, let's see how we can perform the tests for one pair of datasets:
 
 Here, \code{x1} and \code{x2} represent two groups of data. The t-test
 uses a normal-population model to calibrate its p-value, so it is a
-good choice when the data are close to normal. The Wilcoxon test does
+good choice when the data is close to normal. The Wilcoxon test does
 not use that normal model, but it still requires independent groups and
 an exchangeability assumption under its null hypothesis. It can work
 well across a wider range of shapes, especially when the data has
@@ -562,22 +562,26 @@ compute rejection rates for different sample sizes, distributions, and
 effect sizes:
 \showChunk{R}{Code/hypo-2samp.R}{emprejratefun}
 
+Chapter~\ref{ch:llnclt} introduced Student's $t$ distributions as a
+family with heavier tails than the normal distribution. We use $t_5$
+here, which still has a defined mean and variance but produces more
+extreme observations than the normal distribution.
+
 Now, we compare the performance of the t-test and Wilcoxon test for
-data from different distributions (normal and Cauchy):
+data from different distributions (normal and $t_5$):
 \showChunk{R}{Code/hypo-2samp.R}{comparepops}
 
 Under the normal population, both tests have a size close to the
 nominal level: about \inlnR{```cat(size_normal["t"])```}[sizenormalt]
 for the t-test and \inlnR{```cat(size_normal["wilcox"])```}[sizenormalw]
-for Wilcoxon. The Cauchy distribution has heavier tails than the
-normal distribution and, unlike the normal, has no defined mean or
-variance (as we saw in Chapter~\ref{ch:llnclt}). In this simulation,
-adding \code{delta} changes the Cauchy location, not its mean. These
+for Wilcoxon. Although $t_5$ has a defined mean and variance, it still
+violates the t-test's normality assumption. In this simulation,
+adding \code{delta} shifts the population mean. These
 heavy tails hurt the mean-based t-test much more than the rank-based
 Wilcoxon test: at $\delta = 0.5$, the t-test's power drops to about
-\inlnR{```cat(power_cauchy["t"])```}[powercauchyt], while the Wilcoxon
+\inlnR{```cat(power_t5["t"])```}[powert5t], while the Wilcoxon
 test still detects the difference about
-\inlnR{```cat(power_cauchy["wilcox"])```}[powercauchyw] of the time.
+\inlnR{```cat(power_t5["wilcox"])```}[powert5w] of the time.
 
 
 Finally, we compute and plot the power of the tests as the effect size
@@ -591,16 +595,16 @@ rejection rate of both tests under the normal distribution, using
 curves together:
 \showChunk{R}{Code/hypo-2samp.R}{power-normal}
 
-We repeat the same calculation under the Cauchy distribution, so we can
+We repeat the same calculation under the $t_5$ distribution, so we can
 compare how the power of each test changes once the normality
 assumption no longer holds:
-\showChunk{R}{Code/hypo-2samp.R}{power-cauchy}
+\showChunk{R}{Code/hypo-2samp.R}{power-t5}
 
-Figures~\ref{fig:ch5:power-normal} and~\ref{fig:ch5:power-cauchy}
+Figures~\ref{fig:ch5:power-normal} and~\ref{fig:ch5:power-t5}
 show the empirical rejection rates (power) as \code{delta} increases.
 For the t-test, performance depends on the assumption of normality,
 while the Wilcoxon test is more robust under non-normal distributions
-like the Cauchy in this simulation.
+like the $t_5$ distribution in this simulation.
 
 Each figure's legend identifies the solid line as the t-test and the
 dashed blue line as the Wilcoxon test.
@@ -611,9 +615,9 @@ dashed blue line as the Wilcoxon test.
 \end{figure}
 
 \begin{figure}[H]
-\includegraphics[width=0.6\textwidth]{images/chapter_5/hypo-power-cauchy.pdf}
-\caption{Empirical rejection rates for Cauchy data}
-\label{fig:ch5:power-cauchy}
+\includegraphics[width=0.6\textwidth]{images/chapter_5/hypo-power-t5.pdf}
+\caption{Empirical rejection rates for $t_5$ data}
+\label{fig:ch5:power-t5}
 \end{figure}
 \end{example}
 
@@ -697,7 +701,8 @@ is real, running many tests makes a false discovery likely.
 \subsection{The Smallest P-Value}
 
 
-Every experiment has a ``best'' drug, the one with the smallest p-value.
+Every experiment has an apparent ``best'' drug, the one with the smallest
+p-value.
 Let's look at that distribution.
 \showChunk{R}{Code/hypo-multiple.R}{minp}
 
@@ -827,9 +832,9 @@ Modify \lstinline{myPermTest()} from the two-group permutation example
 
 \begin{exercise}
 Repeat the t-test-vs-Wilcoxon power comparison, but generate the data
-  from a $t$-distribution with 3 degrees of freedom instead of Cauchy.
-  Is the power gap between the two tests as large as it was for
-  Cauchy? Why might that be?
+  from a $t$-distribution with 3 degrees of freedom instead of $t_5$.
+  Is the power gap between the two tests as large as it was for $t_5$?
+  Why might that be?
 \end{exercise}
 
 \begin{exercise}

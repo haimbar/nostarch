@@ -52,11 +52,12 @@ power_normal <- empRejRate(nrep, n, rnorm, 0.5)
 size_normal
 power_normal
 
-## Cauchy population
-size_cauchy <- empRejRate(nrep, n, rcauchy, 0)
-power_cauchy <- empRejRate(nrep, n, rcauchy, 0.5)
-size_cauchy
-power_cauchy
+## t distribution with 5 degrees of freedom
+t5 <- function(n) rt(n, df = 5)
+size_t5 <- empRejRate(nrep, n, t5, 0)
+power_t5 <- empRejRate(nrep, n, t5, 0.5)
+size_t5
+power_t5
 #===end
 
 
@@ -78,10 +79,10 @@ legend("topleft", legend = c("t-test", "Wilcoxon"),
 #===end
 dev.off()
 
-pdf("images/chapter_5/hypo-power-cauchy.pdf", width = 5, height = 4)
-#label===power-cauchy
-## Cauchy distribution
-rejrate <- sapply(delta, function(x) empRejRate(nrep, n, rcauchy, x))
+pdf("images/chapter_5/hypo-power-t5.pdf", width = 5, height = 4)
+#label===power-t5
+## t distribution with 5 degrees of freedom
+rejrate <- sapply(delta, function(x) empRejRate(nrep, n, t5, x))
 plot(delta, rejrate["t", ], type = "l",
      ylab = "empirical rejection rate", ylim = c(0, 1))
 lines(delta, rejrate["wilcox", ], lty = 2, col = "blue")

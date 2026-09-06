@@ -298,6 +298,15 @@ lesson here is that taking the ratio between two perfectly well-behaved
 distributions may lead to a distribution to which the LLN doesn't apply. Other
 manipulations of random variables may lead to similar results.
 
+The Student's $t$ distributions give us a useful family of examples with
+heavy tails. They look like normal distributions, but they produce more
+extreme observations. The degrees of freedom control how heavy the tails
+are: $t_1$ is the Cauchy distribution, while $t_5$ still has a defined
+mean and variance but has heavier tails than the normal distribution.
+In R, we can generate $t_5$ data with
+\lstinline{rt(1000, df = 5)}. We'll use this distribution in the next
+chapter to see how heavy tails affect hypothesis tests.
+
 
 
 \section{The Central Limit Theorem\index{Central Limit Theorem}}
