@@ -557,13 +557,18 @@ in which the program really does help and record how often the test
 detects that effect. These two repeated games describe different parts
 of the test's behavior.
 
+First, consider the world in which the tutoring program has no effect.
+The test should reject the null hypothesis only occasionally in this
+world, because every rejection is a false alarm.
+
 Recall that $\alpha$, the significance level, sets the allowed
 probability of a Type~I error when $H_0$ is true. The actual long-run
 false-positive rate is called the \emph{size} of the test. For
 instance, if $\alpha = 0.05$, a well-calibrated test should falsely
 reject $H_0$ about 5\% of the time when $H_0$ is true.
 
-As before, if $\beta$ is the probability of a Type~II error, the
+Next, consider the world in which the tutoring program really does
+help. If $\beta$ is the probability of a Type~II error, the
 \emph{power} of the test is $1 - \beta$: the probability of correctly
 rejecting $H_0$ when there's a real effect. Larger samples, larger
 true effects, and less variable data usually lead to higher power.
