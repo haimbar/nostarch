@@ -17,6 +17,9 @@ blame on chance alone. Along the way, we'll introduce null and
 alternative hypotheses, explore p-values and permutation tests through
 simulation, study the possibility of making incorrect decisions, and
 examine what happens when many hypotheses are tested at the same time.
+Throughout the chapter, we will treat hypothesis testing as a game of
+testing a claim: nature gives us data, and we ask whether those data
+could have come from a world in which the null hypothesis is true.
 
 
 \section{Basic Concepts}
@@ -46,6 +49,10 @@ A school might ask whether a new tutoring program improved test scores.
 The details change, but the structure is the same: start with a
 baseline explanation, then ask whether the data is too surprising for
 that explanation.
+
+This is the first move in our game. We describe the null world before
+we look at the data, so that we have a fair standard for judging what
+we observe.
 
 The logic of a hypothesis test is:
 \begin{enumerate}
@@ -249,6 +256,9 @@ without changing the meaning of the problem, then those shuffled
 versions represent possible worlds in which the null hypothesis is
 true. A permutation test asks how unusual the observed result looks
 compared with those shuffled worlds.
+
+The game is the same as before, but we now build the null world by
+shuffling the data instead of listing every possible outcome.
 
 \subsection{Permutation under Exchangeability}
 
@@ -473,6 +483,10 @@ Hypothesis tests are often judged by two properties: size and power.
 Size tells us how often the test cries wolf. Power tells us how often
 the test finds a real effect when one is there.
 
+At this point, we have a way to play the testing game. We now ask how
+well the game works over many repetitions: does it raise false alarms
+too often, and does it find real effects when they exist?
+
 Recall that $\alpha$, the significance level, sets the allowed
 probability of a Type~I error when $H_0$ is true. The actual long-run
 false-positive rate is called the \emph{size} of the test. For
@@ -627,6 +641,11 @@ The logic of a p-value works well when we test one idea at a time.
 Things change when we test many ideas at once, because now we have many
 chances to see a small p-value by chance. To see why this gets tricky,
 let's run a simulation.
+
+In the previous section, we repeated one testing game to study its
+long-run behavior. In practice, we may instead play many testing games
+at once by asking many questions of the same data. That creates a new
+chance for false discoveries, even when every null hypothesis is true.
 
 \begin{example}[20 Ineffective Drugs]
 We begin with a simple story: a laboratory screens 20 new drugs to
