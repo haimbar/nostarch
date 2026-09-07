@@ -567,7 +567,7 @@ summary(sev_model_data)
 fit_severe <- glm(severe ~ business_day + n_vehicles,
                   data = sev_model_data,
                   family = binomial)
-capture.output(summary(fit_severe), file = "generated/nyc-glm-fit.tex")
+print(summary(fit_severe))
 #===end
 
 ############################################################
@@ -576,12 +576,11 @@ capture.output(summary(fit_severe), file = "generated/nyc-glm-fit.tex")
 coef_est <- coef(summary(fit_severe))
 or <- exp(coef(fit_severe))
 wald_ci <- exp(confint.default(fit_severe))
-capture.output(
+print(
   cbind(Estimate = coef(fit_severe),
         OR = or,
         "2.5%" = wald_ci[, 1],
-        "97.5%" = wald_ci[, 2]),
-  file = "generated/nyc-glm-or.tex"
+        "97.5%" = wald_ci[, 2])
 )
 #===end
 
@@ -589,13 +588,12 @@ capture.output(
 ## Simple diagnostics: fitted probabilities and deviance residuals
 fitted_prob <- predict(fit_severe, type = "response")
 resid_dev <- residuals(fit_severe, type = "deviance")
-capture.output(summary(fitted_prob),
-               file = "generated/nyc-glm-fitted.tex")
-capture.output(summary(resid_dev), file = "generated/nyc-glm-resid.tex")
 
 pdf("images/chapter_9/severity_diagnostics.pdf",
     width = 8, height = 4)
 #label===severity_glm_diag
+print(summary(fitted_prob))
+print(summary(resid_dev))
 par(mfrow = c(1, 2),
     mar = c(2.5, 2.5, 0, 0),
     mgp = c(1.5, 0.5, 0))

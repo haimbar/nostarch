@@ -740,7 +740,7 @@ Next, fit the model:
 
 The model output is shown below.
 
-\includeOutput{nyc-glm-fit}[vbox]
+\runRChunk{Code/nyc_crashes.R}{severity_glm_fit}
 
 To make coefficients easier to interpret, transform the estimates into
 odds ratios\index{odds ratio} and show Wald 95\% confidence intervals.
@@ -749,7 +749,7 @@ odds ratios\index{odds ratio} and show Wald 95\% confidence intervals.
 
 The odds ratios and confidence intervals are shown below.
 
-\includeOutput{nyc-glm-or}[vbox]
+\runRChunk{Code/nyc_crashes.R}{severity_glm_or}
 
 Holding the number of vehicles fixed, the odds of a severe crash on a
 business day are an estimated
@@ -779,11 +779,7 @@ residuals to check for obvious model problems. The resulting plots appear in
 Figure~\ref{fig:ch9:severitydiag}.
 
 \showChunk{R}{Code/nyc_crashes.R}{severity_glm_diag}
-
-The summaries are shown below.
-
-\includeOutput{nyc-glm-fitted}[vbox]
-\includeOutput{nyc-glm-resid}[vbox]
+\runRChunk{Code/nyc_crashes.R}{severity_glm_diag}
 
 \begin{figure}[H]
 \includegraphics[width=0.9\textwidth]{images/chapter_9/severity_diagnostics.pdf}
