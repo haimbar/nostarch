@@ -6,7 +6,8 @@ test hypotheses, estimate unknown quantities, collect data responsibly,
 model relationships between variables, and work through a full case
 study from raw data to inference. Along the way, a new kind of
 collaborator has become part of almost every data analyst's toolkit:
-artificial intelligence, or AI. Large language models and related tools
+artificial intelligence, or AI.\index{artificial intelligence} Large language
+models and related tools
 can now write code, suggest analyses, produce visualizations, and
 explain statistical ideas in plain language. Used well, AI can make you
 faster and help you learn; used carelessly, it can quietly introduce
@@ -21,8 +22,9 @@ rather than dangerous.
 This chapter contains no R code, and that's deliberate, for a few
 reasons. Not everyone has access to the same AI tools: some require a
 paid account, while R itself is free and available to everyone.
-In this chapter, the word AI mainly means generative AI tools, especially
-large language models that can produce text, code, and other content.
+In this chapter, the word AI mainly means generative AI tools,
+especially large language models that can produce text, code, and
+other content.\index{generative AI}\index{large language model}
 Different tools behave differently from one another, and even the
 same tool will rarely produce identical code, text, or analysis twice.
 Most importantly, specific tools and interfaces change quickly, but
@@ -40,6 +42,14 @@ you should ask or what the variables in your dataset really measure. It can
 also miss an important source of bias or use a method whose assumptions do not
 fit the data.
 
+For example, suppose you ask an AI tool to find out whether one group of
+people has a higher average than another. It might immediately choose a test,
+run the calculation, and report a small $p$-value. But it might not notice
+that the groups were formed by a biased sampling process, that the variable
+was measured differently in the two groups, or that the question is about a
+causal effect rather than an association. The calculation can be correct while
+the conclusion is still misleading.
+
 Your first responsibility is to define the question and understand the data
 before asking AI to help. You need to decide who the population is, what the
 sample represents, how each variable was measured, and what outcome would
@@ -55,11 +65,11 @@ or cannot be trusted.
 
 \section{What AI Can Do for You}
 
-Used as a collaborator rather than an oracle, AI can meaningfully
+Used as a collaborator rather than an oracle, AI can
 speed up almost every stage of a data analysis project.
 
 \begin{itemize}
-\item \textbf{Clean, documented code.} AI tools are often good at
+\item \textbf{Writing clean, documented code.} AI tools are often good at
   producing code that is well organized and commented, following
   common style conventions. This can be a useful model to learn from,
   especially early on, and can save time on boilerplate code you would
@@ -80,11 +90,10 @@ speed up almost every stage of a data analysis project.
 \item \textbf{Producing visualizations.} AI can quickly generate a
   first draft of a plot, including plots you haven't made before, and
   suggest alternative ways to display the same data.
-\item \textbf{Borrowing skills from experienced people.} Because AI is
-  trained on an enormous amount of code and writing from many
-  practitioners, asking it for a second opinion is a little like
-  asking a large group of experienced analysts how they would approach
-  a problem.
+\item \textbf{Getting a second opinion.} Because AI is trained on an
+  enormous amount of code and writing from many practitioners, asking
+  it for another possible approach can be a little like asking a large
+  group of experienced analysts how they would approach a problem.
 \end{itemize}
 
 \section{Where AI Can Lead You Astray}
@@ -193,7 +202,7 @@ years, but a few working habits should remain useful regardless of
 which AI you use.
 
 \begin{itemize}
-\item Treat AI as a fast, well-read, but overconfident collaborator,
+\item Treat AI as a fast, capable, but overconfident collaborator,
   not as a source of ground truth.
 \item Start with the question and the data, not with a method name. Explain
   the population, sample, variables, and outcome to the AI, and ask it to say
