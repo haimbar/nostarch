@@ -8,7 +8,10 @@ y <- 3 * z - x + rnorm(n * g)    # (@\wingding{5}@)
 #===end
 
 
-pdf("images/chapter_3/probability-Simpson-plots.pdf", height=3.5, width=3.5*1.5)
+pdf("images/chapter_3/probability-Simpson-plots.pdf", height=4, width=8)
+par(mfrow = c(1, 2), mar = c(2.5, 2.5, 0, 0.5),
+    mgp = c(1.5, 0.5, 0),
+    cex.axis = 1.1, cex.lab = 1.2)
 #label===PRsimpson2
 plot(x, y, pch=19, col=4, cex=0.9)       # (@\wingding{6}@)
 abline(lm(y ~ x), lwd=3, col="navyblue") # (@\wingding{7}@)
