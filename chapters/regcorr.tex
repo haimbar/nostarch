@@ -221,7 +221,6 @@ the measured body fat percentages for the 252 men used to estimate the model. %
 \showChunk{R}{Code/regression-fitbodyfat.R}{REGfitbodyfat2} %
 
 \begin{figure}[htp]
-  \centering
   \includegraphics[width=0.7\textwidth]{images/chapter_8/fitbodyfat.pdf}
   \caption{Fitted versus measured body fat. The dashed identity line represents
   perfect agreement.}
@@ -246,7 +245,6 @@ people. Repeated splits or cross-validation\index{cross-validation} give a more
 stable assessment than one split.
 
 \begin{figure}[htp]
-  \centering
   \includegraphics[width=0.9\textwidth]{images/chapter_8/bodyfat-validation.pdf}
   \caption{Body fat results for the training data and a held-out test set. The
   dashed identity line represents perfect agreement.}
@@ -289,7 +287,6 @@ Figure~\ref{fig:ch8:outliers} illustrates how unusual points can differ:
 
 \runR{Code/regression-outliers.R}{regression-outliers} %
 \begin{figure}[htp]
-  \centering
   \includegraphics[width=\textwidth]{images/chapter_8/outliers.pdf}
   \caption{A response outlier, a high-leverage point that follows the trend,
   and a high-leverage point that changes the fitted line. The dashed line omits
@@ -372,7 +369,6 @@ standard diagnostic plots in \R.
 
 \runR{Code/regression-residual-diagnostics.R}{regression-residual-diagnostics} %
 \begin{figure}[htp]
-  \centering
   \includegraphics[width=\textwidth]{images/chapter_8/residual-diagnostics.pdf}
   \caption{Residual plots for an appropriate linear model, an unmodeled curve,
   and error variation that increases with the fitted value.}
@@ -416,7 +412,6 @@ confidence band for the mean is narrow, while the prediction band must cover
 the natural variation among individual students.
 
 \begin{figure}[htp]
-  \centering
   \includegraphics
     [width=0.9\textwidth]{images/chapter_8/regression-intervals.pdf}
   \caption{A 95\% confidence band for mean height and a 95\% prediction band
