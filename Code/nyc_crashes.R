@@ -217,6 +217,8 @@ pdf("images/chapter_9/crashes_by_hour.pdf",
 borough_cols <- c("darkorange", "steelblue", "seagreen",
                   "orchid", "gray50")
 
+par(mar = c(2.5, 2.5, 0, 0), mgp = c(1.5, 0.5, 0))
+
 barplot(t(tab_hour_borough),
         col = borough_cols,
         border = NA,
@@ -294,21 +296,21 @@ pdf("images/chapter_9/crashes_by_hour_corrected.pdf",
 borough_cols <- c("darkorange", "steelblue", "seagreen",
                   "orchid", "gray50")
 
-par(mfrow = c(1, 2))
+par(mfrow = c(1, 2),
+    mar = c(2.5, 2.5, 0, 0),
+    mgp = c(1.5, 0.5, 0))
 
 barplot(t(tab_hour_borough_total),
         col = borough_cols,
         border = NA,
         xlab = "Hour of day",
-        ylab = "Number of crashes",
-        main = "Original hours")
+        ylab = "Number of crashes")
 
 barplot(t(tab_hour_borough_corrected),
         col = borough_cols,
         border = NA,
         xlab = "Hour of day",
-        ylab = "Number of crashes",
-        main = "Midnight crashes reassigned within borough")
+        ylab = "Number of crashes")
 
 legend("topleft",
        legend = colnames(tab_hour_borough_total),
@@ -340,6 +342,8 @@ pdf("images/chapter_9/crashes_by_day_type.pdf",
     width = 6.5, height = 4.5)
 
 #label===business_plot
+par(mar = c(2.5, 2.5, 0, 0), mgp = c(1.5, 0.5, 0))
+
 barplot(t(tab_bd_borough),
         beside = TRUE,
         col = c("darkorange", "steelblue", "seagreen",
@@ -424,26 +428,28 @@ pdf("images/chapter_9/severity_locations.pdf",
     width = 9, height = 4.8)
 
 #label===severity_map
-## Load the city's official borough boundaries (NYC Open Data) so the
-## crash locations can be read against real coastlines, not a blank
-## grid. The official file has ~75,000 coastline vertices, far more
-## detail than is visible at print size, which bloats the PDF and
-## makes it slow to typeset; simplify before plotting.
-boroughs <- st_read("Data/nyc_borough_boundaries.geojson", quiet = TRUE)
+## Load NYC's official borough boundaries so the map shows real
+## coastlines instead of a blank grid. The official file has about
+## 75,000 coastline vertices, far more detail than is visible at print
+## size, so simplify it before plotting.
+boroughs <- st_read("Data/nyc_borough_boundaries.geojson",
+                    quiet = TRUE)
 sf_use_s2(FALSE)
 boroughs <- st_simplify(boroughs, dTolerance = 0.0005,
                         preserveTopology = TRUE)
 
-## Correct for the longitude/latitude scale mismatch at this latitude,
-## so the maps are not visibly stretched.
+## Correct for the longitude/latitude scale mismatch so the maps
+## are not visibly stretched.
 map_asp <- 1 / cos(mean(df$latitude, na.rm = TRUE) * pi / 180)
 lon_range <- range(df$longitude, na.rm = TRUE)
 lat_range <- range(df$latitude, na.rm = TRUE)
 
-par(mfrow = c(1, 2))
+par(mfrow = c(1, 2),
+    mar = c(2.5, 2.5, 0, 0.5),
+    mgp = c(1.5, 0.5, 0))
 
 plot(NA, xlim = lon_range, ylim = lat_range, asp = map_asp,
-     xlab = "Longitude", ylab = "Latitude", main = "Not severe")
+     xlab = "Longitude", ylab = "Latitude")
 rect(par("usr")[1], par("usr")[3], par("usr")[2], par("usr")[4],
      col = "lightsteelblue1", border = NA)
 plot(st_geometry(boroughs), add = TRUE, col = "gray95",
@@ -453,7 +459,7 @@ points(df$longitude[!df$severe], df$latitude[!df$severe],
 box()
 
 plot(NA, xlim = lon_range, ylim = lat_range, asp = map_asp,
-     xlab = "Longitude", ylab = "Latitude", main = "Severe")
+     xlab = "Longitude", ylab = "Latitude")
 rect(par("usr")[1], par("usr")[3], par("usr")[2], par("usr")[4],
      col = "lightsteelblue1", border = NA)
 plot(st_geometry(boroughs), add = TRUE, col = "gray95",
@@ -501,6 +507,8 @@ pdf("images/chapter_9/severity_by_vehicle_count.pdf",
     width = 6, height = 4)
 
 #label===severity_by_vehicle_plot
+par(mar = c(2.5, 2.5, 0, 0), mgp = c(1.5, 0.5, 0))
+
 barplot(prop_severe_by_veh["Severe", ],
         col = "lightblue",
         border = NA,
@@ -588,20 +596,20 @@ capture.output(summary(resid_dev), file = "generated/nyc-glm-resid.tex")
 pdf("images/chapter_9/severity_diagnostics.pdf",
     width = 8, height = 4)
 #label===severity_glm_diag
-par(mfrow = c(1, 2))
+par(mfrow = c(1, 2),
+    mar = c(2.5, 2.5, 0, 0),
+    mgp = c(1.5, 0.5, 0))
 plot(fitted_prob,
      pch = 19,
      col = rgb(0.2, 0.4, 0.7, 0.5),
      xlab = "Observation",
-     ylab = "Fitted probability",
-     main = "Fitted probabilities")
+     ylab = "Fitted probability")
 plot(fitted_prob,
      resid_dev,
      pch = 19,
      col = rgb(0.8, 0.2, 0.2, 0.5),
      xlab = "Fitted probability",
-     ylab = "Deviance residual",
-     main = "Residuals vs fitted")
+     ylab = "Deviance residual")
 abline(h = 0, lty = 2, col = "gray40")
 #===end
 dev.off()
@@ -699,9 +707,7 @@ cf1_clean[cf1_clean == "unspecified"] <- NA
 ############################################################
 #label===factor_table
 cf1_table <- sort(table(cf1_clean), decreasing = TRUE)
-cf1_table
-
-head(cf1_table, 5)
+print(head(cf1_table, 5))
 #===end
 
 
@@ -709,7 +715,7 @@ head(cf1_table, 5)
 pdf("images/chapter_9/top_contributing_factors.pdf",
     width = 8.5, height = 4.5)
 
-par(mar = c(5, 8, 1, 1))
+par(mar = c(2.5, 8, 0, 0), mgp = c(1.5, 0.5, 0))
 
 #label===factor_plot
 top_factors <- head(cf1_table, 8)
@@ -753,8 +759,8 @@ vt2[tolower(vt2) %in% c("", "unknown")] <- NA
 vt1_table <- sort(table(vt1), decreasing = TRUE)
 vt2_table <- sort(table(vt2), decreasing = TRUE)
 
-head(vt1_table, 10)
-head(vt2_table, 10)
+print(head(vt1_table, 10))
+print(head(vt2_table, 10))
 #===end
 
 
@@ -762,7 +768,7 @@ head(vt2_table, 10)
 pdf("images/chapter_9/top_vehicle_types.pdf",
     width = 8.5, height = 4.5)
 
-par(mar = c(5, 8, 1, 1))
+par(mar = c(2.5, 8, 0, 0), mgp = c(1.5, 0.5, 0))
 
 #label===vehicle_type_plot
 top_vehicle_types <- head(vt1_table, 8)
