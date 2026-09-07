@@ -553,10 +553,7 @@ where $E$ is our target margin of error.  Solving for $n$:
 For IQ scores $\sigma = 15$.  The following code computes the required
 sample size for several values of $E$:
 \showChunk{R}{Code/llnclt_IQ2.R}{iq-samplesize}
-%\runR{Code/llnclt_IQ2.R}{iq-samplesize}
-
-The output is:
-\includeOutput{iq-samplesize}
+\runRChunk[run]{Code/llnclt_IQ2.R}{iq-samplesize}
 
 Cutting the margin of error in half quadruples the required sample size --- a
 direct consequence of the $\sqrt{n}$ in the denominator.  Note that
