@@ -266,7 +266,8 @@ for (b in unique(df$borough[!is.na(df$borough)])) {
 }
 
 tab_hour_borough_total <- table(df$hour, df$borough)
-tab_hour_borough_corrected <- table(df$hour_corrected_borough, df$borough)
+tab_hour_borough_corrected <-
+  table(df$hour_corrected_borough, df$borough)
 #===end
 
 
@@ -377,7 +378,8 @@ df$business_hours <- (df$hour >= 7) & (df$hour < 19)
 ############################################################
 #label===business_hours_table
 hours_type <- factor(df$business_hours, levels = c(FALSE, TRUE),
-                     labels = c("Outside business hours", "Business hours"))
+                     labels = c("Outside business hours",
+                                "Business hours"))
 tab_bh_borough <- table(hours_type, df$borough)
 tab_bh_borough
 
@@ -388,7 +390,7 @@ round(prop_bh_borough, 3)
 
 ############################################################
 #label===injury_consistency
-## Check whether total injured/killed match the sum of subcategories.
+## Check injury and death totals against subcategories.
 inj_cols <- c("number_of_pedestrians_injured",
               "number_of_cyclist_injured",
               "number_of_motorist_injured")
@@ -429,7 +431,8 @@ pdf("images/chapter_9/severity_locations.pdf",
 ## makes it slow to typeset; simplify before plotting.
 boroughs <- st_read("Data/nyc_borough_boundaries.geojson", quiet = TRUE)
 sf_use_s2(FALSE)
-boroughs <- st_simplify(boroughs, dTolerance = 0.0005, preserveTopology = TRUE)
+boroughs <- st_simplify(boroughs, dTolerance = 0.0005,
+                        preserveTopology = TRUE)
 
 ## Correct for the longitude/latitude scale mismatch at this latitude,
 ## so the maps are not visibly stretched.
@@ -540,7 +543,8 @@ severity_counts
 
 ############################################################
 #label===severity_glm_prep
-## Prepare data for logistic regression: select predictors and drop missing
+## Prepare data for logistic regression: select predictors
+## and drop missing
 pred_cols <- c("severe", "business_day", "n_vehicles", "borough")
 sev_model_data <- df[, pred_cols]
 sev_model_data <- sev_model_data[complete.cases(sev_model_data), ]
@@ -577,7 +581,8 @@ capture.output(
 ## Simple diagnostics: fitted probabilities and deviance residuals
 fitted_prob <- predict(fit_severe, type = "response")
 resid_dev <- residuals(fit_severe, type = "deviance")
-capture.output(summary(fitted_prob), file = "generated/nyc-glm-fitted.tex")
+capture.output(summary(fitted_prob),
+               file = "generated/nyc-glm-fitted.tex")
 capture.output(summary(resid_dev), file = "generated/nyc-glm-resid.tex")
 
 pdf("images/chapter_9/severity_diagnostics.pdf",
