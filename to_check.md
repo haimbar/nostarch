@@ -21,7 +21,7 @@
 - Figure/listing numbering — NSP scheme: Figure N-N, Listing N-N (chapter-dash-number, consecutive within chapter)
 - Every figure/table/listing referenced in text *before* it appears
 - Figure captions — period only if full sentence; no period for noun phrases
-- Code line length — standard 78 chars; wide listings 95 chars max
+- Code line length — target 60 characters; hard maximum 73; never rely on automatic wrapping
 - LaTeX source lines — wrap at 80 chars
 - Inline code: use `\inlnR{}` consistently; avoid line breaks inside function or variable names
 
