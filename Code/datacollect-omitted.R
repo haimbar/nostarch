@@ -1,11 +1,14 @@
+#label===omitted-setup
 set.seed(2027)
 
 n <- 100
 house_age <- seq(1:n)
 house_distance <- 10/sqrt(house_age) - 0.5                # (@\wingding{1}@)
 house_price <- 100 + 100*house_distance + rnorm(n, 0, 30) # (@\wingding{2}@)
+#===end
 
 pdf("images/chapter_7/omitted.pdf", width=4, height=4)
+#label===omitted-plot
 plot(sqrt(house_distance), house_price,
      ylim=c(0, max(house_price)),
      xlim=c(0,max(sqrt(house_distance))),
@@ -14,4 +17,5 @@ plot(sqrt(house_distance), house_price,
 abline(lm(house_price ~ I(sqrt(house_distance))),         # (@\wingding{3}@)
        lwd=3, col="red", lty=2)
 axis(1); axis(2)
+#===end
 dev.off()

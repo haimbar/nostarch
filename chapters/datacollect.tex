@@ -390,7 +390,10 @@ we use the ``popular books whose movie adaptations were not-so-good'' example.
 
 \jy{How about removing the pdf and dev.off lines from showcode?}
 
-\showCode{R}{Code/datacollect-berkson.R} %
+\showChunk{R}{Code/datacollect-berkson.R}{berkson-setup}
+\showChunk{R}{Code/datacollect-berkson.R}{berkson-plot-all}
+\showChunk{R}{Code/datacollect-berkson.R}{berkson-plot-selected}
+\showChunk{R}{Code/datacollect-berkson.R}{berkson-output}
 \runR{Code/datacollect-berkson.R}{datacollect-berkson} %
 
 \jy{avoid starting a sentence with a symbol (line number)?}
@@ -558,7 +561,8 @@ Once we add age to the story, the pattern makes sense: older houses are both
 closer to campus and cheaper, so distance only looks important when age is left
 out.
 
-\showCode{R}{Code/datacollect-omitted.R}
+\showChunk{R}{Code/datacollect-omitted.R}{omitted-setup}
+\showChunk{R}{Code/datacollect-omitted.R}{omitted-plot}
 
 This story also demonstrates another common pitfall, called \emph{confirmation bias}.
 When we use observational data and see an interesting relationship, it's natural
