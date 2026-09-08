@@ -158,6 +158,7 @@
 % TeX's 16-stream limit when writeChunk/showChunk are called many times.
 \newread\runcodeReadStream
 \newwrite\runcodeWriteStream
+\newwrite\runcodeInlineStream
 
 \definecolor{bg}{rgb}{0.95,0.95,0.95} % code block background color
 
@@ -420,10 +421,9 @@
       \ifinlnrun\immediate\write18{#1 > \tmpname.tex}\unskip\fi
     }{%
       % File mode: write code to .txt first (needed for checksum comparison and execution)
-      \newwrite\tempfile
-      \immediate\openout\tempfile=\tmpname.txt
-      \immediate\write\tempfile{\detokenize{#2}}
-      \immediate\closeout\tempfile
+      \immediate\openout\runcodeInlineStream=\tmpname.txt
+      \immediate\write\runcodeInlineStream{\detokenize{#2}}
+      \immediate\closeout\runcodeInlineStream
       \IfFileExists{\tmpname.tex}{%
         \IfEndWith{#4}{cache}{}{%
           \ifruncode

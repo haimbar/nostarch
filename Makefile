@@ -1,10 +1,40 @@
 # Build a self-contained copy in tmpoverleaf/, compile it, then rsync to Overleaf.
 # Usage: make overleaf              (compile only)
 #        make overleaf DEST=~/Documents/GitHub/<project-id>/  (compile + rsync)
-.PHONY: overleaf clean check-generated deepclean stopserver build rebuild
+CHAPTER_GOALS := 1 2 3 4 5 6 7 8 9 10
+CHAPTER_ARG := $(or $(CHAPTER),$(filter $(CHAPTER_GOALS),$(MAKECMDGOALS)))
+
+.PHONY: overleaf chapter $(CHAPTER_GOALS) clean check-generated deepclean stopserver build rebuild
 
 overleaf:
 	python3 make_overleaf.py $(DEST)
+
+chapter:
+	@test -n "$(CHAPTER_ARG)" || (printf '%s\n' 'Usage: make chapter 9' >&2; exit 1)
+	rm -f tmp/chapter_$(CHAPTER_ARG).restore
+	rm -f ForceCache nohup.out
+	python3 make_chapter.py --prepare $(CHAPTER_ARG) $(if $(FORCE),--force,)
+	mkdir -p images/chapter_$(CHAPTER_ARG) generated/chapter_$(CHAPTER_ARG)
+	rm -rf tmp/generated
+	ln -s ../generated tmp/generated
+	-python3 -c 'from talk2stat.talk2stat import client; client("./","R","QUIT")'
+	-rm -f serverPIDR.txt
+	python3 -c 'from talk2stat.talk2stat import server,client; server("./","R") if not client("./","R","``` ```") else print("server already running")'
+	python3 wait_for_rserver.py
+	@if [ -f tmp/chapter_$(CHAPTER_ARG).restore ]; then \
+	    python3 -c 'from talk2stat.talk2stat import client; client("./","R","``` load(\"generated/chapter_$(CHAPTER_ARG)/session.RData\") ```")'; \
+	fi
+	xelatex -interaction=nonstopmode -shell-escape -output-directory=tmp tmp/chapter_$(CHAPTER_ARG).tex
+	python3 -c 'from talk2stat.talk2stat import client; client("./","R","``` invisible(NULL) ```")'
+	python3 -c 'from talk2stat.talk2stat import client; client("./","R","``` save.image(\"generated/chapter_$(CHAPTER_ARG)/session.RData\") ```")'
+	python3 make_chapter.py --record $(CHAPTER_ARG)
+	touch ForceCache
+	xelatex -interaction=nonstopmode -shell-escape -output-directory=tmp tmp/chapter_$(CHAPTER_ARG).tex
+	$(MAKE) check-generated
+
+# Make treats a bare number on the command line as another target. This empty
+# rule lets `make chapter 9` pass that number through to the chapter target.
+$(CHAPTER_GOALS):
 
 clean:
 	rm -f sidsmain.aux sidsmain.log sidsmain.ind
@@ -38,25 +68,19 @@ stopserver: deepclean
 	python3 -c 'from talk2stat.talk2stat import client; client("./","R","QUIT")'
 	rm -f serverPIDR.txt Rdebug.txt talk2stat.log nohup.out
  
-# build the book and use the server, not the cache option:
+# Build stale chapters first, then assemble the full book from chapter caches.
 build: clean
 	rm -f ForceCache nohup.out
-	mkdir -p tmp
-	@for i in $$(seq 1 9); do \
-	    mkdir -p images/chapter_$$i; \
+	@set -e; for n in $(CHAPTER_GOALS); do \
+	    if python3 make_chapter.py --cache-valid $$n; then \
+	        printf '%s\n' "Using cached chapter $$n"; \
+	    else \
+	        $(MAKE) chapter $$n; \
+	    fi; \
 	done
-	# Stop any existing server so the fresh one picks up the current R.config
-	-python3 -c 'from talk2stat.talk2stat import client; client("./","R","QUIT")'
-	-rm -f serverPIDR.txt
-	# Pre-start R server so it is ready before xelatex sends any \runR commands
-	python3 -c 'from talk2stat.talk2stat import server,client; server("./","R") if not client("./","R","``` ```") else print("server already running")'
-	python3 wait_for_rserver.py
 #	latexmk -pdflatex='xelatex -shell-escape %O %S' -pdf sidsmain.tex
-	xelatex -interaction=nonstopmode -shell-escape --no-pdf sidsmain.tex
-	# Sync barrier: block until R has finished all queued work before caching results
-	python3 -c 'from talk2stat.talk2stat import client; client("./","R","``` invisible(NULL) ```")'
-	$(MAKE) check-generated
 	touch ForceCache
+	xelatex -interaction=nonstopmode -shell-escape --no-pdf sidsmain.tex
 	-bibtex sidsmain
 	-makeindex sidsmain
 	xelatex -shell-escape sidsmain.tex
