@@ -37,6 +37,7 @@ boxsep=0pt,left=0pt,right=0pt,top=0pt,bottom=0pt} % change the margins
 % self defined environment and commands
 \theoremstyle{definition}
 \newtheorem{example}{Example}[chapter]
+\AtEndEnvironment{example}{\hfill\ensuremath{\square}}
 \theoremstyle{remark}
 \newtheorem{exercise}{Exercise}[chapter]
 
