@@ -758,59 +758,126 @@ population we care about, and what can go wrong when it isn't.
 \section{Problems}
 
 \begin{exercise}
-In the normal hide-and-seek game, change the sample size in
-\lstinline{Code/est-hide-norm.R} from \lstinline{n = 20} to \lstinline{n = 5},
-\lstinline{n = 50}, and \lstinline{n = 200}. For each sample size,
-compare the MSE of the sample mean, sample median, and midrange. Which
-estimator improves the most as the sample size grows?
+Suppose the hidden location is $\mu = 10$, and the observed sample is
+$6, 8, 11, 12, 14$.
+\begin{enumerate}[label=(\alph*)]
+\item Calculate the sample mean, median, and midrange.
+\item The rules mean, median, and midrange are estimators. Which of
+  the numbers you calculated are estimates?
+\item Calculate the squared error of each estimate from the true value
+  $\mu = 10$.
+\item Which estimator would be most affected if the value 14 were
+  replaced by 100? Explain why.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}
+In the normal hide-and-seek game, compare sample sizes
+\lstinline{n = 5}, \lstinline{n = 20}, \lstinline{n = 50}, and
+\lstinline{n = 200}.
+\begin{enumerate}[label=(\alph*)]
+\item Use \lstinline{make_estimates()} from
+  \lstinline{Code/est-hide-norm.R} to generate 1,000 games for each
+  sample size.
+\item For each sample size, calculate the MSE of the sample mean,
+  sample median, and midrange.
+\item Make a table of the four sample sizes and three MSE values.
+\item Which estimator improves the most as the sample size grows?
+  Explain your answer using how each estimator uses the data.
+\end{enumerate}
 \end{exercise}
 
 \begin{exercise}
 The Cauchy hide-and-seek code in Example~\ref{ex:hs:cauchy} generates
 data with \lstinline{mu + rt(n, df = 1)}---recall that a $t$ distribution
-with 1 degree of freedom is the Cauchy distribution. Change
-\lstinline{df = 1} to \lstinline{df = 2}, \lstinline{df = 5}, and
-\lstinline{df = 10}. How does the ordering of the sample mean and sample
-median change as the tails of the distribution become less extreme?
+with 1 degree of freedom is the Cauchy distribution. Keep estimating
+the location parameter~$\mu$; do not treat it as a population mean when
+the distribution does not have one.
+\begin{enumerate}[label=(\alph*)]
+\item Change \lstinline{df = 1} to \lstinline{df = 2},
+  \lstinline{df = 5}, and \lstinline{df = 10}.
+\item For each value of \lstinline{df}, replay the game many times and
+  compare the numerical behavior of the sample mean, median, and
+  midrange.
+\item How does the ordering of the estimators change as the tails become
+  less extreme?
+\item Why should you be cautious about judging the sample mean using
+  MSE when the population has extremely heavy tails?
+\end{enumerate}
 \end{exercise}
 
 \begin{exercise}
-In the uniform population example, change the bandwidth from 20 to 5
-and then to 50. Does the midrange still perform well? Explain why the
-largest and smallest observations are especially informative for a
-uniform distribution.
+In the uniform population example, the data are generated between
+$\mu - 10$ and $\mu + 10$, so the width of the range is 20.
+\begin{enumerate}[label=(\alph*)]
+\item Change the half-width from 10 to 2.5 and then to 25. These give
+  ranges with widths 5 and 50.
+\item For each range, compare the MSE of the sample mean, median, and
+  midrange.
+\item Does the midrange still perform well?
+\item Explain why the smallest and largest observations are especially
+  informative about the location of a uniform distribution.
+\end{enumerate}
 \end{exercise}
 
 \begin{exercise}
 In the free-throw MLE example, change the observed data from 16 made
-shots out of 20 to 8 out of 20, 12 out of 20, and 19 out of 20. For
-each case, plot the likelihood over possible values of $p$. Where does
-the likelihood reach its maximum?
+shots out of 20 to 8 out of 20, 12 out of 20, and 19 out of 20.
+\begin{enumerate}[label=(\alph*)]
+\item For each case, plot the log-likelihood over possible values of
+  $p$.
+\item Record the value of $p$ where the curve reaches its maximum.
+\item Compare each maximum with the observed proportion of made shots.
+\item Explain why the MLE moves toward 0 or 1 when the observed
+  proportion is close to 0 or 1.
+\end{enumerate}
 \end{exercise}
 
 \begin{exercise}
-In the gamma confidence interval simulation, try sample sizes
+In the gamma confidence interval simulation, compare sample sizes
 \lstinline{n = 10}, \lstinline{n = 20}, \lstinline{n = 50}, and
-\lstinline{n = 100}. Estimate the coverage rate for each sample size.
-At what sample size does the large-sample confidence interval begin to
-look reliable?
+\lstinline{n = 100}.
+\begin{enumerate}[label=(\alph*)]
+\item Use 1,000 simulated samples for each sample size to estimate the
+  coverage rate.
+\item Make a table with the sample size and coverage rate.
+\item Also record the average width of the confidence intervals. Which
+  sample sizes give coverage rates close to the nominal 95\% level?
+\item At what sample size does the large-sample confidence interval
+  begin to look reliable? Explain what you mean by ``reliable.''
+\end{enumerate}
 \end{exercise}
 
 \begin{exercise}
 Using the 95\% confidence interval computed in
 Example~\ref{ex:ci-clt} (interval estimation for a gamma mean), pick
 three candidate values of $\mu_0$: one below the interval, one inside
-it, and one above it. Without running a separate hypothesis test, use
-the duality from ``Connection to Hypothesis Testing'' to say which of
-these $\mu_0$ values a level-$\alpha = 0.05$ test of $H_0: \mu = \mu_0$
-would reject, and which it would fail to reject.
+it, and one above it.
+\begin{enumerate}[label=(\alph*)]
+\item Write down your three candidate values of $\mu_0$.
+\item Without running a separate hypothesis test, use the duality from
+  ``Connection to Hypothesis Testing'' to decide which value a
+  level-$\alpha = 0.05$ test of $H_0: \mu = \mu_0$ would reject.
+\item Which values would the test fail to reject?
+\item Explain why a value inside the confidence interval is not proved
+  to be the true value of $\mu$.
+\end{enumerate}
 \end{exercise}
 
-\begin{exercise}
+\begin{exercise}[Challenge: Bootstrap the mean]
 Modify the bootstrap example by estimating the population mean instead
-of the population median. Compare the bootstrap confidence interval for
-the mean with the large-sample confidence interval from the previous
-section. When do the two intervals look similar, and when do they differ?
+of the population median.
+\begin{enumerate}[label=(\alph*)]
+\item In the bootstrap code, replace \lstinline{median} with
+  \lstinline{mean}, and set the true target to the gamma mean
+  $2 \times 2 = 4$.
+\item Compare the bootstrap confidence interval for the mean with the
+  large-sample confidence interval from the previous section.
+\item Repeat for sample sizes 20 and 50.
+\item When do the two intervals look similar, and when do they differ?
+  Explain your answer using the shape of the gamma distribution and the
+  sample size.
+\end{enumerate}
 \end{exercise}
 
 %%% Local Variables:
