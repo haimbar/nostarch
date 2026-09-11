@@ -582,37 +582,33 @@ Let's see how to answer it with the following simulation.
 In \wingding{1}, we generate 500 values for \code{x}, equally spaced 
 between 0 and 2. Then we generate random errors in \wingding{2}, which
 we call \code{e}.
-Next, we generate three functions: in \wingding{3} we create a linear
-function of \code{x}, in \wingding{4} we create the function \code{log(1+x)},
-and in \wingding{5} and \wingding{6} we generate an exponential function that
-increases between 0 and 1, and decreases after 1.
-The three functions are shown in Figure~\ref{fig:ch7:ext2}.
+In \wingding{3}, we generate \code{y} using a quadratic function of \code{x}:
+$$y = x - 0.4 x^2 + e\,.$$
 
 \showChunk{R}{Code/datacollect-extrapolate.R}{EXT1}
 
-The dashed rectangle in the left panel of Figure~\ref{fig:ch7:ext2} marks the region
-where \code{x} is between 0 and 0.4, which covers the narrower range visible in Figure~\ref{fig:ch7:ext1}.
-The right panel enlarges that rectangle, showing that all three functions are
-nearly indistinguishable there: this is exactly why Figure~\ref{fig:ch7:ext1} alone
-gives no clue which function generated the data.
-However, beyond 0.4, the three functions become very different. While \code{y1}
-continues along a straight line, \code{y2} starts to `bend' and, although it continues to
-increase, it does so at a slower rate. The function \code{y3} increases at an exponential
-rate at first, but then has a change-point where the trend reverses and it starts to decrease.
+The dashed rectangle in the left panel of Figure~\ref{fig:ch7:ext2} marks the
+region where \code{x} is between 0 and 0.25, which corresponds to the narrower
+range visible in Figure~\ref{fig:ch7:ext1}.  The right panel enlarges that
+rectangle, showing that the data appear nearly linear there: within this
+restricted range, the points follow the line $y=x$ so closely that the plot
+gives no hint of the underlying quadratic relationship.  However, beyond 0.25,
+the quadratic function bends downward and departs drastically from the linear
+prediction. While the line $y=x$ extrapolates all the way to $y=2$ when $x=2$,
+the true values reach a peak around $x=1.25$ and then fall to around $0.4$.
 
 \begin{figure}[H]
   \includegraphics[width=\textwidth]{images/chapter_7/extra2.pdf}
-  \caption{Three functions that look nearly identical in the limited range of
-  Figure~\protect\ref{fig:ch7:ext1} but diverge sharply beyond it.
+  \caption{A quadratic relationship that appears linear in a limited range
+  of \code{x} but diverges sharply from linear extrapolation.
   Left: full range with the dashed rectangle marking the region shown in
-  Figure~\protect\ref{fig:ch7:ext1}. Right: that rectangle enlarged, showing
-  all three functions are nearly indistinguishable within the original data range.}
+  Figure~\protect\ref{fig:ch7:ext1} and the line $y=x$ showing the linear extrapolation.
+  Right: that rectangle enlarged, showing that the data are nearly indistinguishable
+  from a straight line within the original sample range.}
   \label{fig:ch7:ext2}
 \end{figure}
 
-The code used to produce  Figure~\ref{fig:ch7:ext2} is as follows. Note that we
-show a sample of 100 points out of the 500 (using the variable \code{pts}),
-only to make it easier to see individual points.
+The code used to produce Figure~\ref{fig:ch7:ext2} is as follows.
 
 \showChunk{R}{Code/datacollect-extrapolate.R}{EXT2}
 
