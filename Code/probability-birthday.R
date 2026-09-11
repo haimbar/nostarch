@@ -1,0 +1,14 @@
+#label===prob-birthday
+set.seed(123)
+birthday <- function(n=23, yours="1980-05-01"){      # (@\wingding{1}@)
+    N <- 365                                         # (@\wingding{2}@)
+    bus <- sample(1:N, size=n, replace=TRUE)         # (@\wingding{3}@)
+    doy <- as.numeric(strftime(yours, format="%j"))  # (@\wingding{4}@)
+    same <- doy %in% bus[-1]                         # (@\wingding{5}@)
+    share <- length(unique(bus)) < n                 # (@\wingding{6}@)
+    return (c(same, share))
+}
+res <- replicate(n=1000, birthday(23))               # (@\wingding{7}@)
+prob.p23 <- rowMeans(res)
+res <- replicate(n=1000, birthday(253))              # (@\wingding{8}@)
+prob.p253 <- rowMeans(res)
