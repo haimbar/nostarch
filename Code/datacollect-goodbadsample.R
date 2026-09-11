@@ -1,7 +1,7 @@
 pdf("images/chapter_7/population.pdf", width=3.5, height=3.5)
 #label===BIASgbs1
-set.seed(2023)
-N = 500
+set.seed(2027)
+N = 1000
 height <- rnorm(N, 70, 2.6)
 weight <- -194.49 + 5.30 * height + rnorm(N, 0, 23.26)
 population <- data.frame(height=height, weight=weight)
@@ -32,16 +32,14 @@ plot(population, ylim=range(weight), xlim=range(height),
 abline(-194.49, 5.3, lwd=2)
 axis(1); axis(2)
 n <- 50
-f = lm(weight ~ height)                       # (@\wingding{1}@)
-w = abs(f$residuals) / abs(height-70)         # (@\wingding{2}@)
-idx2 <- sample(N, n, prob=w)                  # (@\wingding{3}@)
+idx2 <- order(weight, decreasing = TRUE)[1:n]        # (@\wingding{1}@)
 rsample <- population[idx2,]
 points(rsample, col="red", pch=16, cex=1.2)
 #===end
 dev.off()
 
 #label===BIASgbs4
-var0 <- var(height)
-var1 <- var(height[idx1])
-var2 <- var(height[idx2])
+sd0 <- sd(weight)
+sd1 <- sd(weight[idx1])
+sd2 <- sd(weight[idx2])
 #===end

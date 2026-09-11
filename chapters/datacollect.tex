@@ -10,14 +10,12 @@ collection.
 
 \section{Representative Sample}\label{representative}
 \subsection{Definitions of Key Terms}\label{keyterms}
-\jy{We've used sample and population many times in earlier
-  chapters. Should we say now a formal definition? Or define them
-  somewhere earlier.}
-
-First, let's introduce some terminology. A \emph{population}\index{\emph{population}} is the set of 
-individuals (\emph{subjects}\index{\emph{population}}) which we're interested in studying. Subjects may be 
-people, mice, or devices produced in a factory, just to name a few examples. 
-
+Although we have used the terms \emph{sample} and \emph{population} throughout
+earlier chapters, let's now define them formally. A
+\emph{population}\index{\emph{population}} is the set of individuals
+(\emph{subjects}\index{\emph{population}}) which we're interested in
+studying. Subjects may be people, mice, or devices produced in a factory, just
+to name a few examples.
 
 A \emph{sample}\index{\emph{sample}} is a subset of the population. The sample is said to be
 \emph{representative}\index{\emph{sample}!\emph{representative}} if it reflects the characteristics of the population.
@@ -33,15 +31,10 @@ then our estimates of population features can be trusted with a certain degree o
 and the larger the sample, the more confident we are about the
 estimate based on the sample
 and the conclusions that we can draw from it.
-
 However, if the sample doesn't faithfully represent the population of interest, then no matter
 how large the sample is, the results can't be trusted. When the quantity we want
 to estimate and reason about is estimated based on a non-representative sample,
-we get a \emph{biased}\index{estimator!\emph{biased}} estimator. By bias\index{estimator!bias} we mean that the obtained estimate
-\jy{This does not define bias}
-is systematically off from the true value, and it doesn't improve when we
-take a larger sample.
-
+we get a \emph{biased}\index{estimator!\emph{biased}} estimator.
 
 Let's illustrate the notions of population, sample, and bias through simulations.
 Assume that for a group of people,  weight and height have a linear relationship
@@ -54,8 +47,7 @@ However, because people have different activity levels and different diets, each
 person's weight is a little different from the one predicted by Equation (\ref{eq:weightheight}).
 We write the weight as a function of height using an equation that includes this 
 random noise, by adding
-a non-deterministic (\emph{stochastic}) term, denoted by `$\text{error}$':
-\jy{lower case error?}
+a non-deterministic (\emph{stochastic}) term, denoted by `error':
 \begin{equation}
   \label{eq:weightheight-stochastic}
   \text{weight} = -194.49 + 5.30 \times \text{height} + \text{error},
@@ -83,29 +75,16 @@ larger population of $N=500$. Here the sample is a representative one.
 
 \showChunk{R}{Code/datacollect-goodbadsample.R}{BIASgbs2}
 
-Now, let's assume that the way to take a sample depends on both the weights and
-heights in the population. We create a function of weight and height
-and use it to 
-determine the probability of including a person in the sample. The following code
-uses this way to take a sample and plot it in
+Now, let's see what happens when the sample is not representative. Suppose our
+selection depends on weight---for example, selecting the 50 heaviest individuals
+in the population. The following code takes this biased sample and plots it in
 Figure~\ref{fig:ch7:representativesample} (c).
-In the code, \wingding{1} fits a linear regression model of weight on height
-using R's \code{lm()} function (we will cover \code{lm()} in detail in the next chapter;
-for now, think of it as finding the best-fit line through the data);
-\wingding{2} uses the model's residuals---the differences between each person's actual weight
-and the fitted value---to build a sampling weight \code{w}; and
-\jy{I feel this might more complicated than necessary. How about
-  setting up a sample obtained from subjects who ...}
-\wingding{3} uses \code{w} to decide the probability of including a person in the sample. The larger the value of \code{w}, the higher the
-probability of including the person in the sample. The exact way we 
-\jy{could we make the example easier without invoking the residuals?
-  such as a sample selected from those at the gym?}
-obtain \code{w} in this example is not important. What's important is
-that the selection of an individual into the sample is \emph{not random}. 
-When the probability of drawing a subject into the sample depends on their
-height, weight, or both, then the sample is no longer representative
-of the population, and estimates of population features based
-on it will be biased.
+In the code, \wingding{1} uses \code{order()} to find the indices of the
+$n=50$ individuals with the largest weights.
+What's important is that the selection of an individual into the sample is
+\emph{not random}. When the selection of a subject into the sample
+depends on their height, weight, or both, the sample may no longer be representative of the
+population, and estimates of population features based on it can be biased.
 \showChunk{R}{Code/datacollect-goodbadsample.R}{BIASgbs3}
 
 In Figure~\ref{fig:ch7:representativesample} (c) you can see that the relationship
@@ -135,19 +114,16 @@ about 70.
   \label{fig:ch7:representativesample}
 \end{figure}
 
-To see the effect of a biased sample, let's look at the variance of height
-in the population, and in the two samples. We can use the following code:
+To see the effect of a biased sample, let's look at the standard deviation of
+weight in the population, and in the two samples. We can use the following code:
 \showChunk{R}{Code/datacollect-goodbadsample.R}{BIASgbs4}
-
-The variance in the population is called \code{var0} in the code and it's equal to
-\inlnR{```cat(var0)```}[var0]. In the first (simple random) sample the
-variance is called \code{var1} and is equal to
-\inlnR{```cat(var1)```}[var1], which is very close to the
-\jy{the two variances being so close could be misleading. Change seed?}
-actual variance in the population (the difference is \inlnR{```cat(var1-var0)```} [diff01]),
-but in the second (biased) sample, the variance of height is much smaller: \code{var2}
-is
-\inlnR{```cat(var2)```}[var2].
+The standard deviation in the population is called \code{sd0} in the code and
+it's equal to \inlnR{```cat(sd0)```}[sd0]. In the first (simple random) sample
+the standard deviation is called \code{sd1} and is equal to
+\inlnR{```cat(sd1)```}[sd1], which is very close to the actual standard
+deviation in the population (the difference is \inlnR{```cat(sd1-sd0)```}
+[diff01]), but in the second (biased) sample, the standard deviation of height
+is much smaller: \code{sd2} is \inlnR{```cat(sd2)```}[sd2].
 This illustrates the core danger of a biased sample: it doesn't just shift the
 mean---it distorts the entire distribution, making the population appear far more
 homogeneous than it actually is. Any conclusion drawn from such a sample about
@@ -250,6 +226,7 @@ training.
 \jy{Randomization does not require researchers to balance every factor
   themselves, and an unmeasured factor does not automatically prevent
   an RCT from supporting causal conclusions.}
+\why{not clear about the point here.}
 
 Unfortunately, running an RCT is not always possible. First, it may be hard or expensive
 to gather the sample. For example, drug development is expensive, because
@@ -338,9 +315,6 @@ and it's called \emph{Berkson's bias}. Let's start with an example to explain.
   the pretty ones and the rare ones. Let's say you only show the 370 stamps which
   are either pretty or rare to your friends. Based on what your friends
   observe, will they conclude that a rare stamp is more likely to be pretty?
-\end{example}
-\jy{Styles: the example environment needs an ending indicator; the
-  closing of the example could include the solution in addition to the problem?}
 
 Let's calculate some numbers to see the answer. For all the stamps, the
 probability that a stamp is pretty is 300/1000=0.3; for rare stamps, the
@@ -382,12 +356,11 @@ large proportion (0.81) of the area of the colored region (the biased sample).
   each region.}
   \label{fig:ch7:stamps}
 \end{figure}
+\end{example}
 
-\jy{use example env?}
-Now let's simulate some data to further illustrate the problem. In this simulation,
-we use the ``popular books whose movie adaptations were not-so-good'' example.
-
-\jy{How about removing the pdf and dev.off lines from showcode?}
+\begin{example}[Popular books bad movies\index{bias!Berkson's bias!popular books bad movies}]
+Now let's simulate some data to further illustrate the problem with ``popular
+books whose movie adaptations were not-so-good'' example.
 
 \showChunk{R}{Code/datacollect-berkson.R}{berkson-setup}
 \showChunk{R}{Code/datacollect-berkson.R}{berkson-plot-all}
@@ -395,16 +368,16 @@ we use the ``popular books whose movie adaptations were not-so-good'' example.
 \showChunk{R}{Code/datacollect-berkson.R}{berkson-output}
 \runR{Code/datacollect-berkson.R}{datacollect-berkson} %
 
-\jy{avoid starting a sentence with a symbol (line number)?}
-\jy{highlight the implication of independently drawn: no true good
-  book bad movie relationship.}
-In the above code, the goodness of books and movies are drawn independently from a
-standard normal distribution (\wingding{1} and \wingding{2}). \wingding{3}
-checks if a book is good (better than 90\% of all books) and \wingding{4} checks
-if a movie is good (better than 90\% of all movies). A component of the variable
-\code{good} in \wingding{5} is \code{TRUE} if the book and/or the movie is good.
-Running the above code should give the two figures in Figure~\ref{fig:ch7:berkson}
-and the following output.
+In the above code, the quality scores of books and movies are drawn
+independently from a standard normal distribution (\wingding{1} and
+\wingding{2}). Because they are generated independently, there is no inherent
+relationship between how good a book is and how good its movie adaptation is in
+the underlying population.  Line \wingding{3} checks if a book is good (better
+than 90\% of all books) and line \wingding{4} checks if a movie is good (better
+than 90\% of all movies). A component of the variable \code{good} in line
+\wingding{5} is \code{TRUE} if the book, the movie, or both are good. Running
+the above code should give the two figures in Figure~\ref{fig:ch7:berkson} and
+the following output.
 \includeOutput{datacollect-berkson} %
 
 We see from the output and Figure~\ref{fig:ch7:berkson} (a) that the correlation between
@@ -441,8 +414,9 @@ points at all, is our \emph{dark data}\index{bias!Berkson's bias!dark data} in t
 our biased result, and the false impression. There are, in fact, many data
 points in this region, but we never observe them. They include the majority of
 bad books and bad movies.
+\end{example}
 
-This type of selection bias problem is related to the idea of \emph{conditional probability}\index{\emph{conditional probability}},
+Berkson's bias is related to the idea of \emph{conditional probability}\index{\emph{conditional probability}},
 which we discussed in Chapter~\ref{ch:probability}. When we calculate probabilities, or
 obtain other statistics, our results depend on the  set of possible events. If we limit 
 the set of observable events, we should generally expect our selection to have
@@ -526,11 +500,12 @@ to visualize and understand the nature of the data. In
 Chapter~\ref{ch:regression} about regression
 we'll see that in some cases we may get hints for missing variables from the so-called
 regression diagnostics plots.
+However, a missing variable is not always easy to spot, as illustrated in the
+following example. 
 
+\begin{example}[House price near campus]
 \runR{Code/datacollect-omitted.R}{datacollect-omitted}
-
-However, a missing variable is not always easy to spot. To see why this matters,
-let's look at another example. Phil is a realtor in a small college town. His
+Phil is a realtor in a small college town. His
 clients often ask why houses farther from campus seem to cost more than houses
 within walking distance. Phil plots the data in Figure~\ref{fig:ch7:omitted},
 with squared distance from campus on the x-axis and house price on the y-axis.
@@ -562,6 +537,7 @@ out.
 
 \showChunk{R}{Code/datacollect-omitted.R}{omitted-setup}
 \showChunk{R}{Code/datacollect-omitted.R}{omitted-plot}
+\end{example}
 
 This story also demonstrates another common pitfall, called \emph{confirmation bias}.
 When we use observational data and see an interesting relationship, it's natural
