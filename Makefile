@@ -7,7 +7,7 @@ overleaf:
 clean:
 	rm -f sidsmain.aux generated/*.txt generated/*.md5 sidsmain.ind
 
-deepclean:
+deepclean: stopserver
 	rm -fr sidsmain.aux sidsmain.mw sidsmain.ind generated/* images/chapter_* \
 	sidsmain.idx sidsmain.ilg sidsmain.log sidsmain.pdf sidsmain.tbc \
 	sidsmain.toc sidsmain.xdv sidsmain.bbl sidsmain.blg \
