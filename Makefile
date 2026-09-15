@@ -8,10 +8,13 @@ clean:
 	rm -f sidsmain.aux generated/*.txt generated/*.md5 sidsmain.ind
 
 deepclean:
-	rm -fr sidsmain.aux sidsmain.mw sidsmain.ind generated/* images/chapter_*
+	rm -fr sidsmain.aux sidsmain.mw sidsmain.ind generated/* images/chapter_* \
+	sidsmain.idx sidsmain.ilg sidsmain.log sidsmain.pdf sidsmain.tbc \
+	sidsmain.toc sidsmain.xdv sidsmain.bbl sidsmain.blg \
+	R.config Rdebug.txt serverPIDR.txt serverslist.txt talk2stat.log\
 
 # stop the talk2stat server, but don't compile the book:
-stopserver: deepclean
+stopserver: 
 	python3 -c 'from talk2stat.talk2stat import client; client("./","R","QUIT")'
 	rm -f serverPIDR.txt Rdebug.txt talk2stat.log nohup.out
  
@@ -27,7 +30,6 @@ build: clean
 	-rm -f serverPIDR.txt
 	# Pre-start R server so it is ready before xelatex sends any \runR commands
 	python3 -c 'from talk2stat.talk2stat import server,client; server("./","R") if not client("./","R","``` ```") else print("server already running")'
-	python3 wait_for_rserver.py
 #	latexmk -pdflatex='xelatex -shell-escape %O %S' -pdf sidsmain.tex
 	xelatex -interaction=nonstopmode -shell-escape --no-pdf sidsmain.tex
 	# Sync barrier: block until R has finished all queued work before caching results
