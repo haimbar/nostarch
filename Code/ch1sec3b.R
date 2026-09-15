@@ -1,3 +1,5 @@
-cat(levels(hotelrooms)[which.max(hoteltbl)],":", max(hoteltbl),"\n")
-cat(levels(autorental)[which.max(autotbl)],":", max(autotbl),"\n")
+#label===mode-output
+cat(levels(hotelrooms)[which.max(hoteltbl)], ":", max(hoteltbl), "\n")
+cat(levels(autorental)[which.max(autotbl)], ":", max(autotbl), "\n")
 
+#===end
