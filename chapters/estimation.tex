@@ -676,7 +676,7 @@ The function \lstinline{do1rep()} generates a random sample of size
 performs a bootstrap procedure with 1000 bootstrap samples, and returns
 a vector of three elements: the point estimate and
 the lower and upper bounds of a 95\% confidence interval. We replicate the
-experiment \lstinline{nrep = 1000} times and check the performance of the point
+experiment \lstinline{nrep = 300} times and check the performance of the point
 estimate and the empirical coverage rate of the 95\% confidence interval.
 \showChunk{R}{Code/est-ci-boot.R}{coverage50}
 
@@ -698,7 +698,8 @@ We repeat the process for a smaller sample size~20:
 \showChunk{R}{Code/est-ci-boot.R}{coverage20}
 The empirical coverage rate of the 95\% confidence interval from the
 \inlnR{```cat(nrep)```}[estnrep3]  replicates is
-%\inlnR{```cat(mean(sim20[2,] < target & target < sim20[3,]))```},
+\inlnR{```cat(mean(sim20[2,] < target & target < sim20[3,]))```}%
+[estmeansim20ci],
 which is still reasonably close to the nominal level 95\%.
 
 The bootstrap figure uses the same idea as the previous interval figure, but

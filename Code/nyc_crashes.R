@@ -589,11 +589,14 @@ print(
 fitted_prob <- predict(fit_severe, type = "response")
 resid_dev <- residuals(fit_severe, type = "deviance")
 
+#label===severity_glm_summ
+print(summary(fitted_prob))
+print(summary(resid_dev))
+#===end
+
 pdf("images/chapter_9/severity_diagnostics.pdf",
     width = 8, height = 4)
 #label===severity_glm_diag
-print(summary(fitted_prob))
-print(summary(resid_dev))
 par(mfrow = c(1, 2),
     mar = c(2.5, 2.5, 0, 0),
     mgp = c(1.5, 0.5, 0))

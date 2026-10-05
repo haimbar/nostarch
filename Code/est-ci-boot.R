@@ -34,7 +34,7 @@ do1rep <- function(n) {
 
 
 #label===coverage50
-nrep <- 1000
+nrep <- 300
 sim50 <- replicate(nrep, do1rep(50))
 ## point estimator
 mean(sim50[1, ])
