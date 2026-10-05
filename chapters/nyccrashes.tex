@@ -9,7 +9,7 @@ in crashes that cause injuries, delays, and sometimes fatalities. Can
 data help us understand when crashes occur, where they're most
 common, and what factors are associated with them? In this chapter, we
 investigate these questions with a real dataset from NYC Open Data,
-using ideas from throughout this book: importing and cleaning data,
+using ideas from this book: importing and cleaning data,
 exploring patterns with tables and graphs, working with dates and
 times, handling missing values, and interpreting results carefully.
 
@@ -65,8 +65,9 @@ You should see the following:
 
 \inlnR{```print(renamed_head)```}[nyc-rename][vbox]
 
-This step doesn't change the data values. It only changes the labels on
-the columns. A name such as \lstinline{NUMBER.OF.PERSONS.INJURED} becomes
+This step doesn't change the data values. It only changes the names of
+the columns. For example, an original name \lstinline{NUMBER.OF.PERSONS.INJURED}
+now becomes
 \lstinline{number_of_persons_injured}, which is easier to type and less
 likely to cause mistakes.
 
@@ -95,18 +96,18 @@ Day, so we define that target window.
 
 The logical variable \lstinline{in_week} is \lstinline{TRUE} for rows inside
 the target week and \lstinline{FALSE} for rows outside it. We count how
-many rows pass that test, keep only those rows, and then check the date
+many rows satisfy this criterion, keep only those rows, and then check the date
 range again.
 
 \showChunk{R}{Code/nyc_crashes.R}{filter_apply}
 
-Filtering keeps \inlnR{```cat(rows_in_week)```}[nyc-rowskept] of the
+This filtering keeps \inlnR{```cat(rows_in_week)```}[nyc-rowskept] of the
 original \inlnR{```cat(rows_before_filter)```}[nyc-rowsbefore] rows, with
 dates now ranging from
 \inlnR{```cat(format(filtered_min_date))```}[nyc-filtmin] to
 \inlnR{```cat(format(filtered_max_date))```}[nyc-filtmax].
 
-Why do we check the date range both before and after filtering? Think
+Why do we check the date range both before and after the filtering? Think
 about what mistake this simple habit could catch.
 
 The raw file has a \lstinline{location} column that stores coordinates as
@@ -139,12 +140,14 @@ There are \inlnR{```cat(length(unique(df$collision_id)))```}[nyc-iduniq]
 distinct IDs among \inlnR{```cat(nrow(df))```}[nyc-idnrow] rows --- the
 two numbers match, confirming that \lstinline{collision_id} works as a
 unique key.
+\why{Remove the third line of the code?}
 
 Because \lstinline{location} is just a text version of the latitude and
 longitude, we drop it now --- in R, assigning \lstinline{NULL} to a
 column removes it --- and keep the numeric coordinates, which we clean
 in the next section. Dropping redundant columns decreases the chance
 of inconsistent results.
+\why{move this before discussion on IDs.}
 
 \showChunk{R}{Code/nyc_crashes.R}{location_drop}
 
@@ -160,7 +163,7 @@ about how the data was collected. A missing borough or zip code might
 mean the crash happened on a highway, at an unusual address, or in a
 record where the location wasn't entered completely.
 
-We start with the borough\index{borough} column. The function
+We start with the \why{should this be indexed?} borough\index{borough} column. The function
 \lstinline{trimws()} removes extra spaces at the beginning and end of
 each entry. Then we convert blank borough names into \lstinline{NA},
 R's missing-value marker\index{missing value!NA@\lstinline{NA}}.
@@ -173,6 +176,8 @@ City zip code, so we recode it as missing.
 
 \showChunk{R}{Code/nyc_crashes.R}{zip_clean}
 
+\why{Should we specify the type of zip code column when loading the data,
+  because we know it is not a numerical variable? }
 We check \lstinline{is.numeric()} first because \lstinline{read.csv()}
 infers each column's type from its contents. In this week's data
 \lstinline{zip_code} happens to be read as numbers, but a different
@@ -186,6 +191,7 @@ are missing.
 
 \showChunk{R}{Code/nyc_crashes.R}{missing_counts}
 
+\why{Include the output here?}
 Try the code above. What do you see? How many rows have a missing 
 borough, a missing zip code, or both?
 The cross-tabulation shows that missing boroughs and missing zip codes
@@ -214,21 +220,24 @@ present coordinates.
 
 \showChunk{R}{Code/nyc_crashes.R}{fillable_make}
 
-To compare days of the week, we create a weekday variable\index{weekday}. The
+To compare days of the week, we create a \why{should it be indexed?} weekday
+variable\index{weekday}. The
 \lstinline{levels} argument puts the days in calendar order instead of
-alphabetical order. We use this same variable again later in the
+alphabetical order. We will use this variable again later in the
 chapter, when we compare business days and weekends.
 
+\why{is weekdays an R function?}
 \showChunk{R}{Code/nyc_crashes.R}{weekday}
 
 Now we count fillable zip codes by weekday and calculate the
-proportion for each day. \lstinline{tapply()} does this in one step:
+proportion for each day. The function \lstinline{tapply()} does this in one step:
 it splits \lstinline{fillable_zip} into groups by \lstinline{weekday}
-and applies \lstinline{mean()} within each group.
+and applies \lstinline{mean()} within each group in the following code.
 
+\why{hide the first line.}
 \showChunk{R}{Code/nyc_crashes.R}{fillable_table}
 
-You should see the following:
+You should see the following output:
 
 \inlnR{```print(table(df$weekday, df$fillable_zip))```}[nyc-fillable][vbox]
 
@@ -255,14 +264,15 @@ runs from 0 to 23, where 0 means midnight.
 Now we make a table of crash counts by hour and borough.
 
 \showChunk{R}{Code/nyc_crashes.R}{hour_table}
-
-The same table can be plotted with a base R bar plot.
+\why{Do we want to show the table here or not?}
+We plot the table as a base R bar plot with the following code.
 
 \showChunk{R}{Code/nyc_crashes.R}{hour_plot}
 
 Figure~\ref{fig:ch9:hour} shows the same information as the table. Each
 bar is one hour of the day. The colored pieces show how many crashes
 came from each borough.
+\why{add some discussion on the plot.}
 
 \begin{figure}[H]
 \includegraphics[width=0.85\textwidth]{images/chapter_9/crashes_by_hour.pdf}
@@ -280,6 +290,8 @@ or that a default value was used.
 
 \showChunk{R}{Code/nyc_crashes.R}{rounded_times}
 
+\why{I feel there is a gap between the code and the discussion. It's not easy to
+following the discussion without seeing the latex and R codes.}
 \inlnR{```cat(round(100 * mean(df$minute == 0, na.rm = TRUE),
 1))```}[nyc-onhour-pct]\%
 of the crashes are recorded on the hour, far more than we would expect
@@ -299,6 +311,7 @@ happened at some unknown time.
 The exact-midnight rate isn't the same in every borough. A higher rate
 in one borough could mean weaker data-quality control there, or simply
 more noise because that borough has fewer crashes.
+The following code calculates the midnight rate by borough.
 
 \showChunk{R}{Code/nyc_crashes.R}{midnight_by_borough}
 
@@ -307,7 +320,8 @@ Try the code above. You should see the following:
 \inlnR{```print(round(midnight_rate_by_borough, 3))```}[nyc-midnightrate][vbox]
 
 Staten Island has the highest share of exact-midnight crashes in this
-week, but it also has the smallest number of crashes overall, so the
+week, but it also has the smallest number of crashes overall as shown in
+Figure~\ref{fig:ch9:hour}, so the
 rate is based on only two records. The pattern is still worth watching
 across a longer time window.
 
@@ -316,6 +330,8 @@ crashes recorded at exactly 00:00 uniformly at random within each
 borough. This isn't a claim about when those crashes really happened;
 it's a way to show how much the midnight peak depends on a data-entry
 choice.
+{\color{red} The following code creates a new variable \lstinline{hour_corrected} that has
+the same values as \lstinline{hour} except that the exact-midnight crashes are replaced with random hours from 0 to 23 within each borough.}
 
 \showChunk{R}{Code/nyc_crashes.R}{hour_corrected_make}
 
@@ -325,6 +341,7 @@ redistributed within each borough. The two panels come from a single
 \lstinline{par(mfrow = c(1, 2))} call, which tells R to arrange the
 next two plots side by side instead of one after another. The
 midnight spike shrinks dramatically.
+The code that produces the figure is below.
 
 \showChunk{R}{Code/nyc_crashes.R}{hour_corrected_plot}
 
@@ -357,8 +374,9 @@ list.
 Then we compare borough counts for business days and non-business days.
 
 \showChunk{R}{Code/nyc_crashes.R}{business_table}
+\why{include the output here?}
 
-Here is the matching plotting code.
+Here is the code {\color{red}that produces Figure~\ref{fig:ch9:daytype}.}
 
 \showChunk{R}{Code/nyc_crashes.R}{business_plot}
 
@@ -388,6 +406,7 @@ lot.
 \caption{Crash counts by day type and borough, showing more crashes on
 business days than weekend days in every borough, partly because there
 are more business days in the week}
+\why{Would it b e better to show the crashes per-day on business days vs weekend days?}
 \label{fig:ch9:daytype}
 \end{figure}
 
@@ -410,11 +429,11 @@ borough.
 
 \showChunk{R}{Code/nyc_crashes.R}{business_hours_table}
 
-You should see the following:
+Running the code above, you should see the following:
 
 \inlnR{```print(round(prop_bh_borough, 3))```}[nyc-bhprop][vbox]
 
-As with business days, the raw counts are higher during business hours
+As with business days, \why{what raw counts this is referring to} the raw counts are higher during business hours
 because that time window is longer. The proportions within each borough
 tell us what fraction of each borough's crashes happened during those
 hours.
@@ -426,12 +445,13 @@ evenly across the day or the week.
 \section{Crash Severity}
 
 Having looked at when crashes happen, we turn now to how bad they
-are: a first step toward our ``what factors'' question. The dataset
+are: a first step toward our \why{what's this? I don't see the connection} ``what factors'' question. The dataset
 records injuries and deaths separately.
 
 \subsection{Defining a Severe Crash}
 
-Before using those numbers, we check one internal consistency
+\why{to continue}
+We first check one internal consistency
 relationship: the total number of persons injured should equal the
 sum of pedestrians, cyclists, and motorists injured. The same should
 hold for deaths.
