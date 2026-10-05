@@ -1,0 +1,9 @@
+pdf("images/chapter_2/smooth.pdf", width=5, height=5)
+#label===smooth-scatter
+x <- seq(-5, 5, length=100000)
+y <- x^3 + rnorm(length(x), mean=0, sd=5)
+## plot(x, y, cex=0.1)  # (@\wingding{1}@)
+smoothScatter(x, y, main="", nbin=50)  # (@\wingding{2}@)
+#===end
+dev.off()
+

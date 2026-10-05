@@ -1,0 +1,6 @@
+#label===prob-elevator
+set.seed(123)                        # (@\wingding{1}@)
+n <- 10000                           # (@\wingding{2}@)
+elevator <- runif(n, min=1, max=15)  # (@\wingding{3}@)
+up <- (elevator < 13)                # (@\wingding{4}@)
+print(prob.up <- sum(up) / n)        # (@\wingding{5}@)
