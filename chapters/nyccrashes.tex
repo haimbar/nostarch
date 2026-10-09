@@ -450,7 +450,6 @@ records injuries and deaths separately.
 
 \subsection{Defining a Severe Crash}
 
-\why{to continue}
 We first check one internal consistency
 relationship: the total number of persons injured should equal the
 sum of pedestrians, cyclists, and motorists injured. The same should
@@ -458,9 +457,9 @@ hold for deaths.
 
 \showChunk{R}{Code/nyc_crashes.R}{injury_consistency}
 
-\inlnR{```cat(sum(df$number_of_persons_injured != df$injured_sum,
+There are \inlnR{```cat(sum(df$number_of_persons_injured != df$injured_sum,
 na.rm = TRUE))```}[nyc-injmismatch]
-rows report injured persons without reporting any injured pedestrians,
+rows that report injured persons without reporting any injured pedestrians,
 cyclists, or motorists, and
 \inlnR{```cat(sum(df$number_of_persons_killed != df$killed_sum,
 na.rm = TRUE))```}[nyc-killmismatch]
@@ -480,7 +479,10 @@ that were severe.
 
 \showChunk{R}{Code/nyc_crashes.R}{severity_rate}
 
+Ruing the code above, we see that
 \inlnR{```cat(sum(df$severe, na.rm = TRUE))```}[nyc-severecount] of the
+\why{Need to clarify what this is referring to. It is to be the number of rows,
+  but not all rows are crashes.}
 \inlnR{```cat(nrow(df))```}[nyc-severenrow] crashes are severe by this
 rule, a rate of
 \inlnR{```cat(round(100 * mean(df$severe, na.rm = TRUE), 1))```}
@@ -504,7 +506,7 @@ This code goes a little beyond base R: the \lstinline{sf} package's
 \lstinline{st_read()} loads the boundary file much like
 \lstinline{read.csv()} loads a table, and \lstinline{st_geometry()}
 pulls out just the shapes so we can plot them as a layer under our
-points. \lstinline{par(mfrow=)} again arranges the two panels side by
+points. The code \lstinline{par(mfrow=)} again arranges the two panels side by
 side, as it did for Figure~\ref{fig:ch9:hourcorrected}.
 
 \begin{figure}[H]
@@ -523,31 +525,27 @@ columns all begin with \lstinline{vehicle_type_code_}, so we use
 
 \showChunk{R}{Code/nyc_crashes.R}{vehicle_columns}
 
-The vehicle type columns are:
-
+The code above gives vehicle type columns int he following output:
 \inlnR{```print(veh_cols)```}[nyc-vehcols][vbox]
 
 For each row, we count how many of those vehicle type fields aren't
-missing. This gives us \lstinline{n_vehicles}.
+missing. This gives us the number of vehicles (\lstinline{n_vehicles}).
 
 \showChunk{R}{Code/nyc_crashes.R}{vehicle_count}
 
-You should see the following:
-
+Running the code above, you should see the following:
 \inlnR{```print(table(df$n_vehicles))```}[nyc-nvehicles][vbox]
 
-Next we compare severity with the number of vehicles. The first table
+Next we compare severity with the number of vehicles by creating two tables. The first table
 shows counts. The second table shows proportions within each vehicle
 count.
 
 \showChunk{R}{Code/nyc_crashes.R}{severity_by_vehicle}
 
-The raw counts table should look like this:
-
+The counts table should look like this:
 \inlnR{```print(tab_severe_veh)```}[nyc-sevvehcounts][vbox]
 
 And the proportions table should look like this:
-
 \inlnR{```print(round(prop_severe_by_veh, 3))```}[nyc-sevvehprop][vbox]
 
 With the exception of the zero-vehicle group, the proportion of severe crashes
@@ -571,7 +569,7 @@ though counts with many vehicles are small}
 \label{fig:ch9:vehseverity}
 \end{figure}
 
-The proportion severe for zero vehicles stands out:
+The proportion of severe-crash for zero vehicles stands out:
 \inlnR{```cat(round(100 * prop_severe_by_veh["Severe", "0"], 1))```}
 [nyc-vehzero-pct]\% of the
 \inlnR{```cat(sum(tab_severe_veh[, "0"]))```}[nyc-vehzero-n]
@@ -639,11 +637,11 @@ Now we sort the crashes by that score and print the top 10 rows.
 \showChunk{R}{Code/nyc_crashes.R}{top_severe}
 
 The 10 rows with the highest scores are shown below, with only the
-most useful columns kept so the table fits on the page.
+most useful columns kept.
 
 \inlnR{```print(top10[, c("borough", "injured", "killed",
 "score")])```}[nyc-top10][vbox]
-
+\why{This interpret the flow. Move it to line 632?}
 Why might two analysts choose different severity scores, and what
 should they explain before comparing their results?
 
@@ -660,9 +658,9 @@ through them than Staten Island does, so a fair comparison would need
 a rate, not just a count. Figure~\ref{fig:ch9:locations} shows both
 severe and not-severe crashes clustering in the same dense areas
 rather than in different parts of the city. And severity itself
-relates to several factors, rising somewhat with the number of
+relates to several factors, rising with the number of
 vehicles involved and shifting across the hours of the day. These are
-patterns, not proof. The next section asks whether some of them hold
+patterns, not proofs. The next section asks whether some of them hold
 up to formal statistical scrutiny.
 
 \section{From Description to Inference}
@@ -692,35 +690,19 @@ statistic\index{Pearson's chi-squared statistic} works with counts,
 which is the right scale for this data.
 
 \showChunk{R}{Code/nyc_crashes.R}{severity_inference_table}
-\showChunk{R}{Code/nyc_crashes.R}{severity_chisq}
-
-The contingency table is
+The contingency table created from the code above is
 \inlnR{```tab_business_severe```}[nyc-sev-tab][vbox]
-and the chi-squared test gives a p-value of
+
+The chi-squared test from the code below gives a p-value of
 \inlnR{```cat(round(chisq_business_severe$p.value, 4))```}[nyc-sev-p].
 For this week, the evidence isn't strong enough to say that severe
 crashes differ by day type.
-
+\showChunk{R}{Code/nyc_crashes.R}{severity_chisq}
 \subsection{How Common Are Severe Crashes?}
 
-Chapter~\ref{ch:estimation} built confidence intervals using a normal
-approximation for a sample mean. Severity is a yes-or-no outcome
-rather than a mean, so here we use an exact binomial confidence
-interval\index{confidence interval!binomial} instead: it comes
-directly from the binomial distribution, with no normal approximation
-involved. The point estimate\index{point estimate} for the overall
-severe-crash rate this week is
-\inlnR{```cat(round(severe_rate, 3))```}[nyc-sev-rate], and the exact
-95\% interval is
-\inlnR{```cat(round(severe_rate_ci$conf.int[1], 3))```}[nyc-sev-lo]
-to \inlnR{```cat(round(severe_rate_ci$conf.int[2], 3))```}[nyc-sev-hi].
-In practical terms, just under half of the crashes this week involved
-at least one injury or death, and if data collection this week were
-repeated many times, about 95\% of the resulting intervals would
-contain the true severe-crash rate for weeks like this one.
-
-To make the binomial calculation concrete, here are the raw counts of
-severe and non-severe crashes used to build the interval:
+Severity is a yes-or-no outcome. To see how common severe crashes are,
+we start with the raw counts of severe and non-severe crashes in the
+dataset:
 
 \showChunk{R}{Code/nyc_crashes.R}{severity_binom_table}
 
@@ -728,13 +710,23 @@ The table shows
 \inlnR{```cat(sum(df$severe, na.rm = TRUE))```}[nyc-sev-count]
 severe crashes and
 \inlnR{```cat(sum(!df$severe, na.rm = TRUE))```}[nyc-nonsev-count]
-non-severe crashes. The point estimate reports the fraction of crashes
-in this sampled week that were classified as severe. The exact binomial
-confidence interval gives a range of plausible values for that
-underlying proportion. A narrow interval means the estimate is relatively
-stable (we observed many crashes); a wide interval means more sampling
-uncertainty (fewer crashes). These values describe the observed week and
-shouldn't be interpreted as causal effects.
+non-severe crashes. The point estimate\index{point estimate} for the
+overall severe-crash rate is the sample proportion:
+\inlnR{```cat(round(severe_rate, 3))```}[nyc-sev-rate].
+
+To quantify sampling uncertainty around this proportion, we calculate an
+exact binomial confidence interval\index{confidence interval!binomial},
+which comes directly from the binomial distribution. The exact 95\%
+interval is
+\inlnR{```cat(round(severe_rate_ci$conf.int[1], 3))```}[nyc-sev-lo]
+to \inlnR{```cat(round(severe_rate_ci$conf.int[2], 3))```}[nyc-sev-hi].
+A narrow interval indicates that the estimate is relatively stable
+because the sample size is large. In practical terms, just under half of
+the crashes this week involved at least one injury or death; if data
+collection were repeated across many comparable weeks, about 95\% of the
+resulting intervals would contain the true severe-crash rate. These
+values describe the observed week and shouldn't be interpreted as causal
+effects.
 
 \subsection{What Predicts a Severe Crash?}
 
@@ -746,7 +738,7 @@ regression\index{logistic regression} instead. We fit it with
 the log-odds of a severe crash to one or more predictors rather than
 predicting a continuous value directly. Odds compare the chance of a
 severe crash with the chance of a non-severe crash. We use the model
-to relate severity to two predictors at once, the business-day
+to relate severity to two predictors, the business-day
 indicator and the number of vehicles involved, and interpret the
 coefficients on the odds-ratio scale.
 
@@ -759,7 +751,6 @@ Next, fit the model:
 \showChunk{R}{Code/nyc_crashes.R}{severity_glm_fit}
 
 The model output is shown below.
-
 \runRChunk{Code/nyc_crashes.R}{severity_glm_fit}
 
 To make coefficients easier to interpret, transform the estimates into
@@ -768,9 +759,9 @@ odds ratios\index{odds ratio} and show Wald 95\% confidence intervals.
 \showChunk{R}{Code/nyc_crashes.R}{severity_glm_or}
 
 The odds ratios and confidence intervals are shown below.
-
 \runRChunk{Code/nyc_crashes.R}{severity_glm_or}
 
+Here are the main takeaways from the output above.
 Holding the number of vehicles fixed, the odds of a severe crash on a
 business day are an estimated
 \inlnR{```cat(round(or["business_dayTRUE"], 2))```}[nyc-or-bd] times
@@ -810,13 +801,12 @@ deviance residuals}
 \label{fig:ch9:severitydiag}
 \end{figure}
 
+\why{add some discussion on the actual patterns in figure? The discussion below
+  reads like a generic discussion of what to look for in the figure.}
 The diagnostic figure above gives a quick visual check. The fitted
-probabilities should spread across a sensible range, not collapse to
-almost all zeros or almost all ones. The residual plot should also look roughly
+probabilities on the left panel should spread across a sensible range, not collapse to
+almost all zeros or almost all ones. The residual plot on the right should also look roughly
 centered around zero, with no obvious curve or other strong pattern.
-
-\hyb{The plot should be shown here, and the summaries alone are not
-very informative.}
 
 These steps separate modeling into preparation, fitting, interpretation,
 and validation. The logistic model gives an interpretable summary via
@@ -831,7 +821,7 @@ flagging for whoever maintains this dataset. Some we've already
 seen in detail: the \lstinline{location} column duplicates latitude
 and longitude as text (``Importing and Inspecting the Data'');
 \inlnR{```cat(n_both_missing)```}[nyc-both-missing] rows are missing
-borough and zip code together, never just one or the other (``Missing
+borough and zip code together, \why{I did not get the meaning of this:} never just one or the other (``Missing
 Values and Data Quality''); about
 \inlnR{```cat(round(100 * prop_on_hour, 1))```}[nyc-prop-on-hour]\% of
 crash times end in ``:00'', with
@@ -840,9 +830,10 @@ exactly 00:00 --- almost certainly a default value rather than real
 midnight crashes (``The Midnight Artifact''); and
 \inlnR{```cat(n_injury_mismatch)```}[nyc-injury-mismatch] rows report
 injury totals that don't match their pedestrian, cyclist, and
-motorist subtotals (``Defining a Severe Crash''). Two more lessons
+motorist subtotals (\why{If these are referring the subsections, we can set
+  labels and refer them.}``Defining a Severe Crash''). Two more lessons
 come from fields we haven't yet examined closely: how the
-contributing factor and vehicle type for vehicle 1 were recorded.
+contributing factor and vehicle type for \why{What's and why vehicle 1?} vehicle 1 were recorded.
 
 \subsection{Contributing Factors}
 
@@ -865,20 +856,19 @@ factors.
 \runRChunk{Code/nyc_crashes.R}{factor_table}
 
 Figure~\ref{fig:ch9:factors} shows the eight most common cleaned
-contributing factors for vehicle 1.
+contributing factors for vehicle 1, created from the code below.
 
 \showChunk{R}{Code/nyc_crashes.R}{factor_plot}
 
 \begin{figure}[H]
 \includegraphics[width=0.85\textwidth]%
 {images/chapter_9/top_contributing_factors.pdf}
-\caption{Most common contributing factors for vehicle 1, with driver
-inattention and following too closely as the most frequently recorded
-factors this week}
+\caption{Most common contributing factors for vehicle 1}
 \label{fig:ch9:factors}
 \end{figure}
-
-This kind of table is easy to read, but it has a limit. A contributing
+Figure~\ref{fig:ch9:factors} shows the most common contributing factors this
+week are driver inattention and following too closely.
+This kind of result is easy to read, but it has a limit. A contributing
 factor is what was recorded, not necessarily the full cause of the
 crash. Vehicle 1 alone has
 \inlnR{```cat(n_unspecified)```}[nyc-n-unspecified]
@@ -888,7 +878,8 @@ cause is unclear, would make this field more useful.
 
 \subsection{Vehicle Types}
 
-We look next at vehicle types\index{vehicle type} for vehicles 1 and
+We look next at vehicle types\index{vehicle type} for vehicles \why{are they the
+labels for vehicles involved in crash?} 1 and
 2. We trim extra spaces and turn blank entries or the literal value
 \lstinline{unknown}
 into \lstinline{NA}. Those are the only missing-value patterns that
@@ -901,8 +892,9 @@ Then we count the most common vehicle categories.
 
 \showChunk{R}{Code/nyc_crashes.R}{vehicle_type_table}
 \runRChunk{Code/nyc_crashes.R}{vehicle_type_table}
+\why{Discuss the output or remove the output.}
 
-Figure~\ref{fig:ch9:vehicles} shows the most common vehicle 1 types.
+Figure~\ref{fig:ch9:vehicles} created from the code below shows the most common vehicle 1 types.
 The long sport utility vehicle label is a good reminder that real
 categories aren't always short or tidy.
 
@@ -946,7 +938,7 @@ describing a pattern, or are we claiming a cause?
 
 Open data lets anyone ask these questions with patience and a
 computer. City agencies, federal agencies, scientific groups, sports
-leagues, and many other organizations share data that students can
+leagues, and many other organizations share data that you can
 explore. NYC Open Data is a good place to look for more examples. In
 addition to crash records, it includes widely used datasets such as 311
 Service Requests, which record calls and online reports about noise,
