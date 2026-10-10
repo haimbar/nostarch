@@ -845,6 +845,130 @@ sampling, omitted variable bias, and the limits of observational data---will
 reappear throughout that chapter as we ask whether a fitted model can be
 trusted and what its estimates actually mean.
 
+\section{Exercises}
+
+\begin{exercise}
+  In \lstinline{Code/datacollect-goodbadsample.R}, which was used to generate
+  Figure~\ref{fig:ch7:representativesample}, we drew a random sample of size
+  $n = 50$ (\lstinline{idx1}) and a biased sample of size $n = 50$
+  (\lstinline{idx2}, the 50 heaviest individuals).
+  \begin{enumerate}
+  \item Calculate the sample mean and standard deviation of \lstinline{weight}
+    for both samples. Compare each to the true population parameters
+    \lstinline{mean(population$weight)} and \lstinline{sd(population$weight)}.
+  \item Modify the biased sampling code to select the 200 heaviest individuals
+    instead of 50. Recompute the sample mean of \lstinline{weight}. Does
+    increasing the sample size reduce the bias of the estimate?
+  \item Explain why a larger sample size cannot fix a fundamentally biased
+    data-collection mechanism. Under what condition does the sample mean
+    converge to the true population mean as the sample size grows?
+  \end{enumerate}
+\end{exercise}
+
+\begin{exercise}
+  Return to \lstinline{Code/datacollect-berkson.R}, the code used to produce
+  Figure~\ref{fig:ch7:berkson}, where book quality and movie quality are
+  simulated as two independent standard normal variables.
+  \begin{enumerate}
+  \item Run the code as written and verify that the correlation between
+    \lstinline{book} and \lstinline{movie} in the overall population is near
+    zero (Figure~\ref{fig:ch7:berkson}~(a)), but becomes negative when
+    restricted to items where \lstinline{good.b | good.m} is true
+    (Figure~\ref{fig:ch7:berkson}~(b)).
+  \item Change the selection threshold from the 90th percentile
+    (\lstinline{quantile(..., 0.9)}) to the 75th percentile and then to the 98th
+    percentile. How does the magnitude of the spurious negative correlation
+    change as selection becomes more stringent?
+  \item Suppose a college admits applicants who have either an exceptionally
+    high academic test score or an exceptionally high athletic ranking.  Explain
+    how Berkson's bias could lead an investigator studying only enrolled
+    students to conclude that athletic ability and academic ability are
+    negatively related, even if they are completely independent in the general
+    population.
+  \end{enumerate}
+\end{exercise}
+
+\begin{exercise}
+  Figure~\ref{fig:ch7:survival-bias} illustrates the pattern of bullet holes on
+  aircraft returning from combat missions in World War~II, analyzed by Abraham
+  Wald and the Statistical Research Group.
+  \begin{enumerate}
+  \item The returning planes had many bullet holes in the wings and fuselage,
+    but very few in the engines and cockpit. Why would adding extra armor to the
+    wings and fuselage be an example of survival bias?
+  \item Where did Abraham Wald recommend placing additional armor, and what was
+    his reasoning?
+  \item A financial analyst examines mutual funds that have been in continuous
+    operation for at least 15 years and reports that their average annual return
+    exceeded the market index. Explain how survival bias distorts this
+    conclusion. How would you design a study to assess fund performance fairly?
+  \end{enumerate}
+\end{exercise}
+
+\begin{exercise}
+  In Section~\ref{extrapolations}, Figure~\ref{fig:ch7:ext1} shows data
+  collected only for $x$ between $0$ and $0.25$, where the points appear to
+  follow the line $y = x$.
+  \begin{enumerate}
+  \item If someone assumes this linear pattern continues, what would they
+    predict for $y$ when $x = 0.5$, $x = 1.0$, and $x = 2.0$?
+  \item In \lstinline{Code/datacollect-extrapolate.R}, the true relationship
+    (ignoring random error) is quadratic: $y = x - 0.4x^2$. Calculate the true
+    values of $y$ from this formula for $x = 0.5$, $x = 1.0$, and $x = 2.0$.
+  \item Compare the naive linear predictions from part~1 to the true values from
+    part~2. What is the prediction error at each of the three points? What
+    happens to the error as $x$ moves further away from the observed range
+    $[0, 0.25]$?
+  \item In the online shopping example at the end of
+    Section~\ref{extrapolations}, why is it risky to predict spending habits for
+    people earning \$150,000 using a sample that only included people earning up
+    to \$25,000? How should a researcher gather evidence about higher-income
+    spending instead?
+  \end{enumerate}
+\end{exercise}
+
+\begin{exercise}
+  A health study finds a strong positive correlation between daily coffee
+  consumption and the incidence of cardiovascular disease. A media headline
+  concludes: ``Drinking coffee increases heart disease risk.''
+  \begin{enumerate}
+  \item Explain how cigarette smoking could serve as an omitted variable
+    (confounder) in this observational finding. What two relationships must hold
+    between smoking, coffee drinking, and heart disease for confounding to
+    occur?
+  \item In Figure~\ref{fig:ch7:omitted} (produced by
+    \lstinline{Code/datacollect-omitted.R}), how did omitting house age distort
+    the estimated relationship between distance and house price?
+  \item Why can a randomized controlled trial (RCT) eliminate omitted variable
+    bias, while an observational study generally cannot? What practical or
+    ethical considerations make an RCT infeasible for studying long-term coffee
+    intake and heart disease?
+  \end{enumerate}
+\end{exercise}
+
+\begin{exercise}
+  For each of the following research scenarios, determine which sampling design
+  is being used (simple random sampling, stratified sampling, cluster sampling,
+  systematic sampling, or convenience sampling) and evaluate whether the sample
+  is likely to be representative of the target population:
+  \begin{enumerate}
+  \item A university administration obtains a roster of all 15,000 enrolled
+    students sorted alphabetically and selects every 50th student to complete a
+    campus climate survey.
+  \item A statewide polling organization divides registered voters into three
+    groups based on residential setting (urban, suburban, and rural) and takes
+    an independent random sample from each group proportional to its size in the
+    state population.
+  \item A researcher investigating elementary school literacy randomly selects
+    eight schools within a large school district and evaluates every third-grade
+    student in those eight schools.
+  \item A student newspaper reporter surveys the first 40 people entering the
+    campus recreation center at 6:30~AM about average weekly exercise habits
+    among college students.
+  \end{enumerate}
+\end{exercise}
+
+
 %%% Local Variables:
 %%% mode: latex
 %%% TeX-command-extra-options: "-shell-escape"
